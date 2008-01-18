@@ -339,7 +339,9 @@ forrest -Dproject.start-uri=live-sites.html
       <question>How can I generate one pdf-file out of the whole site or selected pages of the site?</question>
       <answer>
         <p>
-          Add the following entries to your site.xml file:
+          Add the following entries to your site.xml file.
+          Note that the href must be exactly "wholesite" or "site" which triggers
+          a special match in the sitemap to aggregate all documents.
         </p>
         <source>
 <![CDATA[
@@ -352,14 +354,23 @@ forrest -Dproject.start-uri=live-sites.html
         </source>
         <p>
           In this case the menu labeled "About" will have 2 new items: "Full
-          PDF" and "Full HTML". (See also <link href="site:pdf-tab">How to
-          create a PDF document for each tab</link>.)
+          PDF" and "Full HTML".
+        </p>
+        <p>
+          See also <link href="site:pdf-tab">How to
+          create a PDF document for each tab</link>.
         </p>
         <p>
           This assumes that you use the
           <link href="site:linking">site.xml</link> method for your site
           structure and navigation, rather than the old book.xml method.
         </p>
+        <warning>
+          There are many issues with the "wholesite" aggregation. Search the
+          issue tracker and mail lists.
+          The main issue is for Forrest-0.8 and the new locationmap
+          (<link href="http://issues.apache.org/jira/browse/FOR-733">FOR-733</link>).
+        </warning>
       </answer>
     </faq>
     <faq id="pageBreaks">
@@ -970,7 +981,7 @@ forrest -Dproject.start-uri=live-sites.html
       <answer>
         <p>
           Certain patterns are claimed by the default sitemaps for special
-          processing. These reserved words include: <code>site, changes, todo,
+          processing. These reserved words include: <code>site, wholesite, changes, todo,
           faq, images, my-images, skinconf, community, howto</code>
         </p>
         <p>
