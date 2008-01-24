@@ -72,6 +72,7 @@
 <![CDATA[<forrest:contract name="branding-css-links">
       <forrest:property name="branding-css-links-input">
         <css url="common.css"/>
+        <css if="IE 7" .../>
         <css .../>
       </forrest:property>
     </forrest:contract>]]>
@@ -94,7 +95,21 @@
       </xsl:template>
       <xsl:template 
         match="css[@url]">
-        <xsl:copy-of select="@rel"/><link type="text/css">
+        <xsl:variable name="if" select="@if"/>
+        <xsl:choose>
+          <xsl:when test="$if">
+            <xsl:comment>[if <xsl:value-of select="$if"/>]><xsl:call-template name="printLinkText"/>
+
+            &lt;![endif]</xsl:comment>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:call-template name="printLink"/>
+          </xsl:otherwise>
+        </xsl:choose>
+      </xsl:template>
+      <xsl:template name="printLink">
+
+        <link type="text/css">
         <xsl:choose>
           <xsl:when test="@rel">
             <xsl:attribute name="rel">
@@ -103,6 +118,7 @@
           </xsl:when>
           <xsl:otherwise>
             <xsl:attribute name="rel">stylesheet</xsl:attribute>
+
           </xsl:otherwise>
         </xsl:choose>
         <xsl:choose>
@@ -112,6 +128,7 @@
             </xsl:attribute>
           </xsl:when>
           <xsl:otherwise>
+
             <xsl:attribute name="title">
               <xsl:value-of select="concat( translate( substring($theme, 1, 1), 'abcdefghijklmnopqrstuvwxyz', 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'), substring($theme,2))"/>
             </xsl:attribute>
@@ -121,6 +138,7 @@
           <xsl:choose>
             <xsl:when test="@prefix">
               <xsl:value-of select="@prefix"/>
+
             </xsl:when>
             <xsl:otherwise>
                 themes/
@@ -132,6 +150,7 @@
             select="$root"/>
           <xsl:value-of 
             select="normalize-space($prefix)"/>
+
           <xsl:value-of 
             select="@url"/>
         </xsl:attribute>
@@ -141,9 +160,38 @@
           </xsl:attribute>
         </xsl:if></link>
       </xsl:template>
+        <xsl:template name="printLinkText">
+
+          <xsl:variable name="out">
+            <xsl:choose>
+              <xsl:when test="@rel"> rel="<xsl:value-of select="@rel"/>" </xsl:when>
+              <xsl:otherwise> rel="stylesheet" </xsl:otherwise>
+            </xsl:choose>
+            <xsl:choose>
+
+              <xsl:when test="@theme"> title="<xsl:value-of select="@theme"/>" </xsl:when>
+              <xsl:otherwise> title="<xsl:value-of
+                  select="concat( translate( substring($theme, 1, 1), 'abcdefghijklmnopqrstuvwxyz', 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'), substring($theme,2))"/>
+                " </xsl:otherwise>
+            </xsl:choose>
+            <xsl:variable name="prefix">
+              <xsl:choose>
+
+                <xsl:when test="@prefix">
+                  <xsl:value-of select="@prefix"/>
+                </xsl:when>
+                <xsl:otherwise> themes/ </xsl:otherwise>
+              </xsl:choose>
+            </xsl:variable> href="<xsl:value-of select="$root"/>
+            <xsl:value-of select="normalize-space($prefix)"/>
+
+            <xsl:value-of select="@url"/>
+            <xsl:if test="@media">" media="<xsl:value-of select="@media"/>" </xsl:if> </xsl:variable>
+          &lt;link type="text/css" <xsl:value-of select="normalize-space($out)"/>> </xsl:template>
       <xsl:template match="css[not(@url)]">
         <style type="text/css">
           <xsl:value-of select="."/>
+
         </style>
       </xsl:template>
     </xsl:stylesheet>
