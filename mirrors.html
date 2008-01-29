@@ -206,6 +206,14 @@ document.write("Last Published: " + document.lastModified);
 </li>
 <li>
 <a href="#verify">Verify releases</a>
+<ul class="minitoc">
+<li>
+<a href="#PGP+Signature">PGP Signature</a>
+</li>
+<li>
+<a href="#MD5+Checksum">MD5 Checksum</a>
+</li>
+</ul>
 </li>
 </ul>
 </div>
@@ -246,7 +254,9 @@ document.write("Last Published: " + document.lastModified);
 <a name="N1007E"></a><a name="verify"></a>
 <h2 class="underlined_10">Verify releases</h2>
 <div class="section">
-<p>It is essential that you verify the integrity of the downloaded files using the PGP and MD5 signatures. MD5 verification ensures the file was not corrupted or tampered with. PGP verification ensures that the file came from a certain person.</p>
+<p>It is essential that you verify the integrity of the downloaded files using the MD5 and PGP signatures. MD5 verification ensures the file was not corrupted or tampered with. PGP verification ensures that the file came from a certain person.</p>
+<a name="N10086"></a><a name="PGP+Signature"></a>
+<h3 class="underlined_5">PGP Signature</h3>
 <p>The PGP signatures can be verified using <a href="http://www.pgpi.org/">PGP</a> or <a href="http://www.gnupg.org/">GPG</a>. First download the Apache Forrest <a href="http://www.apache.org/dist/forrest/KEYS">KEYS</a> as well as the <span class="codefrag">*.asc</span> signature file for the particular distribution. It is important that you get these files from the ultimate trusted source - the main ASF distribution site, rather than from a mirror. Then verify the signatures using ...</p>
 <pre>% pgpk -a KEYS
 % pgpv apache-forrest-X.Y.tar.gz.asc
@@ -261,7 +271,11 @@ document.write("Last Published: " + document.lastModified);
 % gpg --import KEYS
 % gpg --verify apache-forrest-X.Y.tar.gz.asc
 </pre>
-<p>To verify the MD5 signature on the files, you need to use a program called <span class="codefrag">md5</span> or <span class="codefrag">md5sum</span>, which is included in many unix distributions. It is also available as part of <a href="http://www.gnu.org/software/textutils/textutils.html">GNU Textutils</a>. Windows users can get binary md5 programs from <a href="http://www.fourmilab.ch/md5/">here</a>, <a href="http://www.pc-tools.net/win32/freeware/console/">here</a>, or <a href="http://www.slavasoft.com/fsum/">here</a> or an openssl client from <a href="http://www.slproweb.com/products/Win32OpenSSL.html">here</a>.</p>
+<p>The files <span class="codefrag">apache-forrest-0.8.*</span> are signed by David Crossley <span class="codefrag">23CB7A2A</span>
+</p>
+<a name="N100AC"></a><a name="MD5+Checksum"></a>
+<h3 class="underlined_5">MD5 Checksum</h3>
+<p>To verify the MD5 checksum on the files, you need to use a program called <span class="codefrag">md5</span> or <span class="codefrag">md5sum</span>, which is included in many unix distributions. It is also available as part of <a href="http://www.gnu.org/software/textutils/textutils.html">GNU Textutils</a>. Windows users can get binary md5 programs from <a href="http://www.fourmilab.ch/md5/">here</a>, <a href="http://www.pc-tools.net/win32/freeware/console/">here</a>, or <a href="http://www.slavasoft.com/fsum/">here</a> or an openssl client from <a href="http://www.slproweb.com/products/Win32OpenSSL.html">here</a>.</p>
 <pre>% md5sum apache-forrest-X.Y.tar.gz
 ... output should match the string in apache-forrest-X.Y.tar.gz.md5
 </pre>
