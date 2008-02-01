@@ -196,7 +196,7 @@ public class DispatcherTransformer extends AbstractSAXTransformer implements
 
   private Document defaultProperties;
 
-  private AggregatedValidity validity;
+  private SourceValidity validity;
 
   private String validityOverride;
 
@@ -244,7 +244,6 @@ public class DispatcherTransformer extends AbstractSAXTransformer implements
     // or add this property to forrest.properties.xml
     // to force a SourceValidity.INVALID
     if (null != validityFile & !(validityOverride.equals(CACHING_OFF))) {
-      this.validity = new AggregatedValidity();
       try {
         this.validity.add(m_resolver.resolveURI(validityFile).getValidity());
       } catch (Exception e) {
@@ -283,37 +282,14 @@ public class DispatcherTransformer extends AbstractSAXTransformer implements
 
   }
 
-  /**
-   * Setup the file generator. Try to get the last modification date of the
-   * source for caching.
-   */
-  // FIXME: See
-  // http://cocoon.zones.apache.org/daisy/documentation/writing/690.html
-  // Writing Cache Efficient Components
-  // we have to do all the heavy stuff later and only prepare the basics here,
-  // this will
-  // help enhance caching. I mark them with *
+  // we do all the heavy stuff later and only prepare the basics here,
+  // this enhance the response time while caching.
   public void setup(SourceResolver resolver, Map objectModel, String src,
       Parameters par) throws ProcessingException, SAXException, IOException {
     super.setup(resolver, objectModel, src, par);
-    localRecycle();
-    try {
-      if (null == this.dispatcherHelper)
-        this.dispatcherHelper = new DispatcherHelper(manager);
-      if (null == this.processor)
-        this.processor = (XPathProcessor) this.manager
-            .lookup(XPathProcessor.ROLE);
-      if (null == m_resolver)
-        m_resolver = (SourceResolver) manager.lookup(SourceResolver.ROLE);
-    } catch (Exception e) {
-      String error = "dispatcherError:\n Could not set up the dispatcherHelper!\n DispatcherStack: "
-          + e;
-      getLogger().error(error);
-      throw new ProcessingException(error);
-    }
+    
     storedPrefixMap = new HashMap();
     this.parameterHelper = new HashMap();
-
     this.hooksPosition = new HashMap();
 
     this.allowMarkup = Boolean.getBoolean(parameters.getParameter(
@@ -336,17 +312,7 @@ public class DispatcherTransformer extends AbstractSAXTransformer implements
       getLogger().error(error);
       throw new ProcessingException(error);
     }
-    // * just store the $requestId and do the DOM-reading/storing later
-    String propertyURI = "cocoon://" + requestId + ".props";
-    try {
-      this.defaultProperties = org.apache.forrest.dispatcher.util.SourceUtil
-          .readDOM(propertyURI, this.manager);
-    } catch (Exception e1) {
-      String error = "dispatcherError:\n" + "Could not get the properties for "
-          + propertyURI + "\n DispatcherStack: " + e1;
-      getLogger().error(error);
-      throw new ProcessingException(error);
-    }
+
     parameterHelper.put(DISPATCHER_REQUEST_ATTRIBUTE, requestId);
     this.requestedFormat = parameters.getParameter(STRUCTURER_FORMAT_ATTRIBUTE,
         null);
@@ -359,28 +325,7 @@ public class DispatcherTransformer extends AbstractSAXTransformer implements
     parameterHelper.put(STRUCTURER_FORMAT_ATTRIBUTE, requestedFormat);
 
     this.hooksXSL = parameters.getParameter(HOOKS_TRANSFORMER_PARAMETER, null);
-    try {
-      if (this.hooksXSL == null || this.hooksXSL.equals("")) {
-        String warning = "dispatcherError:\n"
-            + "You did not set up the \"hooksTransformer\" parameter in the sitemap, we are not going to transform forrest:hooks elements."
-            + " For text output where you would not have to use hooks as structurer, the way you want it.";
-        getLogger().warn(warning);
-      } else {
-        // * just store the $hooksXSL and do the DOM-reading/storing
-        // later
-        DOMSource stylesheet = new DOMSource(dispatcherHelper
-            .getDocument(this.hooksXSL));
-        this.structurerTransformer = dispatcherHelper
-            .createTransformer(stylesheet);
-      }
-      parameterHelper.put(HOOKS_TRANSFORMER_PARAMETER, hooksXSL);
-    } catch (Exception e) {
-      String error = "dispatcherError:\n"
-          + "Could not set up the \"hooks transformer\".\n\n DispatcherStack:\n "
-          + e;
-      getLogger().error(error);
-      throw new ProcessingException(error);
-    }
+    parameterHelper.put(HOOKS_TRANSFORMER_PARAMETER, hooksXSL);
   }
 
   /**
@@ -388,7 +333,6 @@ public class DispatcherTransformer extends AbstractSAXTransformer implements
    */
   private void localRecycle() {
     this.contract = null;
-    this.hooksXSL = null;
     this.structurerTransformer = null;
     this.insideProperties = false;
   }
@@ -563,6 +507,53 @@ public class DispatcherTransformer extends AbstractSAXTransformer implements
       }
     }
     if (requestedFormat.equals(currentFormat)) {
+      localRecycle();
+      try {
+        if (null == this.dispatcherHelper)
+          this.dispatcherHelper = new DispatcherHelper(manager);
+        if (null == this.processor)
+          this.processor = (XPathProcessor) this.manager
+              .lookup(XPathProcessor.ROLE);
+        if (null == m_resolver)
+          m_resolver = (SourceResolver) manager.lookup(SourceResolver.ROLE);
+      } catch (Exception e) {
+        String error = "dispatcherError:\n Could not set up the dispatcherHelper!\n DispatcherStack: "
+            + e;
+        getLogger().error(error);
+        throw new SAXException(error);
+      }
+      String propertyURI = "cocoon://" + requestId + ".props";
+      try {
+        this.defaultProperties = org.apache.forrest.dispatcher.util.SourceUtil
+            .readDOM(propertyURI, this.manager);
+      } catch (Exception e1) {
+        String error = "dispatcherError:\n" + "Could not get the properties for "
+            + propertyURI + "\n DispatcherStack: " + e1;
+        getLogger().error(error);
+        throw new SAXException(error);
+      }
+      try {
+        if (this.hooksXSL == null || this.hooksXSL.equals("")) {
+          String warning = "dispatcherError:\n"
+              + "You did not set up the \"hooksTransformer\" parameter in the sitemap, we are not going to transform forrest:hooks elements."
+              + " For text output where you would not have to use hooks as structurer, the way you want it.";
+          getLogger().warn(warning);
+        } else {
+          // * just store the $hooksXSL and do the DOM-reading/storing
+          // later
+          DOMSource stylesheet = new DOMSource(dispatcherHelper
+              .getDocument(this.hooksXSL));
+          this.structurerTransformer = dispatcherHelper
+              .createTransformer(stylesheet);
+        }
+        
+      } catch (Exception e) {
+        String error = "dispatcherError:\n"
+            + "Could not set up the \"hooks transformer\".\n\n DispatcherStack:\n "
+            + e;
+        getLogger().error(error);
+        throw new SAXException(error);
+      }
       if (path == null)
         path = "result";
       this.includeNodes = true;
@@ -663,16 +654,6 @@ public class DispatcherTransformer extends AbstractSAXTransformer implements
         String contractUri = ContractBean.CONTRACT_RESOLVE_PREFIX + "."
             + currentFormat + "." + value;
         try {
-          // Adding the contract to the validity object.
-          // As soon the contract changes we want a rebuild of
-          // the page and not the cached object.
-          if (!validityOverride.equals(CACHING_OFF) & null != this.validity) {
-            SourceValidity contractValidityId = m_resolver.resolveURI(
-                contractUri).getValidity();
-            // we cannot allow null in an AggregatedValidity
-            if (null != contractValidityId)
-              this.validity.add(contractValidityId);
-          }
           Document doc = org.apache.forrest.dispatcher.util.SourceUtil.readDOM(
               contractUri, this.manager);
           contract.setContractImpl(doc, contractUri);
@@ -697,16 +678,7 @@ public class DispatcherTransformer extends AbstractSAXTransformer implements
         // contract is a nugget-contract
         contract.setNugget(true);
         try {
-          // Adding the raw data to the validity object.
-          // As soon the raw data changes we want a rebuild of
-          // the page and not the cached object.
-          if (!validityOverride.equals(CACHING_OFF) & null != this.validity) {
-            SourceValidity contractValidityRaw = m_resolver.resolveURI(value)
-                .getValidity();
-            // we cannot allow null in an AggregatedValidity
-            if (null != contractValidityRaw)
-              this.validity.add(contractValidityRaw);
-          }
+          
           Document doc = org.apache.forrest.dispatcher.util.SourceUtil.readDOM(
               value, this.manager);
           contract.setContractRawData(doc);
@@ -1028,11 +1000,9 @@ public class DispatcherTransformer extends AbstractSAXTransformer implements
       // transformed by the XSLT Transformer we should return null here.
       return null;
     } catch (java.net.MalformedURLException mue) {
-      if (getLogger().isDebugEnabled()) {
-        getLogger().debug(
-            "Failed to resolve " + href + "(base = " + base + "), return null",
-            mue);
-      }
+      getLogger().debug(
+          "Failed to resolve " + href + "(base = " + base + "), return null",
+          mue);
 
       return null;
     } catch (IOException ioe) {
