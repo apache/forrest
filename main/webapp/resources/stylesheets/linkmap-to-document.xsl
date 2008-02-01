@@ -41,14 +41,14 @@
   <xsl:template match="*">
     <xsl:if test="@label">
       <ul>
-        <li><a>
+        <li><link>
           <xsl:if test="@href!=''">
             <xsl:attribute name="href">
               <xsl:value-of select="@href"/>
             </xsl:attribute>
           </xsl:if>
           <xsl:value-of select="@label"/>
-<!-- force site element name to be on same line as label --></a>&#160;&#160;___________________&#160;&#160;<em>
+<!-- force site element name to be on same line as label --></link>&#160;&#160;___________________&#160;&#160;<em>
           <xsl:value-of select="name(.)" /></em>
           <xsl:if test="@description">
 <!-- allow description to flow to next line in a small window -->
