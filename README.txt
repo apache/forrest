@@ -49,6 +49,8 @@ ENC Technology Software Unrestricted (TSU) exception (see the BIS
 Export Administration Regulations, Section 740.13) for both object 
 code and source code.
 
+See http://www.apache.org/licenses/exports/
+
 The following provides more details on the included files that
 may be subject to export controls on cryptographic software:
 
