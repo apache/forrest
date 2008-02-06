@@ -285,33 +285,12 @@ public class DispatcherTransformer extends AbstractSAXTransformer implements
 
   }
 
-  /**
-   * Setup the file generator. Try to get the last modification date of the
-   * source for caching.
-   */
-  // FIXME: See
-  // http://cocoon.zones.apache.org/daisy/documentation/writing/690.html
-  // Writing Cache Efficient Components
-  // we have to do all the heavy stuff later and only prepare the basics here,
-  // this will
-  // help enhance caching. I mark them with *
+  // we do all the heavy stuff later and only prepare the basics here,
+  // this enhance the response time while caching.
   public void setup(SourceResolver resolver, Map objectModel, String src,
       Parameters par) throws ProcessingException, SAXException, IOException {
     super.setup(resolver, objectModel, src, par);
-    localRecycle();
-    try {
-      if (null == this.dispatcherHelper)
-        this.dispatcherHelper = new DispatcherHelper(manager);
-      if (null == this.processor)
-        this.processor = (XPathProcessor) this.manager.lookup(XPathProcessor.ROLE);
-      if (null == m_resolver)
-        m_resolver = (SourceResolver) manager.lookup(SourceResolver.ROLE);
-    } catch (Exception e) {
-      String error = "dispatcherError:\n Could not set up the dispatcherHelper!\n DispatcherStack: "
-          + e;
-      getLogger().error(error);
-      throw new ProcessingException(error);
-    }
+    
     storedPrefixMap = new HashMap();
     this.parameterHelper = new HashMap();
 
@@ -336,17 +315,7 @@ public class DispatcherTransformer extends AbstractSAXTransformer implements
       getLogger().error(error);
       throw new ProcessingException(error);
     }
-    // * just store the $requestId and do the DOM-reading/storing later
-    String propertyURI = "cocoon://" + requestId + ".props";
-    try {
-      this.defaultProperties = org.apache.forrest.dispatcher.util.SourceUtil
-          .readDOM(propertyURI, this.manager);
-    } catch (Exception e1) {
-      String error = "dispatcherError:\n" + "Could not get the properties for "
-          + propertyURI + "\n DispatcherStack: " + e1;
-      getLogger().error(error);
-      throw new ProcessingException(error);
-    }
+
     parameterHelper.put(DISPATCHER_REQUEST_ATTRIBUTE, requestId);
     this.requestedFormat = parameters.getParameter(STRUCTURER_FORMAT_ATTRIBUTE,
         null);
@@ -359,27 +328,7 @@ public class DispatcherTransformer extends AbstractSAXTransformer implements
     parameterHelper.put(STRUCTURER_FORMAT_ATTRIBUTE, requestedFormat);
 
     this.hooksXSL = parameters.getParameter(HOOKS_TRANSFORMER_PARAMETER, null);
-    try {
-      if (this.hooksXSL == null || this.hooksXSL.equals("")) {
-        String warning = "dispatcherError:\n"
-            + "You did not set up the \"hooksTransformer\" parameter in the sitemap, we are not going to transform forrest:hooks elements."
-            + " For text output where you would not have to use hooks as structurer, the way you want it.";
-        getLogger().warn(warning);
-      } else {
-        // * just store the $hooksXSL and do the DOM-reading/storing
-        // later
-        DOMSource stylesheet = new DOMSource(dispatcherHelper
-            .getDocument(this.hooksXSL));
-        this.structurerTransformer = dispatcherHelper.createTransformer(stylesheet);
-      }
-      parameterHelper.put(HOOKS_TRANSFORMER_PARAMETER, hooksXSL);
-    } catch (Exception e) {
-      String error = "dispatcherError:\n"
-          + "Could not set up the \"hooks transformer\".\n\n DispatcherStack:\n "
-          + e;
-      getLogger().error(error);
-      throw new ProcessingException(error);
-    }
+    parameterHelper.put(HOOKS_TRANSFORMER_PARAMETER, hooksXSL);
   }
 
   /**
@@ -387,7 +336,6 @@ public class DispatcherTransformer extends AbstractSAXTransformer implements
    */
   private void localRecycle() {
     this.contract = null;
-    this.hooksXSL = null;
     this.structurerTransformer = null;
     this.insideProperties = false;
   }
@@ -561,6 +509,53 @@ public class DispatcherTransformer extends AbstractSAXTransformer implements
       }
     }
     if (requestedFormat.equals(currentFormat)) {
+      localRecycle();
+      try {
+        if (null == this.dispatcherHelper)
+          this.dispatcherHelper = new DispatcherHelper(manager);
+        if (null == this.processor)
+          this.processor = (XPathProcessor) this.manager
+              .lookup(XPathProcessor.ROLE);
+        if (null == m_resolver)
+          m_resolver = (SourceResolver) manager.lookup(SourceResolver.ROLE);
+      } catch (Exception e) {
+        String error = "dispatcherError:\n Could not set up the dispatcherHelper!\n DispatcherStack: "
+            + e;
+        getLogger().error(error);
+        throw new SAXException(error);
+      }
+      String propertyURI = "cocoon://" + requestId + ".props";
+      try {
+        this.defaultProperties = org.apache.forrest.dispatcher.util.SourceUtil
+            .readDOM(propertyURI, this.manager);
+      } catch (Exception e1) {
+        String error = "dispatcherError:\n" + "Could not get the properties for "
+            + propertyURI + "\n DispatcherStack: " + e1;
+        getLogger().error(error);
+        throw new SAXException(error);
+      }
+      try {
+        if (this.hooksXSL == null || this.hooksXSL.equals("")) {
+          String warning = "dispatcherError:\n"
+              + "You did not set up the \"hooksTransformer\" parameter in the sitemap, we are not going to transform forrest:hooks elements."
+              + " For text output where you would not have to use hooks as structurer, the way you want it.";
+          getLogger().warn(warning);
+        } else {
+          // * just store the $hooksXSL and do the DOM-reading/storing
+          // later
+          DOMSource stylesheet = new DOMSource(dispatcherHelper
+              .getDocument(this.hooksXSL));
+          this.structurerTransformer = dispatcherHelper
+              .createTransformer(stylesheet);
+        }
+        
+      } catch (Exception e) {
+        String error = "dispatcherError:\n"
+            + "Could not set up the \"hooks transformer\".\n\n DispatcherStack:\n "
+            + e;
+        getLogger().error(error);
+        throw new SAXException(error);
+      }
       if (path == null)
         path = "result";
       this.includeNodes = true;
@@ -641,9 +636,6 @@ public class DispatcherTransformer extends AbstractSAXTransformer implements
       if (contract == null)
         contract = new ContractBeanDOMImpl(this.manager, parameterHelper,
             defaultProperties, (URIResolver) this);
-      // This is not needed since the manager did not change.
-      // else
-      // contract.initialize();
     } catch (Exception e) {
       String error = DispatcherException.ERROR_500 + "\n"
           + "component: ContractBean" + "\n"
@@ -1011,21 +1003,6 @@ public class DispatcherTransformer extends AbstractSAXTransformer implements
         getLogger().debug(
             "xslSource = " + xslSource + ", system id = " + xslSource.getURI());
       }
-
-      // if (m_checkIncludes) {
-      // // Populate included validities
-      // List includes = (List) m_includesMap.get(base);
-      // if (includes != null) {
-      // SourceValidity included = xslSource.getValidity();
-      // if (included != null) {
-      // includes.add(new Object[] { xslSource.getURI(),
-      // xslSource.getValidity() });
-      // } else {
-      // // One of the included stylesheets is not cacheable
-      // m_includesMap.remove(base);
-      // }
-      // }
-      // }
 
       return new StreamSource(is.getByteStream(), is.getSystemId());
     } catch (SourceException e) {
