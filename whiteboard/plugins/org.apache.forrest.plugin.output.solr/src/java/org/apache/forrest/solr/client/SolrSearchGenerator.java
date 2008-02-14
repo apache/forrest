@@ -74,7 +74,7 @@ public class SolrSearchGenerator extends ServiceableGenerator {
         // cocoon-2.1.x compatible
         for (Enumeration iter = request.getParameterNames(); iter.hasMoreElements();) {
             String name = (String) iter.nextElement();
-            System.out.println("xxx "+name);
+            getLogger().debug("parameter "+name);
             map.put(name, request.getParameter(name));
         }
     }
