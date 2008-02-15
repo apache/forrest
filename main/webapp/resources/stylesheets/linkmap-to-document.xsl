@@ -15,18 +15,14 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 -->
-<xsl:stylesheet
-    version="1.0"
-    xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
-  <xsl:output
-        method="xml"
-        version="1.0"
-        omit-xml-declaration="no"
-        indent="yes"
-        doctype-public="-//APACHE//DTD Documentation V1.2//EN"
-        doctype-system="http://forrest.apache.org/dtd/document-v12.dtd" />
-  <xsl:template
-        match="/">
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+  <xsl:output method="xml" 
+               version="1.0" 
+               omit-xml-declaration="no" 
+               indent="yes"
+               doctype-public="-//APACHE//DTD Documentation V1.2//EN"
+               doctype-system="http://forrest.apache.org/dtd/document-v12.dtd" />
+  <xsl:template match="/">
     <document>
       <header>
         <title>Site Linkmap Table of Contents</title>
@@ -38,41 +34,30 @@
 <!-- FIXME: FOR-731 workaround for a side-effect of the workaround for FOR-675
          <xsl:apply-templates select="*[not(self::site)]" />        
 -->
-        <xsl:apply-templates
-                    select="*" />
+        <xsl:apply-templates select="*" />
       </body>
     </document>
   </xsl:template>
-  <xsl:template
-        match="*">
-    <xsl:if
-            test="@label">
+  <xsl:template match="*">
+    <xsl:if test="@label">
       <ul>
         <li><a>
-          <xsl:if
-                            test="@href!=''">
-            <xsl:attribute
-                                name="href">
-              <xsl:value-of
-                                    select="@href" />
+          <xsl:if test="@href!=''">
+            <xsl:attribute name="href">
+              <xsl:value-of select="@href"/>
             </xsl:attribute>
           </xsl:if>
-          <xsl:value-of
-                            select="@label" />
+          <xsl:value-of select="@label"/>
 <!-- force site element name to be on same line as label --></a>&#160;&#160;___________________&#160;&#160;<em>
-          <xsl:value-of
-                            select="name(.)" /></em>
-          <xsl:if
-                        test="@description">
+          <xsl:value-of select="name(.)" /></em>
+          <xsl:if test="@description">
 <!-- allow description to flow to next line in a small window -->
 <xsl:text>&#160;: </xsl:text>
-            <xsl:value-of
-                            select="normalize-space(@description)" />
+            <xsl:value-of select="normalize-space(@description)"/>
           </xsl:if></li>
-        <xsl:if
-                    test="*[@label!='']">
+        <xsl:if test="*">
           <ul>
-            <xsl:apply-templates />
+            <xsl:apply-templates/>
           </ul>
         </xsl:if>
       </ul>
