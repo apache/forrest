@@ -19,45 +19,45 @@
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns:fo="http://www.w3.org/1999/XSL/Format"
     version="1.0">
-    <xsl:template
+  <xsl:template
         match="document"
         mode="outline">
-        <fo:bookmark-tree>
-        <xsl:apply-templates
+    <fo:bookmark-tree>
+      <xsl:apply-templates
             select="body/section"
             mode="outline" />
-        </fo:bookmark-tree>
-    </xsl:template>
-    <xsl:template
+    </fo:bookmark-tree>
+  </xsl:template>
+  <xsl:template
         match="section"
         mode="outline">
-        <fo:bookmark>
-            <xsl:attribute
+    <fo:bookmark>
+      <xsl:attribute
                 name="internal-destination">
-                <xsl:choose>
-                    <xsl:when
+        <xsl:choose>
+          <xsl:when
                         test="normalize-space(@id)!=''">
-                        <xsl:value-of
+            <xsl:value-of
                             select="@id" />
-                    </xsl:when>
-                    <xsl:otherwise>
-                        <xsl:value-of
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:value-of
                             select="generate-id()" />
-                    </xsl:otherwise>
-                </xsl:choose>
-            </xsl:attribute>
-            <fo:bookmark-title>
-                <xsl:number
+          </xsl:otherwise>
+        </xsl:choose>
+      </xsl:attribute>
+      <fo:bookmark-title>
+        <xsl:number
                     format="1.1.1.1.1.1.1"
                     count="section"
                     level="multiple" />
-                <xsl:text> </xsl:text>
-                <xsl:value-of
+<xsl:text> </xsl:text>
+        <xsl:value-of
                     select="normalize-space(title)" />
-            </fo:bookmark-title>
-            <xsl:apply-templates
+      </fo:bookmark-title>
+      <xsl:apply-templates
                 select="section"
                 mode="outline" />
-        </fo:bookmark>
-    </xsl:template>
+    </fo:bookmark>
+  </xsl:template>
 </xsl:stylesheet>
