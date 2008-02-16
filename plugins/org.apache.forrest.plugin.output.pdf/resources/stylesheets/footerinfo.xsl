@@ -44,18 +44,18 @@ with @role='pdf' is present, that is used instead.  Eg:
     </xsl:variable>
     <xsl:variable name="url" select="$pdfcredit/url"/>
     <fo:block-container font-style="italic" absolute-position="absolute"
-      left="0pt" bottom="150pt"
-      font-size="10pt">
-        <!-- move copyright down if there is a legal notice 
+      left="0pt" bottom="150pt" height="15pt"
+      font-size="8pt">
+<!-- move copyright down if there is a legal notice 
               (thus keeping it on same line as line number) -->
-        <xsl:attribute
+      <xsl:attribute
             name="top">
-            <xsl:choose>
-                <xsl:when
+        <xsl:choose>
+          <xsl:when
                     test="/site/document/footer/legal">22</xsl:when>
-                <xsl:otherwise>6</xsl:otherwise>
-            </xsl:choose>
-        </xsl:attribute>  
+          <xsl:otherwise>6</xsl:otherwise>
+        </xsl:choose>
+      </xsl:attribute>
       <xsl:if test="not($url)">
         <fo:block text-align="center" color="lightgrey">
           <xsl:value-of select="$text"/>

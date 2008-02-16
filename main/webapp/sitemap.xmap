@@ -557,28 +557,7 @@ $Revision: 1.12 $
       <map:match pattern="**faq.fo">
         <map:mount uri-prefix="" src="faq.xmap" check-reload="yes" />
       </map:match>
-<!-- generate .fo from .xml  -->
-      <map:match type="regexp" pattern="^(.*?)([^/]*).fo$">
-        <map:select type="exists">
-          <map:when test="{lm:project.{1}{2}.fo}">
-            <map:generate src="{lm:project.{1}{2}.fo}"/>
-          </map:when>
-          <map:otherwise>
-            <map:aggregate element="site">
-              <map:part src="cocoon:/skinconf.xml"/>
-              <map:part src="cocoon:/{1}{2}.xml"/>
-            </map:aggregate>
-<!-- <map:transform type="idgen"/> -->
-            <map:transform type="xinclude"/>
-            <map:transform type="linkrewriter" src="cocoon://{1}linkmap-{2}.fo"/>
-            <map:transform src="{lm:transform.document.fo}">
-              <map:parameter name="imagesdir" value="{properties:resources.images}/"/>
-              <map:parameter name="xmlbasedir" value="{properties:content.xdocs}{1}"/>
-            </map:transform>
-          </map:otherwise>
-        </map:select>
-        <map:serialize type="xml"/>
-      </map:match>
+
 <!-- handle PHP -->
       <map:match type="regexp" pattern="^(.*?)([^/]*).php$">
         <map:generate src="cocoon://{1}{2}.html"/>
