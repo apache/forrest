@@ -19,58 +19,61 @@
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns:fo="http://www.w3.org/1999/XSL/Format"
     version="1.0">
+  <xsl:variable
+        name="config"
+        select="//skinconfig" />
 <!-- left, justify, right -->
   <xsl:variable
         name="text-align"
-        select="string(//skinconfig/pdf/page/@text-align)" />
+        select="string($config/pdf/page/@text-align)" />
 <!-- prefix which turns relative URLs into absolute ones, empty by default -->
   <xsl:variable
         name="url-prefix"
-        select="string(//skinconfig/pdf/url-prefix)" />
+        select="string($config/pdf/url-prefix)" />
 <!-- print URL of external links -->
   <xsl:variable
         name="show-external-urls"
-        select="//skinconfig/pdf/show-external-urls" />
+        select="$config/pdf/show-external-urls" />
 <!-- disable the table of content (enabled by default) -->
   <xsl:variable
         name="disable-toc"
-        select="string(//skinconfig/pdf/disable-toc)" />
+        select="string($config/pdf/disable-toc)" />
 <!-- Get the section depth to use when generating the minitoc (default is 2) -->
   <xsl:variable
         name="toc-max-depth"
-        select="number(//skinconfig/toc/@max-depth)" />
+        select="number($config/toc/@max-depth)" />
 <!-- The page size to be used -->
   <xsl:variable
         name="pagesize"
-        select="string(//skinconfig/pdf/page/@size)" />
+        select="string($config/pdf/page/@size)" />
 <!-- The page orientation ("portrait" or "landscape") -->
   <xsl:variable
         name="pageorientation"
-        select="string(//skinconfig/pdf/page/@orientation)" />
+        select="string($config/pdf/page/@orientation)" />
 <!-- Double-sided printing toggle -->
   <xsl:variable
         name="doublesided"
-        select="string(//skinconfig/pdf/margins/@double-sided)" />
+        select="string($config/pdf/margins/@double-sided)" />
 <!-- The top page margin -->
   <xsl:variable
         name="topmargin"
-        select="string(//skinconfig/pdf/margins/top)" />
+        select="string($config/pdf/margins/top)" />
 <!-- The bottom page margin -->
   <xsl:variable
         name="bottommargin"
-        select="string(//skinconfig/pdf/margins/bottom)" />
+        select="string($config/pdf/margins/bottom)" />
 <!-- The inner page margin (always the left margin if
   double-sided printing is off, alternating between left and right if
   it's on) -->
   <xsl:variable
         name="innermargin"
-        select="string(//skinconfig/pdf/margins/inner)" />
+        select="string($config/pdf/margins/inner)" />
 <!-- The outer page margin (always the right margin if
   double-sided printing is off, alternating between right and left if
   it's on)-->
   <xsl:variable
         name="outermargin"
-        select="string(//skinconfig/pdf/margins/outer)" />
+        select="string($config/pdf/margins/outer)" />
   <xsl:param
         name="numbersections"
         select="'true'" />
@@ -81,16 +84,16 @@
 <!-- page numbering format -->
   <xsl:variable
         name="page-numbering-format"
-        select="string(//skinconfig/pdf/page-numbering-format)" />
+        select="string($config/pdf/page-numbering-format)" />
   <xsl:variable
         name="background-color"
-        select="//skinconfig/colors/color[@name='body']/@value" />
+        select="$config/colors/color[@name='body']/@value" />
   <xsl:variable
         name="heading-color"
-        select="//skinconfig/colors/color[@name='subheading']/@value" />
+        select="$config/colors/color[@name='subheading']/@value" />
   <xsl:variable
         name="heading-type"
-        select="//skinconfig/headings/@type" />
+        select="$config/headings/@type" />
 <!-- Section depth at which we stop numbering and just indent -->
   <xsl:param
         name="numbering-max-depth"
@@ -528,7 +531,7 @@
         match="source">
     <xsl:variable
             name="color"
-            select="//skinconfig/colors/color[@name='code']/@value" />
+            select="$config/colors/color[@name='code']/@value" />
     <fo:block
             font-family="monospace"
             font-size="8pt"
@@ -704,7 +707,7 @@
         match="warning">
     <xsl:variable
             name="color"
-            select="//skinconfig/colors/color[@name='warning']/@value" />
+            select="$config/colors/color[@name='warning']/@value" />
     <fo:block
             margin-left="0.25in"
             margin-right="0.25in"
@@ -757,7 +760,7 @@
         match="note">
     <xsl:variable
             name="color"
-            select="//skinconfig/colors/color[@name='note']/@value" />
+            select="$config/colors/color[@name='note']/@value" />
     <fo:block
             margin-left="0.25in"
             margin-right="0.25in"
@@ -811,7 +814,7 @@
         match="fixme">
     <xsl:variable
             name="color"
-            select="//skinconfig/colors/color[@name='fixme']/@value" />
+            select="$config/colors/color[@name='fixme']/@value" />
     <fo:block
             margin-left="0.25in"
             margin-right="0.25in"
@@ -857,7 +860,7 @@
         match="link|fork|jump">
     <xsl:variable
             name="color"
-            select="//skinconfig/colors/color[@name = 'body']/@link" />
+            select="$config/colors/color[@name = 'body']/@link" />
     <xsl:choose>
       <xsl:when
                 test="starts-with(@href, '#')">
@@ -981,7 +984,7 @@
       </fo:external-graphic>
 <!-- alt text -->
       <xsl:if
-                test="//skinconfig/pdf/show-image-alt-text='true'">
+                test="$config/pdf/show-image-alt-text='true'">
         <xsl:if
                     test="normalize-space(@alt)!=''">
           <fo:block>
@@ -1103,7 +1106,7 @@
         match="th">
     <xsl:variable
             name="border-color"
-            select="//skinconfig/colors/color[@name = 'table']/@value" />
+            select="$config/colors/color[@name = 'table']/@value" />
     <xsl:variable
             name="background-color"
             select="$border-color" />
@@ -1143,10 +1146,10 @@
         match="td">
     <xsl:variable
             name="border-color"
-            select="//skinconfig/colors/color[@name = 'table']/@value" />
+            select="$config/colors/color[@name = 'table']/@value" />
     <xsl:variable
             name="background-color"
-            select="//skinconfig/colors/color[@name = 'table-cell']/@value" />
+            select="$config/colors/color[@name = 'table-cell']/@value" />
     <fo:table-cell
             padding-before="4pt"
             padding-after="4pt"
