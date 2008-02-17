@@ -95,6 +95,10 @@
         href="pdfoutline.xsl" />
   <xsl:include
         href="footerinfo.xsl" />
+  <xsl:include
+        href="helper-pageBreaks.xsl" />
+  <xsl:include
+        href="helper-pageNumber.xsl" />
 <!-- Determine page height for various page sizes (US Letter portrait
   is the default) -->
 <!-- FIXME: JJP:would this be better of a file? -->
@@ -1442,69 +1446,6 @@
                 name="insertPageBreaks" />
       <xsl:apply-templates />
     </fo:block>
-  </xsl:template>
-  <xsl:template
-        name="insertPageBreaks">
-<!-- if marked as a 'pageBreakBefore', and we're breaking on pages, and were not the first node -->
-    <xsl:if
-            test="contains(@class, 'pageBreakBefore') and preceding-sibling::node()">
-      <xsl:attribute
-                name="break-before">page</xsl:attribute>
-    </xsl:if>
-<!-- if marked as a 'pageBreakAfter', and we're breaking on pages, and were not the last node -->
-    <xsl:if
-            test="contains(@class, 'pageBreakAfter') and following-sibling::node()">
-      <xsl:attribute
-                name="break-after">page</xsl:attribute>
-    </xsl:if>
-  </xsl:template>
-<!-- Display the document numerotation -->
-  <xsl:template
-        name="insertPageNumber">
-    <xsl:param
-            name="text-align"
-            select="'start'" />
-    <xsl:variable
-            name="prefixe"
-            select="substring-before($page-numbering-format,'1')" />
-    <xsl:variable
-            name="sep"
-            select="substring-before(substring-after($page-numbering-format,'1'),'1')" />
-    <xsl:variable
-            name="postfixe">
-      <xsl:choose>
-        <xsl:when
-                    test="contains(substring-after($page-numbering-format,'1'),'1')">
-          <xsl:value-of
-                        select="substring-after(substring-after($page-numbering-format,'1'),'1')" />
-        </xsl:when>
-        <xsl:otherwise>
-          <xsl:value-of
-                        select="substring-after($page-numbering-format,'1')" />
-        </xsl:otherwise>
-      </xsl:choose>
-    </xsl:variable>
-<!-- if 'page-numbering-format' contains 1 digits, the page number is displayed in the footer -->
-    <xsl:if
-            test="contains($page-numbering-format,'1')">
-      <fo:block
-                font-size="70%"
-                text-align="{$text-align}">
-<!-- if the separator is not found, the total page number is skipped -->
-        <xsl:value-of
-                    select="$prefixe" />
-        <fo:page-number />
-        <xsl:if
-                    test="$sep != ''">
-          <xsl:value-of
-                        select="$sep" />
-          <fo:page-number-citation
-                        ref-id="term" />
-        </xsl:if>
-        <xsl:value-of
-                    select="$postfixe" />
-      </fo:block>
-    </xsl:if>
   </xsl:template>
 <!-- ====================================================================== -->
 <!-- Temporary section - subject to change on short notice  -->
