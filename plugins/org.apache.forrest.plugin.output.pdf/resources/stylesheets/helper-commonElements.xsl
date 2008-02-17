@@ -105,4 +105,505 @@
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
+  <xsl:template match="source">
+    <xsl:variable name="color"
+      select="$config/colors/color[@name='code']/@value"/>
+    <fo:block font-family="monospace" font-size="8pt" padding="6pt" margin="0"
+      background-color="{$color}" white-space-collapse="false"
+      linefeed-treatment="preserve" white-space-treatment="preserve"
+      wrap-option="wrap" text-align="start">
+      <xsl:copy-of select="@id"/>
+      <xsl:call-template name="insertPageBreaks"/>
+      <xsl:apply-templates/>
+    </fo:block>
+  </xsl:template>
+  <xsl:template match="ol|ul">
+    <fo:list-block provisional-distance-between-starts="18pt"
+      provisional-label-separation="3pt" text-align="start">
+      <xsl:copy-of select="@id"/>
+      <xsl:apply-templates/>
+    </fo:list-block>
+  </xsl:template>
+  <xsl:template match="ol/li">
+    <fo:list-item>
+      <xsl:copy-of select="@id"/>
+      <xsl:if test="not(following-sibling::li[1])">
+        <xsl:attribute name="space-after">6pt</xsl:attribute>
+      </xsl:if>
+      <fo:list-item-label end-indent="label-end()" font-size="9">
+        <fo:block>
+          <xsl:number format="1."/>
+        </fo:block>
+      </fo:list-item-label>
+      <fo:list-item-body start-indent="body-start()">
+        <fo:block font-family="serif">
+          <xsl:apply-templates/>
+        </fo:block>
+      </fo:list-item-body>
+    </fo:list-item>
+  </xsl:template>
+  <!-- Emulate browser handling of these invalid combinations that our DTD
+  unfortunately allows -->
+  <xsl:template match="ul/ul | ul/ol | ol/ul | ol/ol">
+    <fo:list-item>
+      <xsl:copy-of select="@id"/>
+      <fo:list-item-label end-indent="label-end()">
+        <fo:block/>
+      </fo:list-item-label>
+      <fo:list-item-body start-indent="body-start()">
+        <fo:list-block>
+          <xsl:apply-templates/>
+        </fo:list-block>
+      </fo:list-item-body>
+    </fo:list-item>
+  </xsl:template>
+  <xsl:template match="ul/li">
+    <fo:list-item>
+      <xsl:copy-of select="@id"/>
+      <xsl:if test="not(following-sibling::li[1])">
+        <xsl:attribute name="space-after">6pt</xsl:attribute>
+      </xsl:if>
+      <fo:list-item-label end-indent="label-end()">
+        <fo:block>&#x2022;
+        </fo:block>
+      </fo:list-item-label>
+      <fo:list-item-body start-indent="body-start()">
+        <fo:block font-family="serif">
+          <xsl:apply-templates/>
+        </fo:block>
+      </fo:list-item-body>
+    </fo:list-item>
+  </xsl:template>
+  <xsl:template match="dl">
+    <fo:list-block provisional-distance-between-starts="18pt"
+      provisional-label-separation="3pt" text-align="start">
+      <xsl:copy-of select="@id"/>
+      <xsl:apply-templates/>
+    </fo:list-block>
+  </xsl:template>
+  <xsl:template match="dt">
+    <fo:list-item>
+      <xsl:copy-of select="@id"/>
+      <fo:list-item-label end-indent="label-end()">
+        <fo:block/>
+      </fo:list-item-label>
+      <fo:list-item-body start-indent="body-start()">
+        <fo:block font-weight="bold">
+          <xsl:apply-templates/>
+        </fo:block>
+      </fo:list-item-body>
+    </fo:list-item>
+  </xsl:template>
+  <xsl:template match="dd">
+    <fo:list-item>
+      <xsl:copy-of select="@id"/>
+      <fo:list-item-label end-indent="label-end()">
+        <fo:block/>
+      </fo:list-item-label>
+      <fo:list-item-body start-indent="body-start()">
+        <fo:block>
+          <xsl:apply-templates/>
+        </fo:block>
+      </fo:list-item-body>
+    </fo:list-item>
+  </xsl:template>
+  <xsl:template match="strong">
+    <fo:inline font-weight="bold">
+      <xsl:copy-of select="@id"/>
+      <xsl:apply-templates/>
+    </fo:inline>
+  </xsl:template>
+  <xsl:template match="em">
+    <fo:inline font-style="italic">
+      <xsl:copy-of select="@id"/>
+      <xsl:apply-templates/>
+    </fo:inline>
+  </xsl:template>
+  <xsl:template match="code">
+    <fo:inline font-family="monospace">
+      <xsl:copy-of select="@id"/>
+      <xsl:apply-templates/>
+    </fo:inline>
+  </xsl:template>
+  <xsl:template match="warning">
+    <xsl:variable name="color"
+      select="$config/colors/color[@name='warning']/@value"/>
+    <fo:block margin-left="0.25in" margin-right="0.25in" padding-left="3pt"
+      padding-top="2pt" padding-bottom="1pt" font-size="9pt"
+      font-family="sans-serif" space-before="10pt" border-before-style="solid"
+      border-start-style="solid" border-end-style="solid" border-color="{$color}"
+      background-color="{$color}" color="#ffffff">
+      <xsl:copy-of select="@id"/>
+      <xsl:call-template name="insertPageBreaks"/>
+      <xsl:choose>
+        <xsl:when test="@label">
+          <xsl:value-of select="@label"/>
+        </xsl:when>
+        <xsl:otherwise>Warning: </xsl:otherwise>
+      </xsl:choose>
+      <xsl:value-of select="title"/>
+    </fo:block>
+    <fo:block margin-left="0.25in" margin-right="0.25in" font-family="serif"
+      font-size="10pt" border-after-style="solid" border-start-style="solid"
+      border-end-style="solid" border-color="{$color}" background-color="#fff0f0"
+      padding-start="3pt" padding-end="3pt" padding-before="3pt"
+      padding-after="3pt" space-after="10pt">
+      <xsl:apply-templates/>
+    </fo:block>
+  </xsl:template>
+  <xsl:template match="note">
+    <xsl:variable name="color"
+      select="$config/colors/color[@name='note']/@value"/>
+    <fo:block margin-left="0.25in" margin-right="0.25in" padding-left="3pt"
+      font-size="9pt" padding-top="2pt" padding-bottom="1pt" color="#ffffff"
+      font-family="sans-serif" space-before="10pt" border-before-style="solid"
+      border-start-style="solid" border-end-style="solid" border-color="{$color}"
+      background-color="{$color}">
+      <xsl:copy-of select="@id"/>
+      <xsl:call-template name="insertPageBreaks"/>
+      <xsl:choose>
+        <xsl:when test="@label">
+          <xsl:value-of select="@label"/>
+        </xsl:when>
+        <!-- insert i18n stuff here -->
+        <xsl:otherwise>Note: </xsl:otherwise>
+      </xsl:choose>
+      <xsl:value-of select="title"/>
+    </fo:block>
+    <fo:block margin-left="0.25in" margin-right="0.25in" font-family="serif"
+      font-size="10pt" space-after="10pt" border-after-style="solid"
+      border-start-style="solid" border-end-style="solid" border-color="{$color}"
+      background-color="#F0F0FF" padding-start="3pt" padding-end="3pt"
+      padding-before="3pt" padding-after="3pt">
+      <xsl:apply-templates/>
+    </fo:block>
+  </xsl:template>
+  <xsl:template match="fixme">
+    <xsl:variable name="color"
+      select="$config/colors/color[@name='fixme']/@value"/>
+    <fo:block margin-left="0.25in" margin-right="0.25in" padding-left="3pt"
+      font-size="9pt" padding-top="2pt" padding-bottom="1pt" color="#FFFFFF"
+      font-family="sans-serif" space-before="10pt" border-before-style="solid"
+      border-start-style="solid" border-end-style="solid" border-color="{$color}"
+      background-color="{$color}">
+      <xsl:copy-of select="@id"/>
+      <xsl:call-template name="insertPageBreaks"/>
+      <!-- insert i18n stuff here --> FIXME (
+      <xsl:value-of select="@author"/>):
+      <xsl:value-of select="title"/> </fo:block>
+    <fo:block margin-left="0.25in" margin-right="0.25in" font-family="serif"
+      font-size="10pt" space-after="10pt" border-after-style="solid"
+      border-start-style="solid" border-end-style="solid" border-color="{$color}"
+      background-color="#FFF0F0" padding-start="3pt" padding-end="3pt"
+      padding-before="3pt" padding-after="3pt">
+      <xsl:apply-templates/>
+    </fo:block>
+  </xsl:template>
+  <xsl:template match="link|fork|jump">
+    <xsl:variable name="color"
+      select="$config/colors/color[@name = 'body']/@link"/>
+    <xsl:choose>
+      <xsl:when test="starts-with(@href, '#')">
+        <fo:basic-link color="{$color}" text-decoration="underline"
+          internal-destination="{substring(@href,2)}">
+          <xsl:copy-of select="@id"/>
+          <xsl:apply-templates/>
+        </fo:basic-link>
+      </xsl:when>
+      <xsl:otherwise>
+        <!-- Make relative URLs absolute -->
+        <xsl:variable name="href">
+          <xsl:choose>
+            <!-- already absolute -->
+            <xsl:when test="contains(@href,'://')">
+              <xsl:value-of select="@href"/>
+            </xsl:when>
+            <!-- add prefix if one is set -->
+            <xsl:when test="$url-prefix != ''">
+              <xsl:value-of select="concat($url-prefix,@href)"/>
+            </xsl:when>
+            <!-- keep as is -->
+            <xsl:otherwise>
+              <xsl:value-of select="@href"/>
+            </xsl:otherwise>
+          </xsl:choose>
+        </xsl:variable>
+        <fo:basic-link color="{$color}" text-decoration="underline"
+          external-destination="{$href}">
+          <xsl:copy-of select="@id"/>
+          <xsl:apply-templates/>
+        </fo:basic-link>
+        <xsl:if test="$show-external-urls = 'true' and @href != string(.)"> (
+          <xsl:value-of select="$href"/>) </xsl:if>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+  <xsl:template match="figure|img">
+    <fo:block text-align="center">
+      <xsl:call-template name="insertPageBreaks"/>
+      <xsl:copy-of select="@id"/>
+      <!-- Make relative paths absolute -->
+      <xsl:variable name="imgpath">
+        <xsl:choose>
+          <!-- resources image dir -->
+          <xsl:when test="starts-with(string(@src),'images/')">
+            <xsl:value-of
+              select="concat($imagesdir,substring-after(@src,'images'))"/>
+          </xsl:when>
+          <xsl:when test="contains(string(@src),'/images/')">
+            <xsl:value-of
+              select="concat($imagesdir,substring-after(@src,'/images'))"/>
+          </xsl:when>
+          <!-- already absolute -->
+          <xsl:when
+            test="contains(string(@src),':') or starts-with(string(@src),'/')">
+            <xsl:value-of select="@src"/>
+          </xsl:when>
+          <!-- relative to document -->
+          <xsl:otherwise> 
+            <xsl:value-of select="concat('cocoon://',@src)"/> </xsl:otherwise>
+        </xsl:choose>
+      </xsl:variable>
+      <fo:external-graphic src="{$imgpath}">
+        <xsl:if test="@height">
+          <xsl:attribute name="height">
+            <xsl:value-of select="@height"/>
+          </xsl:attribute>
+          <xsl:attribute name="content-height">scale-to-fit</xsl:attribute>
+        </xsl:if>
+        <xsl:if test="@width">
+          <xsl:attribute name="width">
+            <xsl:value-of select="@width"/>
+          </xsl:attribute>
+          <xsl:attribute name="content-width">scale-to-fit</xsl:attribute>
+        </xsl:if>
+        <!-- Work around for fop094 not supporting 
+        scale-down-to-fit, to be replaces as soon as fop095 is released
+        -->
+        <xsl:if test=" not((@width|@height))">
+          <xsl:attribute name="width">100%</xsl:attribute>
+          <xsl:attribute name="content-width">scale-to-fit</xsl:attribute>
+          <xsl:attribute name="content-height">100%</xsl:attribute>
+        </xsl:if>
+      </fo:external-graphic>
+      <!-- alt text -->
+      <xsl:if test="$config/pdf/show-image-alt-text='true'">
+        <xsl:if test="normalize-space(@alt)!=''">
+          <fo:block>
+            <xsl:value-of select="@alt"/>
+          </fo:block>
+        </xsl:if>
+      </xsl:if>
+    </fo:block>
+  </xsl:template>
+  <xsl:template match="table">
+    <!-- FIXME: Apache FOP must have column widths specified at present,
+    this section can be removed when this limitation is removed from Fop.
+    Unfortunately, this means that each column is a fixed width,
+    but at least the table displays! -->
+    <xsl:variable name="max-number-columns-td">
+      <xsl:for-each select="tr">
+        <xsl:sort select="count(td|th)" data-type="number" order="descending"/>
+        <xsl:if test="position() = 1">
+          <xsl:value-of select="count(td|th)"/>
+        </xsl:if>
+      </xsl:for-each>
+    </xsl:variable>
+    <xsl:variable name="max-number-columns-colspan">
+      <xsl:for-each select="tr">
+        <xsl:sort select="count(td|th)" data-type="number" order="descending"/>
+        <xsl:if test="position() = 1">
+          <xsl:value-of select="sum(td/@colspan|th/@colspan)"/>
+        </xsl:if>
+      </xsl:for-each>
+    </xsl:variable>
+    <xsl:variable name="max-number-columns">
+      <xsl:choose>
+        <xsl:when test="$max-number-columns-colspan&gt;$max-number-columns-td">
+          <xsl:value-of select="$max-number-columns-colspan"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="$max-number-columns-td"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
+    <xsl:variable name="column-width">
+      <xsl:value-of select="6.25 div number($max-number-columns)"/>in
+      </xsl:variable>
+    <fo:table table-layout="fixed" width="100%">
+      <xsl:copy-of select="@id"/>
+      <fo:table-column>
+        <xsl:attribute name="column-width">
+          <xsl:value-of select="$column-width"/>
+        </xsl:attribute>
+        <xsl:attribute name="number-columns-repeated">
+          <xsl:value-of select="number($max-number-columns)"/>
+        </xsl:attribute>
+      </fo:table-column>
+      <!-- End of hack for Fop support (if removing this hack, remember
+      you need the <fo:table> element) -->
+      <fo:table-body font-size="10pt" font-family="serif">
+        <xsl:apply-templates select="tr"/>
+      </fo:table-body>
+    </fo:table>
+    <!-- FIXME: Apache Fop does not support the caption element yet.
+    This hack will display the table caption accordingly. -->
+    <xsl:if test="caption">
+      <fo:block font-size="10pt" text-align="left" font-weight="normal"
+        margin-top="5pt">
+        <!-- insert i18n stuff here --> Table
+        <xsl:text>
+        </xsl:text>
+        <xsl:number count="table" level="multiple"/>
+        <xsl:text>: </xsl:text>
+        <xsl:value-of select="caption"/> </fo:block>
+    </xsl:if>
+  </xsl:template>
+  <xsl:template match="tr">
+    <fo:table-row>
+      <xsl:copy-of select="@id"/>
+      <xsl:apply-templates/>
+    </fo:table-row>
+  </xsl:template>
+  <xsl:template match="th">
+    <xsl:variable name="border-color"
+      select="$config/colors/color[@name = 'table']/@value"/>
+    <xsl:variable name="background-color" select="$border-color"/>
+    <fo:table-cell padding-before="4pt" padding-after="4pt" padding-start="4pt"
+      padding-end="4pt" color="#FFFFFF" background-color="{$background-color}"
+      border="1pt solid {$border-color}">
+      <xsl:copy-of select="@id"/>
+      <xsl:if test="@colspan!=''">
+        <xsl:attribute name="number-columns-spanned">
+          <xsl:value-of select="@colspan"/>
+        </xsl:attribute>
+      </xsl:if>
+      <xsl:if test="@rowspan!=''">
+        <xsl:attribute name="number-rows-spanned">
+          <xsl:value-of select="@rowspan"/>
+        </xsl:attribute>
+      </xsl:if>
+      <fo:block text-align="center">
+        <xsl:apply-templates/>
+      </fo:block>
+    </fo:table-cell>
+  </xsl:template>
+  <xsl:template match="td">
+    <xsl:variable name="border-color"
+      select="$config/colors/color[@name = 'table']/@value"/>
+    <xsl:variable name="background-color"
+      select="$config/colors/color[@name = 'table-cell']/@value"/>
+    <fo:table-cell padding-before="4pt" padding-after="4pt" padding-start="4pt"
+      padding-end="4pt" background-color="{$background-color}"
+      border="1pt solid {$border-color}">
+      <xsl:copy-of select="@id"/>
+      <xsl:if test="@colspan!=''">
+        <xsl:attribute name="number-columns-spanned">
+          <xsl:value-of select="@colspan"/>
+        </xsl:attribute>
+      </xsl:if>
+      <xsl:if test="@rowspan!=''">
+        <xsl:attribute name="number-rows-spanned">
+          <xsl:value-of select="@rowspan"/>
+        </xsl:attribute>
+      </xsl:if>
+      <fo:block>
+        <xsl:apply-templates/>
+      </fo:block>
+    </fo:table-cell>
+  </xsl:template>
+  <xsl:template match="br">
+    <fo:block>
+      <xsl:copy-of select="@id"/>
+    </fo:block>
+  </xsl:template>
+  <xsl:template match="legal">
+    <fo:inline font-size="8pt">
+      <xsl:apply-templates/>
+    </fo:inline>
+  </xsl:template>
+  <xsl:template match="body[count(//section) != 0]">
+    <xsl:if test="$disable-toc != 'true' and $toc-max-depth > 0">
+      <fo:block font-family="sans-serif" font-size="12pt" font-weight="bold"
+        space-after="5pt" space-before="5pt" text-align="justify" width="7.5in">
+        <xsl:call-template name="insertPageBreaks"/>
+        <!-- insert i18n stuff here -->
+        <xsl:text>Table of contents</xsl:text>
+      </fo:block>
+      <fo:block font-family="serif" font-size="12pt" space-after="5pt"
+        space-before="0pt" text-align="justify" width="7.5in">
+        <xsl:if test="$page-break-top-sections">
+          <xsl:attribute name="break-after">page</xsl:attribute>
+        </xsl:if>
+        <xsl:apply-templates select="section" mode="toc"/>
+      </fo:block>
+    </xsl:if>
+    <xsl:apply-templates/>
+  </xsl:template>
+  <xsl:template match="section" mode="toc">
+    <!-- FIXME: see bug FOR-640 -->
+    <xsl:param name="depth" select="'1'"/>
+    <fo:block space-before="5pt" text-align-last="justify" start-indent=".5em"
+      text-indent=".5em">
+      <fo:inline>
+        <xsl:variable name="id">
+          <xsl:choose>
+            <xsl:when test="normalize-space(@id)!=''">
+              <xsl:value-of select="@id"/>
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:value-of select="generate-id()"/>
+            </xsl:otherwise>
+          </xsl:choose>
+        </xsl:variable>
+        <fo:basic-link internal-destination="{$id}">
+          <xsl:value-of
+            select="substring('&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;', 0, 2 * $depth - 1)"/>
+          <fo:inline font-size="11pt">
+            <xsl:number count="section" format="1.1.1.1.1.1.1" level="multiple"/>
+          </fo:inline>
+          <xsl:text>
+          </xsl:text>
+          <xsl:value-of select="title"/>
+          <fo:leader leader-pattern="dots"/>
+          <fo:page-number-citation ref-id="{$id}"/>
+        </fo:basic-link>
+      </fo:inline>
+      <xsl:if test="$toc-max-depth > $depth">
+        <xsl:apply-templates select="section" mode="toc">
+          <xsl:with-param name="depth" select="$depth + 1"/>
+        </xsl:apply-templates>
+      </xsl:if>
+    </fo:block>
+  </xsl:template>
+  
+  <!-- ====================================================================== -->
+  <!-- Local Extensions section -->
+  
+  <!-- ====================================================================== -->
+  <xsl:template match="citation">
+    <fo:inline>
+      <xsl:copy-of select="@id"/> [
+      <xsl:value-of select="@def"/>] </fo:inline>
+  </xsl:template>
+  <xsl:template match="p[@class='quote']">
+    <fo:block padding="3pt" margin="0" space-before="4pt" space-after="4pt"
+      background-color="#f0f0f0" font-family="serif" font-style="italic">
+      <xsl:copy-of select="@id"/>
+      <xsl:call-template name="insertPageBreaks"/>
+      <xsl:apply-templates/>
+    </fo:block>
+  </xsl:template>
+  
+  <!-- ====================================================================== -->
+  <!-- Temporary section - subject to change on short notice  -->
+  
+  <!-- ====================================================================== -->
+  <xsl:template match="//style">
+    <!-- HACK: The OpenOffice.org input plugin currently produces
+    intermediate documents that contain a style element, invalid per
+    the Forrest Document DTD. This style element must be ignored
+    here. To find out why this is done this way, read the comments
+    attached to issue FOR-433. -->
+  </xsl:template>
 </xsl:stylesheet>
