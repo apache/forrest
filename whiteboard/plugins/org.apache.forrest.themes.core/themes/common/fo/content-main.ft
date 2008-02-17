@@ -424,12 +424,28 @@ limitations under the License.
               <xsl:attribute name="height">
                 <xsl:value-of select="@height"/>
               </xsl:attribute>
+               <xsl:attribute
+                    name="content-height">scale-to-fit</xsl:attribute>
             </xsl:if>
             <xsl:if test="@width">
               <xsl:attribute name="width">
                 <xsl:value-of select="@width"/>
               </xsl:attribute>
+                <xsl:attribute
+                    name="content-width">scale-to-fit</xsl:attribute>
             </xsl:if>
+              <!-- Work around for fop094 not supporting 
+                  scale-down-to-fit, to be replaces as soon as fop095 is released
+              -->
+              <xsl:if
+                  test=" not((@width|@height))">
+                  <xsl:attribute
+                      name="width">100%</xsl:attribute>
+                  <xsl:attribute
+                      name="content-width">scale-to-fit</xsl:attribute>
+                  <xsl:attribute
+                      name="content-height">100%</xsl:attribute>
+              </xsl:if>
           </fo:external-graphic>
 <!-- alt text -->
           <xsl:if test="$config/show-image-alt-text='true'">
@@ -525,12 +541,22 @@ limitations under the License.
           padding-end="4pt" color="#FFFFFF"
           background-color="{$background-color}"
           border="1pt solid {$border-color}">
-          <xsl:attribute name="number-columns-spanned">
-            <xsl:value-of select="@colspan"/>
-          </xsl:attribute>
-          <xsl:attribute name="number-rows-spanned">
-            <xsl:value-of select="@rowspan"/>
-          </xsl:attribute>
+            <xsl:if
+                test="@colspan!=''">
+                <xsl:attribute
+                    name="number-columns-spanned">
+                    <xsl:value-of
+                        select="@colspan" />
+                </xsl:attribute>
+            </xsl:if>
+            <xsl:if
+                test="@rowspan!=''">
+                <xsl:attribute
+                    name="number-rows-spanned">
+                    <xsl:value-of
+                        select="@rowspan" />
+                </xsl:attribute>
+            </xsl:if>
           <fo:block text-align="center">
             <xsl:apply-templates/>
           </fo:block>
@@ -546,12 +572,22 @@ limitations under the License.
           padding-end="4pt"
           background-color="{$background-color}"
           border="1pt solid {$border-color}">
-          <xsl:attribute name="number-columns-spanned">
-            <xsl:value-of select="@colspan"/>
-          </xsl:attribute>
-          <xsl:attribute name="number-rows-spanned">
-            <xsl:value-of select="@rowspan"/>
-          </xsl:attribute>
+            <xsl:if
+                test="@colspan!=''">
+                <xsl:attribute
+                    name="number-columns-spanned">
+                    <xsl:value-of
+                        select="@colspan" />
+                </xsl:attribute>
+            </xsl:if>
+            <xsl:if
+                test="@rowspan!=''">
+                <xsl:attribute
+                    name="number-rows-spanned">
+                    <xsl:value-of
+                        select="@rowspan" />
+                </xsl:attribute>
+            </xsl:if>
           <fo:block>
             <xsl:apply-templates/>
           </fo:block>
