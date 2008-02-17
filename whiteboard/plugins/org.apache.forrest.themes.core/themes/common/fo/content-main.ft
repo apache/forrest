@@ -89,7 +89,7 @@ limitations under the License.
         </forrest:content>
       </xsl:template>
       <xsl:template match="anchor">
-        <fo:block id="{@id}"/>
+          <xsl:copy-of select="@id"/>
         <xsl:apply-templates/>
       </xsl:template>
       <xsl:template match="section">
@@ -147,6 +147,7 @@ limitations under the License.
 <!-- Already taken into account with sections -->
       <xsl:template match="title"/>
       <xsl:template match="p">
+          <xsl:copy-of select="@id"/>
         <xsl:choose>
           <xsl:when
             test="ancestor::li and not(preceding-sibling::*)">
@@ -165,6 +166,7 @@ limitations under the License.
         </xsl:choose>
       </xsl:template>
       <xsl:template match="source">
+          <xsl:copy-of select="@id"/>
         <xsl:variable name="color"
           select="$config/colors/color[@name='code']/@value"/>
         <fo:block font-family="monospace" font-size="10pt"
@@ -182,14 +184,16 @@ limitations under the License.
           provisional-distance-between-starts="18pt"
           provisional-label-separation="3pt"
           text-align="start">
+            <xsl:copy-of select="@id"/>
           <xsl:apply-templates/>
         </fo:list-block>
       </xsl:template>
       <xsl:template match="ol/li">
         <fo:list-item>
+            <xsl:copy-of select="@id"/>
           <xsl:if test="not(following-sibling::li[1])">
             <xsl:attribute name="space-after">
-              6pt"</xsl:attribute>
+              6pt</xsl:attribute>
           </xsl:if>
           <fo:list-item-label end-indent="label-end()">
             <fo:block>
@@ -207,6 +211,7 @@ limitations under the License.
       unfortunately allows -->
       <xsl:template match="ul/ul | ul/ol | ol/ul | ol/ol">
         <fo:list-item>
+            <xsl:copy-of select="@id"/>
           <fo:list-item-label end-indent="label-end()">
             <fo:block></fo:block>
           </fo:list-item-label>
@@ -219,6 +224,7 @@ limitations under the License.
       </xsl:template>
       <xsl:template match="ul/li">
         <fo:list-item>
+            <xsl:copy-of select="@id"/>
           <xsl:if test="not(following-sibling::li[1])">
             <xsl:attribute name="space-after">
               6pt</xsl:attribute>
@@ -239,11 +245,13 @@ limitations under the License.
           provisional-distance-between-starts="18pt"
           provisional-label-separation="3pt"
           text-align="start">
+            <xsl:copy-of select="@id"/>
           <xsl:apply-templates/>
         </fo:list-block>
       </xsl:template>
       <xsl:template match="dt">
         <fo:list-item>
+            <xsl:copy-of select="@id"/>
           <fo:list-item-label end-indent="label-end()">
             <fo:block></fo:block>
           </fo:list-item-label>
@@ -256,6 +264,7 @@ limitations under the License.
       </xsl:template>
       <xsl:template match="dd">
         <fo:list-item>
+            <xsl:copy-of select="@id"/>
           <fo:list-item-label end-indent="label-end()">
             <fo:block></fo:block>
           </fo:list-item-label>
@@ -267,21 +276,25 @@ limitations under the License.
         </fo:list-item>
       </xsl:template>
       <xsl:template match="strong">
+          <xsl:copy-of select="@id"/>
         <fo:inline font-weight="bold">
           <xsl:apply-templates/>
         </fo:inline>
       </xsl:template>
       <xsl:template match="em">
+          <xsl:copy-of select="@id"/>
         <fo:inline font-style="italic">
           <xsl:apply-templates/>
         </fo:inline>
       </xsl:template>
       <xsl:template match="code">
+          <xsl:copy-of select="@id"/>
         <fo:inline font-family="monospace">
           <xsl:apply-templates/>
         </fo:inline>
       </xsl:template>
       <xsl:template match="warning">
+          <xsl:copy-of select="@id"/>
         <xsl:variable name="color"
           select="$config/colors/color[@name='warning']/@value"/>
         <fo:block margin-left="0.25in" margin-right="0.25in"
@@ -321,6 +334,7 @@ limitations under the License.
           border-start-style="solid" border-end-style="solid"
           border-color="{$color}"
           background-color="{$color}">
+            <xsl:copy-of select="@id"/>
           <xsl:call-template name="insertPageBreaks"/>
           <xsl:choose>
             <xsl:when test="@label">
@@ -351,6 +365,7 @@ limitations under the License.
           border-start-style="solid" border-end-style="solid"
           border-color="{$color}"
           background-color="{$color}">
+            <xsl:copy-of select="@id"/>
           <xsl:call-template name="insertPageBreaks"/>
 <!-- insert i18n stuff here --> FIXME (
           <xsl:value-of select="@author"/>):
@@ -374,6 +389,7 @@ limitations under the License.
             <fo:basic-link color="{$color}"
               text-decoration="underline"
               internal-destination="{substring(@href,2)}">
+                <xsl:copy-of select="@id"/>
               <xsl:apply-templates/>
             </fo:basic-link>
           </xsl:when>
@@ -381,6 +397,7 @@ limitations under the License.
             <fo:basic-link color="{$color}"
               text-decoration="underline"
               external-destination="{@href}">
+                <xsl:copy-of select="@id"/>
               <xsl:apply-templates/>
             </fo:basic-link>
             <xsl:if
@@ -495,6 +512,7 @@ limitations under the License.
             select="6.25 div number($max-number-columns)"/>
           in </xsl:variable>
         <fo:table>
+            <xsl:copy-of select="@id"/>
           <fo:table-column>
             <xsl:attribute name="column-width">
               <xsl:value-of select="$column-width"/>
@@ -528,6 +546,7 @@ limitations under the License.
       </xsl:template>
       <xsl:template match="tr">
         <fo:table-row>
+            <xsl:copy-of select="@id"/>
           <xsl:apply-templates/>
         </fo:table-row>
       </xsl:template>
@@ -541,6 +560,7 @@ limitations under the License.
           padding-end="4pt" color="#FFFFFF"
           background-color="{$background-color}"
           border="1pt solid {$border-color}">
+            <xsl:copy-of select="@id"/>
             <xsl:if
                 test="@colspan!=''">
                 <xsl:attribute
@@ -572,6 +592,7 @@ limitations under the License.
           padding-end="4pt"
           background-color="{$background-color}"
           border="1pt solid {$border-color}">
+            <xsl:copy-of select="@id"/>
             <xsl:if
                 test="@colspan!=''">
                 <xsl:attribute
@@ -594,7 +615,7 @@ limitations under the License.
         </fo:table-cell>
       </xsl:template>
       <xsl:template match="br">
-        <fo:block></fo:block>
+          <fo:block> <xsl:copy-of select="@id"/></fo:block>
       </xsl:template>
       <xsl:template match="legal">
         <fo:inline font-size="8pt">
@@ -605,7 +626,7 @@ limitations under the License.
 <!-- Local Extensions section -->
 <!-- ====================================================================== -->
       <xsl:template match="citation">
-        <fo:inline> [
+          <fo:inline><xsl:copy-of select="@id"/>[
           <xsl:value-of select="@def"/>] </fo:inline>
       </xsl:template>
       <xsl:template match="p[@class='quote']">
