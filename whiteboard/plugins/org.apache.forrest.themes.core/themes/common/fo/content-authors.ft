@@ -35,20 +35,18 @@ limitations under the License.
       xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
       xmlns:fo="http://www.w3.org/1999/XSL/Format"
       version="1.0">
+      <xsl:include href="lm://pdf.transform.helper.pageBreaks" />
       <xsl:template match="/">
         <forrest:content>
           <forrest:part xpath="/fo/xsl-region-body/title">
             <xsl:if test="//div[@class='author']">
               <fo:block space-before="20pt" font-weight="bold" font-size="9pt">
-<!-- FIXME - Don't know how to manage the insertPageBreaks... -->
-<!--xsl:call-template name="insertPageBreaks"/-->
-<!-- FIXME - insert i18n stuff here --> by
+                <xsl:call-template name="insertPageBreaks"/>
+                <!-- FIXME - insert i18n stuff here --> by
                 <xsl:for-each select="//div[@class='author']">
                   <xsl:value-of select="./div[@class='name']/text()"/>
-                  <xsl:if test="not(position() = last())">,
-                  </xsl:if>
-                </xsl:for-each>
-              </fo:block>
+                  <xsl:if test="not(position() = last())">, </xsl:if>
+                </xsl:for-each> </fo:block>
             </xsl:if>
           </forrest:part>
         </forrest:content>

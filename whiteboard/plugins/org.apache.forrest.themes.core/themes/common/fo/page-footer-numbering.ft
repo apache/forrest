@@ -52,6 +52,7 @@ limitations under the License.
       version="1.0">
       <xsl:param name="skip-first-page-numbering" select="'true'"/>
       <xsl:param name="page-numbering-format" select="'Page 1'"/>
+      <xsl:include href="lm://pdf.transform.helper.pageNumber" />
       <xsl:template match="/">
         <forrest:content>
           <forrest:part xpath="/fo/static-content">
@@ -92,41 +93,7 @@ limitations under the License.
           </forrest:part>
         </forrest:content>
       </xsl:template>
-<!-- Display the document numerotation -->
-      <xsl:template name="insertPageNumber">
-        <xsl:param name="text-align" select="'start'"/>
-        <xsl:variable name="prefixe"
-          select="substring-before($page-numbering-format,'1')"/>
-        <xsl:variable name="sep"
-          select="substring-before(substring-after($page-numbering-format,'1'),'1')"/>
-        <xsl:variable name="postfixe">
-          <xsl:choose>
-            <xsl:when
-              test="contains(substring-after($page-numbering-format,'1'),'1')">
-              <xsl:value-of
-                select="substring-after(substring-after($page-numbering-format,'1'),'1')"/>
-            </xsl:when>
-            <xsl:otherwise>
-              <xsl:value-of
-                select="substring-after($page-numbering-format,'1')"/>
-            </xsl:otherwise>
-          </xsl:choose>
-        </xsl:variable>
-<!-- if 'page-numbering-format' contains 1 digits, the page number is displayed in the footer -->
-        <xsl:if test="contains($page-numbering-format,'1')">
-          <fo:block font-size="70%"
-            text-align="{$text-align}">
-<!-- if the separator is not found, the total page number is skipped -->
-            <xsl:value-of select="$prefixe"/>
-            <fo:page-number/>
-            <xsl:if test="$sep != ''">
-              <xsl:value-of select="$sep"/>
-              <fo:page-number-citation ref-id="term"/>
-            </xsl:if>
-            <xsl:value-of select="$postfixe"/>
-          </fo:block>
-        </xsl:if>
-      </xsl:template>
+
     </xsl:stylesheet>
   </forrest:template>
 </forrest:contract>

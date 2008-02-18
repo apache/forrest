@@ -34,14 +34,14 @@ limitations under the License.
       xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
       xmlns:fo="http://www.w3.org/1999/XSL/Format"
       version="1.0">
+      <xsl:include href="lm://pdf.transform.helper.pageBreaks" />
       <xsl:template match="/">
         <forrest:content>
           <forrest:part xpath="/fo/xsl-region-body/title">
-            <fo:block font-size="12pt" text-align="center"
-              space-before="20pt" space-after="25pt" width="7.5in"
-              font-family="serif" font-style="italic">
-<!-- FIXME - Don't know how to manage the insertPageBreaks... -->
-<!--xsl:call-template name="insertPageBreaks"/-->
+            <fo:block font-size="12pt" text-align="center" space-before="20pt"
+              space-after="25pt" width="7.5in" font-family="serif"
+              font-style="italic">
+              <xsl:call-template name="insertPageBreaks"/>
               <xsl:apply-templates select="//div[@class='abstract']"/>
             </fo:block>
           </forrest:part>
