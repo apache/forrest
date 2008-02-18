@@ -80,8 +80,8 @@ limitations under the License.
         select="$config/show-external-urls"/>
       <!-- Section depth at which we stop numbering and just indent -->
       <xsl:param name="numbering-max-depth" select="'3'"/>
-      <xsl:param name="imagesdir" select="."/>
-      <xsl:param name="xmlbasedir"/>
+      <xsl:param name="imagesdir" select="$defaultVariables/*/*[@name='resources.images']/@value"/>
+      <xsl:param name="xmlbasedir" select="$defaultVariables/*/*[@name='content.xdocs']/@value"/>
       <xsl:variable name="background-color"
         select="$config/page/@background-color"/>
       <xsl:variable name="heading-color" select="$config/headings/@color"/>
@@ -93,7 +93,7 @@ limitations under the License.
           <forrest:part xpath="/fo/xsl-region-body/body">
             <fo:block text-align="{$text-align}" padding-before="18pt"
               padding-after="18pt">
-              <xsl:apply-templates select="/document/body"/>
+              <xsl:apply-templates select="//body/*"/>
             </fo:block>
           </forrest:part>
         </forrest:content>

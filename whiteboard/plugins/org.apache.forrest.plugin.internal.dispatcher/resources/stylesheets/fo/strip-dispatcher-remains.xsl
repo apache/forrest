@@ -38,10 +38,10 @@
         <fo:flow flow-name="xsl-region-body">
           <xsl:copy-of select="/fo/xsl-region-body/title/*"/>
 <!-- FIXME : left was {$text-align} -->
-          <fo:block text-align="left" padding-before="18pt" padding-after="18pt">
+          <!--<fo:block text-align="left" padding-before="18pt" padding-after="18pt">-->
             <xsl:copy-of select="/fo/xsl-region-body/body/*"/>
-          </fo:block>
-          <fo:block id="term" />
+          <!--</fo:block>
+          <fo:block id="term" />-->
         </fo:flow>
       </fo:page-sequence>
     </fo:root>
