@@ -71,16 +71,7 @@ limitations under the License.
         <fo:block space-before="5pt" text-align-last="justify" start-indent=".5em"
           text-indent=".5em">
           <fo:inline>
-            <xsl:variable name="id">
-              <xsl:choose>
-                <xsl:when test="normalize-space(@id)!=''">
-                  <xsl:value-of select="@id"/>
-                </xsl:when>
-                <xsl:otherwise>
-                  <xsl:value-of select="generate-id()"/>
-                </xsl:otherwise>
-              </xsl:choose>
-            </xsl:variable>
+            <xsl:variable name="id" select="substring(@href,2)"/>
             <fo:basic-link internal-destination="{$id}">
               <xsl:value-of
                 select="substring('&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;', 0, 2 * $depth - 1)"/>

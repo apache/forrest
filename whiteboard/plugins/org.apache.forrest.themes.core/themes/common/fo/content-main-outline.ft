@@ -42,19 +42,11 @@ limitations under the License.
       <xsl:template match="tocitem">
         <fo:bookmark>
           <xsl:attribute name="internal-destination">
-            <xsl:choose>
-              <xsl:when test="normalize-space(@id)!=''">
-                <xsl:value-of select="@id"/>
-              </xsl:when>
-              <xsl:otherwise>
-                <xsl:value-of select="generate-id()"/>
-              </xsl:otherwise>
-            </xsl:choose>
+            <xsl:value-of select="substring(@href,2)"/>
           </xsl:attribute>
           <fo:bookmark-title>
             <xsl:number format="1.1.1.1.1.1.1" count="tocitem" level="multiple"/>
-            <xsl:text>
-            </xsl:text>
+            <xsl:text> </xsl:text>
             <xsl:value-of select="normalize-space(@title)"/>
           </fo:bookmark-title>
           <xsl:apply-templates select="tocitem"/>
