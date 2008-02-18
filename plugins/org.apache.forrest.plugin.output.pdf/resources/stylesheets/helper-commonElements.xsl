@@ -522,60 +522,6 @@
       <xsl:apply-templates/>
     </fo:inline>
   </xsl:template>
-  <xsl:template match="body[count(//section) != 0]">
-    <xsl:if test="$disable-toc != 'true' and $toc-max-depth > 0">
-      <fo:block font-family="sans-serif" font-size="12pt" font-weight="bold"
-        space-after="5pt" space-before="5pt" text-align="justify" width="7.5in">
-        <xsl:call-template name="insertPageBreaks"/>
-        <!-- insert i18n stuff here -->
-        <xsl:text>Table of contents</xsl:text>
-      </fo:block>
-      <fo:block font-family="serif" font-size="12pt" space-after="5pt"
-        space-before="0pt" text-align="justify" width="7.5in">
-        <xsl:if test="$page-break-top-sections">
-          <xsl:attribute name="break-after">page</xsl:attribute>
-        </xsl:if>
-        <xsl:apply-templates select="section" mode="toc"/>
-      </fo:block>
-    </xsl:if>
-    <xsl:apply-templates/>
-  </xsl:template>
-  <xsl:template match="section" mode="toc">
-    <!-- FIXME: see bug FOR-640 -->
-    <xsl:param name="depth" select="'1'"/>
-    <fo:block space-before="5pt" text-align-last="justify" start-indent=".5em"
-      text-indent=".5em">
-      <fo:inline>
-        <xsl:variable name="id">
-          <xsl:choose>
-            <xsl:when test="normalize-space(@id)!=''">
-              <xsl:value-of select="@id"/>
-            </xsl:when>
-            <xsl:otherwise>
-              <xsl:value-of select="generate-id()"/>
-            </xsl:otherwise>
-          </xsl:choose>
-        </xsl:variable>
-        <fo:basic-link internal-destination="{$id}">
-          <xsl:value-of
-            select="substring('&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;', 0, 2 * $depth - 1)"/>
-          <fo:inline font-size="11pt">
-            <xsl:number count="section" format="1.1.1.1.1.1.1" level="multiple"/>
-          </fo:inline>
-          <xsl:text>
-          </xsl:text>
-          <xsl:value-of select="title"/>
-          <fo:leader leader-pattern="dots"/>
-          <fo:page-number-citation ref-id="{$id}"/>
-        </fo:basic-link>
-      </fo:inline>
-      <xsl:if test="$toc-max-depth > $depth">
-        <xsl:apply-templates select="section" mode="toc">
-          <xsl:with-param name="depth" select="$depth + 1"/>
-        </xsl:apply-templates>
-      </xsl:if>
-    </fo:block>
-  </xsl:template>
   
   <!-- ====================================================================== -->
   <!-- Local Extensions section -->

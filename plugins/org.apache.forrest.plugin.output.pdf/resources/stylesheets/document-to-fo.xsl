@@ -104,152 +104,17 @@
   <xsl:param
         name="xmlbasedir" />
   <xsl:include
-        href="pdfoutline.xsl" />
+        href="helper-pdfoutline.xsl" />
   <xsl:include
         href="footerinfo.xsl" />
   <xsl:include
-        href="helper-pageBreaks.xsl" />
+        href="lm://pdf.transform.helper.pageBreaks" />
   <xsl:include
         href="helper-pageNumber.xsl" />
   <xsl:include
         href="helper-commonElements.xsl" />
-<!-- Determine page height for various page sizes (US Letter portrait
-  is the default) -->
-<!-- FIXME: JJP:would this be better of a file? -->
-  <xsl:variable
-        name="pageheight">
-    <xsl:choose>
-      <xsl:when
-                test="$pageorientation = 'landscape'">
-        <xsl:choose>
-          <xsl:when
-                        test="$pagesize = 'a0'">841mm</xsl:when>
-          <xsl:when
-                        test="$pagesize = 'a1'">594mm</xsl:when>
-          <xsl:when
-                        test="$pagesize = 'a2'">420mm</xsl:when>
-          <xsl:when
-                        test="$pagesize = 'a3'">297mm</xsl:when>
-          <xsl:when
-                        test="$pagesize = 'a4'">210mm</xsl:when>
-          <xsl:when
-                        test="$pagesize = 'a5'">148mm</xsl:when>
-          <xsl:when
-                        test="$pagesize = 'executive'">7.25in</xsl:when>
-          <xsl:when
-                        test="$pagesize = 'folio'">8.5in</xsl:when>
-          <xsl:when
-                        test="$pagesize = 'ledger'">11in</xsl:when>
-          <xsl:when
-                        test="$pagesize = 'legal'">8.5in</xsl:when>
-          <xsl:when
-                        test="$pagesize = 'letter'">8.5in</xsl:when>
-          <xsl:when
-                        test="$pagesize = 'quarto'">8.5in</xsl:when>
-          <xsl:when
-                        test="$pagesize = 'tabloid'">11in</xsl:when>
-          <xsl:otherwise>8.5in</xsl:otherwise>
-        </xsl:choose>
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:choose>
-          <xsl:when
-                        test="$pagesize = 'a0'">1189mm</xsl:when>
-          <xsl:when
-                        test="$pagesize = 'a1'">841mm</xsl:when>
-          <xsl:when
-                        test="$pagesize = 'a2'">594mm</xsl:when>
-          <xsl:when
-                        test="$pagesize = 'a3'">420mm</xsl:when>
-          <xsl:when
-                        test="$pagesize = 'a4'">297mm</xsl:when>
-          <xsl:when
-                        test="$pagesize = 'a5'">210mm</xsl:when>
-          <xsl:when
-                        test="$pagesize = 'executive'">10.5in</xsl:when>
-          <xsl:when
-                        test="$pagesize = 'folio'">13in</xsl:when>
-          <xsl:when
-                        test="$pagesize = 'ledger'">17in</xsl:when>
-          <xsl:when
-                        test="$pagesize = 'legal'">14in</xsl:when>
-          <xsl:when
-                        test="$pagesize = 'quarto'">10.83in</xsl:when>
-          <xsl:when
-                        test="$pagesize = 'tabloid'">17in</xsl:when>
-          <xsl:otherwise>11in</xsl:otherwise>
-        </xsl:choose>
-      </xsl:otherwise>
-    </xsl:choose>
-  </xsl:variable>
-<!-- Determine page width for various page sizes (US Letter portrait
-  is the default) -->
-  <xsl:variable
-        name="pagewidth">
-    <xsl:choose>
-      <xsl:when
-                test="$pageorientation = 'landscape'">
-        <xsl:choose>
-          <xsl:when
-                        test="$pagesize = 'a0'">1189mm</xsl:when>
-          <xsl:when
-                        test="$pagesize = 'a1'">841mm</xsl:when>
-          <xsl:when
-                        test="$pagesize = 'a2'">594mm</xsl:when>
-          <xsl:when
-                        test="$pagesize = 'a3'">420mm</xsl:when>
-          <xsl:when
-                        test="$pagesize = 'a4'">297mm</xsl:when>
-          <xsl:when
-                        test="$pagesize = 'a5'">210mm</xsl:when>
-          <xsl:when
-                        test="$pagesize = 'executive'">10.5in</xsl:when>
-          <xsl:when
-                        test="$pagesize = 'folio'">13in</xsl:when>
-          <xsl:when
-                        test="$pagesize = 'ledger'">17in</xsl:when>
-          <xsl:when
-                        test="$pagesize = 'legal'">14in</xsl:when>
-          <xsl:when
-                        test="$pagesize = 'quarto'">10.83in</xsl:when>
-          <xsl:when
-                        test="$pagesize = 'tabloid'">17in</xsl:when>
-          <xsl:otherwise>11in</xsl:otherwise>
-        </xsl:choose>
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:choose>
-          <xsl:when
-                        test="$pagesize = 'a0'">841mm</xsl:when>
-          <xsl:when
-                        test="$pagesize = 'a1'">594mm</xsl:when>
-          <xsl:when
-                        test="$pagesize = 'a2'">420mm</xsl:when>
-          <xsl:when
-                        test="$pagesize = 'a3'">297mm</xsl:when>
-          <xsl:when
-                        test="$pagesize = 'a4'">210mm</xsl:when>
-          <xsl:when
-                        test="$pagesize = 'a5'">148mm</xsl:when>
-          <xsl:when
-                        test="$pagesize = 'executive'">7.25in</xsl:when>
-          <xsl:when
-                        test="$pagesize = 'folio'">8.5in</xsl:when>
-          <xsl:when
-                        test="$pagesize = 'ledger'">11in</xsl:when>
-          <xsl:when
-                        test="$pagesize = 'legal'">8.5in</xsl:when>
-          <xsl:when
-                        test="$pagesize = 'letter'">8.5in</xsl:when>
-          <xsl:when
-                        test="$pagesize = 'quarto'">8.5in</xsl:when>
-          <xsl:when
-                        test="$pagesize = 'tabloid'">11in</xsl:when>
-          <xsl:otherwise>8.5in</xsl:otherwise>
-        </xsl:choose>
-      </xsl:otherwise>
-    </xsl:choose>
-  </xsl:variable>
+  <xsl:include
+        href="helper-layout.xsl" />
   <xsl:template
         match="/">
     <fo:root
@@ -527,5 +392,57 @@
       </xsl:for-each>
     </fo:block>
   </xsl:template>
-  
+  <xsl:template match="body[count(//section) != 0]">
+    <xsl:if test="$disable-toc != 'true' and $toc-max-depth > 0">
+      <fo:block font-family="sans-serif" font-size="12pt" font-weight="bold"
+        space-after="5pt" space-before="5pt" text-align="justify" width="7.5in">
+        <xsl:call-template name="insertPageBreaks"/>
+        <!-- insert i18n stuff here -->
+        <xsl:text>Table of contents</xsl:text>
+      </fo:block>
+      <fo:block font-family="serif" font-size="12pt" space-after="5pt"
+        space-before="0pt" text-align="justify" width="7.5in">
+        <xsl:if test="$page-break-top-sections">
+          <xsl:attribute name="break-after">page</xsl:attribute>
+        </xsl:if>
+        <xsl:apply-templates select="section" mode="toc"/>
+      </fo:block>
+    </xsl:if>
+    <xsl:apply-templates/>
+  </xsl:template>
+  <xsl:template match="section" mode="toc">
+    <!-- FIXME: see bug FOR-640 -->
+    <xsl:param name="depth" select="'1'"/>
+    <fo:block space-before="5pt" text-align-last="justify" start-indent=".5em"
+      text-indent=".5em">
+      <fo:inline>
+        <xsl:variable name="id">
+          <xsl:choose>
+            <xsl:when test="normalize-space(@id)!=''">
+              <xsl:value-of select="@id"/>
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:value-of select="generate-id()"/>
+            </xsl:otherwise>
+          </xsl:choose>
+        </xsl:variable>
+        <fo:basic-link internal-destination="{$id}">
+          <xsl:value-of
+            select="substring('&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;', 0, 2 * $depth - 1)"/>
+          <fo:inline font-size="11pt">
+            <xsl:number count="section" format="1.1.1.1.1.1.1" level="multiple"/>
+          </fo:inline>
+          <xsl:text> </xsl:text>
+          <xsl:value-of select="title"/>
+          <fo:leader leader-pattern="dots"/>
+          <fo:page-number-citation ref-id="{$id}"/>
+        </fo:basic-link>
+      </fo:inline>
+      <xsl:if test="$toc-max-depth > $depth">
+        <xsl:apply-templates select="section" mode="toc">
+          <xsl:with-param name="depth" select="$depth + 1"/>
+        </xsl:apply-templates>
+      </xsl:if>
+    </fo:block>
+  </xsl:template>
 </xsl:stylesheet>
