@@ -24,7 +24,9 @@
       <fo:layout-master-set>
         <xsl:copy-of select="/fo/layout-master-set/*"/>
       </fo:layout-master-set>
-      <xsl:copy-of select="/fo/fox/outline/*"/>
+      <fo:bookmark-tree>
+        <xsl:copy-of select="/fo/bookmark-tree/*"/>
+      </fo:bookmark-tree>
       <fo:page-sequence master-reference="book">
         <xsl:for-each select="//fo:static-content[generate-id()=generate-id(key('static-content', @flow-name))]">
           <xsl:sort select="@flow-name"/>
