@@ -45,7 +45,6 @@ import org.apache.cocoon.xml.dom.DOMUtil;
 import org.apache.excalibur.source.Source;
 import org.apache.excalibur.source.SourceException;
 import org.apache.excalibur.source.SourceValidity;
-import org.apache.excalibur.source.impl.validity.AggregatedValidity;
 import org.apache.excalibur.xml.xpath.XPathProcessor;
 import org.apache.forrest.dispatcher.ContractBean;
 import org.apache.forrest.dispatcher.ContractBeanDOMImpl;
@@ -245,7 +244,7 @@ public class DispatcherTransformer extends AbstractSAXTransformer implements
     // to force a SourceValidity.INVALID
     if (null != validityFile & !(validityOverride.equals(CACHING_OFF))) {
       try {
-        this.validity.add(m_resolver.resolveURI(validityFile).getValidity());
+        this.validity = m_resolver.resolveURI(validityFile).getValidity();
       } catch (Exception e) {
         getLogger().error(e.getMessage());
       }
@@ -326,6 +325,13 @@ public class DispatcherTransformer extends AbstractSAXTransformer implements
 
     this.hooksXSL = parameters.getParameter(HOOKS_TRANSFORMER_PARAMETER, null);
     parameterHelper.put(HOOKS_TRANSFORMER_PARAMETER, hooksXSL);
+    
+    if (null == m_resolver)
+      try {
+        m_resolver = (SourceResolver) manager.lookup(SourceResolver.ROLE);
+      } catch (ServiceException e) {
+        throw new ProcessingException(e);
+      }
   }
 
   /**
@@ -514,9 +520,7 @@ public class DispatcherTransformer extends AbstractSAXTransformer implements
         if (null == this.processor)
           this.processor = (XPathProcessor) this.manager
               .lookup(XPathProcessor.ROLE);
-        if (null == m_resolver)
-          m_resolver = (SourceResolver) manager.lookup(SourceResolver.ROLE);
-      } catch (Exception e) {
+        } catch (Exception e) {
         String error = "dispatcherError:\n Could not set up the dispatcherHelper!\n DispatcherStack: "
             + e;
         getLogger().error(error);
