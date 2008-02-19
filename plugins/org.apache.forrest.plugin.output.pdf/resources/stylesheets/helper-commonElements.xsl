@@ -345,19 +345,15 @@
       <!-- Make relative paths absolute -->
       <xsl:variable name="imgpath">
         <xsl:choose>
-          <!-- resources image dir -->
-          <xsl:when test="starts-with(string(@src),'images/')">
-            <xsl:value-of
-              select="concat($imagesdir,substring-after(@src,'images'))"/>
-          </xsl:when>
-          <xsl:when test="contains(string(@src),'/images/')">
-            <xsl:value-of
-              select="concat($imagesdir,substring-after(@src,'/images'))"/>
-          </xsl:when>
           <!-- already absolute -->
           <xsl:when
-            test="contains(string(@src),':') or starts-with(string(@src),'/')">
+            test="contains(string(@src),':')">
             <xsl:value-of select="@src"/>
+          </xsl:when>
+          <!-- absolute to servlet context -->
+          <xsl:when test="starts-with(string(@src),'/')">
+            <xsl:value-of
+              select="concat('cocoon:/',@src)"/>
           </xsl:when>
           <!-- relative to document -->
           <xsl:otherwise> 
