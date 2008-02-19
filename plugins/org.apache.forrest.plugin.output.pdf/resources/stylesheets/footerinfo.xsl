@@ -44,7 +44,7 @@ with @role='pdf' is present, that is used instead.  Eg:
     </xsl:variable>
     <xsl:variable name="url" select="$pdfcredit/url"/>
     <fo:block-container font-style="italic" absolute-position="absolute"
-      left="0pt" bottom="150pt" height="15pt"
+      left="0pt" bottom="150pt" height="20pt"
       font-size="8pt">
 <!-- move copyright down if there is a legal notice 
               (thus keeping it on same line as line number) -->
