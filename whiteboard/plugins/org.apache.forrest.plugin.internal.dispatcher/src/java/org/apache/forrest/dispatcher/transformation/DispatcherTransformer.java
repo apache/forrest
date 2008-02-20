@@ -267,7 +267,8 @@ public class DispatcherTransformer extends AbstractSAXTransformer implements
    */
   public void dispose() {
     if (null != this.manager) {
-      this.manager.release(m_resolver);
+      if (null!=m_resolver)
+        this.manager.release(m_resolver);
       this.manager = null;
     }
     m_resolver = null;
@@ -329,6 +330,13 @@ public class DispatcherTransformer extends AbstractSAXTransformer implements
 
     this.hooksXSL = parameters.getParameter(HOOKS_TRANSFORMER_PARAMETER, null);
     parameterHelper.put(HOOKS_TRANSFORMER_PARAMETER, hooksXSL);
+    if (null == m_resolver)
+      try {
+        m_resolver = (SourceResolver) manager.lookup(SourceResolver.ROLE);
+      } catch (ServiceException e) {
+        throw new ProcessingException(e);
+      }
+
   }
 
   /**
@@ -516,8 +524,6 @@ public class DispatcherTransformer extends AbstractSAXTransformer implements
         if (null == this.processor)
           this.processor = (XPathProcessor) this.manager
               .lookup(XPathProcessor.ROLE);
-        if (null == m_resolver)
-          m_resolver = (SourceResolver) manager.lookup(SourceResolver.ROLE);
       } catch (Exception e) {
         String error = "dispatcherError:\n Could not set up the dispatcherHelper!\n DispatcherStack: "
             + e;
