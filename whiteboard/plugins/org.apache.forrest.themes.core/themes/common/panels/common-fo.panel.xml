@@ -18,7 +18,15 @@
 <forrest:template xmlns:forrest="http://apache.org/forrest/templates/1.0"
   xmlns:jx="http://apache.org/cocoon/templates/jx/1.0">
   <jx:set var="end" value="${getRequest.lastIndexOf('/')}"/>
-  <jx:set var="path" value="${getRequest.substring(0,end)}"/>
+  <jx:choose>
+    <jx:when test="${end>0}">
+      <jx:set var="path" value="${getRequest.substring(0,end)}"/>
+    </jx:when>
+    <jx:otherwise>
+      <jx:set var="path" value="${getRequest}"/>
+    </jx:otherwise>
+  </jx:choose>
+  
 <!-- Settings specific to PDF output. -->
   <forrest:contract name="layout-master-set">
     <forrest:property name="config">
