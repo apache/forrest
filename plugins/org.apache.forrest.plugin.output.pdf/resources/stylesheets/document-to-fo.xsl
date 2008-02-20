@@ -103,6 +103,9 @@
         select="." />
   <xsl:param
         name="xmlbasedir" />
+  <xsl:param
+        name="path"
+        select="." />
   <xsl:include
         href="helper-pdfoutline.xsl" />
   <xsl:include

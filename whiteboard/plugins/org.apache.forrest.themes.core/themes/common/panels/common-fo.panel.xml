@@ -17,6 +17,8 @@
 -->
 <forrest:template xmlns:forrest="http://apache.org/forrest/templates/1.0"
   xmlns:jx="http://apache.org/cocoon/templates/jx/1.0">
+  <jx:set var="end" value="${getRequest.lastIndexOf('/')}"/>
+  <jx:set var="path" value="${getRequest.substring(0,end)}"/>
 <!-- Settings specific to PDF output. -->
   <forrest:contract name="layout-master-set">
     <forrest:property name="config">
@@ -100,6 +102,7 @@
   </forrest:contract>
   <forrest:contract name="content-main-outline" dataURI="cocoon://#{$getRequest}.toc.xml"/>
   <forrest:contract name="content-main" dataURI="cocoon://#{$getRequest}.source.rewritten.xml">
+    <forrest:property name="requestPath" value="${path}"/>
     <forrest:property name="config">
 <!-- 
         Supported text alignments are left, right, justify (default left).

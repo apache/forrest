@@ -357,7 +357,7 @@
           </xsl:when>
           <!-- relative to document -->
           <xsl:otherwise> 
-            <xsl:value-of select="concat('cocoon://',@src)"/> </xsl:otherwise>
+            <xsl:value-of select="concat('cocoon://',$path,@src)"/> </xsl:otherwise>
         </xsl:choose>
       </xsl:variable>
       <fo:external-graphic src="{$imgpath}">

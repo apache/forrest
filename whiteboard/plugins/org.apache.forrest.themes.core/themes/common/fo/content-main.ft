@@ -63,6 +63,8 @@ limitations under the License.
     <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
       xmlns:fo="http://www.w3.org/1999/XSL/Format" version="1.0">
       <xsl:param name="config"/>
+      <xsl:param name="requestPath"/>
+      <xsl:variable name="path" select="concat($requestPath/@value,'/')"/>
       <xsl:param name="defaultVariables" select="'test.html'"/>
       <!-- left, justify, right -->
       <xsl:variable name="text-align" select="string($config/page/@text-align)"/>
@@ -72,8 +74,6 @@ limitations under the License.
       <xsl:param name="numbersections" select="'true'"/>
       <!-- page breaks after TOC and each page if an aggregate document -->
       <xsl:variable name="page-break-top-sections" select="'true'"/>
-      
-      
       <!-- prefix which turns relative URLs into absolute ones, empty by default -->
       <xsl:variable name="url-prefix" select="string($config/url-prefix)"/>
       <!-- print URL of external links -->
