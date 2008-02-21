@@ -263,7 +263,8 @@ public class DispatcherTransformer extends AbstractSAXTransformer implements
    */
   public void dispose() {
     if (null != this.manager) {
-      this.manager.release(m_resolver);
+      if (null!=m_resolver)
+        this.manager.release(m_resolver);
       this.manager = null;
     }
     m_resolver = null;
