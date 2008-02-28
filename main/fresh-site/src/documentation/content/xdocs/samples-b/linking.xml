@@ -218,18 +218,21 @@ Raw un-processed content ...
           processed by Forrest in the normal way:
         </p>
         <source>
-&lt;map:match pattern="old_site/**.html"&gt;
- &lt;map:select type="exists"&gt;
-  &lt;map:when test="{properties:content}{1}.html"&gt;
-    &lt;map:read src="{properties:content}/{1}.html" mime-type="text/html"/&gt;
-    &lt;!--
-      Use this instead if you want JTidy to clean up your HTML
-      &lt;map:generate type="html" src="{properties:content}/{0}" /&gt;
-      &lt;map:serialize type="html"/&gt;
-    --&gt;
-  &lt;/map:when&gt;
-&lt;/map:match&gt;
-        </source>
+<![CDATA[
+      <map:match pattern="old_site/**.html">
+        <map:select type="exists">
+          <map:when test="{properties:content}{0}">
+            <map:read src="{properties:content}{0}" mime-type="text/html"/>
+<!--
+            If you want JTidy to clean up your HTML source, then use a
+            generator/serializer instead of the reader.
+            <map:generate type="html" src="{properties:content}{0}" />
+            <map:serialize type="html"/>
+            -->
+          </map:when>
+        </map:select>
+      </map:match>
+     ]]></source>
         <p>
           For example: <a href="../old_site/test1.html">HTML content</a>.
         </p>

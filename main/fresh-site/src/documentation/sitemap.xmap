@@ -44,15 +44,16 @@
   </map:resources>
   <map:pipelines>
     <map:pipeline>
-      <map:match pattern="old_site/*.html">
+      <map:match pattern="old_site/**.html">
         <map:select type="exists">
-          <map:when test="{properties:content}{1}.html">
-            <map:read src="{properties:content}{1}.html" mime-type="text/html"/>
+          <map:when test="{properties:content}{0}">
+            <map:read src="{properties:content}{0}" mime-type="text/html"/>
 <!--
-          Use this instead if you want JTidy to clean up your HTML
-          <map:generate type="html" src="{properties:content}/{0}" />
-          <map:serialize type="html"/>
-        -->
+            If you want JTidy to clean up your HTML source, then use a
+            generator/serializer instead of the reader.
+            <map:generate type="html" src="{properties:content}{0}" />
+            <map:serialize type="html"/>
+            -->
           </map:when>
         </map:select>
       </map:match>

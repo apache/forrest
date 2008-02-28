@@ -728,23 +728,25 @@ forrest -Dproject.start-uri=live-sites.html
       <answer>
         <p>
           To serve, for example a legacy HTML site, add something like the
-          following to your project's sitemap and place the source content at
-          the <code>src/documentation/content/xdocs/old_site/</code> directory.
+          following to your project's sitemap and place the source content in a
+          <code>src/documentation/content/old_site/</code> directory.
         </p>
         <source>
-&lt;map:match pattern="old_site/**.html"&gt;
- &lt;map:select type="exists"&gt;
-  &lt;map:when test="{properties:content}{0}"&gt;
-    &lt;map:read src="{properties:content}/{0}" mime-type="text/html"/&gt;
-    &lt;!--
-      Use this instead if you want JTidy to clean up your HTML
-      &lt;map:generate type="html" src="{properties:content}/{0}" /&gt;
-      &lt;map:serialize type="html"/&gt;
-    --&gt;
-  &lt;/map:when&gt;
- &lt;/map:select&gt;
-&lt;/map:match&gt;
-        </source>
+<![CDATA[
+      <map:match pattern="old_site/**.html">
+        <map:select type="exists">
+          <map:when test="{properties:content}{0}">
+            <map:read src="{properties:content}{0}" mime-type="text/html"/>
+<!--
+            If you want JTidy to clean up your HTML source, then use a
+            generator/serializer instead of the reader.
+            <map:generate type="html" src="{properties:content}{0}" />
+            <map:serialize type="html"/>
+            -->
+          </map:when>
+        </map:select>
+      </map:match>
+     ]]></source>
         <p>
           Exactly what the match should be is dependant on your content
           structure. It is outside the scope of this FAQ to provide full
@@ -759,8 +761,8 @@ forrest -Dproject.start-uri=live-sites.html
           <li>mkdir seed</li>
           <li>cd seed</li>
           <li>forrest seed-sample</li>
-          <li>forrest</li>
-          <li><code>http://localhost:8888/samples/linking.html#no-decoration</code></li>
+          <li>forrest run</li>
+          <li><code>http://localhost:8888/samples-b/linking.html#no-decoration</code></li>
         </ol>
       </answer>
     </faq>
