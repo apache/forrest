@@ -29,7 +29,7 @@
       <xsl:value-of select="12-number($level)"/>
     </xsl:variable>
     <fo:block font-family="sans-serif" font-size="{$size}pt" font-weight="bold"
-      space-before="12pt" space-after="8pt" margin="0">
+      space-before="12pt" space-after="8pt" margin="0" keep-with-next.within-column="always">
       <xsl:call-template name="insertPageBreaks"/>
       <xsl:attribute name="id">
         <xsl:choose>
@@ -58,8 +58,13 @@
       </xsl:if>
       <xsl:if
         test="$numbersections = 'true' and number($level) &lt; $numbering-max-depth+1">
-        <xsl:number format="1.1.1.1.1.1.1" count="section" level="multiple"/>
-        <xsl:text>. </xsl:text>
+        <xsl:variable name="section-nr">
+          <xsl:number count="section" format="1.1.1.1.1.1.1" level="multiple"/>
+        </xsl:variable>
+        <xsl:if test="not(starts-with(title, $section-nr))">
+          <xsl:value-of select="$section-nr"/>
+          <xsl:text> </xsl:text>
+        </xsl:if>
       </xsl:if>
       <!-- For sections 4  or more nestings deep, indent instead of number -->
       <xsl:if test="number($level) &gt; $numbering-max-depth+1">
@@ -232,7 +237,7 @@
       padding-top="2pt" padding-bottom="1pt" font-size="9pt"
       font-family="sans-serif" space-before="10pt" border-before-style="solid"
       border-start-style="solid" border-end-style="solid" border-color="{$color}"
-      background-color="{$color}" color="#ffffff">
+      background-color="{$color}" color="#ffffff" keep-with-previous.within-column="always" keep-with-next.within-column="always">
       <xsl:copy-of select="@id"/>
       <xsl:call-template name="insertPageBreaks"/>
       <xsl:choose>
@@ -258,7 +263,7 @@
       font-size="9pt" padding-top="2pt" padding-bottom="1pt" color="#ffffff"
       font-family="sans-serif" space-before="10pt" border-before-style="solid"
       border-start-style="solid" border-end-style="solid" border-color="{$color}"
-      background-color="{$color}">
+      background-color="{$color}" keep-with-previous.within-column="always" keep-with-next.within-column="always">
       <xsl:copy-of select="@id"/>
       <xsl:call-template name="insertPageBreaks"/>
       <xsl:choose>
@@ -285,7 +290,7 @@
       font-size="9pt" padding-top="2pt" padding-bottom="1pt" color="#FFFFFF"
       font-family="sans-serif" space-before="10pt" border-before-style="solid"
       border-start-style="solid" border-end-style="solid" border-color="{$color}"
-      background-color="{$color}">
+      background-color="{$color}" keep-with-previous.within-column="always" keep-with-next.within-column="always">
       <xsl:copy-of select="@id"/>
       <xsl:call-template name="insertPageBreaks"/>
       <!-- insert i18n stuff here --> FIXME (
@@ -303,6 +308,10 @@
     <xsl:variable name="color"
       select="$config/colors/color[@name = 'body']/@link"/>
     <xsl:choose>
+      <xsl:when test="not(boolean(href))">
+        <!-- html2document.xsl creates links with name but with no href -> filter those -->
+        <xsl:apply-templates/>
+      </xsl:when>
       <xsl:when test="starts-with(@href, '#')">
         <fo:basic-link color="{$color}" text-decoration="underline"
           internal-destination="{substring(@href,2)}">
@@ -423,14 +432,11 @@
         </xsl:otherwise>
       </xsl:choose>
     </xsl:variable>
-    <xsl:variable name="column-width">
-      <xsl:value-of select="6.25 div number($max-number-columns)"/>in
-      </xsl:variable>
     <fo:table table-layout="fixed" width="100%">
       <xsl:copy-of select="@id"/>
       <fo:table-column>
         <xsl:attribute name="column-width">
-          <xsl:value-of select="$column-width"/>
+          proportional-column-width(1)
         </xsl:attribute>
         <xsl:attribute name="number-columns-repeated">
           <xsl:value-of select="number($max-number-columns)"/>
@@ -438,15 +444,18 @@
       </fo:table-column>
       <!-- End of hack for Fop support (if removing this hack, remember
       you need the <fo:table> element) -->
+      <fo:table-header font-size="10pt" font-family="serif">
+        <xsl:apply-templates select="tr[count(th) &gt; 0]"/>
+      </fo:table-header>
       <fo:table-body font-size="10pt" font-family="serif">
-        <xsl:apply-templates select="tr"/>
+        <xsl:apply-templates select="tr[count(th) = 0]"/>
       </fo:table-body>
     </fo:table>
     <!-- FIXME: Apache Fop does not support the caption element yet.
     This hack will display the table caption accordingly. -->
     <xsl:if test="caption">
       <fo:block font-size="10pt" text-align="left" font-weight="normal"
-        margin-top="5pt">
+        margin-top="5pt" keep-with-next.within-column="always">
         <!-- insert i18n stuff here --> Table
         <xsl:text>
         </xsl:text>

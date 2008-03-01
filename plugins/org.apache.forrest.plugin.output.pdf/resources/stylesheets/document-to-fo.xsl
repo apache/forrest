@@ -254,7 +254,7 @@
         <xsl:call-template
                     name="insertPageNumber">
           <xsl:with-param
-                        name="text-align">start</xsl:with-param>
+                        name="text-align">end</xsl:with-param>
         </xsl:call-template>
       </xsl:if>
       <xsl:call-template
@@ -279,11 +279,18 @@
         <xsl:apply-templates
                     select="footer" />
       </fo:block>
-      <xsl:call-template
-                name="insertPageNumber">
-        <xsl:with-param
-                    name="text-align">end</xsl:with-param>
-      </xsl:call-template>
+      <xsl:choose>
+        <xsl:when test="$doublesided = 'true'">
+          <xsl:call-template name="insertPageNumber">
+            <xsl:with-param name="text-align">start</xsl:with-param>
+          </xsl:call-template>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:call-template name="insertPageNumber">
+            <xsl:with-param name="text-align">end</xsl:with-param>
+          </xsl:call-template>
+        </xsl:otherwise>
+      </xsl:choose>
       <xsl:call-template
                 name="info" />
     </fo:static-content>
@@ -291,8 +298,15 @@
             flow-name="odd-header">
       <fo:block
                 font-size="70%"
-                text-align="start"
                 font-style="italic">
+        <xsl:choose>
+          <xsl:when test="$doublesided = 'true'">
+            <xsl:attribute name="text-align">start</xsl:attribute>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:attribute name="text-align">end</xsl:attribute>
+          </xsl:otherwise>
+        </xsl:choose>
         <xsl:value-of
                     select="header/title" />
       </fo:block>
@@ -307,9 +321,9 @@
                     select="footer" />
       </fo:block>
       <xsl:call-template
-                name="insertPageNumber">
+        name="insertPageNumber">
         <xsl:with-param
-                    name="text-align">start</xsl:with-param>
+          name="text-align">end</xsl:with-param>
       </xsl:call-template>
       <xsl:call-template
                 name="info" />
@@ -398,7 +412,7 @@
   <xsl:template match="body[count(//section) != 0]">
     <xsl:if test="$disable-toc != 'true' and $toc-max-depth > 0">
       <fo:block font-family="sans-serif" font-size="12pt" font-weight="bold"
-        space-after="5pt" space-before="5pt" text-align="justify" width="7.5in">
+        space-after="5pt" space-before="5pt" text-align="justify" width="7.5in" id="__toc__">
         <xsl:call-template name="insertPageBreaks"/>
         <!-- insert i18n stuff here -->
         <xsl:text>Table of contents</xsl:text>
@@ -431,11 +445,16 @@
         </xsl:variable>
         <fo:basic-link internal-destination="{$id}">
           <xsl:value-of
-            select="substring('&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;', 0, 2 * $depth - 1)"/>
-          <fo:inline font-size="11pt">
+          select="substring('&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;', 0, 2 * $depth - 1)"/>
+          <xsl:variable name="section-nr">
             <xsl:number count="section" format="1.1.1.1.1.1.1" level="multiple"/>
-          </fo:inline>
-          <xsl:text> </xsl:text>
+          </xsl:variable>
+          <xsl:if test="not(starts-with(title, $section-nr))">
+            <fo:inline font-size="11pt">
+              <xsl:value-of select="$section-nr"/>
+            </fo:inline>
+            <xsl:text> </xsl:text>
+          </xsl:if>
           <xsl:value-of select="title"/>
           <fo:leader leader-pattern="dots"/>
           <fo:page-number-citation ref-id="{$id}"/>

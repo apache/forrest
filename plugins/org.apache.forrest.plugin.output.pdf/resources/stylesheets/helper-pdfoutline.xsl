@@ -23,6 +23,14 @@
         match="document"
         mode="outline">
     <fo:bookmark-tree>
+      <xsl:if test="$disable-toc != 'true' and $toc-max-depth > 0">
+        <fo:bookmark internal-destination="__toc__">
+          <fo:bookmark-title>
+            <!-- insert i18n stuff here -->
+            <xsl:text>Table of contents</xsl:text>
+          </fo:bookmark-title>
+        </fo:bookmark>
+      </xsl:if>
       <xsl:apply-templates
             select="body/section"
             mode="outline" />
@@ -47,11 +55,13 @@
         </xsl:choose>
       </xsl:attribute>
       <fo:bookmark-title>
-        <xsl:number
-                    format="1.1.1.1.1.1.1"
-                    count="section"
-                    level="multiple" />
-<xsl:text> </xsl:text>
+        <xsl:variable name="section-nr">
+          <xsl:number count="section" format="1.1.1.1.1.1.1" level="multiple"/>
+        </xsl:variable>
+        <xsl:if test="not(starts-with(title, $section-nr))">
+          <xsl:value-of select="$section-nr"/>
+          <xsl:text> </xsl:text>
+        </xsl:if>
         <xsl:value-of
                     select="normalize-space(title)" />
       </fo:bookmark-title>
