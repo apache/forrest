@@ -357,7 +357,6 @@
             text-align="center"
             space-before="20pt"
             space-after="25pt"
-            width="7.5in"
             font-family="serif"
             font-style="italic">
       <xsl:call-template
@@ -371,7 +370,6 @@
             font-size="10pt"
             text-align="left"
             space-before="20pt"
-            width="7.5in"
             font-family="serif"
             border-top="0.25pt solid"
             border-bottom="0.25pt solid"
@@ -412,13 +410,13 @@
   <xsl:template match="body[count(//section) != 0]">
     <xsl:if test="$disable-toc != 'true' and $toc-max-depth > 0">
       <fo:block font-family="sans-serif" font-size="12pt" font-weight="bold"
-        space-after="5pt" space-before="5pt" text-align="justify" width="7.5in" id="__toc__">
+        space-after="5pt" space-before="5pt" text-align="justify" id="__toc__">
         <xsl:call-template name="insertPageBreaks"/>
         <!-- insert i18n stuff here -->
         <xsl:text>Table of contents</xsl:text>
       </fo:block>
       <fo:block font-family="serif" font-size="12pt" space-after="5pt"
-        space-before="0pt" text-align="justify" width="7.5in">
+        space-before="0pt" text-align="justify">
         <xsl:if test="$page-break-top-sections">
           <xsl:attribute name="break-after">page</xsl:attribute>
         </xsl:if>

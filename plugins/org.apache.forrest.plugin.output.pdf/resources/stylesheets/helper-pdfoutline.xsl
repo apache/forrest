@@ -22,19 +22,21 @@
   <xsl:template
         match="document"
         mode="outline">
-    <fo:bookmark-tree>
-      <xsl:if test="$disable-toc != 'true' and $toc-max-depth > 0">
-        <fo:bookmark internal-destination="__toc__">
-          <fo:bookmark-title>
-            <!-- insert i18n stuff here -->
-            <xsl:text>Table of contents</xsl:text>
-          </fo:bookmark-title>
-        </fo:bookmark>
-      </xsl:if>
-      <xsl:apply-templates
-            select="body/section"
-            mode="outline" />
-    </fo:bookmark-tree>
+    <xsl:if test="count(body/section) &gt; 0">
+      <fo:bookmark-tree>
+        <xsl:if test="$disable-toc != 'true' and $toc-max-depth > 0">
+          <fo:bookmark internal-destination="__toc__">
+            <fo:bookmark-title>
+              <!-- insert i18n stuff here -->
+              <xsl:text>Table of contents</xsl:text>
+            </fo:bookmark-title>
+          </fo:bookmark>
+        </xsl:if>
+        <xsl:apply-templates
+          select="body/section"
+          mode="outline" />
+      </fo:bookmark-tree>
+    </xsl:if>
   </xsl:template>
   <xsl:template
         match="section"
