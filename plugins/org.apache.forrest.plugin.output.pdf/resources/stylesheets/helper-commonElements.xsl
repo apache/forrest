@@ -444,13 +444,13 @@
       </fo:table-column>
       <!-- End of hack for Fop support (if removing this hack, remember
       you need the <fo:table> element) -->
-      <xsl:if test="tr[count(th) &gt; 0]">
+      <xsl:if test="tr[count(th) &gt; 0 and count(td) = 0]">
         <fo:table-header font-size="10pt" font-family="serif">
-          <xsl:apply-templates select="tr[count(th) &gt; 0]"/>
+          <xsl:apply-templates select="tr[count(th) &gt; 0 and count(td) = 0]"/>
         </fo:table-header>
       </xsl:if>
       <fo:table-body font-size="10pt" font-family="serif">
-        <xsl:apply-templates select="tr[count(th) = 0]"/>
+        <xsl:apply-templates select="tr[count(td) &gt; 0]"/>
       </fo:table-body>
     </fo:table>
     <!-- FIXME: Apache Fop does not support the caption element yet.
