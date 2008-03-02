@@ -680,7 +680,9 @@ forrest -Dproject.start-uri=live-sites.html
       <answer>
         <p>
           A set of symbols is available. See the demonstration in a fresh
-          'forrest seed' site (at samples/xml-entities.html). For example, use
+          'forrest seed' site (at
+          <link href="http://forrest.zones.apache.org/ft/build/forrest-seed/samples-b/xml-entities.html">samples-b/xml-entities.html</link>).
+          For example, use
           "<code>&amp;myp-t;</code>" to represent the project name together with
           trademark symbol "My Project Name&trade;". Avoid lengthy typing and
           potential spelling errors.
@@ -1243,6 +1245,32 @@ X [0]         /docs_0_80/upgrading_08.html  BROKEN: No pipeline matched...
           file. Projects can supply their own (see FAQ:
           <link href="#cli-xconf">Cocoon cli.xconf</link>) or use the default
           installation-wide cli.xconf file.
+        </p>
+      </answer>
+    </faq>
+    <faq id="sitemap-entities">
+      <question>How to configure some Cocoon sitemap components, e.g. output html encoding or doctype?</question>
+      <answer>
+        <p>
+          The core Cocoon components are defined in the
+          <code>main/webapp/sitemap.xmap</code> file. Normally the default
+          settings are suitable. There are some things that you might like to
+          change per project. For example, change the html encoding for output
+          html files from the default UTF-8 or configure a different document
+          type declaration for the Dispatcher.
+        </p>
+        <p>
+          Create a fresh site with 'forrest seed' and see the set of symbols at the 
+          <code>src/documentation/resources/schema/symbols-project-v10.ent</code> file.
+          Copy that file to your own projects at the same location. Also add the
+          entry to your project xml catalog as shown in the seed site at
+          <code>src/documentation/resources/schema/catalog.xcat</code> file.
+        </p>
+        <p>
+          Now copy the particular entity that you wish to re-define from
+          <code>main/webapp/resources/schema/entity/symbols-core-v10.ent</code>
+          file into your project symbols file and edit the entity declaration.
+          Re-start Forrest.
         </p>
       </answer>
     </faq>

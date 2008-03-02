@@ -29,6 +29,16 @@
   structure the content from multiple input sources. Far more actually
   because it provides as well logical conditions for presentation formatting logic
 -->
+<!DOCTYPE map:sitemap [
+<!ENTITY % symbols-project
+  PUBLIC "-//Apache Forrest//ENTITIES Symbols Project v1.0//EN"
+  "symbols-project-v10.ent">
+  %symbols-project;
+<!ENTITY % symbols-core
+  PUBLIC "-//Apache Forrest//ENTITIES Symbols Core v1.0//EN"
+  "symbols-core-v10.ent">
+  %symbols-core;
+]>
 <map:sitemap xmlns:map="http://apache.org/cocoon/sitemap/1.0">
   <map:components>
     <map:generators default="file">
@@ -67,10 +77,9 @@
       <map:serializer logger="sitemap.serializer.xhtml" mime-type="text/html" 
         name="xhtml" pool-grow="2" pool-max="64" pool-min="2" 
         src="org.apache.cocoon.serialization.XMLSerializer">
-        <doctype-public> -//W3C//DTD XHTML 1.0 Strict//EN </doctype-public>
-        <doctype-system> http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd 
-          </doctype-system>
-        <encoding>UTF-8</encoding>
+        <doctype-public>&serializer-xhtml-doctype-public;</doctype-public>
+        <doctype-system>&serializer-xhtml-doctype-system;</doctype-system>
+        <encoding>&serializer-xhtml-encoding;</encoding>
         <indent>yes</indent>
         <omit-xml-declaration>yes</omit-xml-declaration>
       </map:serializer>
