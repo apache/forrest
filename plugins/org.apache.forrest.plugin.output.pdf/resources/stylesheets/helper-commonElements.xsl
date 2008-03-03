@@ -308,7 +308,7 @@
     <xsl:variable name="color"
       select="$config/colors/color[@name = 'body']/@link"/>
     <xsl:choose>
-      <xsl:when test="not(boolean(href))">
+      <xsl:when test="not(boolean(@href))">
         <!-- html2document.xsl creates links with name but with no href -> filter those -->
         <xsl:apply-templates/>
       </xsl:when>

@@ -118,6 +118,8 @@
         href="helper-commonElements.xsl" />
   <xsl:include
         href="helper-layout.xsl" />
+  <xsl:include
+        href="helper-xmpMetadata.xsl" />
   <xsl:template
         match="/">
     <fo:root
@@ -223,6 +225,7 @@
           </fo:repeatable-page-master-alternatives>
         </fo:page-sequence-master>
       </fo:layout-master-set>
+      <xsl:call-template name="createXMPMetadata"/>
       <xsl:apply-templates
                 select="/site/document"
                 mode="outline" />
@@ -390,12 +393,30 @@
     </fo:block>
     <xsl:apply-templates />
   </xsl:template>
-  <xsl:template
-        match="authors">
+  <xsl:template match="version">
     <fo:block
-            space-before="20pt"
             font-weight="bold"
-            font-size="9pt">
+            font-size="smaller">
+      <xsl:call-template name="insertPageBreaks"/>
+      <xsl:apply-templates select="@major"/>
+      <xsl:apply-templates select="@minor"/>
+      <xsl:apply-templates select="@fix"/>
+      <xsl:apply-templates select="@tag"/>
+      <xsl:choose>
+        <xsl:when test="starts-with(., '$Revision: ')">
+          Version <xsl:value-of select="substring(., 12, string-length(.) -11-2)"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="."/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </fo:block>
+  </xsl:template>
+  <xsl:template match="authors">
+    <fo:block
+            space-before="2em"
+            font-weight="bold"
+            font-size="smaller">
       <xsl:call-template
                 name="insertPageBreaks" />
 <!-- insert i18n stuff here --> by <xsl:for-each
@@ -410,7 +431,7 @@
   <xsl:template match="body[count(//section) != 0]">
     <xsl:if test="$disable-toc != 'true' and $toc-max-depth > 0">
       <fo:block font-family="sans-serif" font-size="12pt" font-weight="bold"
-        space-after="5pt" space-before="5pt" text-align="justify" id="__toc__">
+        space-after="0.5em" space-before="1em" text-align="justify" id="__toc__">
         <xsl:call-template name="insertPageBreaks"/>
         <!-- insert i18n stuff here -->
         <xsl:text>Table of contents</xsl:text>
