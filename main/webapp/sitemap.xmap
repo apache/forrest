@@ -22,12 +22,22 @@ http://forrest.apache.org/docs/sitemap-ref.html
 
 $Revision: 1.12 $
 ==================================================== -->
+<!DOCTYPE map:sitemap [
+<!ENTITY % symbols-project
+  PUBLIC "-//Apache Forrest//ENTITIES Symbols Project v1.0//EN"
+  "symbols-project-v10.ent">
+  %symbols-project;
+<!ENTITY % symbols-core
+  PUBLIC "-//Apache Forrest//ENTITIES Symbols Core v1.0//EN"
+  "symbols-core-v10.ent">
+  %symbols-core;
+]>
 <map:sitemap xmlns:map="http://apache.org/cocoon/sitemap/1.0">
   <map:components>
     <map:generators default="file">
       <map:generator name="file"  src="org.apache.cocoon.generation.FileGenerator" />
       <map:generator name="html"  src="org.apache.cocoon.generation.HTMLGenerator">
-        <jtidy-config>WEB-INF/jtidy.properties</jtidy-config>
+        <jtidy-config>&generator-html-jtidy-properties;</jtidy-config>
       </map:generator>
       <map:generator name="exception"
                   src="org.apache.cocoon.generation.ExceptionGenerator"/>
@@ -156,9 +166,9 @@ $Revision: 1.12 $
     </map:readers>
     <map:serializers default="html">
       <map:serializer name="html" mime-type="text/html" src="org.apache.cocoon.serialization.HTMLSerializer">
-        <doctype-public>-//W3C//DTD HTML 4.01 Transitional//EN</doctype-public>
-        <doctype-system>http://www.w3.org/TR/html4/loose.dtd</doctype-system>
-        <encoding>UTF-8</encoding>
+        <doctype-public>&serializer-html-doctype-public;</doctype-public>
+        <doctype-system>&serializer-html-doctype-system;</doctype-system>
+        <encoding>&serializer-html-encoding;</encoding>
       </map:serializer>
       <map:serializer name="xml" mime-type="text/xml" src="org.apache.cocoon.serialization.XMLSerializer"/>
       <map:serializer name="xml-document" mime-type="text/xml" src="org.apache.cocoon.serialization.XMLSerializer">
