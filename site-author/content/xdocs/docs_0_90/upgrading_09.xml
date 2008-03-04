@@ -32,16 +32,23 @@
       </note>
       <p>This is a placeholder document for the new version.</p>
     </section>
-    <section id="Headsup">
-      <title>Headsup</title>
+    <section id="entities">
+      <title>Entities</title>
       <p>Due to
-        <strong>FOR-1071</strong> you need to add
+        <strong>FOR-1071</strong> you need to either add
         <code>src/documentation/resources/schema/symbols-project-v10.ent</code>
-        to your custom project. See
+        to your custom project or comment a section in your project <code>catalog.xcat</code>. See
         <a href="site:v0.90//faq/sitemap-entities">
-          faq.html#sitemap-entities</a> for more information.</p>
+        faq.html#sitemap-entities</a> for more information and the benefits using entities in your project.</p>
       <source>cd $YOUR_PROJECT
-cp $FORREST_HOME/main/webapp/symbols-project-v10.ent src/documentation/resources/schema/</source>
+# The following is either or. 
+# a) copy an empty entity file:  
+cp $FORREST_HOME/main/webapp/symbols-project-v10.ent src/documentation/resources/schema/
+# b) OR comment a section in src/documentation/resources/schema/catalog.xcat
+vi src/documentation/resources/schema/catalog.xcat
+# comment the following 
+<![CDATA[<!--public publicId="-//Apache Forrest//ENTITIES Symbols Project v1.0//EN"
+  uri="symbols-project-v10.ent"/-->]]></source>
     </section>
 <!-- FIXME: need to bring back some sections from the 0.8 version, temporarily removed -->
   </body>
