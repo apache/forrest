@@ -54,7 +54,8 @@ See http://www.apache.org/licenses/exports/
 The following provides more details on the included files that
 may be subject to export controls on cryptographic software:
 
-FIXME: FOR-1069 -  Mention where each product is used.
+  The Apache Forrest facility "forrestbot" uses and includes the JSch
+  library <http://www.jcraft.com/jsch/> to enable deployment via "scp".
 
------------------------------------------------------------------------------
+--------
 Thanks for using Apache Forrest ... http://forrest.apache.org/
