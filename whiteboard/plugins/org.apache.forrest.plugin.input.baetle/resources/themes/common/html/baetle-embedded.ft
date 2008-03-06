@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one or more
+  contributor license agreements.  See the NOTICE file distributed with
+  this work for additional information regarding copyright ownership.
+  The ASF licenses this file to You under the Apache License, Version 2.0
+  (the "License"); you may not use this file except in compliance with
+  the License.  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<forrest:contract xmlns:i18n="http://apache.org/cocoon/i18n/2.1"
+                  xmlns:forrest="http://apache.org/forrest/templates/1.0"
+                  name="baetle-embedded">
+  <description>
+    <p>
+      This template outputs html link elements for embedding Baetle files.
+    </p>
+    <p>
+      The contract requires the locations of Baetle files to be passed in as
+      parameters using the following syntax:
+    </p>
+    <source>&lt;baetle url="<em>issue.rdf</em>"&gt;</source>
+    <ul>
+      <li><strong>url</strong> attribute indicates the location of the Baetle 
+      file. The <strong>url</strong> attribute is required.
+      </li>
+      <li><strong>title</strong> attribute indicates the title of the Baetle 
+        file. The <strong>title</strong> attribute is optional an has a 
+	default value of "Baetle".
+      </li>
+    </ul>
+  </description>
+  <usage>
+<![CDATA[<forrest:contract name="baetle-embedded">
+      <forrest:property name="baetle-embedded-links">
+        <baetle url="foo.rdf"/>
+        <baetle url="foo.bar.xml"/>
+        ...
+      </forrest:property>
+    </forrest:contract>]]>
+  </usage>
+  <forrest:template xmlns:forrest="http://apache.org/forrest/templates/1.0" 
+                    name="baetle-embedded" inputFormat="xsl">
+
+    <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+                    xmlns:forrest="http://apache.org/forrest/templates/1.0"
+                    version="1.1">
+      <xsl:param name="baetle-embedded-links"/>
+      <xsl:template match="/">
+        <forrest:content>
+          <forrest:part xpath="/html/head">
+            <xsl:apply-templates select="$baetle-embedded-links"/>
+          </forrest:part>
+        </forrest:content>
+      </xsl:template>
+
+      <xsl:template match="baetle[@url]">
+        <link rel="meta" type="application/rdf+xml">
+        <xsl:choose>
+          <xsl:when test="@title">
+            <xsl:attribute name="title">
+              <xsl:value-of select="@title"/>
+            </xsl:attribute>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:attribute name="title">Baetle</xsl:attribute>
+          </xsl:otherwise>
+        </xsl:choose>
+        <xsl:attribute name="href">
+          <xsl:value-of select="@url"/>
+        </xsl:attribute></link>
+      </xsl:template>
+    </xsl:stylesheet>
+  </forrest:template>
+</forrest:contract>
