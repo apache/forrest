@@ -95,14 +95,14 @@
   <xsl:template match="p">
     <xsl:choose>
       <xsl:when test="ancestor::li and not(preceding-sibling::*)">
-        <fo:block space-after="4pt" font-family="serif">
+        <fo:block space-after="4pt">
           <xsl:copy-of select="@id"/>
           <xsl:call-template name="insertPageBreaks"/>
           <xsl:apply-templates/>
         </fo:block>
       </xsl:when>
       <xsl:otherwise>
-        <fo:block space-before="4pt" space-after="4pt" font-family="serif">
+        <fo:block space-before="4pt" space-after="4pt">
           <xsl:copy-of select="@id"/>
           <xsl:call-template name="insertPageBreaks"/>
           <xsl:apply-templates/>
@@ -141,7 +141,7 @@
         </fo:block>
       </fo:list-item-label>
       <fo:list-item-body start-indent="body-start()">
-        <fo:block font-family="serif">
+        <fo:block>
           <xsl:apply-templates/>
         </fo:block>
       </fo:list-item-body>
@@ -149,7 +149,7 @@
   </xsl:template>
   <!-- Emulate browser handling of these invalid combinations that our DTD
   unfortunately allows -->
-  <xsl:template match="ul/ul | ul/ol | ol/ul | ol/ol">
+  <xsl:template match="ul/ul | ul/ol | ol/ul | ol/ol | ul/dl | ol/dl">
     <fo:list-item>
       <xsl:copy-of select="@id"/>
       <fo:list-item-label end-indent="label-end()">
@@ -173,7 +173,7 @@
         </fo:block>
       </fo:list-item-label>
       <fo:list-item-body start-indent="body-start()">
-        <fo:block font-family="serif">
+        <fo:block>
           <xsl:apply-templates/>
         </fo:block>
       </fo:list-item-body>
@@ -248,7 +248,7 @@
       </xsl:choose>
       <xsl:value-of select="title"/>
     </fo:block>
-    <fo:block margin-left="0.25in" margin-right="0.25in" font-family="serif"
+    <fo:block margin-left="0.25in" margin-right="0.25in"
       font-size="10pt" border-after-style="solid" border-start-style="solid"
       border-end-style="solid" border-color="{$color}" background-color="#fff0f0"
       padding-start="3pt" padding-end="3pt" padding-before="3pt"
@@ -275,7 +275,7 @@
       </xsl:choose>
       <xsl:value-of select="title"/>
     </fo:block>
-    <fo:block margin-left="0.25in" margin-right="0.25in" font-family="serif"
+    <fo:block margin-left="0.25in" margin-right="0.25in"
       font-size="10pt" space-after="10pt" border-after-style="solid"
       border-start-style="solid" border-end-style="solid" border-color="{$color}"
       background-color="#F0F0FF" padding-start="3pt" padding-end="3pt"
@@ -296,7 +296,7 @@
       <!-- insert i18n stuff here --> FIXME (
       <xsl:value-of select="@author"/>):
       <xsl:value-of select="title"/> </fo:block>
-    <fo:block margin-left="0.25in" margin-right="0.25in" font-family="serif"
+    <fo:block margin-left="0.25in" margin-right="0.25in"
       font-size="10pt" space-after="10pt" border-after-style="solid"
       border-start-style="solid" border-end-style="solid" border-color="{$color}"
       background-color="#FFF0F0" padding-start="3pt" padding-end="3pt"
@@ -445,11 +445,11 @@
       <!-- End of hack for Fop support (if removing this hack, remember
       you need the <fo:table> element) -->
       <xsl:if test="tr[count(th) &gt; 0 and count(td) = 0]">
-        <fo:table-header font-size="10pt" font-family="serif">
+        <fo:table-header font-size="10pt">
           <xsl:apply-templates select="tr[count(th) &gt; 0 and count(td) = 0]"/>
         </fo:table-header>
       </xsl:if>
-      <fo:table-body font-size="10pt" font-family="serif">
+      <fo:table-body font-size="10pt">
         <xsl:apply-templates select="tr[count(td) &gt; 0]"/>
       </fo:table-body>
     </fo:table>
@@ -541,7 +541,7 @@
   </xsl:template>
   <xsl:template match="p[@class='quote']">
     <fo:block padding="3pt" margin="0" space-before="4pt" space-after="4pt"
-      background-color="#f0f0f0" font-family="serif" font-style="italic">
+      background-color="#f0f0f0" font-style="italic">
       <xsl:copy-of select="@id"/>
       <xsl:call-template name="insertPageBreaks"/>
       <xsl:apply-templates/>

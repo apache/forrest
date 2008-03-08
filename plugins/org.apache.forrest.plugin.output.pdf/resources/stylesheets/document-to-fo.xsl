@@ -123,7 +123,8 @@
   <xsl:template
         match="/">
     <fo:root
-            xmlns:fo="http://www.w3.org/1999/XSL/Format">
+            xmlns:fo="http://www.w3.org/1999/XSL/Format"
+            font-family="serif" font-size="12pt">
       <fo:layout-master-set>
         <fo:simple-page-master
                     master-name="first-page"
@@ -236,14 +237,15 @@
       </fo:page-sequence>
     </fo:root>
   </xsl:template>
-  <xsl:template
-        match="document">
+  
+  <xsl:template match="document">
     <fo:title>
-      <xsl:value-of
-                select="header/title" />
+      <xsl:value-of select="header/title" />
     </fo:title>
+    
     <fo:static-content
-            flow-name="first-footer">
+            flow-name="first-footer"
+            font-family="sans-serif">
       <fo:block
                 border-top="0.25pt solid"
                 padding-before="6pt"
@@ -263,8 +265,10 @@
       <xsl:call-template
                 name="info" />
     </fo:static-content>
+    
     <fo:static-content
-            flow-name="even-header">
+            flow-name="even-header"
+            font-family="sans-serif">
       <fo:block
                 font-size="70%"
                 text-align="end"
@@ -274,7 +278,8 @@
       </fo:block>
     </fo:static-content>
     <fo:static-content
-            flow-name="even-footer">
+            flow-name="even-footer"
+            font-family="sans-serif">
       <fo:block
                 border-top="0.25pt solid"
                 padding-before="6pt"
@@ -297,8 +302,10 @@
       <xsl:call-template
                 name="info" />
     </fo:static-content>
+    
     <fo:static-content
-            flow-name="odd-header">
+            flow-name="odd-header"
+            font-family="sans-serif">
       <fo:block
                 font-size="70%"
                 font-style="italic">
@@ -314,8 +321,10 @@
                     select="header/title" />
       </fo:block>
     </fo:static-content>
+    
     <fo:static-content
-            flow-name="odd-footer">
+            flow-name="odd-footer"
+            font-family="sans-serif">
       <fo:block
                 border-top="0.25pt solid"
                 padding-before="6pt"
@@ -331,16 +340,18 @@
       <xsl:call-template
                 name="info" />
     </fo:static-content>
+    
     <fo:flow
             flow-name="xsl-region-body">
       <fo:block
-                padding-before="24pt"
-                padding-after="24pt"
-                font-size="24pt"
-                font-weight="bold"
-                id="{generate-id()}">
+              padding-before="24pt"
+              padding-after="24pt"
+              font-family="sans-serif"
+              font-size="24pt"
+              font-weight="bold"
+              id="{generate-id()}">
         <xsl:value-of
-                    select="header/title" />
+          select="header/title" />
       </fo:block>
       <fo:block
                 text-align="{$text-align}"
@@ -360,7 +371,6 @@
             text-align="center"
             space-before="20pt"
             space-after="25pt"
-            font-family="serif"
             font-style="italic">
       <xsl:call-template
                 name="insertPageBreaks" />
@@ -373,7 +383,6 @@
             font-size="10pt"
             text-align="left"
             space-before="20pt"
-            font-family="serif"
             border-top="0.25pt solid"
             border-bottom="0.25pt solid"
             padding-before="6pt"
@@ -395,6 +404,7 @@
   </xsl:template>
   <xsl:template match="version">
     <fo:block
+            font-family="sans-serif"
             font-weight="bold"
             font-size="smaller">
       <xsl:call-template name="insertPageBreaks"/>
@@ -415,6 +425,7 @@
   <xsl:template match="authors">
     <fo:block
             space-before="2em"
+            font-family="sans-serif"
             font-weight="bold"
             font-size="smaller">
       <xsl:call-template
@@ -436,7 +447,7 @@
         <!-- insert i18n stuff here -->
         <xsl:text>Table of contents</xsl:text>
       </fo:block>
-      <fo:block font-family="serif" font-size="12pt" space-after="5pt"
+      <fo:block font-size="12pt" space-after="5pt"
         space-before="0pt" text-align="justify">
         <xsl:if test="$page-break-top-sections">
           <xsl:attribute name="break-after">page</xsl:attribute>
