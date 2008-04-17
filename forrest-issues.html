@@ -172,7 +172,7 @@ document.write("Last Published: " + document.lastModified);
   |alternative credits
   +-->
 <div id="credit2">
-<a href="http://eu.apachecon.com/"><img border="0" title="ApacheCon Europe 2008" alt="ApacheCon Europe 2008 - logo" src="http://apache.org/ads/ApacheCon/2008-europe-125x125.png" style="width: 125px;height: 125px;"></a><a href="http://us.apachecon.com/"><img border="0" title="ApacheCon US 2008" alt="ApacheCon US 2008 - logo" src="http://apache.org/ads/ApacheCon/2008-usa-125x125.png" style="width: 125px;height: 125px;"></a>
+<a href="http://us.apachecon.com/"><img border="0" title="ApacheCon US 2008" alt="ApacheCon US 2008 - logo" src="http://apache.org/ads/ApacheCon/2008-usa-125x125.png" style="width: 125px;height: 125px;"></a>
 </div>
 </div>
 <!--+
@@ -268,7 +268,7 @@ document.write("Last Published: " + document.lastModified);
 <a href="#%5BFOR-785%5D+plugins%2F*%2Fskinconf.xml+does+not+validate+since+using+entity+to+ease+management">[FOR-785] plugins/*/skinconf.xml does not validate since using entity to ease management</a>
 </li>
 <li>
-<a href="#%5BFOR-889%5D+Use+by+Ant+of+newer+catalog+entity+resolver+failing+for+Windows">[FOR-889] Use by Ant of newer catalog entity resolver failing for Windows</a>
+<a href="#%5BFOR-936%5D+Forrest+%22looses%22+the+locale+when+switching+pages">[FOR-936] Forrest "looses" the locale when switching pages</a>
 </li>
 </ul>
 </div>
@@ -597,17 +597,23 @@ Tidy up the pluginTempate/status.xml</p>
 &lt;br/&gt;
 Okay, i admit it ... forgot to do 'build test' :-) and it doesn't validate. The DTD insists on having the elements in a specific order.</p>
 </div>
-<a name="N10131"></a><a name="%5BFOR-889%5D+Use+by+Ant+of+newer+catalog+entity+resolver+failing+for+Windows"></a>
-<h2 class="underlined_10">[FOR-889] Use by Ant of newer catalog entity resolver failing for Windows</h2>
+<a name="N10131"></a><a name="%5BFOR-936%5D+Forrest+%22looses%22+the+locale+when+switching+pages"></a>
+<h2 class="underlined_10">[FOR-936] Forrest "looses" the locale when switching pages</h2>
 <div class="section">
 <p>
-<a href="http://issues.apache.org/jira/browse/FOR-889">http://issues.apache.org/jira/browse/FOR-889</a>
+<a href="http://issues.apache.org/jira/browse/FOR-936">http://issues.apache.org/jira/browse/FOR-936</a>
 </p>
-<p>Some people on Windows report that the 'forrest validate-xdocs' task is &amp;quot;failing&amp;quot; when we upgrade the $FORREST_HOME/tools/ant/lib/xml-commons-resolver.jar&lt;br/&gt;
+<p>When moving from one page to another and switching locales in between, the chosen locale is lost when entering the new page. To reproduce:&lt;br/&gt;
 &lt;br/&gt;
-See discussion in:&lt;br/&gt;
-&amp;nbsp;[heads up] Ant upgraded, please test&lt;br/&gt;
-&amp;nbsp;&lt;a href="http://marc.theaimsgroup.com/?t=114800390100001"&gt;http://marc.theaimsgroup.com/?t=114800390100001&lt;/a&gt;</p>
+1) set up and run forrest with i18n ON&lt;br/&gt;
+2) open a localized page&lt;br/&gt;
+3) switch locale by appending '?locale=XY' in the address field&lt;br/&gt;
+4) open another page available in both the original locale (before the switch) and the new locale XY&lt;br/&gt;
+5) notice how the new page is displayed in the original locale, NOT the expected XY locale&lt;br/&gt;
+&lt;br/&gt;
+Although one could argue that the described behaviour is wanted in some cases, I believe that to most users it would be natural that the locale is &amp;quot;sticky&amp;quot; once changed - it should not change back by itself. Thus, the &amp;quot;sticky&amp;quot; behaviour should be default in Forrest.&lt;br/&gt;
+&lt;br/&gt;
+The fix is simple, patch to come soon.</p>
 </div>
 </div>
 <!--+
