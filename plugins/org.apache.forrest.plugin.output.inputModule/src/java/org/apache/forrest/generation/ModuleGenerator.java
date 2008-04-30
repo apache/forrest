@@ -38,6 +38,28 @@ import org.apache.excalibur.source.SourceValidity;
 import org.apache.excalibur.source.impl.validity.NOPValidity;
 import org.xml.sax.SAXException;
 
+/**
+ * The module generator will connect to the input module
+ * specified by the {@link #MODULE_PARAM}.
+ * The generator will then create a property file out of the 
+ * iteration of the {@link InputModule#getAttributeNames()} method.
+ *  <p>
+ *  The result will look like:<br>
+ *  <code>
+ *  &lt;properties&gt;<br>
+ *  &nbsp;&lt;property value="InputModuleValue" name="InputModuleKey"/><br>
+ *  &lt;/properties&gt;
+ *  <p>
+ *  Use it from the sitemap like:<br>
+ *  <code>
+ *  &lt;map:match pattern="module.*.properties"&gt;<br>
+ *    &nbsp;&lt;map:generate type="module"&gt;<br>
+ *     &nbsp;&nbsp; &lt;map:parameter name="input-module" value="{1}"/&gt;<br>
+ *   &nbsp; &lt;/map:generate&gt;<br>
+ *   &nbsp; &lt;map:serialize type="xml"/&gt;<br>
+ *  &lt;/map:match&gt;
+ *
+ */
 public class ModuleGenerator extends AbstractGenerator implements Serviceable,
         CacheableProcessingComponent {
     private ServiceSelector selector;
