@@ -17,6 +17,9 @@
 -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   xmlns:fo="http://www.w3.org/1999/XSL/Format" version="1.0">
+
+  <xsl:include href="lm://transform.xml.pathutils"/>
+
   <xsl:template match="anchor">
     <fo:block>
       <xsl:copy-of select="@id"/>
@@ -347,45 +350,74 @@
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
+  
+  <xsl:template name="imgpath">
+    <xsl:choose>
+      <!-- already absolute -->
+      <xsl:when
+        test="contains(string(@src),':')">
+        <xsl:value-of select="@src"/>
+      </xsl:when>
+      <!-- absolute to servlet context -->
+      <xsl:when test="starts-with(string(@src),'/')">
+        <xsl:value-of
+          select="concat('cocoon:/',@src)"/>
+      </xsl:when>
+      <!-- relative to document -->
+      <xsl:otherwise>
+        <xsl:call-template name="normalize">
+          <xsl:with-param name="path">
+            <xsl:value-of select="concat('cocoon://',$path,@src)"/>
+          </xsl:with-param>
+        </xsl:call-template>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+  <xsl:template name="img-explicit-size">
+    <xsl:if test="@height">
+      <xsl:attribute name="height">
+        <xsl:value-of select="@height"/>
+      </xsl:attribute>
+      <xsl:attribute name="content-height">scale-to-fit</xsl:attribute>
+    </xsl:if>
+    <xsl:if test="@width">
+      <xsl:attribute name="width">
+        <xsl:value-of select="@width"/>
+      </xsl:attribute>
+      <xsl:attribute name="content-width">scale-to-fit</xsl:attribute>
+    </xsl:if>
+  </xsl:template>
+  <xsl:template match="icon">
+    <!-- Make relative paths absolute -->
+    <xsl:variable name="imgpath">
+      <xsl:call-template name="imgpath"/>
+    </xsl:variable>
+    <fo:external-graphic src="{$imgpath}">
+      <xsl:call-template name="img-explicit-size"/>
+    </fo:external-graphic>
+    <!-- alt text -->
+    <xsl:if test="$config/pdf/show-image-alt-text='true'">
+      <xsl:if test="normalize-space(@alt)!=''">
+        <xsl:text> (</xsl:text>
+        <xsl:value-of select="@alt"/>
+        <xsl:text>)</xsl:text>
+      </xsl:if>
+    </xsl:if>
+  </xsl:template>
   <xsl:template match="figure|img">
     <fo:block text-align="center">
       <xsl:call-template name="insertPageBreaks"/>
       <xsl:copy-of select="@id"/>
       <!-- Make relative paths absolute -->
       <xsl:variable name="imgpath">
-        <xsl:choose>
-          <!-- already absolute -->
-          <xsl:when
-            test="contains(string(@src),':')">
-            <xsl:value-of select="@src"/>
-          </xsl:when>
-          <!-- absolute to servlet context -->
-          <xsl:when test="starts-with(string(@src),'/')">
-            <xsl:value-of
-              select="concat('cocoon:/',@src)"/>
-          </xsl:when>
-          <!-- relative to document -->
-          <xsl:otherwise> 
-            <xsl:value-of select="concat('cocoon://',$path,@src)"/> </xsl:otherwise>
-        </xsl:choose>
+        <xsl:call-template name="imgpath"/>
       </xsl:variable>
       <fo:external-graphic src="{$imgpath}">
-        <xsl:if test="@height">
-          <xsl:attribute name="height">
-            <xsl:value-of select="@height"/>
-          </xsl:attribute>
-          <xsl:attribute name="content-height">scale-to-fit</xsl:attribute>
-        </xsl:if>
-        <xsl:if test="@width">
-          <xsl:attribute name="width">
-            <xsl:value-of select="@width"/>
-          </xsl:attribute>
-          <xsl:attribute name="content-width">scale-to-fit</xsl:attribute>
-        </xsl:if>
+        <xsl:call-template name="img-explicit-size"/>
         <!-- Work around for fop094 not supporting 
-        scale-down-to-fit, to be replaces as soon as fop095 is released
+          scale-down-to-fit, to be replaced as soon as fop095 is released
         -->
-        <xsl:if test=" not((@width|@height))">
+        <xsl:if test="not((@width|@height))">
           <xsl:attribute name="width">100%</xsl:attribute>
           <xsl:attribute name="content-width">scale-to-fit</xsl:attribute>
           <xsl:attribute name="content-height">100%</xsl:attribute>
@@ -401,6 +433,7 @@
       </xsl:if>
     </fo:block>
   </xsl:template>
+  
   <xsl:template match="table">
     <!-- FIXME: Apache FOP must have column widths specified at present,
     this section can be removed when this limitation is removed from Fop.
