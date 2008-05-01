@@ -294,15 +294,30 @@
     <xsl:param name="buglist"/>
     <xsl:choose>
       <xsl:when test="contains($buglist, ',')">
-        <xsl:variable name="current" select="substring-before($buglist, ',')"/><link href="{concat($bugtracking-url, $current)}">
-        <xsl:value-of select="$current"/></link>
+        <xsl:variable name="current" select="substring-before($buglist, ',')"/>
+        <xsl:call-template name="print-bug">
+          <xsl:with-param name="bug-id" select="$current"/>
+        </xsl:call-template>
 <xsl:text>, </xsl:text>
         <xsl:call-template name="print-bugs">
           <xsl:with-param name="buglist" select="substring-after($buglist, ',')"/>
         </xsl:call-template>
       </xsl:when>
-      <xsl:otherwise><link href="{concat($bugtracking-url, $buglist)}">
-        <xsl:value-of select="$buglist"/></link>
+      <xsl:otherwise>
+        <xsl:call-template name="print-bug">
+          <xsl:with-param name="bug-id" select="$buglist"/>
+        </xsl:call-template>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+  <xsl:template name="print-bug">
+    <xsl:param name="bug-id"/>
+    <xsl:choose>
+      <xsl:when test="string-length($bugtracking-url) &gt; 0">
+        <link href="{concat($bugtracking-url, $bug-id)}"><xsl:value-of select="$bug-id"/></link>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="$bug-id"/>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
