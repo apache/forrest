@@ -32,6 +32,20 @@ import org.apache.cocoon.selection.Selector;
 
 /**
  * Locationmap select statement.
+ * 
+ * <p>
+ * The &lt;select&gt; element has one optional <code>type</code> attribute
+ * which identifies the <code>{@link Selector}<code> that is to do the selection.
+ * If no <code>type</code> attribute is used the default selector is used.
+ * </p>
+ * 
+ * Select statements can contain <code>&lt;select&gt;</code>,
+ * <code>&lt;mount&gt;</code> and <code>&lt;location&gt;</code>
+ * child statements.
+ * 
+ * <p>
+ * Select nodes can be parametrized using <code>&lt;parameter&gt;</code> child elements.
+ * </p>
  */
 public final class SelectNode extends AbstractNode {
     
@@ -121,8 +135,6 @@ public final class SelectNode extends AbstractNode {
         
         return null;
     }
-    
-    
 
     /**
      * If debugging is turned on then log a debug message.
