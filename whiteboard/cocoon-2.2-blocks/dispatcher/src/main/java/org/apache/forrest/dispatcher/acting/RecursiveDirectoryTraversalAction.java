@@ -32,35 +32,32 @@ import org.apache.excalibur.source.Source;
 import org.apache.excalibur.source.SourceResolver;
 
 /**
- * Selects the first of a set of Sources that exists in the context.
+ * Calculates which location to return for a given directory.
+ * Here we are traversing the tree till we reach its root. 
  * <p>
- * For example, we could define a SourceExistsSelector with:
+ * We are looking first in the request string and then using a 
+ * fallback algorithm to find alternative fallbacks.
+ * <p> 
+ * e.g. the request is "sample/index". First choice is to find: 
+ * {$projectDir}sample/index{$projectExtension}<br>
+ * If the file does not exist we will try with the fallback file
+ * {$projectDir}sample/{$projectFallback}{$projectExtension}<br>
+ * The last file we will try in our example is 
+ * {$projectDir}{$projectFallback}{$projectExtension}.<br>
+ * With this we have reached the root directory and we cannot find the
+ * requested file the action will return null.
+ * <p>
+ * &lt;map:act type="RecursiveDirectoryTraversalAction"&gt;<br>
+ *   &lt;map:parameter value="{../1}{1}" name="request"/&gt;<br>
+ *   &lt;map:parameter value="{properties:dispatcher.theme}" name="projectFallback"/&gt;<br>
+ *   &lt;map:parameter value="{properties:dispatcher.theme-ext}" 
+ *                     name="projectExtension"/&gt;<br>
+ *   &lt;map:parameter value="{properties:resources}structurer/url/" 
+ *                     name="projectDir"/&gt;<br>
+ * &lt;!--  url project-based theme-based = directory-based / parent-directory based (recursively) --&gt;<br>
+ *         &lt;map:location src="{uri}" /&gt;<br>
+ *  &lt;/map:act&gt;
  * 
- * <pre>
- * 
- *  &lt;map:selector name=&quot;exists&quot;
- *                logger=&quot;sitemap.selector.source-exists&quot;
- *                src=&quot;org.apache.cocoon.selection.SourceExistsSelector&quot; /&gt;
- *  
- * </pre>
- * 
- * And use it to build a PDF from XSL:FO or a higher-level XML format with:
- * 
- * <pre>
- * 
- *   &lt;map:match pattern=&quot;**.pdf&quot;&gt;
- *     &lt;map:select type=&quot;exists&quot;&gt;
- *        &lt;map:when test=&quot;context/xdocs/{1}.fo&quot;&gt;
- *           &lt;map:generate src=&quot;content/xdocs/{1}.fo&quot; /&gt;
- *        &lt;/map:when&gt;
- *        &lt;map:otherwise&gt;
- *          &lt;map:generate src=&quot;content/xdocs/{1}.xml&quot; /&gt;
- *          &lt;map:transform src=&quot;stylesheets/document2fo.xsl&quot; /&gt;
- *        &lt;/map:otherwise&gt;
- *     &lt;/map:select&gt;
- *     &lt;map:serialize type=&quot;fo2pdf&quot; /&gt;
- *  
- * </pre>
  */
 public class RecursiveDirectoryTraversalAction extends ServiceableAction
         implements ThreadSafe, Serviceable {

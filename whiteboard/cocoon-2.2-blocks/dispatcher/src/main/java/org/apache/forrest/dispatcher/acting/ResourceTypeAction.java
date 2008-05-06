@@ -17,22 +17,23 @@
 package org.apache.forrest.dispatcher.acting;
 /**
  * Looks up a meta data file to determine which resource type should be returned. 
- */
-/**
- * component declaration (lm and sitemap)
+ * Will parse the document and looks for the {$resourceTypeElement}.
+ * If found the action returns {$resourceTypeBase}{$resourceTypeElement}.
+ * <p>
+ * component declaration (lm and sitemap):<br>
  * &lt;action name="resourceTypeAction" 
  *      src="org.apache.forrest.dispatcher.acting.ResourceTypeAction"/&gt;
- *
- *pipline usage lm
-*  &lt;act type="resourceTypeAction"&gt;
-*     &lt;parameter value="{1}" name="request"/&gt;
-*     &lt;parameter value="{project:content.xdocs}" name="projectDir"/&gt;
-*     &lt;parameter value="lm://dispatcher.structurer.resourceType." name="resourceTypeBase"/&gt;
-*     &lt;parameter value=".xml.meta" name="metaExtension"/&gt;
-*     &lt;parameter value="resourceType" name="resourceTypeElement"/&gt;
-*     &lt;parameter value="http://apache.org/cocoon/lenya/page-envelope/1.0" name="resourceTypeElementNS"/&gt;
-*     &lt;!--  Meta data based --&gt;
-*     &lt;location src="{uri}" /&gt;
+ *<p>
+ *pipline usage lm<br>
+*  &lt;act type="resourceTypeAction"&gt;<br>
+*     &lt;parameter value="{1}" name="request"/&gt;<br>
+*     &lt;parameter value="{project:content.xdocs}" name="projectDir"/&gt;<br>
+*     &lt;parameter value="lm://dispatcher.structurer.resourceType." name="resourceTypeBase"/&gt;<br>
+*     &lt;parameter value=".xml.meta" name="metaExtension"/&gt;<br>
+*     &lt;parameter value="resourceType" name="resourceTypeElement"/&gt;<br>
+*     &lt;parameter value="http://apache.org/cocoon/lenya/page-envelope/1.0" name="resourceTypeElementNS"/&gt;<br>
+*     &lt;!--  Meta data based --&gt;<br>
+*     &lt;location src="{uri}" /&gt;<br>
  * &lt;/act&gt;
  */
 import java.io.IOException;
