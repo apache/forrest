@@ -37,6 +37,13 @@ import org.apache.excalibur.source.Source;
 import org.apache.excalibur.source.SourceException;
 import org.apache.excalibur.source.SourceFactory;
 
+/**
+ * A <code>Source</code> that takes its content from the 
+ * locationmap module.
+ * <p>The URI syntax is "lm//:<location>",
+ * where the location is any given String that 
+ * will be match by the locationmap module.
+ */
 public class LocationmapSourceFactory extends AbstractLogEnabled implements
         Serviceable, SourceFactory, ThreadSafe, Contextualizable {
 

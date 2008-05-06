@@ -29,7 +29,6 @@ import org.apache.cocoon.components.treeprocessor.variables.VariableResolver;
 import org.apache.cocoon.components.treeprocessor.variables.VariableResolverFactory;
 import org.apache.cocoon.sitemap.PatternException;
 import org.apache.excalibur.source.SourceValidity;
-import org.apache.excalibur.source.SourceUtil;
 import org.apache.excalibur.source.SourceResolver;
 import org.apache.excalibur.source.Source;
 import org.apache.excalibur.xml.sax.SAXParser;
@@ -38,6 +37,12 @@ import org.xml.sax.SAXException;
 
 /**
  * locationmap mount statement.
+ * <p>
+ * The &lt;mount&gt; element has one required <code>src</code> attribute
+ * that contains the location string of the sub locationmap that should
+ * be mounted.
+ * </p>
+ * 
  */
 public class MountNode extends AbstractNode {
 
