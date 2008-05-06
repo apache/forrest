@@ -31,7 +31,15 @@ import org.apache.avalon.framework.service.ServiceManager;
 import org.apache.avalon.framework.service.Serviceable;
 
 import org.apache.cocoon.components.modules.input.InputModule;
-
+/**
+ * Wrapper module that loads an input module for all 
+ * <code>component-instance</code> defined in the configuration.
+ * <p>
+ * After we created an instance we will check for the different possible
+ * implementations of some interfaces (such as e.g. {@link LogEnabled}) and
+ * invoke the corresponding methods 
+ * (e.g. {@link LogEnabled#enableLogging(org.apache.avalon.framework.logger.Logger)}.
+ */
 public abstract class AbstractWrappingModule extends AbstractLogEnabled
     implements InputModule, Configurable, Serviceable, Disposable {
 

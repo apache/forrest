@@ -44,6 +44,23 @@ import org.xml.sax.SAXException;
 
 /**
  * Resolves a request against a LocationMap.
+ * <p>
+ * The locationmap module works as any other {@link InputModule}.
+ * It acts as a location resolver where you can configure a series
+ * of fallbacks.
+ * <p>
+ * It can be seen as a reduced sitemap with the only concern of 
+ * resolving locations strings to the final location.
+ * <p> 
+ * This module is configured via a sitemap similar DSL which looks
+ * something like:
+ * &lt;locationmap&gt;<br>
+ *  &lt;components/&gt;<br>
+ *  &lt;locator/&gt;<br>
+ *  &lt;/locationmap&gt;<br>
+ *  <p>
+ *  You can use the same actions and selectors like you can use 
+ *  in any othe sitemap.
  */
 public class LocationMapModule extends AbstractLogEnabled
     implements InputModule, Serviceable, Configurable, Disposable, ThreadSafe {
