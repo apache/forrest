@@ -18,7 +18,7 @@
 <forrest:contract 
   xmlns:i18n="http://apache.org/cocoon/i18n/2.1"
   xmlns:forrest="http://apache.org/forrest/templates/1.0"
-  name="content-author" type="nugget">
+  name="content-author">
   <description>
     content-author will output the author of the content.
   </description>
@@ -26,9 +26,12 @@
 <![CDATA[<forrest:contract name="content-author"/>]]>
   </usage>
   <forrest:template xmlns:forrest="http://apache.org/forrest/templates/1.0"
-    format="html" name="content-author" inputFormat="xsl" body="true" head="false">
+  name="content-author" inputFormat="xsl">
     <xsl:stylesheet version="1.1" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
-      <xsl:template name="content-author-body">
+      <xsl:param name="content-author-body"/>
+      <xsl:template match="/">
+        <forrest:content>
+          <forrest:part>
         <xsl:comment>+
 	    |start content-author
 	    +</xsl:comment>
@@ -36,6 +39,8 @@
         <xsl:comment>+
     |end content-author
     +</xsl:comment>
+          </forrest:part>
+        </forrest:content>
       </xsl:template>
     </xsl:stylesheet>
   </forrest:template>
