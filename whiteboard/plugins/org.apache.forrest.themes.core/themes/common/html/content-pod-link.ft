@@ -15,7 +15,7 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 -->
-<forrest:contract name="content-pod-link" type="nugget"
+<forrest:contract name="content-pod-link"
   xmlns:forrest="http://apache.org/forrest/templates/1.0">
   <description>
     content-pod-link will output the POD link with image to the content.
@@ -24,12 +24,20 @@
 <![CDATA[<forrest:contract name="content-pod-link"/>]]>
   </usage>
   <forrest:template
-  	xmlns:forrest="http://apache.org/forrest/templates/1.0"
-  	format="html" name="content-pod-link" inputFormat="xsl" body="true" head="false">
+  xmlns:forrest="http://apache.org/forrest/templates/1.0"
+  name="content-pod-link" inputFormat="xsl">
     <xsl:stylesheet version="1.1" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
-      <xsl:template name="content-pod-link-body"><a href="{$filename-noext}.pod" class="format">
-        <img class="skin" src="{$skin-img-dir}/poddoc.png" alt="POD - icon" />
-        <span class="caption">POD</span></a>
+      <xsl:param name="defaultVariables" select="'test.html'"/>
+      <xsl:variable name="skin-img-dir" select="$defaultVariables/*/*[@name='skin-img-dir']/@value"/>
+      <xsl:variable name="filename-noext" select="$defaultVariables/*/*[@name='filename-noext']/@value"/>
+      <xsl:template match="/">
+        <forrest:content>
+          <forrest:part>
+          <a href="{$filename-noext}.pod" class="format">
+          <img class="skin" src="{$skin-img-dir}/poddoc.png" alt="POD - icon" />
+          <span class="caption">POD</span></a>
+          </forrest:part>
+        </forrest:content>
       </xsl:template>
     </xsl:stylesheet>
   </forrest:template>
