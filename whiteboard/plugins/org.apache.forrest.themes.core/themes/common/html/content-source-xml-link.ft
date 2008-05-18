@@ -15,7 +15,7 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 -->
-<forrest:contract name="content-source-xml-link" type="nugget"
+<forrest:contract name="content-source-xml-link"
     xmlns:forrest="http://apache.org/forrest/templates/1.0">
   <description>
     content-source-xml-link will output the XML link with image to the original
@@ -29,7 +29,7 @@
   </usage>
   <forrest:template
   xmlns:forrest="http://apache.org/forrest/templates/1.0"
-  format="html" name="content-source-xml-link" inputFormat="xsl" body="true">
+  format="html" name="content-source-xml-link" inputFormat="xsl">
     <xsl:stylesheet version="1.1" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
       <xsl:param name="defaultVariables" select="'test.html'"/>
       <xsl:variable name="skin-img-dir" 
@@ -38,7 +38,8 @@
           select="$defaultVariables/*/*[@name='filename-noext']/@value"/>
       <xsl:template match="/">
         <forrest:content>
-          <forrest:part><a href="{$filename-noext}.source.xml" class="format">
+          <forrest:part xpath="/html/body">
+          <a href="{$filename-noext}.source.xml" class="format">
             <img class="skin" src="{$skin-img-dir}/xmldoc.gif" 
                   alt="Source XML - icon" />
             <span class="caption">Source XML</span></a>
