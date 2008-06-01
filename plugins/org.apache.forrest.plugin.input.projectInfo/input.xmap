@@ -111,6 +111,18 @@
         </map:transform>
         <map:serialize type="xml-document"/>
       </map:match>
+      <map:match pattern="**/docs/user/useCases/**.xml">
+        <map:generate src="cocoon:/docs/user/useCases/{1}.{2}.source.xml" />
+        <map:transform src="{lm:projectInfo.transform.useCase.document}">
+          <map:parameter name="includeImplementationNotes" value="false"/>
+        </map:transform>
+        <map:serialize type="xml-document"/>
+      </map:match>
+      <map:match pattern="**/docs/developer/useCases/**.xml">
+        <map:generate src="cocoon:/docs/developer/useCases/{1}.{2}.source.xml" />
+        <map:transform src="{lm:projectInfo.transform.useCase.document}"/>
+        <map:serialize type="xml-document"/>
+      </map:match>
       <map:match pattern="docs/developer/useCases/**.xml">
         <map:generate src="cocoon:/docs/developer/useCases/{1}.source.xml" />
         <map:transform src="{lm:projectInfo.transform.useCase.document}"/>
