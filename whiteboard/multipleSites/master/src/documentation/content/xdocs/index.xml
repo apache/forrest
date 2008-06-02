@@ -247,6 +247,77 @@
         </section>
         
         <section>
+          <title>Enabling Plugins</title>
+          
+          <p>Most plugins will work without any further configuration. However,
+          some plugins use a specific URL space to indicate a required 
+          processing step. For example, the projectInfo plugin uses 
+          <code>**/docs/**/*</code> for its use case processing. In these
+          instances you will need to add matches to your locationmap.</p>
+          
+          <p>It is outside the scope of this document to document all 
+          plugins here. However, we will provide an example using the 
+          projectInfo plugin.</p>
+          
+          <p>First of all we need to examine the plugin code (or if you
+          are lucky documentation) to see what matches are used to drive
+          the processing we want. In the input.xmap we find:</p>
+          
+          <source><![CDATA[
+<map:match pattern="**/docs/user/useCases/**.xml">
+  <map:generate src="cocoon:/docs/user/useCases/{1}.{2}.source.xml" />
+  <map:transform src="{lm:projectInfo.transform.useCase.document}">
+    <map:parameter name="includeImplementationNotes" value="false"/>
+  </map:transform>
+  <map:serialize type="xml-document"/>
+</map:match>
+          ]]></source> 
+          
+          <note>The above sitemap snippet was not present when I started
+          writing this documentation. I had to add it as the plugin had
+          not been designed to work with multiple sites. Previously the
+          pattern was limited to "docs/user/useCases/**.xml". By adding
+          the "**" prefix we allow the plugin to work with sites mounted
+          in a subdirectory.</note>
+          
+          <p>The generator for "cocoon:/docs/user/useCases/{1}.{2}.source.xml"
+          is handled by the match:</p>
+          
+          <source><![CDATA[
+<map:match pattern="docs/**/useCases/**.source.xml">
+  <map:generate type="file" src="{lm:project.useCases.{2}}" />
+  <map:serialize type="xml"/>
+</map:match>
+          ]]></source>
+          
+          <p>So now we need to look in the locationmap for a
+          match for "{lm:project.useCases.{2}}". What we find 
+          is:</p>
+          
+          <source><![CDATA[
+<match pattern="project.useCases.**">
+  <location src="{properties:content}/useCases/{1}.xml" />
+</match>
+          ]]></source>
+          
+          <p>We can see from the above that a request for a resource
+          at "subsite/docs/user/useCases/simpleUseCase.xml" will
+          result in a locationmap lookup for 
+          "project.useCases.subsite.simpleUseCase". The default match 
+          in thje projectInfo will look for that in the master site
+          useCases directory. So we need to add a locationmap match to
+          the master site that will catch the subsite matches, as 
+          follows:</p> 
+          
+          <source><![CDATA[
+<match pattern="project.useCases.subsite.**">
+  <location src="../../../../uk.ac.osswatch.simal.core/src/documentation/content/useCases/{1}.xml" />
+</match>
+          ]]></source>
+          
+        </section>
+        
+        <section>
           <title>Known Problems</title>
           
           <ul>
