@@ -208,23 +208,18 @@ public class LocationMapModule extends AbstractLogEnabled
                 }
                   
         		hasBeenCached = m_locationsCache.containsKey(name);
-        		if (hasBeenCached == true) {
+        		if (hasBeenCached == true && m_locationsCache.get(name)!=null) {
         			result =  m_locationsCache.get(name);
         			if (getLogger().isDebugEnabled()) {
         				getLogger().debug("Locationmap cached location returned for hint: " + name + " value: " + result);
         			}
-        		}
+        		}else{
+                    result = getFreshResult(name, objectModel);
+                  }
         	}
         	
         	if (hasBeenCached == false) {
-        		result = getLocationMap().locate(name,objectModel);
-        		
-        		if (m_cacheAll == true) {
-        			m_locationsCache.put(name,result);
-        			if (getLogger().isDebugEnabled()) {
-        				getLogger().debug("Locationmap caching hint: " + name + " value: " + result);
-        			}
-        		}
+        		result = getFreshResult(name, objectModel);
         	}
           
           if (result == null) {
@@ -241,6 +236,20 @@ public class LocationMapModule extends AbstractLogEnabled
             getLogger().error("Failure processing LocationMap.",e);
         }
         return null;
+    }
+
+    private Object getFreshResult(final String name, final Map objectModel)
+        throws Exception {
+      Object result;
+      result = getLocationMap().locate(name,objectModel);
+      
+      if (m_cacheAll == true) {
+      	m_locationsCache.put(name,result);
+      	if (getLogger().isDebugEnabled()) {
+      		getLogger().debug("Locationmap caching hint: " + name + " value: " + result);
+      	}
+      }
+      return result;
     }
 
     /**
