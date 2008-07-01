@@ -184,6 +184,9 @@ public class LocationMapModule extends AbstractLogEnabled
      * Execute the current request against the locationmap returning the
      * resulting string.
      */
+    /* FIXME: FOR-1082 we added synchronized because of problems
+     * with Concurrency.
+     */
     public synchronized Object getAttribute(
         final String name,
         final Configuration modeConf,
