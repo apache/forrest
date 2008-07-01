@@ -184,10 +184,7 @@ public class LocationMapModule extends AbstractLogEnabled
      * Execute the current request against the locationmap returning the
      * resulting string.
      */
-    /* FIXME: FOR-1082 we added synchronized because of problems
-     * with Concurrency.
-     */
-    public synchronized Object getAttribute(
+    public Object getAttribute(
         final String name,
         final Configuration modeConf,
         final Map objectModel)
@@ -241,6 +238,16 @@ public class LocationMapModule extends AbstractLogEnabled
         return null;
     }
 
+    
+    /**
+     * Method to create a new locationmap if needed. Needs to be
+     * synchronized otherwise the module will fail with concurrency.
+     * @see FOR-1082
+     * @param name - location that we want to look up
+     * @param objectModel - the current object model
+     * @return the location resolved via the locationmap or null if not found.
+     * @throws Exception
+     */
     private Object getFreshResult(final String name, final Map objectModel)
         throws Exception {
       Object result;
