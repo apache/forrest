@@ -44,6 +44,23 @@ import org.xml.sax.SAXException;
 
 /**
  * Resolves a request against a LocationMap.
+ * <p>
+ * The locationmap module works as any other {@link InputModule}.
+ * It acts as a location resolver where you can configure a series
+ * of fallbacks.
+ * <p>
+ * It can be seen as a reduced sitemap with the only concern of 
+ * resolving locations strings to the final location.
+ * <p> 
+ * This module is configured via a sitemap similar DSL which looks
+ * something like:
+ * &lt;locationmap&gt;<br>
+ *  &lt;components/&gt;<br>
+ *  &lt;locator/&gt;<br>
+ *  &lt;/locationmap&gt;<br>
+ *  <p>
+ *  You can use the same actions and selectors like you can use 
+ *  in any othe sitemap.
  */
 public class LocationMapModule extends AbstractLogEnabled
     implements InputModule, Serviceable, Configurable, Disposable, ThreadSafe {
@@ -167,7 +184,10 @@ public class LocationMapModule extends AbstractLogEnabled
      * Execute the current request against the locationmap returning the
      * resulting string.
      */
-    public Object getAttribute(
+    /* FIXME: FOR-1082 we added synchronized because of problems
+     * with Concurrency.
+     */
+    public synchronized Object getAttribute(
         final String name,
         final Configuration modeConf,
         final Map objectModel)
@@ -191,23 +211,18 @@ public class LocationMapModule extends AbstractLogEnabled
                 }
                   
         		hasBeenCached = m_locationsCache.containsKey(name);
-        		if (hasBeenCached == true) {
+        		if (hasBeenCached == true && m_locationsCache.get(name)!=null) {
         			result =  m_locationsCache.get(name);
         			if (getLogger().isDebugEnabled()) {
         				getLogger().debug("Locationmap cached location returned for hint: " + name + " value: " + result);
         			}
-        		}
+        		}else{
+                    result = getFreshResult(name, objectModel);
+                  }
         	}
         	
         	if (hasBeenCached == false) {
-        		result = getLocationMap().locate(name,objectModel);
-        		
-        		if (m_cacheAll == true) {
-        			m_locationsCache.put(name,result);
-        			if (getLogger().isDebugEnabled()) {
-        				getLogger().debug("Locationmap caching hint: " + name + " value: " + result);
-        			}
-        		}
+        		result = getFreshResult(name, objectModel);
         	}
           
           if (result == null) {
@@ -224,6 +239,20 @@ public class LocationMapModule extends AbstractLogEnabled
             getLogger().error("Failure processing LocationMap.",e);
         }
         return null;
+    }
+
+    private Object getFreshResult(final String name, final Map objectModel)
+        throws Exception {
+      Object result;
+      result = getLocationMap().locate(name,objectModel);
+      
+      if (m_cacheAll == true) {
+      	m_locationsCache.put(name,result);
+      	if (getLogger().isDebugEnabled()) {
+      		getLogger().debug("Locationmap caching hint: " + name + " value: " + result);
+      	}
+      }
+      return result;
     }
 
     /**
