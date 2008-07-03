@@ -18,6 +18,17 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   xmlns:fo="http://www.w3.org/1999/XSL/Format" version="1.0">
 
+<!-- Font-family variables defined here: -->
+  <xsl:param
+        name="sans-serif"
+        select="'sans-serif'" />
+  <xsl:param
+        name="serif"
+        select="'serif'" />
+  <xsl:param
+        name="monospace"
+        select="'monospace'" />
+
   <xsl:include href="lm://transform.xml.pathutils"/>
 
   <xsl:template match="anchor">
