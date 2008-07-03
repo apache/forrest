@@ -86,6 +86,16 @@
     <xsl:param
         name="numbering-max-depth"
         select="'3'" />
+    <!-- Font-family variables defined here: -->
+    <xsl:param
+        name="sans-serif"
+        select="'sans-serif'" />
+    <xsl:param
+        name="serif"
+        select="'serif'" />
+    <xsl:param
+        name="monospace"
+        select="'monospace'" />
     <xsl:param
         name="imagesdir"
         select="." />
@@ -458,7 +468,7 @@
             space-before="20pt"
             space-after="25pt"
             width="7.5in"
-            font-family="serif"
+            font-family="{$serif}"
             font-style="italic">
             <xsl:call-template
                 name="insertPageBreaks" />
@@ -472,7 +482,7 @@
             text-align="left"
             space-before="20pt"
             width="7.5in"
-            font-family="serif"
+            font-family="{$serif}"
             border-top="0.25pt solid"
             border-bottom="0.25pt solid"
             padding-before="6pt"
@@ -508,7 +518,7 @@
             name="heading-type"
             select="//skinconfig/headings/@type" />
         <fo:block
-            font-family="sans-serif"
+            font-family="{$sans-serif}"
             font-size="{$size}pt"
             font-weight="bold"
             space-before="12pt"
@@ -568,7 +578,7 @@
             <!-- The non-breaking space in this block is required, otherwise
       the block won't be rendered at all. -->
             <fo:block
-                font-family="serif"
+                font-family="{$serif}"
                 font-size="{10 div (number($level) +1 )}pt"
                 background-color="{$heading-color}">&#160;</fo:block>
         </xsl:if>
@@ -624,7 +634,7 @@
                 test="ancestor::li and not(preceding-sibling::*)">
                 <fo:block
                     space-after="4pt"
-                    font-family="serif">
+                    font-family="{$serif}">
                     <xsl:call-template
                         name="insertPageBreaks" />
                     <xsl:apply-templates />
@@ -635,7 +645,7 @@
                 <fo:block
                     space-before="4pt"
                     space-after="4pt"
-                    font-family="serif">
+                    font-family="{$serif}">
                     <xsl:call-template
                         name="insertPageBreaks" />
                     <xsl:apply-templates />
@@ -649,7 +659,7 @@
             name="color"
             select="//skinconfig/colors/color[@name='code']/@value" />
         <fo:block
-            font-family="monospace"
+            font-family="{$monospace}"
             font-size="8pt"
             padding="6pt"
             margin="0"
@@ -692,7 +702,7 @@
             <fo:list-item-body
                 start-indent="body-start()">
                 <fo:block
-                    font-family="serif">
+                    font-family="{$serif}">
                     <xsl:apply-templates />
                 </fo:block>
             </fo:list-item-body>
@@ -710,7 +720,7 @@
             <fo:list-item-body
                 start-indent="body-start()">
                 <fo:block
-                    font-family="serif">
+                    font-family="{$serif}">
                     <xsl:apply-templates />
                 </fo:block>
             </fo:list-item-body>
@@ -731,7 +741,7 @@
             <fo:list-item-body
                 start-indent="body-start()">
                 <fo:block
-                    font-family="serif">
+                    font-family="{$serif}">
                     <xsl:apply-templates />
                 </fo:block>
             </fo:list-item-body>
@@ -794,7 +804,7 @@
     <xsl:template
         match="code">
         <fo:inline
-            font-family="monospace">
+            font-family="{$monospace}">
             <xsl:apply-templates />
         </fo:inline>
     </xsl:template>
@@ -810,7 +820,7 @@
             padding-top="2pt"
             padding-bottom="1pt"
             font-size="9pt"
-            font-family="sans-serif"
+            font-family="{$sans-serif}"
             space-before="10pt"
             border-before-style="solid"
             border-start-style="solid"
@@ -834,7 +844,7 @@
         <fo:block
             margin-left="0.25in"
             margin-right="0.25in"
-            font-family="serif"
+            font-family="{$serif}"
             font-size="10pt"
             border-after-style="solid"
             border-start-style="solid"
@@ -862,7 +872,7 @@
             padding-top="2pt"
             padding-bottom="1pt"
             color="#ffffff"
-            font-family="sans-serif"
+            font-family="{$sans-serif}"
             space-before="10pt"
             border-before-style="solid"
             border-start-style="solid"
@@ -886,7 +896,7 @@
         <fo:block
             margin-left="0.25in"
             margin-right="0.25in"
-            font-family="serif"
+            font-family="{$serif}"
             font-size="10pt"
             space-after="10pt"
             border-after-style="solid"
@@ -914,7 +924,7 @@
             padding-top="2pt"
             padding-bottom="1pt"
             color="#FFFFFF"
-            font-family="sans-serif"
+            font-family="{$sans-serif}"
             space-before="10pt"
             border-before-style="solid"
             border-start-style="solid"
@@ -930,7 +940,7 @@
         <fo:block
             margin-left="0.25in"
             margin-right="0.25in"
-            font-family="serif"
+            font-family="{$serif}"
             font-size="10pt"
             space-after="10pt"
             border-after-style="solid"
@@ -1158,7 +1168,7 @@
            you need the <fo:table> element) -->
             <fo:table-body
                 font-size="10pt"
-                font-family="serif">
+                font-family="{$serif}">
                 <xsl:apply-templates
                     select="tr" />
             </fo:table-body>
@@ -1278,7 +1288,7 @@
         <xsl:if
             test="$disable-toc != 'true' and $toc-max-depth > 0">
             <fo:block
-                font-family="sans-serif"
+                font-family="{$sans-serif}"
                 font-size="12pt"
                 font-weight="bold"
                 space-after="5pt"
@@ -1291,7 +1301,7 @@
                 <xsl:text>Table of contents</xsl:text>
             </fo:block>
             <fo:block
-                font-family="serif"
+                font-family="{$serif}"
                 font-size="12pt"
                 space-after="5pt"
                 space-before="0pt"
@@ -1384,7 +1394,7 @@
             space-before="4pt"
             space-after="4pt"
             background-color="#f0f0f0"
-            font-family="serif"
+            font-family="{$serif}"
             font-style="italic">
             <xsl:call-template
                 name="insertPageBreaks" />
