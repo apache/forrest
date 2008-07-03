@@ -31,7 +31,7 @@
     <xsl:variable name="size">
       <xsl:value-of select="12-number($level)"/>
     </xsl:variable>
-    <fo:block font-family="sans-serif" font-size="{$size}pt" font-weight="bold"
+    <fo:block font-family="{$sans-serif}" font-size="{$size}pt" font-weight="bold"
       space-before="12pt" space-after="8pt" margin="0" keep-with-next.within-column="always">
       <xsl:call-template name="insertPageBreaks"/>
       <xsl:attribute name="id">
@@ -116,7 +116,7 @@
   <xsl:template match="source">
     <xsl:variable name="color"
       select="$config/colors/color[@name='code']/@value"/>
-    <fo:block font-family="monospace" font-size="8pt" padding="6pt" margin="0"
+    <fo:block font-family="{$monospace}" font-size="8pt" padding="6pt" margin="0"
       background-color="{$color}" white-space-collapse="false"
       linefeed-treatment="preserve" white-space-treatment="preserve"
       wrap-option="wrap" text-align="start">
@@ -228,7 +228,7 @@
     </fo:inline>
   </xsl:template>
   <xsl:template match="code">
-    <fo:inline font-family="monospace">
+    <fo:inline font-family="{$monospace}">
       <xsl:copy-of select="@id"/>
       <xsl:apply-templates/>
     </fo:inline>
@@ -238,7 +238,7 @@
       select="$config/colors/color[@name='warning']/@value"/>
     <fo:block margin-left="0.25in" margin-right="0.25in" padding-left="3pt"
       padding-top="2pt" padding-bottom="1pt" font-size="9pt"
-      font-family="sans-serif" space-before="10pt" border-before-style="solid"
+      font-family="{$sans-serif}" space-before="10pt" border-before-style="solid"
       border-start-style="solid" border-end-style="solid" border-color="{$color}"
       background-color="{$color}" color="#ffffff" keep-with-previous.within-column="always" keep-with-next.within-column="always">
       <xsl:copy-of select="@id"/>
@@ -264,7 +264,7 @@
       select="$config/colors/color[@name='note']/@value"/>
     <fo:block margin-left="0.25in" margin-right="0.25in" padding-left="3pt"
       font-size="9pt" padding-top="2pt" padding-bottom="1pt" color="#ffffff"
-      font-family="sans-serif" space-before="10pt" border-before-style="solid"
+      font-family="{$sans-serif}" space-before="10pt" border-before-style="solid"
       border-start-style="solid" border-end-style="solid" border-color="{$color}"
       background-color="{$color}" keep-with-previous.within-column="always" keep-with-next.within-column="always">
       <xsl:copy-of select="@id"/>
@@ -291,7 +291,7 @@
       select="$config/colors/color[@name='fixme']/@value"/>
     <fo:block margin-left="0.25in" margin-right="0.25in" padding-left="3pt"
       font-size="9pt" padding-top="2pt" padding-bottom="1pt" color="#FFFFFF"
-      font-family="sans-serif" space-before="10pt" border-before-style="solid"
+      font-family="{$sans-serif}" space-before="10pt" border-before-style="solid"
       border-start-style="solid" border-end-style="solid" border-color="{$color}"
       background-color="{$color}" keep-with-previous.within-column="always" keep-with-next.within-column="always">
       <xsl:copy-of select="@id"/>

@@ -98,6 +98,16 @@
   <xsl:param
         name="numbering-max-depth"
         select="'3'" />
+<!-- Font-family variables defined here: -->
+  <xsl:param
+        name="sans-serif"
+        select="'sans-serif'" />
+  <xsl:param
+        name="serif"
+        select="'serif'" />
+  <xsl:param
+        name="monospace"
+        select="'monospace'" />
   <xsl:param
         name="imagesdir"
         select="." />
@@ -124,7 +134,7 @@
         match="/">
     <fo:root
             xmlns:fo="http://www.w3.org/1999/XSL/Format"
-            font-family="serif" font-size="12pt">
+            font-family="{$serif}" font-size="12pt">
       <fo:layout-master-set>
         <fo:simple-page-master
                     master-name="first-page"
@@ -245,7 +255,7 @@
     
     <fo:static-content
             flow-name="first-footer"
-            font-family="sans-serif">
+            font-family="{$sans-serif}">
       <fo:block
                 border-top="0.25pt solid"
                 padding-before="6pt"
@@ -268,7 +278,7 @@
     
     <fo:static-content
             flow-name="even-header"
-            font-family="sans-serif">
+            font-family="{$sans-serif}">
       <fo:block
                 font-size="70%"
                 text-align="end"
@@ -279,7 +289,7 @@
     </fo:static-content>
     <fo:static-content
             flow-name="even-footer"
-            font-family="sans-serif">
+            font-family="{$sans-serif}">
       <fo:block
                 border-top="0.25pt solid"
                 padding-before="6pt"
@@ -305,7 +315,7 @@
     
     <fo:static-content
             flow-name="odd-header"
-            font-family="sans-serif">
+            font-family="{$sans-serif}">
       <fo:block
                 font-size="70%"
                 font-style="italic">
@@ -324,7 +334,7 @@
     
     <fo:static-content
             flow-name="odd-footer"
-            font-family="sans-serif">
+            font-family="{$sans-serif}">
       <fo:block
                 border-top="0.25pt solid"
                 padding-before="6pt"
@@ -346,7 +356,7 @@
       <fo:block
               padding-before="24pt"
               padding-after="24pt"
-              font-family="sans-serif"
+              font-family="{$sans-serif}"
               font-size="24pt"
               font-weight="bold"
               id="{generate-id()}">
@@ -404,7 +414,7 @@
   </xsl:template>
   <xsl:template match="version">
     <fo:block
-            font-family="sans-serif"
+            font-family="{$sans-serif}"
             font-weight="bold"
             font-size="smaller">
       <xsl:call-template name="insertPageBreaks"/>
@@ -425,7 +435,7 @@
   <xsl:template match="authors">
     <fo:block
             space-before="2em"
-            font-family="sans-serif"
+            font-family="{$sans-serif}"
             font-weight="bold"
             font-size="smaller">
       <xsl:call-template
@@ -441,7 +451,7 @@
   </xsl:template>
   <xsl:template match="body[count(//section) != 0]">
     <xsl:if test="$disable-toc != 'true' and $toc-max-depth > 0">
-      <fo:block font-family="sans-serif" font-size="12pt" font-weight="bold"
+      <fo:block font-family="{$sans-serif}" font-size="12pt" font-weight="bold"
         space-after="0.5em" space-before="1em" text-align="justify" id="__toc__">
         <xsl:call-template name="insertPageBreaks"/>
         <!-- insert i18n stuff here -->
