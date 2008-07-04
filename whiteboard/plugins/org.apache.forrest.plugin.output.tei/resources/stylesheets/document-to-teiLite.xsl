@@ -28,19 +28,19 @@
               http://creativecommons.org/licenses/by-sa/2.0/uk/
             </licence>
           </availability>
-          <date>2006-04-28</date>
+          <date>FIXME: Date</date>
         </publicationStmt>
 
       </fileDesc>
       <revisionDesc
         vcdate="$LastChangedDate: 2006-10-02 17:10:52 +0100 (Mon, 02 Oct 2006) $"
-        vcwho="$LastChangedBy: rgardler $"
-        vcrevision="$LastChangedRevision: 10309 $">
+        vcwho="$LastChangedBy: unklown $"
+        vcrevision="$LastChangedRevision: 1 $">
         <change>
-          <date>2006-02-20</date>
+          <date>FIXME: Date</date>
           <respStmt>
             <resp>author</resp>
-            <name>Ross Gardler</name>
+            <name>FIXME: Author</name>
           </respStmt>
           <reason>creation</reason>
         </change>
