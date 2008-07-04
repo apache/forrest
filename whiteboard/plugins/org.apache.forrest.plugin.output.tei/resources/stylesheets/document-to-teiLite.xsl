@@ -1,5 +1,6 @@
 <?xml version='1.0'?>
 <xsl:stylesheet xmlns:xsl='http://www.w3.org/1999/XSL/Transform'
+  xmlns:datetime="http://exslt.org/dates-and-times"
   version='1.0'>
 
   <xsl:template match='document'>
@@ -34,7 +35,7 @@
               http://creativecommons.org/licenses/by-sa/2.0/uk/
             </licence>
           </availability>
-          <date>FIXME: Date</date>
+          <date><xsl:value-of select="datetime:date()"/></date>
         </publicationStmt>
 
       </fileDesc>
@@ -43,7 +44,7 @@
         vcwho="$LastChangedBy: unklown $"
         vcrevision="$LastChangedRevision: 1 $">
         <change>
-          <date>FIXME: Date</date>
+          <date><xsl:value-of select="datetime:date()"/></date>
           <respStmt>
             <resp>author</resp>
             <name>FIXME: Author</name>
