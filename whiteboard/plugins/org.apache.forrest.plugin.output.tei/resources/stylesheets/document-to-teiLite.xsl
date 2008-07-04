@@ -3,6 +3,12 @@
   version='1.0'>
 
   <xsl:template match='document'>
+    <xsl:text disable-output-escaping="yes">
+  <![CDATA[
+  <!DOCTYPE TEI.2 PUBLIC "-//TEI//DTD TEI Lite 1.0//EN" "">
+  ]]>
+</xsl:text>
+    
     <TEI.2>
       <xsl:apply-templates />
     </TEI.2>
