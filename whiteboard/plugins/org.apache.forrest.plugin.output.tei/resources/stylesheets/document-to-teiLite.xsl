@@ -41,7 +41,7 @@
       </fileDesc>
       <revisionDesc
         vcdate="$LastChangedDate: 2006-10-02 17:10:52 +0100 (Mon, 02 Oct 2006) $"
-        vcwho="$LastChangedBy: unklown $"
+        vcwho="$LastChangedBy: unknown $"
         vcrevision="$LastChangedRevision: 1 $">
         <change>
           <date><xsl:value-of select="datetime:date()"/></date>
