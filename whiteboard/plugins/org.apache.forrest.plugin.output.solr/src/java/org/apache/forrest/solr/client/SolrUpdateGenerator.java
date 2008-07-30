@@ -64,6 +64,8 @@ public class SolrUpdateGenerator extends ServiceableGenerator {
             
         } catch (ServiceException e) {
             throw new ProcessingException(e);
+        }finally{
+          post.releaseConnection();
         }
         
     }

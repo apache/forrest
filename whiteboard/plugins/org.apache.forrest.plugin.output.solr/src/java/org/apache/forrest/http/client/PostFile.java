@@ -62,6 +62,12 @@ public class PostFile {
         filePost = prepareFilePost(destinationUrl, srcUrl);
         statusCode = client.executeMethod(filePost);
     }
+    
+    public void releaseConnection(){
+      if (null!=filePost){
+        filePost.releaseConnection();
+      }
+    }
 
     public int statusCode() {
         return statusCode;
