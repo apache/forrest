@@ -117,6 +117,9 @@ NOTES:
 <!ENTITY % link.att 'href      CDATA             #REQUIRED
                      title     CDATA             #IMPLIED
                      rel       CDATA             #IMPLIED'>
+
+<!ENTITY % xinclude-ns.att 'xmlns:xi CDATA #FIXED "http://www.w3.org/2001/XInclude"'>
+
 <!-- =============================================================== -->
 <!-- General definitions -->
 <!-- =============================================================== -->
@@ -131,7 +134,7 @@ NOTES:
 <!-- Content definitions -->
 <!-- =============================================================== -->
 <!ENTITY % local.inline "">
-<!ENTITY % link-content.mix "%text;|%markup;|%special-inline; %local.inline;">
+<!ENTITY % link-content.mix "%text;|%markup;|%special-inline;|xi:include %local.inline;">
 <!ENTITY % content.mix "%link-content.mix;|%links;">
 <!-- ==================================================== -->
 <!-- Phrase Markup -->
@@ -219,6 +222,13 @@ NOTES:
 <!ATTLIST acronym
   title CDATA #REQUIRED
   %common.att; 
+>
+
+<!ELEMENT xi:include EMPTY>
+<!ATTLIST xi:include
+  parse     (text|xml)  "xml"
+  href      CDATA       #REQUIRED
+  encoding  CDATA       #IMPLIED
 >
 
 <!-- =============================================================== -->
@@ -366,6 +376,7 @@ NOTES:
 <!ELEMENT document (header, body, footer?)>
 <!ATTLIST document
   %common.att; 
+  %xinclude-ns.att;
 >
 <!-- ==================================================== -->
 <!-- Header -->
@@ -420,7 +431,7 @@ NOTES:
 <!-- ==================================================== -->
 <!ENTITY % local.sections "">
 <!ENTITY % sections "section %local.sections;">
-<!ELEMENT body (%sections; | %blocks;)+>
+<!ELEMENT body (%sections; | %blocks; | xi:include)+>
 <!ATTLIST body
   %common.att; 
 >
