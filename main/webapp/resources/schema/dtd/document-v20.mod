@@ -435,7 +435,7 @@ NOTES:
 <!ATTLIST body
   %common.att; 
 >
-<!ELEMENT section (title, (%sections; | %blocks;)*)>
+<!ELEMENT section (title, (%sections; | %blocks; | xi:include)*)>
 <!ATTLIST section
   %common.att; 
 >
