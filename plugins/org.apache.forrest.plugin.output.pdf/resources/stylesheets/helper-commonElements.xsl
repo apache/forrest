@@ -227,6 +227,18 @@
       <xsl:apply-templates/>
     </fo:inline>
   </xsl:template>
+  <xsl:template match="sub">
+    <fo:inline vertical-align="sub">
+      <xsl:copy-of select="@id"/>
+      <xsl:apply-templates/>
+    </fo:inline>
+  </xsl:template>
+  <xsl:template match="sup">
+    <fo:inline vertical-align="super">
+      <xsl:copy-of select="@id"/>
+      <xsl:apply-templates/>
+    </fo:inline>
+  </xsl:template>
   <xsl:template match="code">
     <fo:inline font-family="{$monospace}">
       <xsl:copy-of select="@id"/>
