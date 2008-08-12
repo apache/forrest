@@ -228,6 +228,7 @@ NOTES:
 <!ATTLIST xi:include
   parse     (text|xml)  "xml"
   href      CDATA       #REQUIRED
+  xpointer  CDATA       #IMPLIED
   encoding  CDATA       #IMPLIED
 >
 

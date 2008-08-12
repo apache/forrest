@@ -39,6 +39,9 @@
       <map:match pattern="**.source.rewritten.xml">
         <map:generate src="cocoon://{1}.xml" />
         <map:transform type="idgen" />
+        <!-- Start fix for FOR-1088 -->
+        <map:transform src="{lm:transform.xml.xml-xpointer-attributes}"/>
+        <!-- End fix for FOR-1088 -->
         <map:transform type="xinclude" />
         <map:match pattern="**/*.source.rewritten.xml">
           <map:transform type="linkrewriter" src="cocoon://{1}/linkmap-{2}" />
