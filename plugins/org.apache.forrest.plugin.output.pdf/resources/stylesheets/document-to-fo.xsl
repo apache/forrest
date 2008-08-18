@@ -99,13 +99,13 @@
         name="numbering-max-depth"
         select="'3'" />
 <!-- Font-family variables defined here: -->
-  <xsl:variable
+  <xsl:param
         name="sans-serif"
         select="'sans-serif'" />
-  <xsl:variable
+  <xsl:param
         name="serif"
         select="'serif'" />
-  <xsl:variable
+  <xsl:param
         name="monospace"
         select="'monospace'" />
   <xsl:param
