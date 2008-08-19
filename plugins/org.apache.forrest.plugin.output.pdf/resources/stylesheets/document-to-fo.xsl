@@ -98,16 +98,12 @@
   <xsl:param
         name="numbering-max-depth"
         select="'3'" />
-<!-- Font-family variables defined here: -->
-  <xsl:param
-        name="sans-serif"
-        select="'sans-serif'" />
-  <xsl:param
-        name="serif"
-        select="'serif'" />
-  <xsl:param
-        name="monospace"
-        select="'monospace'" />
+<!-- Font-family parameters defined here. Default values specified,
+     but usually the values should be passed in from the calling sitemap. -->
+  <xsl:param name="serif"      select="'serif'" />
+  <xsl:param name="sans-serif" select="'sans-serif'" />
+  <xsl:param name="monospace"  select="'monospace'" />
+<!-- Other external parameters: -->
   <xsl:param
         name="imagesdir"
         select="." />
@@ -116,6 +112,8 @@
   <xsl:param
         name="path"
         select="." />
+
+<!-- Included stylesheets: -->
   <xsl:include
         href="helper-pdfoutline.xsl" />
   <xsl:include
@@ -130,6 +128,7 @@
         href="helper-layout.xsl" />
   <xsl:include
         href="helper-xmpMetadata.xsl" />
+
   <xsl:template
         match="/">
     <fo:root
