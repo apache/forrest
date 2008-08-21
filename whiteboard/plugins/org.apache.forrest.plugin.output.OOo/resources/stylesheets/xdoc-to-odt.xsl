@@ -57,7 +57,12 @@
                   <style:font-face style:name="Lucida Sans Unicode" svg:font-family="&apos;Lucida Sans Unicode&apos;" style:font-family-generic="system" style:font-pitch="variable"/>
                   <style:font-face style:name="Tahoma" svg:font-family="Tahoma" style:font-family-generic="system" style:font-pitch="variable"/>
                 </office:font-face-decls>
-                <office:automatic-styles/>
+                <office:automatic-styles>
+                        <style:style style:name="P6" style:family="paragraph">
+                                <style:paragraph-properties fo:margin-top="0cm" fo:margin-bottom="0cm"/>
+                                <style:text-properties fo:font-weight="bold"/>
+                        </style:style>
+                </office:automatic-styles>
                 <office:body>
                   <office:text>
                     <text:sequence-decls>
@@ -66,7 +71,7 @@
                       <text:sequence-decl text:display-outline-level="0" text:name="Text"/>
                       <text:sequence-decl text:display-outline-level="0" text:name="Drawing"/>
                     </text:sequence-decls>
-                    <text:p text:style-name="Standard">A Simple test document</text:p>
+                        <xsl:apply-templates/>
                   </office:text>
                 </office:body>
               </office:document-content>
@@ -322,16 +327,29 @@
       </zip:entry>
           </zip:archive>
         </xsl:template>
-  <xsl:template match="header"></xsl:template>
-  <xsl:template match="body">
-    <text:p text:style-name="P1">Test</text:p>
+        <xsl:template match="header">
+                <text:h text:outline-level="1" text:is-list-header="true"><xsl:value-of select="title"/></text:h>
+        </xsl:template>
+        <xsl:template match="body"><xsl:apply-templates/></xsl:template>
+        <xsl:template match="section">
+                <text:h text:outline-level="2" text:is-list-header="true"><xsl:value-of select="title"/></text:h>
+                <text:p><xsl:value-of select="p"/></text:p>
+                <xsl:if test="ul">
+                  <text:list>
+                          <xsl:for-each select="ul/li">
+                      <text:list-item>
+                              <text:p><xsl:value-of select="."/></text:p>
+                      </text:list-item>
+                    </xsl:for-each>
+                  </text:list>
+          </xsl:if>
+          <xsl:if test="note|warning|fixme"><text:p text:style-name="P6">Note: <xsl:value-of select="note|warning|fixme"/></text:p></xsl:if>
   </xsl:template>
-  <xsl:template match="section"></xsl:template>
-  <xsl:template match="p"></xsl:template>
+  <!-- <xsl:template match="p"><text:p><xsl:value-of select="."/></text:p></xsl:template>
   <xsl:template match="@*|node()" priority="-2">
   </xsl:template>
   <xsl:template match="text()" priority="-1">
-  </xsl:template>
+  </xsl:template>-->
 </xsl:stylesheet>
 
 
