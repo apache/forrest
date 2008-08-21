@@ -19,7 +19,9 @@
 <xsl:stylesheet version="1.0"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns:zip="http://apache.org/cocoon/zip-archive/1.0"
-                xmlns:text="http://openoffice.org/2000/text">
+                xmlns:text="http://openoffice.org/2000/text"
+                xmlns:datetime="http://exslt.org/dates-and-times"
+                exclude-result-prefixes="datetime">
   <xsl:template match="document">
           <zip:archive>
               <zip:entry name="content.xml" serializer="xml">
@@ -77,9 +79,9 @@
                       xmlns:ooo="http://openoffice.org/2004/office"
                       office:version="1.1">
                 <office:meta>
-                  <meta:generator>OpenOffice.org/2.4$Win32 OpenOffice.org_project/680m17$Build-9310</meta:generator>
-                  <meta:creation-date>2008-07-31T19:08:12</meta:creation-date>
-                  <dc:date>2008-08-04T12:19:50</dc:date>
+                  <meta:generator>OpenOffice.org/2.4</meta:generator>
+                  <meta:creation-date><xsl:value-of select="datetime:dateTime()"/></meta:creation-date>
+                  <dc:date><xsl:value-of select="datetime:dateTime()"/></dc:date>
                   <meta:editing-cycles>1</meta:editing-cycles>
                   <meta:editing-duration>P3DT17H11M55S</meta:editing-duration>
                   <meta:user-defined meta:name="Info 1"/>
@@ -314,7 +316,10 @@
                 <manifest:file-entry manifest:media-type="" manifest:full-path="Thumbnails/"/>
                 <manifest:file-entry manifest:media-type="text/xml" manifest:full-path="settings.xml"/>
               </manifest:manifest>
-            </zip:entry>
+      </zip:entry>
+      <zip:entry name="mimetype" serializer="text">
+              <text>application/vnd.oasis.opendocument.text</text>
+      </zip:entry>
           </zip:archive>
         </xsl:template>
   <xsl:template match="header"></xsl:template>
