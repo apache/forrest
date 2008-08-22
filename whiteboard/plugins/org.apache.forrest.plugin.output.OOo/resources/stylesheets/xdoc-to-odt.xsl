@@ -330,26 +330,42 @@
         <xsl:template match="header">
                 <text:h text:outline-level="1" text:is-list-header="true"><xsl:value-of select="title"/></text:h>
         </xsl:template>
-        <xsl:template match="body"><xsl:apply-templates/></xsl:template>
+        <xsl:template match="body">
+                <xsl:apply-templates/>
+        </xsl:template>
         <xsl:template match="section">
-                <text:h text:outline-level="2" text:is-list-header="true"><xsl:value-of select="title"/></text:h>
-                <text:p><xsl:value-of select="p"/></text:p>
-                <xsl:if test="ul">
-                  <text:list>
-                          <xsl:for-each select="ul/li">
-                      <text:list-item>
-                              <text:p><xsl:value-of select="."/></text:p>
-                      </text:list-item>
-                    </xsl:for-each>
-                  </text:list>
-          </xsl:if>
-          <xsl:if test="note|warning|fixme"><text:p text:style-name="P6">Note: <xsl:value-of select="note|warning|fixme"/></text:p></xsl:if>
+                <xsl:apply-templates/>
+        </xsl:template>
+        <xsl:template match="title">
+                <text:h text:outline-level="2" text:is-list-header="true"><xsl:value-of select="."/></text:h>
+        </xsl:template>
+        <xsl:template match="p">
+                <text:p><xsl:value-of select="."/></text:p>
+        </xsl:template>
+        <xsl:template match="ul">
+                <text:list>
+                  <xsl:apply-templates/>
+                </text:list>
+        </xsl:template>
+        <xsl:template match="li">
+                <text:list-item>
+                  <xsl:apply-templates/>
+                </text:list-item>
+        </xsl:template>
+        <xsl:template match="a">
+                      <!-- FIXME:(GM) Links not working yet. -->
+                      <!--<text:a xlink:type="simple" xlink:href="http://example.org">http://example.org</text:a>-->
+        </xsl:template>
+  <xsl:template match="note | warning | fixme">
+ <xsl:choose>
+        <xsl:when test="@label">
+          <xsl:value-of select="@label"/>
+        </xsl:when>
+        <xsl:when test="local-name() = 'note'"><text:p text:style-name="P6">Note: <xsl:value-of select="."/></text:p></xsl:when>
+        <xsl:when test="local-name() = 'warning'"><text:p text:style-name="P6">Warning: <xsl:value-of select="."/></text:p></xsl:when>
+        <xsl:otherwise><text:p text:style-name="P6">Fixme (<xsl:value-of select="@author"/>) <xsl:value-of select="."/></text:p></xsl:otherwise>
+      </xsl:choose>
   </xsl:template>
-  <!-- <xsl:template match="p"><text:p><xsl:value-of select="."/></text:p></xsl:template>
-  <xsl:template match="@*|node()" priority="-2">
-  </xsl:template>
-  <xsl:template match="text()" priority="-1">
-  </xsl:template>-->
 </xsl:stylesheet>
 
 
