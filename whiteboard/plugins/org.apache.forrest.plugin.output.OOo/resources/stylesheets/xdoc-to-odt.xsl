@@ -20,6 +20,7 @@
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns:zip="http://apache.org/cocoon/zip-archive/1.0"
                 xmlns:text="http://openoffice.org/2000/text"
+                xmlns:xlink="http://www.w3.org/1999/xlink"
                 xmlns:datetime="http://exslt.org/dates-and-times"
                 exclude-result-prefixes="datetime">
   <xsl:template match="document">
@@ -58,6 +59,9 @@
                   <style:font-face style:name="Tahoma" svg:font-family="Tahoma" style:font-family-generic="system" style:font-pitch="variable"/>
                 </office:font-face-decls>
                 <office:automatic-styles>
+                        <style:style style:name="P5" style:family="paragraph">
+                                <style:paragraph-properties fo:margin-top="0cm" fo:margin-bottom="0cm"/>
+                        </style:style>
                         <style:style style:name="P6" style:family="paragraph">
                                 <style:paragraph-properties fo:margin-top="0cm" fo:margin-bottom="0cm"/>
                                 <style:text-properties fo:font-weight="bold"/>
@@ -326,6 +330,11 @@
               <text>application/vnd.oasis.opendocument.text</text>
       </zip:entry>
           </zip:archive>
+  </xsl:template>
+        <xsl:template match="@*|node()">
+          <xsl:copy>
+            <xsl:apply-templates select="@*|node()"/>
+          </xsl:copy>
         </xsl:template>
         <xsl:template match="header">
                 <text:h text:outline-level="1" text:is-list-header="true"><xsl:value-of select="title"/></text:h>
@@ -339,8 +348,11 @@
         <xsl:template match="title">
                 <text:h text:outline-level="2" text:is-list-header="true"><xsl:value-of select="."/></text:h>
         </xsl:template>
+        <xsl:template match="a|link">
+          <text:a xlink:type="simple" xlink:href="{@href}"><xsl:value-of select="."/></text:a>
+        </xsl:template>
         <xsl:template match="p">
-                <text:p><xsl:value-of select="."/></text:p>
+                <text:p><xsl:apply-templates/></text:p>
         </xsl:template>
         <xsl:template match="ul">
                 <text:list>
@@ -349,12 +361,17 @@
         </xsl:template>
         <xsl:template match="li">
                 <text:list-item>
-                  <xsl:apply-templates/>
+                  <xsl:choose>
+                    <xsl:when test="p|note|warning|fixme">
+                      <xsl:apply-templates/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                      <text:p>
+                        <xsl:apply-templates/>
+                      </text:p>
+                    </xsl:otherwise>
+                  </xsl:choose>
                 </text:list-item>
-        </xsl:template>
-        <xsl:template match="a">
-                      <!-- FIXME:(GM) Links not working yet. -->
-                      <!--<text:a xlink:type="simple" xlink:href="http://example.org">http://example.org</text:a>-->
         </xsl:template>
   <xsl:template match="note | warning | fixme">
  <xsl:choose>
@@ -366,6 +383,7 @@
         <xsl:otherwise><text:p text:style-name="P6">Fixme (<xsl:value-of select="@author"/>) <xsl:value-of select="."/></text:p></xsl:otherwise>
       </xsl:choose>
   </xsl:template>
+
 </xsl:stylesheet>
 
 
