@@ -80,6 +80,11 @@
                   <xsl:apply-templates/>
                 </text:list>
         </xsl:template>
+        <xsl:template match="ol">
+                <text:list text:style-name="L1">
+                  <xsl:apply-templates/>
+                </text:list>
+        </xsl:template>
         <xsl:template match="li">
                 <text:list-item>
                   <xsl:choose>
@@ -94,6 +99,32 @@
                   </xsl:choose>
                 </text:list-item>
         </xsl:template>
+        <xsl:template match="sub">
+          <text:span text:style-name="T1">
+            <xsl:value-of select="."/>
+          </text:span>
+        </xsl:template>
+        <xsl:template match="sup">
+          <text:span text:style-name="T2">
+            <xsl:value-of select="."/>
+          </text:span>
+        </xsl:template>
+        <xsl:template match="em">
+          <text:span text:style-name="Emphasis">
+            <xsl:value-of select="."/>
+          </text:span>
+        </xsl:template>
+        <xsl:template match="code">
+          <text:span text:style-name="Source_20_Text">
+            <xsl:value-of select="."/>
+          </text:span>
+        </xsl:template>
+        <xsl:template match="strong">
+          <text:span text:style-name="Strong_20_Text">
+            <xsl:value-of select="."/>
+          </text:span>
+  </xsl:template>
+
   <xsl:template match="note | warning | fixme">
  <xsl:choose>
         <xsl:when test="@label">
