@@ -27,6 +27,7 @@
                 xmlns:zip="http://apache.org/cocoon/zip-archive/1.0"
                 xmlns:text="http://openoffice.org/2000/text"
                 xmlns:xlink="http://www.w3.org/1999/xlink"
+                xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0"
                 xmlns:datetime="http://exslt.org/dates-and-times"
                 exclude-result-prefixes="datetime">
 
@@ -49,7 +50,11 @@
             </zip:entry>
             <zip:entry name="mimetype" serializer="text">
               <text>application/vnd.oasis.opendocument.text</text>
-            </zip:entry>
+      </zip:entry>
+      <!-- Temporary hard coded zip entries so that template matches and styles can be worked on -->
+      <zip:entry name="Pictures/icon.png" src="cocoon://images/icon.png"></zip:entry>
+      <zip:entry name="Pictures/cocoon-project-logo.png" src="http://cocoon.apache.org/images/cocoon-project-logo.png">
+      </zip:entry>
           </zip:archive>
   </xsl:template>
         <xsl:template match="@*|node()">
@@ -59,6 +64,8 @@
         </xsl:template>
         <xsl:template match="header">
                 <text:h text:outline-level="1" text:is-list-header="true"><xsl:value-of select="title"/></text:h>
+                <text:h text:outline-level="3" text:is-list-header="true"><xsl:value-of select="subtitle"/></text:h>
+                <text:p><xsl:value-of select="abstract"/></text:p>
         </xsl:template>
         <xsl:template match="body">
                 <xsl:apply-templates/>
@@ -88,7 +95,7 @@
         <xsl:template match="li">
                 <text:list-item>
                   <xsl:choose>
-                    <xsl:when test="p|note|warning|fixme">
+                          <xsl:when test="p|note|warning|fixme">
                       <xsl:apply-templates/>
                     </xsl:when>
                     <xsl:otherwise>
@@ -123,19 +130,25 @@
           <text:span text:style-name="Strong_20_Text">
             <xsl:value-of select="."/>
           </text:span>
-  </xsl:template>
+        </xsl:template>
 
-  <xsl:template match="note | warning | fixme">
- <xsl:choose>
-        <xsl:when test="@label">
-          <xsl:value-of select="@label"/>
-        </xsl:when>
-        <xsl:when test="local-name() = 'note'"><text:p text:style-name="P6">Note: <xsl:value-of select="."/></text:p></xsl:when>
-        <xsl:when test="local-name() = 'warning'"><text:p text:style-name="P6">Warning: <xsl:value-of select="."/></text:p></xsl:when>
-        <xsl:otherwise><text:p text:style-name="P6">Fixme (<xsl:value-of select="@author"/>) <xsl:value-of select="."/></text:p></xsl:otherwise>
-      </xsl:choose>
-  </xsl:template>
-
+        <xsl:template match="note | warning | fixme">
+          <xsl:choose>
+            <xsl:when test="@label">
+              <xsl:value-of select="@label"/>
+            </xsl:when>
+            <xsl:when test="local-name() = 'note'"><text:p text:style-name="P6">Note: <xsl:value-of select="."/></text:p></xsl:when>
+            <xsl:when test="local-name() = 'warning'"><text:p text:style-name="P6">Warning: <xsl:value-of select="."/></text:p></xsl:when>
+            <xsl:otherwise><text:p text:style-name="P6">Fixme (<xsl:value-of select="@author"/>) <xsl:value-of select="."/></text:p></xsl:otherwise>
+          </xsl:choose>
+        </xsl:template>
+        <xsl:template match="img|figure|icon">
+                  <draw:frame draw:style-name="fr1" draw:name="{@alt}" text:anchor-type="paragraph" draw:z-index="0">
+                          <draw:image xlink:href="Pictures/icon.png" xlink:type="simple" xlink:show="embed" xlink:actuate="onLoad"/>
+                          <!-- Temporary hard coded xlink:ref above, for testing. -->
+            </draw:frame>
+            <xsl:apply-templates/>
+        </xsl:template>
 </xsl:stylesheet>
 
 
