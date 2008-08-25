@@ -28,6 +28,7 @@
                 xmlns:text="http://openoffice.org/2000/text"
                 xmlns:xlink="http://www.w3.org/1999/xlink"
                 xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0"
+                xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0"
                 xmlns:datetime="http://exslt.org/dates-and-times"
                 exclude-result-prefixes="datetime">
 
@@ -51,7 +52,7 @@
             <zip:entry name="mimetype" serializer="text">
               <text>application/vnd.oasis.opendocument.text</text>
       </zip:entry>
-      <!-- Temporary hard coded zip entries so that template matches and styles can be worked on -->
+      <!-- FIXME: Temporary hard coded zip entries so that template matches and styles can be worked on -->
       <zip:entry name="Pictures/icon.png" src="cocoon://images/icon.png"></zip:entry>
       <zip:entry name="Pictures/cocoon-project-logo.png" src="http://cocoon.apache.org/images/cocoon-project-logo.png">
       </zip:entry>
@@ -145,10 +146,36 @@
         <xsl:template match="img|figure|icon">
                   <draw:frame draw:style-name="fr1" draw:name="{@alt}" text:anchor-type="paragraph" draw:z-index="0">
                           <draw:image xlink:href="Pictures/icon.png" xlink:type="simple" xlink:show="embed" xlink:actuate="onLoad"/>
-                          <!-- Temporary hard coded xlink:ref above, for testing. -->
+                          <!-- FIXME: Temporary hard coded xlink:ref above, for testing. -->
             </draw:frame>
             <xsl:apply-templates/>
-        </xsl:template>
+    </xsl:template>
+    <!-- Tables -->
+    <xsl:template match="table">
+    <xsl:param name="count" select="count(following-sibling::tr)"/>
+      <table:table table:name="{//caption}">
+      <table:table-column table:number-columns-repeated="3" />
+      <!-- FIXME: That hard coded 3 needs to be replaced with a count of how <tr> there are
+              need to test and apply the 'count' param above -->
+        <xsl:apply-templates/>
+      </table:table>
+    </xsl:template>
+    <xsl:template match="th">
+      <xsl:value-of select="."/>
+    </xsl:template>
+    <xsl:template match="tr">
+      <table:table-row>
+        <xsl:apply-templates/>
+      </table:table-row>
+    </xsl:template>
+    <xsl:template match="td">
+      <table:table-cell>
+        <text:p>
+           <xsl:apply-templates/>
+         </text:p>
+       </table:table-cell>
+    </xsl:template>
+        <!-- /Tables -->
 </xsl:stylesheet>
 
 
