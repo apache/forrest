@@ -32,7 +32,7 @@
                 xmlns:datetime="http://exslt.org/dates-and-times"
                 exclude-result-prefixes="datetime">
 
-  <xsl:template match="document">
+                <xsl:template match="document">
           <zip:archive>
             <zip:entry name="content.xml" serializer="xml">
                &content;
@@ -51,11 +51,8 @@
             </zip:entry>
             <zip:entry name="mimetype" serializer="text">
               <text>application/vnd.oasis.opendocument.text</text>
-      </zip:entry>
-      <!-- FIXME: Temporary hard coded zip entries so that template matches and styles can be worked on -->
-      <zip:entry name="Pictures/icon.png" src="cocoon://images/icon.png"></zip:entry>
-      <zip:entry name="Pictures/cocoon-project-logo.png" src="http://cocoon.apache.org/images/cocoon-project-logo.png">
-      </zip:entry>
+            </zip:entry>
+            <xsl:call-template name="createImageEntries"/>
           </zip:archive>
   </xsl:template>
         <xsl:template match="@*|node()">
@@ -144,9 +141,16 @@
           </xsl:choose>
         </xsl:template>
         <xsl:template match="img|figure|icon">
-                  <draw:frame draw:style-name="fr1" draw:name="{@alt}" text:anchor-type="paragraph" draw:z-index="0">
-                          <draw:image xlink:href="Pictures/icon.png" xlink:type="simple" xlink:show="embed" xlink:actuate="onLoad"/>
-                          <!-- FIXME: Temporary hard coded xlink:ref above, for testing. -->
+          <draw:frame draw:style-name="fr1" draw:name="{@alt}" text:anchor-type="paragraph" draw:z-index="0">
+            <draw:image>
+              <xsl:attribute name="xlink:href">Pictures/<xsl:call-template name="fileName">
+              <xsl:with-param name="path" select="@src"/>
+              </xsl:call-template>
+              </xsl:attribute>
+               <xsl:attribute name="xlink:type">simple</xsl:attribute>
+               <xsl:attribute name="xlink:show">embed</xsl:attribute>
+               <xsl:attribute name="xlink:actuate">onLoad</xsl:attribute>
+             </draw:image>
             </draw:frame>
             <xsl:apply-templates/>
     </xsl:template>
@@ -175,7 +179,42 @@
          </text:p>
        </table:table-cell>
     </xsl:template>
-        <!-- /Tables -->
+    <!-- /Tables -->
+<xsl:template name="createImageEntries">
+  <xsl:for-each select="//img|//figure|//icon">
+    <zip:entry>
+      <xsl:attribute name="name">Pictures/<xsl:call-template name="fileName">
+          <xsl:with-param name="path" select="@src"/>
+        </xsl:call-template>
+      </xsl:attribute>
+      <xsl:attribute name="src">cocoon://<xsl:value-of select="@src"/>
+      </xsl:attribute>
+    </zip:entry>
+  </xsl:for-each>
+</xsl:template>
+
+<!-- 'filename' template returns just file.txt from a path such
+as /foo/bar/baz/file.txt -->
+
+<xsl:template name="fileName">
+  <xsl:param name="path" />
+  <xsl:choose>
+    <xsl:when test="contains($path,'\')">
+      <xsl:call-template name="fileName">
+        <xsl:with-param name="path" select="substring-after($path,'\')" />
+      </xsl:call-template>
+    </xsl:when>
+    <xsl:when test="contains($path,'/')">
+      <xsl:call-template name="fileName">
+        <xsl:with-param name="path" select="substring-after($path,'/')" />
+      </xsl:call-template>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:value-of select="$path" />
+    </xsl:otherwise>
+  </xsl:choose>
+</xsl:template>
+
 </xsl:stylesheet>
 
 
