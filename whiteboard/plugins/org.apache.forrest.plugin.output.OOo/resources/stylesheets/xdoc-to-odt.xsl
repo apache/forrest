@@ -141,7 +141,20 @@
           </xsl:choose>
         </xsl:template>
         <xsl:template match="img|figure|icon">
-          <draw:frame draw:style-name="fr1" draw:name="{@alt}" text:anchor-type="paragraph" draw:z-index="0">
+                <draw:frame>
+                        <xsl:attribute name="draw:style-name">fr1</xsl:attribute>
+                        <xsl:attribute name="draw:name"><xsl:value-of select="@alt"/></xsl:attribute>
+                        <xsl:attribute name="text:anchor-type">paragraph</xsl:attribute>
+                        <xsl:attribute name="draw:z-index">0</xsl:attribute>
+                        <!-- FIXME: See FOR-1098 - The svg attributes below are being ignored. -->
+                        <xsl:attribute name="svg:y">0cm</xsl:attribute>
+                        <xsl:attribute name="svg:width"><xsl:value-of select="@width div 36"/>cm</xsl:attribute>
+                        <xsl:attribute name="svg:height"><xsl:value-of select="@height div 36"/>cm</xsl:attribute>
+                        <xsl:call-template name="drawImage"/>
+            </draw:frame>
+            <xsl:apply-templates/>
+    </xsl:template>
+    <xsl:template name="drawImage">
             <draw:image>
               <xsl:attribute name="xlink:href">Pictures/<xsl:call-template name="fileName">
               <xsl:with-param name="path" select="@src"/>
@@ -150,10 +163,8 @@
                <xsl:attribute name="xlink:type">simple</xsl:attribute>
                <xsl:attribute name="xlink:show">embed</xsl:attribute>
                <xsl:attribute name="xlink:actuate">onLoad</xsl:attribute>
-             </draw:image>
-            </draw:frame>
-            <xsl:apply-templates/>
-    </xsl:template>
+       </draw:image>
+       </xsl:template>
     <!-- Tables -->
     <xsl:template match="table">
     <xsl:param name="count" select="count(following-sibling::tr)"/>
