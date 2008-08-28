@@ -88,22 +88,15 @@
   <property name="getsrc.svn.revision" value="HEAD"/>
   <property name="build.svn-dir"    location="work/svn"/>
   <target name="getsrc.svn" description="FB: Get source from an SVN repository">
-<!-- non-recursive; just to get forrest.properties -->
     <echo>svn: ${getsrc.svn.url} -> ${build.svn-dir}/${ant.project.name}</echo>
     <svncheckout repositoryUrl="${getsrc.svn.url}"
       destination="${build.svn-dir}/${ant.project.name}"
       revision="${getsrc.svn.revision}"
       failonerror="true"
-      recursive="false"/>
+      recursive="true"/>
     <echo>Loading ${build.svn-dir}/${ant.project.name}/forrest.properties..</echo>
     <loadproperties srcFile="${build.svn-dir}/${ant.project.name}/forrest.properties"/>
     <loadproperties srcFile="${forrest.home}/main/webapp/default-forrest.properties"/>
-<!-- only the project.content-dir directory -->
-    <echo>svn: ${getsrc.svn.url}/${project.content-dir} -> ${build.svn-dir}/${ant.project.name}/${project.content-dir}</echo>
-    <svncheckout repositoryUrl="${getsrc.svn.url}/${project.content-dir}"
-      destination="${build.svn-dir}/${ant.project.name}/${project.content-dir}"
-      revision="${getsrc.svn.revision}"
-      failonerror="true"/>
     <copy todir="${build.work-dir}" overwrite="true">
       <fileset dir="${build.svn-dir}/${ant.project.name}"/>
     </copy>
