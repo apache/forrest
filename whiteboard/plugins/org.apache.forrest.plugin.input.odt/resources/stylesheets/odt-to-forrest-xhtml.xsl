@@ -329,10 +329,10 @@
     </xsl:variable>
     <xsl:choose>
       <xsl:when test="starts-with($href, 'http:')">
-        <img src="{$href}" alt="{../@draw:name}" heigth="{../@svg:heigth}" width="{../@svg:width}"/>
+        <img src="{$href}" alt="{../@draw:name}" height="{../@svg:height}" width="{../@svg:width}"/>
       </xsl:when>
       <xsl:otherwise>
-        <img src="./{$root}{$dirname}openDocumentEmbeddedImages/zip-{$filename}.odt/file-{$href}" alt="{../@draw:name}" heigth="{../@svg:heigth}" width="{../@svg:width}"/>
+        <img src="./{$root}{$dirname}openDocumentEmbeddedImages/zip-{$filename}.odt/file-{$href}" alt="{../@draw:name}" height="{../@svg:height}" width="{../@svg:width}"/>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
