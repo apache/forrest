@@ -24,16 +24,162 @@
     <section>
       <title>Apache Forrest - org.apache.forrest.plugin.output.pdf Plugin</title>
       <p>
-        This plugin enables any Forrest page to be output as a PDF document.
+        This plugin (hereafter just called the PDF plugin) enables any
+        Forrest page to be output as a PDF document.
       </p>
       <p>
-        To use it simply request a page with the <code>pdf</code> extension
+        To use it simply request a page with the <code>pdf</code> extension.
       </p>
       <note>
         By default this plugin is included in a new Forrest project. You will
         see a PDF link in the upper right corner of the body section of each
         page, this will, of course, link to the PDF version of that page.
       </note>
+    </section>
+
+    <section>
+      <title>Configuration options</title>
+
+      <p>The PDF plugin can be configured in several ways:</p>
+
+      <ul>
+        <li>font family configuration</li>
+
+        <li>other presentation changes: page size, copyright notes, etc.</li>
+
+        <li>i18n configuarion, which is actually two subtopics:<ul>
+            <li>font family configuration</li>
+
+            <li>l10n of label text</li>
+          </ul></li>
+      </ul>
+
+      <p>Each of these points will be covered in separate sections below.</p>
+    </section>
+
+    <section>
+      <title>Font Family Configuration</title>
+
+      <p>The font family can be specifed in different steps of granularity. As
+      of version 0.4 of the PDF plugin, all of the configuration can be done
+      on a per project basis. There is no need to touch the plugin itself, as
+      it used to be.</p>
+
+      <section>
+        <title>Preparations</title>
+
+        <p>If you want to change the actual font family, not only where to use
+        the generic <code>serif</code>, <code>sans-serif</code> and
+        <code>monospace</code> families, then you also need to take these
+        preparatory steps:</p>
+
+        <ol>
+          <li>Follow the instructions at <a
+          href="http://cocoon.apache.org/2.1/userdocs/pdf-serializer.html">http://cocoon.apache.org/2.1/userdocs/pdf-serializer.html</a>
+          to create a font configuration file and font metrics files at
+          <code>$PROJECT_HOME/src/documentation/resources/fonts</code> (you
+          may have to create the <code>fonts</code> folder).</li>
+
+          <li>Specify the absolute path to the font configuration file you
+          created in step 1 as the value of the entity
+          <code>&amp;pdf-config-file;</code> in the project entity file. The
+          file is located at:
+          <code>$PROJECT_HOME/src/documentation/resources/schema/symbols-project-v10.ent</code>.
+          The result should look something like:<source>&lt;!ENTITY pdf-config-file "/Users/foo/forrestproject/src/documentation/resources/fonts/config.xml"&gt;</source>(the
+          above would work for a user named <code>foo</code> on a typical
+          MacOS X system - adapt to your local OS as needed, but the path
+          needs to be absolute)</li>
+
+          <li>Finally, add the necessary configuration options to your
+          <code>forrest.properties.xml</code> file, as described below.</li>
+        </ol>
+      </section>
+
+      <section>
+        <title>Font family overrides/specifications</title>
+
+        <p>For the easiest type of changing the font family, add the following
+        lines to your <code>forrest.properties.xml</code> file:</p>
+
+        <source>  &lt;property name="output.pdf.fontFamily.serif"     value="serif"/&gt;
+  &lt;property name="output.pdf.fontFamily.sansSerif" value="sans-serif"/&gt;
+  &lt;property name="output.pdf.fontFamily.monospace" value="monospace"/&gt;</source>
+
+        <p>and replace the default values above with your preferred font
+        family, e.g. <code>DejaVuSans</code>, etc. Using these properties, you
+        will change the font family of whole classes of text types at once. If
+        you need proper i18n support for your language (more below) in the pdf
+        files, this is usually the easiest way to go - just replace the
+        generic families with your chosen font families.</p>
+
+        <p>If you need to override or specify the font family for a certain
+        text type, add one or more of the following properties to your
+        <code>forrest.properties.xml</code> file:</p>
+
+        <source>  &lt;property name="output.pdf.fontFamily.rootFontFamily"          value="serif" /&gt;
+  &lt;property name="output.pdf.fontFamily.headerFooterFontFamily"  value="sans-serif" /&gt;
+  &lt;property name="output.pdf.fontFamily.documentTitleFontFamily" value="sans-serif" /&gt;
+  &lt;property name="output.pdf.fontFamily.versionFontFamily"       value="sans-serif" /&gt;
+  &lt;property name="output.pdf.fontFamily.authorsFontFamily"       value="sans-serif" /&gt;
+  &lt;property name="output.pdf.fontFamily.TOCTitleFontFamily"      value="sans-serif" /&gt;
+  &lt;property name="output.pdf.fontFamily.sectionTitleFontFamily"  value="sans-serif" /&gt;
+  &lt;property name="output.pdf.fontFamily.sourceFontFamily"        value="monospace" /&gt;
+  &lt;property name="output.pdf.fontFamily.codeFontFamily"          value="monospace" /&gt;
+  &lt;property name="output.pdf.fontFamily.warningTitleFontFamily"  value="sans-serif" /&gt;
+  &lt;property name="output.pdf.fontFamily.noteTitleFontFamily"     value="sans-serif" /&gt;
+  &lt;property name="output.pdf.fontFamily.fixmeTitleFontFamily"    value="sans-serif" /&gt;</source>
+
+        <p>The given values are defaults, and should be replaced with what you
+        want. If you want, you can further specify the font family for
+        variants of the
+        <code>output.pdf.fontFamily.headerFooterFontFamily</code> property
+        using the following properties instead:</p>
+
+        <source>  &lt;property name="output.pdf.fontFamily.firstFooterFontFamily"   value="sans-serif" /&gt;
+  &lt;property name="output.pdf.fontFamily.evenHeaderFontFamily"    value="sans-serif" /&gt;
+  &lt;property name="output.pdf.fontFamily.evenFooterFontFamily"    value="sans-serif" /&gt;
+  &lt;property name="output.pdf.fontFamily.oddHeaderFontFamily"     value="sans-serif" /&gt;
+  &lt;property name="output.pdf.fontFamily.oddFooterFontFamily"     value="sans-serif" /&gt;</source>
+
+        <p>It is possible to do further customisations of the pdf rendering by
+        editing the stylesheets found in ...</p>
+      </section>
+    </section>
+
+    <section>
+      <title>Other presentation options</title>
+
+      <p>
+        Presentation changes like page size, copyright notes, etc. are presently
+        specified in the <code>skinconfig.xml</code> file. See separate documentation for
+        further info.
+      </p>
+    </section>
+
+    <section>
+      <title>I18n Configuration</title>
+
+      <section>
+        <title>Font Family Configuration</title>
+
+        <p>For some languages, the default font families (<code>serif</code>,
+        <code>sans-serif</code>, <code>monospace</code>) do not render all
+        characters, giving squares, question marks or nothing instead in the
+        rendered pdf document. This is known to be an issue with CJK
+        languages, as well as with lesser used languages such as Sámi. If this
+        is the case for your language(s), please follow the steps above to
+        configure the pdf plugin to use a font family known to contain all
+        characters needed. For many alphabetic languages, the free and open
+        source <a
+        href="http://dejavu.sourceforge.net/wiki/index.php/Main_Page">DejaVu
+        font family</a> nowadays has quite good coverage.</p>
+      </section>
+
+      <section>
+        <title>L10n of label text</title>
+
+        <p>[TO BE WRITTEN]</p>
+      </section>
     </section>
   </body>
 </document>
