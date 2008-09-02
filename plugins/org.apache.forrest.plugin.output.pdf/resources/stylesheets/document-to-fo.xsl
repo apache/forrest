@@ -18,10 +18,14 @@
 <xsl:stylesheet
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns:fo="http://www.w3.org/1999/XSL/Format"
+    xmlns:prop="http://apache.org/forrest/properties/1.0"
     version="1.0">
   <xsl:variable
         name="config"
         select="//skinconfig" />
+  <xsl:variable
+        name="properties"
+        select="//prop:properties" />
 <!-- left, justify, right -->
   <xsl:variable
         name="text-align"
@@ -98,11 +102,175 @@
   <xsl:param
         name="numbering-max-depth"
         select="'3'" />
-<!-- Font-family parameters defined here. Default values specified,
+<!-- Generic font-family parameters defined here. Default values specified,
      but usually the values should be passed in from the calling sitemap. -->
-  <xsl:param name="serif"      select="'serif'" />
-  <xsl:param name="sans-serif" select="'sans-serif'" />
-  <xsl:param name="monospace"  select="'monospace'" />
+  <xsl:param name="serif">
+    <xsl:choose>
+      <xsl:when test="$properties/*[@name='output.pdf.fontFamily.serif']">
+        <xsl:value-of select="$properties/*[@name='output.pdf.fontFamily.serif']/@value"/>
+      </xsl:when>
+      <xsl:otherwise>serif</xsl:otherwise>
+    </xsl:choose>
+  </xsl:param>
+  <xsl:param name="sans-serif">
+    <xsl:choose>
+      <xsl:when test="$properties/*[@name='output.pdf.fontFamily.sansSerif']">
+        <xsl:value-of select="$properties/*[@name='output.pdf.fontFamily.sansSerif']/@value"/>
+      </xsl:when>
+      <xsl:otherwise>sans-serif</xsl:otherwise>
+    </xsl:choose>
+  </xsl:param>
+  <xsl:param name="monospace">
+    <xsl:choose>
+      <xsl:when test="$properties/*[@name='output.pdf.fontFamily.monospace']">
+        <xsl:value-of select="$properties/*[@name='output.pdf.fontFamily.monospace']/@value"/>
+      </xsl:when>
+      <xsl:otherwise>monospace</xsl:otherwise>
+    </xsl:choose>
+  </xsl:param>
+<!-- Classes of text types that typically go together, and share font family
+     properties; this can be used to specify the font family for all related
+     text types at once: -->
+  <xsl:param name="headerFooterFontFamily">
+    <xsl:choose>
+      <xsl:when test="$properties/*[@name='output.pdf.fontFamily.headerFooterFontFamily']">
+        <xsl:value-of select="$properties/*[@name='output.pdf.fontFamily.headerFooterFontFamily']/@value"/>
+      </xsl:when>
+      <xsl:otherwise><xsl:value-of select="$sans-serif"/></xsl:otherwise>
+    </xsl:choose>
+  </xsl:param>
+<!-- Specific font-family parameters defined here, to allow overrides of
+     specific content elements; default values taken from the generic ones
+     above: -->
+  <xsl:param name="rootFontFamily">
+    <xsl:choose>
+      <xsl:when test="$properties/*[@name='output.pdf.fontFamily.rootFontFamily']">
+        <xsl:value-of select="$properties/*[@name='output.pdf.fontFamily.rootFontFamily']/@value"/>
+      </xsl:when>
+      <xsl:otherwise><xsl:value-of select="$serif"/></xsl:otherwise>
+    </xsl:choose>
+  </xsl:param>
+  <xsl:param name="firstFooterFontFamily">
+    <xsl:choose>
+      <xsl:when test="$properties/*[@name='output.pdf.fontFamily.firstFooterFontFamily']">
+        <xsl:value-of select="$properties/*[@name='output.pdf.fontFamily.firstFooterFontFamily']/@value"/>
+      </xsl:when>
+      <xsl:otherwise><xsl:value-of select="$headerFooterFontFamily"/></xsl:otherwise>
+    </xsl:choose>
+  </xsl:param>
+  <xsl:param name="evenHeaderFontFamily">
+    <xsl:choose>
+      <xsl:when test="$properties/*[@name='output.pdf.fontFamily.evenHeaderFontFamily']">
+        <xsl:value-of select="$properties/*[@name='output.pdf.fontFamily.evenHeaderFontFamily']/@value"/>
+      </xsl:when>
+      <xsl:otherwise><xsl:value-of select="$headerFooterFontFamily"/></xsl:otherwise>
+    </xsl:choose>
+  </xsl:param>
+  <xsl:param name="evenFooterFontFamily">
+    <xsl:choose>
+      <xsl:when test="$properties/*[@name='output.pdf.fontFamily.evenFooterFontFamily']">
+        <xsl:value-of select="$properties/*[@name='output.pdf.fontFamily.evenFooterFontFamily']/@value"/>
+      </xsl:when>
+      <xsl:otherwise><xsl:value-of select="$headerFooterFontFamily"/></xsl:otherwise>
+    </xsl:choose>
+  </xsl:param>
+  <xsl:param name="oddHeaderFontFamily">
+    <xsl:choose>
+      <xsl:when test="$properties/*[@name='output.pdf.fontFamily.oddHeaderFontFamily']">
+        <xsl:value-of select="$properties/*[@name='output.pdf.fontFamily.oddHeaderFontFamily']/@value"/>
+      </xsl:when>
+      <xsl:otherwise><xsl:value-of select="$headerFooterFontFamily"/></xsl:otherwise>
+    </xsl:choose>
+  </xsl:param>
+  <xsl:param name="oddFooterFontFamily">
+    <xsl:choose>
+      <xsl:when test="$properties/*[@name='output.pdf.fontFamily.oddFooterFontFamily']">
+        <xsl:value-of select="$properties/*[@name='output.pdf.fontFamily.oddFooterFontFamily']/@value"/>
+      </xsl:when>
+      <xsl:otherwise><xsl:value-of select="$headerFooterFontFamily"/></xsl:otherwise>
+    </xsl:choose>
+  </xsl:param>
+  <xsl:param name="documentTitleFontFamily">
+    <xsl:choose>
+      <xsl:when test="$properties/*[@name='output.pdf.fontFamily.documentTitleFontFamily']">
+        <xsl:value-of select="$properties/*[@name='output.pdf.fontFamily.documentTitleFontFamily']/@value"/>
+      </xsl:when>
+      <xsl:otherwise><xsl:value-of select="$sans-serif"/></xsl:otherwise>
+    </xsl:choose>
+  </xsl:param>
+  <xsl:param name="versionFontFamily">
+    <xsl:choose>
+      <xsl:when test="$properties/*[@name='output.pdf.fontFamily.versionFontFamily']">
+        <xsl:value-of select="$properties/*[@name='output.pdf.fontFamily.versionFontFamily']/@value"/>
+      </xsl:when>
+      <xsl:otherwise><xsl:value-of select="$sans-serif"/></xsl:otherwise>
+    </xsl:choose>
+  </xsl:param>
+  <xsl:param name="authorsFontFamily">
+    <xsl:choose>
+      <xsl:when test="$properties/*[@name='output.pdf.fontFamily.authorsFontFamily']">
+        <xsl:value-of select="$properties/*[@name='output.pdf.fontFamily.authorsFontFamily']/@value"/>
+      </xsl:when>
+      <xsl:otherwise><xsl:value-of select="$sans-serif"/></xsl:otherwise>
+    </xsl:choose>
+  </xsl:param>
+  <xsl:param name="TOCTitleFontFamily">
+    <xsl:choose>
+      <xsl:when test="$properties/*[@name='output.pdf.fontFamily.TOCTitleFontFamily']">
+        <xsl:value-of select="$properties/*[@name='output.pdf.fontFamily.TOCTitleFontFamily']/@value"/>
+      </xsl:when>
+      <xsl:otherwise><xsl:value-of select="$sans-serif"/></xsl:otherwise>
+    </xsl:choose>
+  </xsl:param>
+  <!-- helper-commonElements.xsl font-family definitions: -->
+  <xsl:param name="sectionTitleFontFamily">
+    <xsl:choose>
+      <xsl:when test="$properties/*[@name='output.pdf.fontFamily.sectionTitleFontFamily']">
+        <xsl:value-of select="$properties/*[@name='output.pdf.fontFamily.sectionTitleFontFamily']/@value"/>
+      </xsl:when>
+      <xsl:otherwise><xsl:value-of select="$sans-serif"/></xsl:otherwise>
+    </xsl:choose>
+  </xsl:param>
+  <xsl:param name="sourceFontFamily">
+    <xsl:choose>
+      <xsl:when test="$properties/*[@name='output.pdf.fontFamily.sourceFontFamily']">
+        <xsl:value-of select="$properties/*[@name='output.pdf.fontFamily.sourceFontFamily']/@value"/>
+      </xsl:when>
+      <xsl:otherwise><xsl:value-of select="$monospace"/></xsl:otherwise>
+    </xsl:choose>
+  </xsl:param>
+  <xsl:param name="codeFontFamily">
+    <xsl:choose>
+      <xsl:when test="$properties/*[@name='output.pdf.fontFamily.codeFontFamily']">
+        <xsl:value-of select="$properties/*[@name='output.pdf.fontFamily.codeFontFamily']/@value"/>
+      </xsl:when>
+      <xsl:otherwise><xsl:value-of select="$monospace"/></xsl:otherwise>
+    </xsl:choose>
+  </xsl:param>
+  <xsl:param name="warningTitleFontFamily">
+    <xsl:choose>
+      <xsl:when test="$properties/*[@name='output.pdf.fontFamily.warningTitleFontFamily']">
+        <xsl:value-of select="$properties/*[@name='output.pdf.fontFamily.warningTitleFontFamily']/@value"/>
+      </xsl:when>
+      <xsl:otherwise><xsl:value-of select="$sans-serif"/></xsl:otherwise>
+    </xsl:choose>
+  </xsl:param>
+  <xsl:param name="noteTitleFontFamily">
+    <xsl:choose>
+      <xsl:when test="$properties/*[@name='output.pdf.fontFamily.noteTitleFontFamily']">
+        <xsl:value-of select="$properties/*[@name='output.pdf.fontFamily.noteTitleFontFamily']/@value"/>
+      </xsl:when>
+      <xsl:otherwise><xsl:value-of select="$sans-serif"/></xsl:otherwise>
+    </xsl:choose>
+  </xsl:param>
+  <xsl:param name="fixmeTitleFontFamily">
+    <xsl:choose>
+      <xsl:when test="$properties/*[@name='output.pdf.fontFamily.fixmeTitleFontFamily']">
+        <xsl:value-of select="$properties/*[@name='output.pdf.fontFamily.fixmeTitleFontFamily']/@value"/>
+      </xsl:when>
+      <xsl:otherwise><xsl:value-of select="$sans-serif"/></xsl:otherwise>
+    </xsl:choose>
+  </xsl:param>
 <!-- Other external parameters: -->
   <xsl:param
         name="imagesdir"
@@ -115,25 +283,25 @@
 
 <!-- Included stylesheets: -->
   <xsl:include
-        href="helper-pdfoutline.xsl" />
+        href="lm://pdf.transform.helper.pdfoutline" />
   <xsl:include
-        href="footerinfo.xsl" />
+        href="lm://pdf.transform.helper.footerinfo" />
   <xsl:include
         href="lm://pdf.transform.helper.pageBreaks" />
   <xsl:include
-        href="helper-pageNumber.xsl" />
+        href="lm://pdf.transform.helper.pageNumber" />
   <xsl:include
-        href="helper-commonElements.xsl" />
+        href="lm://pdf.transform.helper.commonElements" />
   <xsl:include
-        href="helper-layout.xsl" />
+        href="lm://pdf.transform.helper.layout" />
   <xsl:include
-        href="helper-xmpMetadata.xsl" />
+        href="lm://pdf.transform.helper.xmpMetadata" />
 
   <xsl:template
         match="/">
     <fo:root
             xmlns:fo="http://www.w3.org/1999/XSL/Format"
-            font-family="{$serif}" font-size="12pt">
+            font-family="{$rootFontFamily}" font-size="12pt">
       <fo:layout-master-set>
         <fo:simple-page-master
                     master-name="first-page"
@@ -254,7 +422,7 @@
     
     <fo:static-content
             flow-name="first-footer"
-            font-family="{$sans-serif}">
+            font-family="{$firstFooterFontFamily}">
       <fo:block
                 border-top="0.25pt solid"
                 padding-before="6pt"
@@ -277,7 +445,7 @@
     
     <fo:static-content
             flow-name="even-header"
-            font-family="{$sans-serif}">
+            font-family="{$evenHeaderFontFamily}">
       <fo:block
                 font-size="70%"
                 text-align="end"
@@ -288,7 +456,7 @@
     </fo:static-content>
     <fo:static-content
             flow-name="even-footer"
-            font-family="{$sans-serif}">
+            font-family="{$evenFooterFontFamily}">
       <fo:block
                 border-top="0.25pt solid"
                 padding-before="6pt"
@@ -314,7 +482,7 @@
     
     <fo:static-content
             flow-name="odd-header"
-            font-family="{$sans-serif}">
+            font-family="{$oddHeaderFontFamily}">
       <fo:block
                 font-size="70%"
                 font-style="italic">
@@ -333,7 +501,7 @@
     
     <fo:static-content
             flow-name="odd-footer"
-            font-family="{$sans-serif}">
+            font-family="{$oddFooterFontFamily}">
       <fo:block
                 border-top="0.25pt solid"
                 padding-before="6pt"
@@ -355,7 +523,7 @@
       <fo:block
               padding-before="24pt"
               padding-after="24pt"
-              font-family="{$sans-serif}"
+              font-family="{$documentTitleFontFamily}"
               font-size="24pt"
               font-weight="bold"
               id="{generate-id()}">
@@ -413,7 +581,7 @@
   </xsl:template>
   <xsl:template match="version">
     <fo:block
-            font-family="{$sans-serif}"
+            font-family="{$versionFontFamily}"
             font-weight="bold"
             font-size="smaller">
       <xsl:call-template name="insertPageBreaks"/>
@@ -434,7 +602,7 @@
   <xsl:template match="authors">
     <fo:block
             space-before="2em"
-            font-family="{$sans-serif}"
+            font-family="{$authorsFontFamily}"
             font-weight="bold"
             font-size="smaller">
       <xsl:call-template
@@ -450,8 +618,14 @@
   </xsl:template>
   <xsl:template match="body[count(//section) != 0]">
     <xsl:if test="$disable-toc != 'true' and $toc-max-depth > 0">
-      <fo:block font-family="{$sans-serif}" font-size="12pt" font-weight="bold"
-        space-after="0.5em" space-before="1em" text-align="justify" id="__toc__">
+      <fo:block
+              font-family="{$TOCTitleFontFamily}"
+              font-size="12pt"
+              font-weight="bold"
+              space-after="0.5em"
+              space-before="1em"
+              text-align="justify"
+              id="__toc__">
         <xsl:call-template name="insertPageBreaks"/>
         <!-- insert i18n stuff here -->
         <xsl:text>Table of contents</xsl:text>

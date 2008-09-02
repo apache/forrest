@@ -15,10 +15,22 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 -->
+<!DOCTYPE map:sitemap [
+<!ENTITY % symbols-project
+  PUBLIC "-//Apache Forrest//ENTITIES Symbols Project v1.0//EN"
+  "symbols-project-v10.ent">
+  %symbols-project;
+<!ENTITY % symbols-core
+  PUBLIC "-//Apache Forrest//ENTITIES Symbols Core v1.0//EN"
+  "symbols-core-v10.ent">
+  %symbols-core;
+]>
 <map:sitemap xmlns:map="http://apache.org/cocoon/sitemap/1.0">
   <map:components>
     <map:serializers default="fo2pdf">
-        <map:serializer name="fo2pdf" src="org.apache.cocoon.blocks.fop.FOPNGSerializer" mime-type="application/pdf" />
+      <map:serializer name="fo2pdf" src="org.apache.cocoon.blocks.fop.FOPNGSerializer" mime-type="application/pdf">
+      	<user-config>&pdf-config-file;</user-config>
+      </map:serializer> 
     </map:serializers>
   </map:components>
   <map:pipelines>
@@ -31,6 +43,7 @@
                 </map:when>
                 <map:otherwise>
                     <map:aggregate element="site">
+                        <map:part src="cocoon://module.properties.properties"/>
                         <map:part src="cocoon://skinconf.xml"/>
                         <map:part src="cocoon://{1}{2}.xml"/>
                     </map:aggregate>
@@ -38,12 +51,9 @@
                     <map:transform type="xinclude"/>
                     <map:transform type="linkrewriter" src="cocoon://{1}linkmap-{2}.fo"/>
                     <map:transform src="{lm:pdf.transform.document.fo}">
-                        <map:parameter name="imagesdir" value="{properties:resources.images}/"/>
+                        <map:parameter name="imagesdir"  value="{properties:resources.images}/"/>
                         <map:parameter name="xmlbasedir" value="{properties:content.xdocs}{1}"/>
-                        <map:parameter name="serif"      value="{properties:output.pdf.fontFamily.serif}"/>
-                        <map:parameter name="sans-serif" value="{properties:output.pdf.fontFamily.sansSerif}"/>
-                        <map:parameter name="monospace"  value="{properties:output.pdf.fontFamily.monospace}"/>
-                        <map:parameter name="path" value="{1}"/>
+                        <map:parameter name="path"       value="{1}"/>
                     </map:transform>
                 </map:otherwise>
             </map:select>
