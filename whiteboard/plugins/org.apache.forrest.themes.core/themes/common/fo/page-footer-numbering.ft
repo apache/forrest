@@ -50,6 +50,42 @@ limitations under the License.
       xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
       xmlns:fo="http://www.w3.org/1999/XSL/Format"
       version="1.0">
+      <xsl:param name="defaultVariables" select="'test.html'"/>
+      <xsl:param name="sans-serif" select="$defaultVariables/*/*[@name='output.pdf.fontFamily.sansSerif']/@value" />
+      <xsl:param name="headerFooterFontFamily">
+        <xsl:choose>
+          <xsl:when test="$defaultVariables/*/*[@name='output.pdf.fontFamily.headerFooterFontFamily']">
+            <xsl:value-of select="$defaultVariables/*/*[@name='output.pdf.fontFamily.headerFooterFontFamily']/@value"/>
+          </xsl:when>
+          <xsl:otherwise><xsl:value-of select="$sans-serif"/></xsl:otherwise>
+        </xsl:choose>
+      </xsl:param>
+      <xsl:param name="firstFooterFontFamily">
+        <xsl:choose>
+          <xsl:when test="$defaultVariables/*/*[@name='output.pdf.fontFamily.firstFooterFontFamily']">
+            <xsl:value-of select="$defaultVariables/*/*[@name='output.pdf.fontFamily.firstFooterFontFamily']/@value"/>
+          </xsl:when>
+          <xsl:otherwise><xsl:value-of select="$headerFooterFontFamily"/></xsl:otherwise>
+        </xsl:choose>
+      </xsl:param>
+      <xsl:param name="evenFooterFontFamily">
+        <xsl:choose>
+          <xsl:when test="$defaultVariables/*/*[@name='output.pdf.fontFamily.evenFooterFontFamily']">
+            <xsl:value-of select="$defaultVariables/*/*[@name='output.pdf.fontFamily.evenFooterFontFamily']/@value"/>
+          </xsl:when>
+          <xsl:otherwise><xsl:value-of select="$headerFooterFontFamily"/></xsl:otherwise>
+        </xsl:choose>
+      </xsl:param>
+      <xsl:param name="oddFooterFontFamily">
+        <xsl:choose>
+          <xsl:when test="$defaultVariables/*/*[@name='output.pdf.fontFamily.oddFooterFontFamily']">
+            <xsl:value-of select="$defaultVariables/*/*[@name='output.pdf.fontFamily.oddFooterFontFamily']/@value"/>
+          </xsl:when>
+          <xsl:otherwise><xsl:value-of select="$headerFooterFontFamily"/></xsl:otherwise>
+        </xsl:choose>
+      </xsl:param>
+<!-- Double-sided printing toggle -->
+      <xsl:param name="doublesided" select="'true'" />
       <xsl:param name="skip-first-page-numbering" select="'true'"/>
       <xsl:param name="page-numbering-format" select="'Page 1'"/>
       <xsl:include href="lm://pdf.transform.helper.pageNumber" />
@@ -57,7 +93,8 @@ limitations under the License.
         <forrest:content>
           <forrest:part xpath="/fo/static-content">
             <fo:static-content
-              flow-name="first-footer">
+              flow-name="first-footer"
+              font-family="{$firstFooterFontFamily}">
               <fo:block
                 border-top="0.25pt solid"
                 padding-before="6pt"
@@ -73,7 +110,8 @@ limitations under the License.
               </xsl:if>
             </fo:static-content>
             <fo:static-content
-              flow-name="even-footer">
+              flow-name="even-footer"
+              font-family="{$evenFooterFontFamily}">
               <fo:block
                 border-top="0.25pt solid"
                 padding-before="6pt"
@@ -85,7 +123,8 @@ limitations under the License.
               </xsl:call-template>
             </fo:static-content>
             <fo:static-content
-              flow-name="odd-footer">
+              flow-name="odd-footer"
+              font-family="{$oddFooterFontFamily}">
               <fo:block
                 border-top="0.25pt solid"
                 padding-before="6pt"
