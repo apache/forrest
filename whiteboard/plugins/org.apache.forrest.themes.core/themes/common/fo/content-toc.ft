@@ -44,12 +44,21 @@ limitations under the License.
       version="1.0">
       <xsl:param name="defaultVariables" select="'test.html'"/>
       <xsl:param name="sans-serif" select="$defaultVariables/*/*[@name='output.pdf.fontFamily.sansSerif']/@value" />
+      <xsl:param name="serif" select="$defaultVariables/*/*[@name='output.pdf.fontFamily.serif']/@value" />
       <xsl:param name="TOCTitleFontFamily">
         <xsl:choose>
           <xsl:when test="$defaultVariables/*/*[@name='output.pdf.fontFamily.TOCTitleFontFamily']">
             <xsl:value-of select="$defaultVariables/*/*[@name='output.pdf.fontFamily.TOCTitleFontFamily']/@value"/>
           </xsl:when>
           <xsl:otherwise><xsl:value-of select="$sans-serif"/></xsl:otherwise>
+        </xsl:choose>
+      </xsl:param>
+      <xsl:param name="TOCFontFamily">
+        <xsl:choose>
+          <xsl:when test="$defaultVariables/*/*[@name='output.pdf.fontFamily.TOCFontFamily']">
+            <xsl:value-of select="$defaultVariables/*/*[@name='output.pdf.fontFamily.TOCFontFamily']/@value"/>
+          </xsl:when>
+          <xsl:otherwise><xsl:value-of select="$serif"/></xsl:otherwise>
         </xsl:choose>
       </xsl:param>
       <xsl:param name="max-depth" select="2"/>
@@ -71,8 +80,13 @@ limitations under the License.
               <!-- insert i18n stuff here -->
               <xsl:text>Table of contents</xsl:text>
             </fo:block>
-            <fo:block font-family="serif" font-size="12pt" space-after="5pt"
-              space-before="0pt" text-align="justify" width="7.5in">
+            <fo:block
+              font-family="{$TOCFontFamily}"
+              font-size="12pt"
+              space-after="5pt"
+              space-before="0pt"
+              text-align="justify"
+              width="7.5in">
               <xsl:if test="$page-break-after">
                 <xsl:attribute name="break-after">page</xsl:attribute>
               </xsl:if>
