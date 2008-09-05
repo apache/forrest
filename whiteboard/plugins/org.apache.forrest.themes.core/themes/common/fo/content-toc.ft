@@ -42,6 +42,16 @@ limitations under the License.
       xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
       xmlns:fo="http://www.w3.org/1999/XSL/Format"
       version="1.0">
+      <xsl:param name="defaultVariables" select="'test.html'"/>
+      <xsl:param name="sans-serif" select="$defaultVariables/*/*[@name='output.pdf.fontFamily.sansSerif']/@value" />
+      <xsl:param name="TOCTitleFontFamily">
+        <xsl:choose>
+          <xsl:when test="$defaultVariables/*/*[@name='output.pdf.fontFamily.TOCTitleFontFamily']">
+            <xsl:value-of select="$defaultVariables/*/*[@name='output.pdf.fontFamily.TOCTitleFontFamily']/@value"/>
+          </xsl:when>
+          <xsl:otherwise><xsl:value-of select="$sans-serif"/></xsl:otherwise>
+        </xsl:choose>
+      </xsl:param>
       <xsl:param name="max-depth" select="2"/>
       <xsl:param name="page-break-after" select="'true'"/>
       <xsl:include href="lm://pdf.transform.helper.pageBreaks"/>
@@ -49,13 +59,14 @@ limitations under the License.
         <forrest:content>
           <forrest:part xpath="/fo/xsl-region-body/title">
             <fo:block
-              font-family="sans-serif"
+              font-family="{$TOCTitleFontFamily}"
               font-size="12pt"
               font-weight="bold"
-              space-after="5pt"
-              space-before="5pt"
+              space-after="0.5em"
+              space-before="1em"
               text-align="justify"
-              width="7.5in">
+              width="7.5in"
+              id="__toc__">
               <xsl:call-template name="insertPageBreaks"/>
               <!-- insert i18n stuff here -->
               <xsl:text>Table of contents</xsl:text>
