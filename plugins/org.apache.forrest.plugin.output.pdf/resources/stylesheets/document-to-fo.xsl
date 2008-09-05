@@ -214,12 +214,36 @@
       <xsl:otherwise><xsl:value-of select="$sans-serif"/></xsl:otherwise>
     </xsl:choose>
   </xsl:param>
+  <xsl:param name="abstractFontFamily">
+    <xsl:choose>
+      <xsl:when test="$properties/*[@name='output.pdf.fontFamily.abstractFontFamily']">
+        <xsl:value-of select="$properties/*[@name='output.pdf.fontFamily.abstractFontFamily']/@value"/>
+      </xsl:when>
+      <xsl:otherwise><xsl:value-of select="$serif"/></xsl:otherwise>
+    </xsl:choose>
+  </xsl:param>
+  <xsl:param name="noticeFontFamily">
+    <xsl:choose>
+      <xsl:when test="$properties/*[@name='output.pdf.fontFamily.noticeFontFamily']">
+        <xsl:value-of select="$properties/*[@name='output.pdf.fontFamily.noticeFontFamily']/@value"/>
+      </xsl:when>
+      <xsl:otherwise><xsl:value-of select="$serif"/></xsl:otherwise>
+    </xsl:choose>
+  </xsl:param>
   <xsl:param name="TOCTitleFontFamily">
     <xsl:choose>
       <xsl:when test="$properties/*[@name='output.pdf.fontFamily.TOCTitleFontFamily']">
         <xsl:value-of select="$properties/*[@name='output.pdf.fontFamily.TOCTitleFontFamily']/@value"/>
       </xsl:when>
       <xsl:otherwise><xsl:value-of select="$sans-serif"/></xsl:otherwise>
+    </xsl:choose>
+  </xsl:param>
+  <xsl:param name="TOCFontFamily">
+    <xsl:choose>
+      <xsl:when test="$properties/*[@name='output.pdf.fontFamily.TOCFontFamily']">
+        <xsl:value-of select="$properties/*[@name='output.pdf.fontFamily.TOCFontFamily']/@value"/>
+      </xsl:when>
+      <xsl:otherwise><xsl:value-of select="$serif"/></xsl:otherwise>
     </xsl:choose>
   </xsl:param>
   <!-- helper-commonElements.xsl font-family definitions: -->
@@ -301,7 +325,8 @@
         match="/">
     <fo:root
             xmlns:fo="http://www.w3.org/1999/XSL/Format"
-            font-family="{$rootFontFamily}" font-size="12pt">
+            font-family="{$rootFontFamily}"
+            font-size="12pt">
       <fo:layout-master-set>
         <fo:simple-page-master
                     master-name="first-page"
@@ -548,6 +573,8 @@
             text-align="center"
             space-before="20pt"
             space-after="25pt"
+            width="7.5in"
+            font-family="{$abstractFontFamily}"
             font-style="italic">
       <xsl:call-template
                 name="insertPageBreaks" />
@@ -558,8 +585,10 @@
         match="notice">
     <fo:block
             font-size="10pt"
+            font-family="{$noticeFontFamily}"
             text-align="left"
             space-before="20pt"
+            width="7.5in"
             border-top="0.25pt solid"
             border-bottom="0.25pt solid"
             padding-before="6pt"
@@ -591,7 +620,7 @@
       <xsl:apply-templates select="@tag"/>
       <xsl:choose>
         <xsl:when test="starts-with(., '$Revision: ')">
-          Version <xsl:value-of select="substring(., 12, string-length(.) -11-2)"/>
+<!-- insert i18n stuff here --> Version <xsl:value-of select="substring(., 12, string-length(.) -11-2)"/>
         </xsl:when>
         <xsl:otherwise>
           <xsl:value-of select="."/>
@@ -625,13 +654,19 @@
               space-after="0.5em"
               space-before="1em"
               text-align="justify"
+              width="7.5in"
               id="__toc__">
         <xsl:call-template name="insertPageBreaks"/>
         <!-- insert i18n stuff here -->
         <xsl:text>Table of contents</xsl:text>
       </fo:block>
-      <fo:block font-size="12pt" space-after="5pt"
-        space-before="0pt" text-align="justify">
+      <fo:block
+        font-family="{$TOCFontFamily}"
+        font-size="12pt"
+        space-after="5pt"
+        space-before="0pt"
+        text-align="justify"
+        width="7.5in">
         <xsl:if test="$page-break-top-sections">
           <xsl:attribute name="break-after">page</xsl:attribute>
         </xsl:if>
