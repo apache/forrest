@@ -35,15 +35,26 @@ limitations under the License.
       xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
       xmlns:fo="http://www.w3.org/1999/XSL/Format"
       version="1.0">
+      <xsl:param name="defaultVariables" select="'test.html'"/>
+      <xsl:param name="sans-serif" select="$defaultVariables/*/*[@name='output.pdf.fontFamily.sansSerif']/@value" />
+      <xsl:param name="authorsFontFamily">
+        <xsl:choose>
+          <xsl:when test="$defaultVariables/*/*[@name='output.pdf.fontFamily.authorsFontFamily']">
+            <xsl:value-of select="$defaultVariables/*/*[@name='output.pdf.fontFamily.authorsFontFamily']/@value"/>
+          </xsl:when>
+          <xsl:otherwise><xsl:value-of select="$sans-serif"/></xsl:otherwise>
+        </xsl:choose>
+      </xsl:param>
       <xsl:include href="lm://pdf.transform.helper.pageBreaks" />
       <xsl:template match="/">
         <forrest:content>
           <forrest:part xpath="/fo/xsl-region-body/title">
             <xsl:if test="//div[@class='author']">
               <fo:block
-                space-before="20pt"
+                space-before="2em"
+                font-family="{$authorsFontFamily}"
                 font-weight="bold"
-                font-size="9pt">
+                font-size="smaller">
                 <xsl:call-template name="insertPageBreaks"/>
                 <!-- FIXME - insert i18n stuff here --> by
                 <xsl:for-each select="//div[@class='author']">
