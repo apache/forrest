@@ -34,6 +34,16 @@ limitations under the License.
       xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
       xmlns:fo="http://www.w3.org/1999/XSL/Format"
       version="1.0">
+      <xsl:param name="defaultVariables" select="'test.html'"/>
+      <xsl:param name="serif" select="$defaultVariables/*/*[@name='output.pdf.fontFamily.serif']/@value" />
+      <xsl:param name="abstractFontFamily">
+        <xsl:choose>
+          <xsl:when test="$defaultVariables/*/*[@name='output.pdf.fontFamily.abstractFontFamily']">
+            <xsl:value-of select="$defaultVariables/*/*[@name='output.pdf.fontFamily.abstractFontFamily']/@value"/>
+          </xsl:when>
+          <xsl:otherwise><xsl:value-of select="$serif"/></xsl:otherwise>
+        </xsl:choose>
+      </xsl:param>
       <xsl:include href="lm://pdf.transform.helper.pageBreaks" />
       <xsl:template match="/">
         <forrest:content>
@@ -44,7 +54,7 @@ limitations under the License.
               space-before="20pt"
               space-after="25pt"
               width="7.5in"
-              font-family="serif"
+              font-family="{$abstractFontFamily}"
               font-style="italic">
               <xsl:call-template name="insertPageBreaks"/>
               <xsl:apply-templates select="//div[@class='abstract']"/>
