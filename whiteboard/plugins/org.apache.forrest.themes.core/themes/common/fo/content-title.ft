@@ -35,6 +35,16 @@ limitations under the License.
       xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
       xmlns:fo="http://www.w3.org/1999/XSL/Format"
       version="1.0">
+      <xsl:param name="defaultVariables" select="'test.html'"/>
+      <xsl:param name="sans-serif" select="$defaultVariables/*/*[@name='output.pdf.fontFamily.sansSerif']/@value" />
+      <xsl:param name="documentTitleFontFamily">
+        <xsl:choose>
+          <xsl:when test="$defaultVariables/*/*[@name='output.pdf.fontFamily.documentTitleFontFamily']">
+            <xsl:value-of select="$defaultVariables/*/*[@name='output.pdf.fontFamily.documentTitleFontFamily']/@value"/>
+          </xsl:when>
+          <xsl:otherwise><xsl:value-of select="$sans-serif"/></xsl:otherwise>
+        </xsl:choose>
+      </xsl:param>
       <xsl:template match="/">
         <forrest:content>
           <forrest:part xpath="/fo/page-sequence">
@@ -46,6 +56,7 @@ limitations under the License.
             <fo:block
                 padding-before="24pt"
                 padding-after="24pt"
+                font-family="{$documentTitleFontFamily}"
                 font-size="24pt"
                 font-weight="bold"
                 id="{generate-id()}">
