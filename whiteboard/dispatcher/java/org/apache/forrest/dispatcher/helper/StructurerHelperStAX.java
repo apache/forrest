@@ -50,7 +50,7 @@ import javax.xml.stream.events.XMLEvent;
 import javax.xml.stream.util.XMLEventAllocator;
 import javax.xml.transform.TransformerConfigurationException;
 
-import org.apache.forrest.dispatcher.api.Contract;
+import org.apache.forrest.dispatcher.api.ContractOld;
 import org.apache.forrest.dispatcher.impl.DefaultContract;
 import org.apache.forrest.dispatcher.utils.CommonString;
 
@@ -347,7 +347,7 @@ public class StructurerHelperStAX {
                 + propertiesHelper.getContractSuffix();
         String cachedTemplate = propertiesHelper.getCacheContracts() + name
                 + propertiesHelper.getContractSuffix() + ".xsl";
-        Contract contract = new DefaultContract(home);
+        ContractOld contract = new DefaultContract(home);
         contract.initialize(source, cachedTemplate);
         HashMap<String, File> param = new HashMap<String, File>();
         while (true) {
@@ -380,7 +380,7 @@ public class StructurerHelperStAX {
     }
 
     private void processContractResult(String data, String destination,
-            Contract contract, HashMap<String, File> param)
+            ContractOld contract, HashMap<String, File> param)
             throws XMLStreamException, FileNotFoundException {
         File contractResult = contract.execute(data, param, destination);
         LinkedHashSet<XMLEvent> pathElement;

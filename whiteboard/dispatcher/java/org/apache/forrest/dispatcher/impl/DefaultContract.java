@@ -19,14 +19,14 @@ package org.apache.forrest.dispatcher.impl;
 import java.io.File;
 import java.util.HashMap;
 
-import org.apache.forrest.dispatcher.api.Contract;
+import org.apache.forrest.dispatcher.api.ContractOld;
 import org.apache.forrest.dispatcher.helper.ContractHelperStAX;
 
 /**
  * @author thorsten
  * 
  */
-public class DefaultContract implements Contract {
+public class DefaultContract implements ContractOld {
 
     private String name, usage, description;
     private File template;

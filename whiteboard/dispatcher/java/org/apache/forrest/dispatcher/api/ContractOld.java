@@ -23,7 +23,7 @@ import java.util.HashMap;
  * @author thorsten
  *
  */
-public interface Contract {
+public interface ContractOld {
     
     /**
      * @return the name of the contract
