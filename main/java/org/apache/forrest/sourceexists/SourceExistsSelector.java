@@ -23,6 +23,7 @@ import java.io.IOException;
 
 import org.apache.cocoon.selection.Selector;
 
+import org.apache.excalibur.source.impl.FileSource;
 import org.apache.avalon.framework.service.ServiceException;
 import org.apache.avalon.framework.service.ServiceManager;
 import org.apache.avalon.framework.service.Serviceable;
@@ -86,6 +87,9 @@ public class SourceExistsSelector extends AbstractLogEnabled
         
         try {
             src = resolver.resolveURI(uri);
+            if (getLogger().isDebugEnabled() && uri.charAt(0) == '.' && src instanceof FileSource) {
+              getLogger().debug("location resolves to: " + ((FileSource)src).getFile().toString());
+            }
             if (src.exists()) {
                 return true;
             } else {
