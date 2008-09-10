@@ -20,16 +20,49 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.HashMap;
 
+import org.apache.forrest.dispatcher.DispatcherException;
+
 public interface Contract {
+
+  /**
+   * To maintain downwards compatibility with former version of the dispatcher,
+   * you can allow xml in the properties. However be aware that setting this
+   * properties to true will have negative influence on performance since this
+   * feature needs to use DOM parsing!
+   * 
+   * We strongly recommend to rewrite your contracts and structurer to use
+   * simple string for the properties.
+   * 
+   * @return whether we allow xml in the properties configuration of the
+   *         contract.
+   */
+  boolean isAllowXmlProperties();
+
+  /**
+   * To maintain downwards compatibility with former version of the dispatcher,
+   * you can allow xml in the properties. However be aware that setting this
+   * properties to true will have negative influence on performance since this
+   * feature needs to use DOM parsing!
+   * 
+   * We strongly recommend to rewrite your contracts and structurer to use
+   * simple string for the properties and set this properties to false.
+   * 
+   * @param allowXmlProperties
+   *          whether we allow xml in the properties configuration of the
+   *          contract.
+   */
+  void setAllowXmlProperties(boolean allowXmlProperties);
+
   /**
    * Some contracts are based on text based files. Best known example are the
-   * xsl contracts as the first implementation.
+   * xsl contracts as the first implementation. This method sets the xslSource,
+   * name, destribition and usage information of the contract.
    * 
    * @param stream
    *          that contains all information of the contract as description,
    *          name, usage, ...
    */
-  void initializeFromStream(InputStream stream);
+  void initializeFromStream(InputStream stream) throws DispatcherException;
 
   /**
    * Execute the contract with the given DataStream. The dataStream serves as
@@ -42,8 +75,10 @@ public interface Contract {
    *          the parameter that configure the contract (customizing it)
    * @return the resulting transformation of the dataStream with the given
    *         properties.
+   * @throws DispatcherException
    */
-  OutputStream execute(InputStream dataStream, HashMap properties);
+  OutputStream execute(InputStream dataStream, HashMap properties)
+      throws DispatcherException;
 
   /**
    * @return the name of the contract
