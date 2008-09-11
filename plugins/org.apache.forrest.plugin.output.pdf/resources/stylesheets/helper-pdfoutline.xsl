@@ -18,8 +18,6 @@
 <xsl:stylesheet
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns:fo="http://www.w3.org/1999/XSL/Format"
-    xmlns:i18n="http://apache.org/cocoon/i18n/2.1"
-    exclude-result-prefixes="i18n"
     version="1.0">
   <xsl:template
         match="document"
@@ -30,7 +28,7 @@
           <fo:bookmark internal-destination="__toc__">
             <fo:bookmark-title>
               <!-- insert i18n stuff here -->
-              <xsl:text><i18n:text i18n:catalogue="pdfmessages">Table of contents</i18n:text></xsl:text>
+              <xsl:text>Table of contents</xsl:text>
             </fo:bookmark-title>
           </fo:bookmark>
         </xsl:if>
