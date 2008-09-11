@@ -17,7 +17,6 @@
 package org.apache.forrest.dispatcher.api;
 
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.HashMap;
 
 import org.apache.forrest.dispatcher.DispatcherException;
@@ -56,7 +55,7 @@ public interface Contract {
   /**
    * Some contracts are based on text based files. Best known example are the
    * xsl contracts as the first implementation. This method sets the xslSource,
-   * name, destribition and usage information of the contract.
+   * name, description and usage information of the contract.
    * 
    * @param stream
    *          that contains all information of the contract as description,
@@ -77,7 +76,7 @@ public interface Contract {
    *         properties.
    * @throws DispatcherException
    */
-  OutputStream execute(InputStream dataStream, HashMap properties)
+  InputStream execute(InputStream dataStream, HashMap<String, ?> properties)
       throws DispatcherException;
 
   /**
