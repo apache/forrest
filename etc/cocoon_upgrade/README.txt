@@ -75,7 +75,9 @@ Steps 6 and 7 can be done with "./build.sh 1"
     new "forrest seed" sites.
 
 12. Now do 'svn commit' for the changed/new files in forrest/lib
-    and use the Cocoon SVN revision number in your log message.
+
+    NOTE: Use the Cocoon SVN revision number in your log message.
+    If you forget, then follow up with 'svn propedit svn:log --revprop -r ...'
 
 ------------------------------------------------------------------------
 Cleanup
