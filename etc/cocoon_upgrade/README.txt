@@ -9,6 +9,9 @@ Make sure that you have set $COCOON_HOME like e.g.:
 export COCOON_HOME=/home/me/svn/asf/cocoon-branch-2_1_X
 and do a 'build clean' there.
 
+Set the required Java version to what is specifed
+as Forrest's minimum requirement in $FORREST_HOME/README.txt
+
 -------------------------
 0. cd $FORREST_HOME/etc/cocoon_upgrade
 
