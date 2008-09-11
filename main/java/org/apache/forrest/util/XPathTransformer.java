@@ -21,9 +21,8 @@ import java.io.Serializable;
 import java.util.Map;
 import java.util.Stack;
 
+import org.apache.avalon.framework.component.ComponentManager;
 import org.apache.avalon.framework.parameters.Parameters;
-import org.apache.avalon.framework.service.ServiceManager;
-import org.apache.avalon.framework.service.ServiceException;
 import org.apache.cocoon.ProcessingException;
 import org.apache.cocoon.transformation.AbstractDOMTransformer;
 import org.apache.cocoon.caching.CacheableProcessingComponent;
@@ -104,8 +103,8 @@ public class XPathTransformer
         }
 
 
-    public void service(ServiceManager manager) throws ServiceException {
-        super.service(manager);
+    public void compose(ComponentManager manager) {
+        super.compose(manager);
         try {
             this.processor = (XPathProcessor)this.manager.lookup(XPathProcessor.ROLE);
         } catch (Exception e) {

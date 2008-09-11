@@ -253,7 +253,6 @@ public final class LocationMap extends AbstractLogEnabled {
         final Logger contextLogger = getLogger().getChildLogger("ctx");
 
         ContainerUtil.enableLogging(context, contextLogger);
-        ContainerUtil.compose(context, new WrapperComponentManager(m_manager));
         ContainerUtil.service(context, m_manager);
 
         final Map anchorMap = new HashMap(2);

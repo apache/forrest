@@ -50,6 +50,7 @@ import org.apache.cocoon.acting.ServiceableAction;
 import org.apache.cocoon.environment.Redirector;
 import org.apache.excalibur.source.Source;
 import org.apache.excalibur.source.SourceResolver;
+import org.apache.forrest.dispatcher.DispatcherException;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 
@@ -107,31 +108,23 @@ public class ResourceTypeAction extends ServiceableAction
             } else {
                 return null;
             }
-        } catch (MalformedURLException e) {
-            getLogger().warn(
-                    "Selector URL '" + uri + "' is not a valid Source URL");
-            return null;
-        } catch (IOException e) {
-            getLogger().warn(
-                    "Error reading from source '" + uri + "': "
-                            + e.getMessage());
-            return null;
-        } catch (Exception e) {
+        }  catch (Exception e) {
             getLogger().warn(
                     "Error reading from source '" + uri + "': "
                             + e.getMessage());
             return null;
         }finally {
-            resolver.release(src);
+            release(src);
         }
     }
        
        private void computeResponseURI(String uri, Source src)
-            throws Exception {
-        src = resolver.resolveURI(uri);
-        if (src.exists()) {
+            throws DispatcherException {
+        try {
+          src = resolver.resolveURI(uri);
+          if (src.exists()) {
             Document rawData =  org.apache.forrest.dispatcher.util.SourceUtil.readDOM(
-                    uri, this.manager);
+                    uri, resolver);
             NodeList type = rawData.getElementsByTagNameNS(getResourceTypeElementNS(),getResourceTypeElement());
             String typeString = type.item(0).getFirstChild().getNodeValue();
             Source typeSource = resolver.resolveURI(resourceTypeBase+typeString);
@@ -139,8 +132,21 @@ public class ResourceTypeAction extends ServiceableAction
                 this.map.put("uri", typeSource.getURI());
             }
         }
+        } catch (Exception e) {
+          throw new DispatcherException(e);
+        }finally{
+          release(src);
+        }
+        
     }
-
+       /**
+        * @see org.apache.excalibur.source.SourceFactory#release(org.apache.excalibur.source.Source) 
+        */
+      public void release(Source source) {
+        if(source!=null){
+          resolver.release(source);
+        }
+       }
     public void prepare(Parameters parameters, String src) {
         this.setRequest(parameters.getParameter("request", src));
         this.setMetaExtension(parameters.getParameter("metaExtension",

@@ -32,6 +32,7 @@ import javax.xml.transform.dom.DOMResult;
 import javax.xml.transform.dom.DOMSource;
 
 import org.apache.avalon.framework.service.ServiceManager;
+import org.apache.excalibur.source.SourceResolver;
 import org.apache.forrest.dispatcher.lenya.xml.NamespaceHelper;
 import org.apache.forrest.dispatcher.transformation.DispatcherTransformer;
 import org.w3c.dom.Document;
@@ -107,7 +108,6 @@ public class ContractBeanDOMImpl extends Beans implements ContractBean {
 
     protected DispatcherHelper dispatcherHelper;
 
-    protected ServiceManager manager;
 
     private HashMap parameterHelper;
 
@@ -116,6 +116,8 @@ public class ContractBeanDOMImpl extends Beans implements ContractBean {
     private URIResolver m_uriResolver;
 
     private Object defaultVariables;
+
+    private SourceResolver resolver;
 
     /**
      * The ContractBean contains all fields to work with contracts. It is a
@@ -131,11 +133,11 @@ public class ContractBeanDOMImpl extends Beans implements ContractBean {
      * @param defaultProperties 
      * @throws ParserConfigurationException
      */
-    public ContractBeanDOMImpl(ServiceManager manager, HashMap parameterHelper,Document defaultProperties, URIResolver uriResolver)
+    public ContractBeanDOMImpl(SourceResolver resolver, HashMap parameterHelper,Document defaultProperties, URIResolver uriResolver)
             throws ParserConfigurationException {
         m_uriResolver=uriResolver;
-        this.manager = manager;
-        dispatcherHelper = new DispatcherHelper(manager);
+        this.resolver = resolver;
+        dispatcherHelper = new DispatcherHelper(resolver);
         this.parameterHelper = parameterHelper;
         this.defaultVariables=defaultProperties;
     }
@@ -167,7 +169,7 @@ public class ContractBeanDOMImpl extends Beans implements ContractBean {
      * @see org.apache.forrest.dispatcher.ContractBeanInterface#initialize()
      */
     public void initialize() throws ParserConfigurationException {
-        dispatcherHelper = new DispatcherHelper(this.manager);
+        dispatcherHelper = new DispatcherHelper(resolver);
     }
 
     /*

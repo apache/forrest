@@ -27,6 +27,7 @@ import org.apache.avalon.framework.service.ServiceException;
 import org.apache.avalon.framework.service.ServiceManager;
 import org.apache.avalon.framework.service.ServiceSelector;
 import org.apache.cocoon.acting.Action;
+import org.apache.cocoon.components.CocoonComponentManager;
 import org.apache.cocoon.components.treeprocessor.InvokeContext;
 import org.apache.cocoon.components.treeprocessor.variables.VariableResolver;
 import org.apache.cocoon.components.treeprocessor.variables.VariableResolverFactory;
@@ -137,7 +138,7 @@ public final class ActNode extends AbstractNode {
      * @see org.apache.forrest.locationmap.lm.AbstractNode#locate(java.util.Map, org.apache.cocoon.components.treeprocessor.InvokeContext)
      */
     public String locate(Map objectModel, InvokeContext context) throws Exception {
-        this.resolver = (SourceResolver)m_manager.lookup(SourceResolver.ROLE);
+        this.resolver = (SourceResolver)CocoonComponentManager.getCurrentEnvironment();
         Parameters parameters = resolveParameters(context,objectModel);
         Redirector redirector = context.getRedirector();
         m_src = m_varResolver.resolve(context,objectModel);

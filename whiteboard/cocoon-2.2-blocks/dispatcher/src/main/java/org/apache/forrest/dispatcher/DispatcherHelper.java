@@ -27,10 +27,10 @@ import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerFactory;
 
 import org.apache.avalon.framework.service.ServiceException;
-import org.apache.avalon.framework.service.ServiceManager;
 import org.apache.cocoon.xml.XMLUtils;
 import org.apache.cocoon.xml.dom.DOMBuilder;
 import org.apache.excalibur.source.SourceNotFoundException;
+import org.apache.excalibur.source.SourceResolver;
 import org.apache.forrest.dispatcher.lenya.xml.NamespaceHelper;
 import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
@@ -53,7 +53,7 @@ public class DispatcherHelper extends Beans {
 
     private NamespaceHelper namespaceHelper;
 
-    private ServiceManager manager;
+    private SourceResolver resolver;
 
     /**
      * Create a DOM representation of this dispatcher.
@@ -72,7 +72,7 @@ public class DispatcherHelper extends Beans {
      */
     public Document getDocument(String uri) throws Exception {
         Document doc = org.apache.forrest.dispatcher.util.SourceUtil.readDOM(
-                uri, this.manager);
+                uri, this.resolver);
         if (doc != null) {
             this.namespaceHelper = new NamespaceHelper(
                     DISPATCHER_NAMESPACE_URI, DISPATCHER_PREFIX, doc);
@@ -184,9 +184,9 @@ public class DispatcherHelper extends Beans {
 
     }
 
-    public DispatcherHelper(ServiceManager manager)
+    public DispatcherHelper(SourceResolver resolver)
             throws ParserConfigurationException {
-        this.manager = manager;
+        this.resolver = resolver;
         this.namespaceHelper = new NamespaceHelper(DISPATCHER_NAMESPACE_URI,
                 DISPATCHER_PREFIX, "foo");
     }

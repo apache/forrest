@@ -26,7 +26,7 @@
     <property file="revision.properties" />
     <property environment="env"/>
     <property name="cocoon.home" location="${env.COCOON_HOME}"/>
-    <property name="cocoon.version" value="2.2.0-dev"/>
+    <property name="cocoon.version" value="2.1.12-dev"/>
     <property name="forrest.home" location="${env.FORREST_HOME}"/>
   </target>
 
@@ -37,7 +37,7 @@
        FIXME: This needs more testing  do not use it yet
        =============================================================== -->
     <xslt force="true" style="./upgrade-cocoon-xconf.xsl"
-    in="${cocoon.home}/src/webapp/WEB-INF/xconf/cocoon-core.xconf" 
+    in="${cocoon.home}/src/webapp/WEB-INF/xconf/cocoon-core.xconf"
     out="${forrest.home}/main/webapp/WEB-INF/xconf/forrest-core.xconf" >
       <outputproperty name="indent" value="yes"/>
     </xslt>
@@ -49,33 +49,40 @@
        FIXME:  use sync task so you can ensure that removed libs from cocoon
                are removed within forrest
        =============================================================== -->
-    <copy todir="${forrest.home}/lib/core">
+    <copy todir="${forrest.home}/lib/core" preservelastmodified="true">
       <fileset dir="${cocoon.home}/lib/core" defaultexcludes="yes">
+        <!-- Exclude some that we don't need -->
+        <exclude name="commons-beanutils-core-*.jar"/>
+        <exclude name="commons-javaflow-*.jar"/>
+        <exclude name="excalibur-instrument-mgr-*.jar"/>
+        <exclude name="javac*.jar"/>
+        <exclude name="jdtcore-*.jar"/>
+        <exclude name="js-*.jar"/>
+        <exclude name="nekohtml-*.jar"/>
+        <exclude name="pizza-*.jar"/>
+        <!-- OSGI not yet needed -->
+        <exclude name="knopflerfish-*.jar"/>
         <!-- FIXME: The jxpath upgrade cannot be done.
           See issue FOR-675 (and FOR-405 and FOR-303) and dev mail list.
           commons-jxpath-1.2 causes errors with "site:" links.
           We have a workaround so use Cocoon's jar.
         <exclude name="commons-jxpath-*.jar"/>
         -->
-        <!-- Exclude some that we don't need -->
-        <exclude name="commons-javaflow-*.jar"/>
         <!-- We have newer xml-commons-resolver -->
         <exclude name="xml-commons-resolver-*.jar"/>
         <!-- servlet.jar goes under tools/jetty -->
         <exclude name="servlet-*.jar"/>
-        <!-- OSGI not yet needed -->
-        <exclude name="knopflerfish-*.jar"/>
       </fileset>
     </copy>
   </target>
-  
+
   <target name="copy-optional-libs" depends="init">
   <!-- ===============================================================
        Some optional libraries are core to forrest
-       FIXME:  jing-*.jar comes from iso-relax.sf.net so maybe we need to 
+       FIXME:  jing-*.jar comes from iso-relax.sf.net so maybe we need to
                have a copy-external-libs target
        =============================================================== -->
-    <copy todir="${forrest.home}/lib/core">
+    <copy todir="${forrest.home}/lib/core" preservelastmodified="true">
       <fileset dir="${cocoon.home}/lib/optional">
         <include name="batik-all-*.jar"/>
 <!-- FIXME: Cocoon's FOP causes trouble FOR-    ###################
@@ -94,12 +101,12 @@
   <!-- ===============================================================
        Some optional libraries are copied to plugins within forrest
        =============================================================== -->
-    <copy todir="${forrest.home}/plugins/org.apache.forrest.plugin.input.dtdx/lib">
+    <copy todir="${forrest.home}/plugins/org.apache.forrest.plugin.input.dtdx/lib" preservelastmodified="true">
       <fileset dir="${cocoon.home}/lib/optional" includes="nekodtd-*.jar"/>
     </copy>
   </target>
-  
-  <target name="copy-endorsed-libs" depends="init">  
+
+  <target name="copy-endorsed-libs" depends="init">
   <!-- ===============================================================
        Endorsed libraries need to go to the endorsed directory
        =============================================================== -->
@@ -107,7 +114,7 @@
       <fileset dir="${cocoon.home}/lib/endorsed" includes="*.jar"/>
     </copy>
   </target>
-  
+
   <target name="build-cocoon" depends="init">
   <!-- ===============================================================
        Copy local settings and build cocoon
@@ -115,10 +122,10 @@
     <copy todir="${cocoon.home}">
       <fileset dir="." includes="local.*.properties"/>
     </copy>
-  	<condition property="build.script" value="build.bat">
-  	    <os family="windows"/>
+    <condition property="build.script" value="build.bat">
+      <os family="windows"/>
     </condition>
-  	<condition property="build.script" value="build.sh">
+    <condition property="build.script" value="build.sh">
       <not>
         <os family="windows"/>
       </not>
@@ -126,15 +133,16 @@
 
     <exec dir="${cocoon.home}" executable="${cocoon.home}/${build.script}"/>
   </target>
-  
+
   <target name="copy-cocoon" depends="init">
   <!-- ===============================================================
        Copy a fresh build from cocoon
        =============================================================== -->
     <delete>
       <fileset dir="${forrest.home}/lib/core" includes="cocoon-*.jar">
-        <!-- exclude any temporary blocks until is official in Cocoon
-        <exclude name="cocoon-foo-block-2.2.0-dev.jar"/>
+        <!-- NOTE: If you have been experimenting with temporary blocks, then
+             exclude them from deletion.
+        <exclude name="cocoon-foo-block-r123456.jar"/>
         -->
       </fileset>
     </delete>
@@ -145,8 +153,7 @@
       </fileset>
     </copy>
     <copy todir="${forrest.home}/lib/core">
-      <mapper type="glob" from="*.jar" 
-       to="cocoon-*-${cocoon.version}.jar"/>
+      <mapper type="glob" from="*.jar" to="cocoon-*.jar"/>
       <fileset dir="${cocoon.home}/build/cocoon-${cocoon.version}/blocks">
         <include name="*-block.jar"/>
         <!-- servlet.jar has been added within jetty-->

@@ -21,10 +21,9 @@ import java.io.IOException;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.avalon.framework.service.ServiceException;
-import org.apache.avalon.framework.service.ServiceManager;
-import org.apache.cocoon.environment.SourceResolver;
 import org.apache.excalibur.source.Source;
 import org.apache.excalibur.source.SourceNotFoundException;
+import org.apache.excalibur.source.SourceResolver;
 import org.apache.forrest.dispatcher.lenya.xml.DocumentHelper;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
@@ -41,27 +40,20 @@ public class SourceUtil {
      * @throws SAXException if an error occurs.
      * @throws IOException if an error occurs.
      */
-    public static Document readDOM(String sourceUri, ServiceManager manager)
+    public static Document readDOM(String sourceUri, SourceResolver resolver)
             throws ServiceException, SourceNotFoundException, ParserConfigurationException,
             SAXException, IOException {
-        SourceResolver resolver = null;
         Source source = null;
         Document document = null;
         try {
-
-            resolver = (SourceResolver) manager.lookup(SourceResolver.ROLE);
             source = resolver.resolveURI(sourceUri);
-
             if (source.exists()) {
                 document = DocumentHelper.readDocument(source.getInputStream());
             }
         } finally {
-            if (resolver != null) {
                 if (source != null) {
                     resolver.release(source);
                 }
-                manager.release(resolver);
-            }
         }
         return document;
     }

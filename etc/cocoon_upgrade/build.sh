@@ -78,10 +78,7 @@ else
     ant copy-optional-libs
     svnDialog
   elif [ "$step" = "1" ]; then
-     cd $COCOON_HOME;svn info|grep Revision|awk '{print "echo svn.revision=-r"$2" > $FORREST_HOME/etc/cocoon_upgrade/revision.properties"}'|sh
-     cd $FORREST_HOME/etc/cocoon_upgrade/
      ant build-cocoon
-     ln -s $COCOON_HOME/build/cocoon/ $COCOON_HOME/build/cocoon-2.2.0-dev
      svnDialog
   else
     echo step $step not found

@@ -17,22 +17,23 @@
 package org.apache.forrest.dispatcher.acting;
 /**
  * Looks up a meta data file to determine which resource type should be returned. 
- */
-/**
- * component declaration (lm and sitemap)
+ * Will parse the document and looks for the {$resourceTypeElement}.
+ * If found the action returns {$resourceTypeBase}{$resourceTypeElement}.
+ * <p>
+ * component declaration (lm and sitemap):<br>
  * &lt;action name="resourceTypeAction" 
  *      src="org.apache.forrest.dispatcher.acting.ResourceTypeAction"/&gt;
- *
- *pipline usage lm
-*  &lt;act type="resourceTypeAction"&gt;
-*     &lt;parameter value="{1}" name="request"/&gt;
-*     &lt;parameter value="{project:content.xdocs}" name="projectDir"/&gt;
-*     &lt;parameter value="lm://dispatcher.structurer.resourceType." name="resourceTypeBase"/&gt;
-*     &lt;parameter value=".xml.meta" name="metaExtension"/&gt;
-*     &lt;parameter value="resourceType" name="resourceTypeElement"/&gt;
-*     &lt;parameter value="http://apache.org/cocoon/lenya/page-envelope/1.0" name="resourceTypeElementNS"/&gt;
-*     &lt;!--  Meta data based --&gt;
-*     &lt;location src="{uri}" /&gt;
+ *<p>
+ *pipline usage lm<br>
+*  &lt;act type="resourceTypeAction"&gt;<br>
+*     &lt;parameter value="{1}" name="request"/&gt;<br>
+*     &lt;parameter value="{project:content.xdocs}" name="projectDir"/&gt;<br>
+*     &lt;parameter value="lm://dispatcher.structurer.resourceType." name="resourceTypeBase"/&gt;<br>
+*     &lt;parameter value=".xml.meta" name="metaExtension"/&gt;<br>
+*     &lt;parameter value="resourceType" name="resourceTypeElement"/&gt;<br>
+*     &lt;parameter value="http://apache.org/cocoon/lenya/page-envelope/1.0" name="resourceTypeElementNS"/&gt;<br>
+*     &lt;!--  Meta data based --&gt;<br>
+*     &lt;location src="{uri}" /&gt;<br>
  * &lt;/act&gt;
  */
 import java.io.IOException;
@@ -49,6 +50,7 @@ import org.apache.cocoon.acting.ServiceableAction;
 import org.apache.cocoon.environment.Redirector;
 import org.apache.excalibur.source.Source;
 import org.apache.excalibur.source.SourceResolver;
+import org.apache.forrest.dispatcher.DispatcherException;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 
@@ -106,31 +108,23 @@ public class ResourceTypeAction extends ServiceableAction
             } else {
                 return null;
             }
-        } catch (MalformedURLException e) {
-            getLogger().warn(
-                    "Selector URL '" + uri + "' is not a valid Source URL");
-            return null;
-        } catch (IOException e) {
-            getLogger().warn(
-                    "Error reading from source '" + uri + "': "
-                            + e.getMessage());
-            return null;
-        } catch (Exception e) {
+        }  catch (Exception e) {
             getLogger().warn(
                     "Error reading from source '" + uri + "': "
                             + e.getMessage());
             return null;
         }finally {
-            resolver.release(src);
+            release(src);
         }
     }
        
        private void computeResponseURI(String uri, Source src)
-            throws Exception {
-        src = resolver.resolveURI(uri);
-        if (src.exists()) {
+            throws DispatcherException {
+        try {
+          src = resolver.resolveURI(uri);
+          if (src.exists()) {
             Document rawData =  org.apache.forrest.dispatcher.util.SourceUtil.readDOM(
-                    uri, this.manager);
+                    uri, resolver);
             NodeList type = rawData.getElementsByTagNameNS(getResourceTypeElementNS(),getResourceTypeElement());
             String typeString = type.item(0).getFirstChild().getNodeValue();
             Source typeSource = resolver.resolveURI(resourceTypeBase+typeString);
@@ -138,8 +132,21 @@ public class ResourceTypeAction extends ServiceableAction
                 this.map.put("uri", typeSource.getURI());
             }
         }
+        } catch (Exception e) {
+          throw new DispatcherException(e);
+        }finally{
+          release(src);
+        }
+        
     }
-
+       /**
+        * @see org.apache.excalibur.source.SourceFactory#release(org.apache.excalibur.source.Source) 
+        */
+      public void release(Source source) {
+        if(source!=null){
+          resolver.release(source);
+        }
+       }
     public void prepare(Parameters parameters, String src) {
         this.setRequest(parameters.getParameter("request", src));
         this.setMetaExtension(parameters.getParameter("metaExtension",

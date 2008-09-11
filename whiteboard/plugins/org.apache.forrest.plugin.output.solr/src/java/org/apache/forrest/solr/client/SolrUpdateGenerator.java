@@ -51,7 +51,6 @@ public class SolrUpdateGenerator extends ServiceableGenerator {
     public void generate() throws IOException, SAXException, ProcessingException {
         Source inputSource = null;
         try {
-            resolver = (SourceResolver) manager.lookup(SourceResolver.ROLE);
             inputSource = resolver.resolveURI(this.source);
             if (inputSource.exists()) {
                 post = new PostFile(destination, inputSource.getInputStream());
@@ -67,6 +66,9 @@ public class SolrUpdateGenerator extends ServiceableGenerator {
         }finally{
           if (null!=post){
             post.releaseConnection();
+          }
+          if (inputSource!=null){
+            resolver.release(inputSource);
           }
         }
         

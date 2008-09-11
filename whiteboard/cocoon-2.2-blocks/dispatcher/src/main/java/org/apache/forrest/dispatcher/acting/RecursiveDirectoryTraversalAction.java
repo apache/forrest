@@ -30,6 +30,7 @@ import org.apache.cocoon.acting.ServiceableAction;
 import org.apache.cocoon.environment.Redirector;
 import org.apache.excalibur.source.Source;
 import org.apache.excalibur.source.SourceResolver;
+import org.apache.forrest.dispatcher.DispatcherException;
 
 /**
  * Calculates which location to return for a given directory.
@@ -118,17 +119,13 @@ public class RecursiveDirectoryTraversalAction extends ServiceableAction
             } else {
                 return null;
             }
-        } catch (MalformedURLException e) {
-            getLogger().warn(
-                    "Selector URL '" + uri + "' is not a valid Source URL");
-            return null;
-        } catch (IOException e) {
+        } catch (DispatcherException e) {
             getLogger().warn(
                     "Error reading from source '" + uri + "': "
                             + e.getMessage());
             return null;
         } finally {
-            resolver.release(src);
+            release(src);
         }
     }
 
@@ -156,14 +153,13 @@ public class RecursiveDirectoryTraversalAction extends ServiceableAction
      * is overriding this view. This override can be used for directories
      * (default.fv) and/or files (*.fv). That means that the root view is the
      * default view as long no other view can be found in the requested child.
-     * @throws IOException
-     * @throws MalformedURLException
+     * @throws DispatcherException 
      *  
      */
-    private void computeResponseURI(String uri, Source src)
-            throws MalformedURLException, IOException {
-        src = resolver.resolveURI(uri);
-        if (src.exists()) {
+    private void computeResponseURI(String uri, Source src) throws DispatcherException{
+        try {
+          src = resolver.resolveURI(uri);
+          if (src.exists()) {
             this.map.put("uri", uri);
         } else {
             if (this.getRest().lastIndexOf("/") > -1) {
@@ -182,8 +178,23 @@ public class RecursiveDirectoryTraversalAction extends ServiceableAction
                 }
             }
         }
+        } catch (MalformedURLException e) {
+         throw new DispatcherException(e);
+        } catch (IOException e) {
+          throw new DispatcherException(e);
+        }finally{
+          release(src);
+        }
+        
     }
-
+    /**
+     * @see org.apache.excalibur.source.SourceFactory#release(org.apache.excalibur.source.Source) 
+     */
+   public void release(Source source) {
+     if(source!=null){
+       resolver.release(source);
+     }
+    }
     public void prepare(Parameters parameters, String src) {
         this.setRequest(parameters.getParameter("request", src));
         this.setProjectFallback(parameters.getParameter("projectFallback",

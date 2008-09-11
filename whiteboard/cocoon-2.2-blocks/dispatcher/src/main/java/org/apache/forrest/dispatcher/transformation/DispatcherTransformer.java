@@ -23,6 +23,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.URIResolver;
@@ -44,12 +45,15 @@ import org.apache.cocoon.xml.dom.DOMBuilder;
 import org.apache.cocoon.xml.dom.DOMUtil;
 import org.apache.excalibur.source.Source;
 import org.apache.excalibur.source.SourceException;
+import org.apache.excalibur.source.SourceNotFoundException;
 import org.apache.excalibur.source.SourceValidity;
+import org.apache.excalibur.source.impl.validity.AggregatedValidity;
 import org.apache.excalibur.xml.xpath.XPathProcessor;
 import org.apache.forrest.dispatcher.ContractBean;
 import org.apache.forrest.dispatcher.ContractBeanDOMImpl;
 import org.apache.forrest.dispatcher.DispatcherException;
 import org.apache.forrest.dispatcher.DispatcherHelper;
+import org.apache.forrest.dispatcher.lenya.xml.DocumentHelper;
 import org.apache.forrest.dispatcher.lenya.xml.NamespaceHelper;
 import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
@@ -189,7 +193,7 @@ public class DispatcherTransformer extends AbstractSAXTransformer implements
 
   private HashMap parameterHelper;
 
-  private SourceResolver m_resolver;
+  private org.apache.excalibur.source.SourceResolver m_resolver;
 
   private String requestId;
 
@@ -242,17 +246,28 @@ public class DispatcherTransformer extends AbstractSAXTransformer implements
     // You can either request URL?dispatcher.caching=off
     // or add this property to forrest.properties.xml
     // to force a SourceValidity.INVALID
-    if (null != validityFile & !(validityOverride.equals(CACHING_OFF))) {
+    if (null != validityFile && !(validityOverride.equals(CACHING_OFF))) {
+    Source resolveSource=null;
       try {
-        this.validity = m_resolver.resolveURI(validityFile).getValidity();
+        resolveSource= m_resolver.resolveURI(validityFile);
+        this.validity = resolveSource.getValidity();
       } catch (Exception e) {
         getLogger().error(e.getMessage());
+      }finally{
+        release(resolveSource);
       }
     } else
       this.validity = null;
     return this.validity;
   }
-
+/**
+   * @see org.apache.excalibur.source.SourceFactory#release(org.apache.excalibur.source.Source) 
+   */
+ public void release(Source source) {
+   if(source!=null){
+     m_resolver.release(source);
+   }
+  }
   public void setManager(ServiceManager manager) throws ServiceException {
     super.service(manager);
     this.manager = manager;
@@ -329,7 +344,7 @@ public class DispatcherTransformer extends AbstractSAXTransformer implements
     
     if (null == m_resolver)
       try {
-        m_resolver = (SourceResolver) manager.lookup(SourceResolver.ROLE);
+        m_resolver = (org.apache.excalibur.source.SourceResolver) manager.lookup(SourceResolver.ROLE);
       } catch (ServiceException e) {
         throw new ProcessingException(e);
       }
@@ -348,7 +363,7 @@ public class DispatcherTransformer extends AbstractSAXTransformer implements
       throws SAXException {
     // Process start element event
     // Are we inside of properties? If so we need to record the elements.
-    if (this.insideProperties & this.includeNodes) {
+    if (this.insideProperties && this.includeNodes) {
       try {
         this.builder.startElement(uri, name, raw, attr);
       } catch (SAXException e) {
@@ -369,19 +384,19 @@ public class DispatcherTransformer extends AbstractSAXTransformer implements
       }
       if (STRUCTURER_ELEMENT.equals(name))
         structurerProcessingStart(attr);
-      else if (DISPATCHER_HOOK_ELEMENT.equals(name) & this.includeNodes)
+      else if (DISPATCHER_HOOK_ELEMENT.equals(name) && this.includeNodes)
         hookProcessingStart(name, raw, attr);
-      else if (ContractBean.CONTRACT_ELEMENT.equals(name) & this.includeNodes)
+      else if (ContractBean.CONTRACT_ELEMENT.equals(name) && this.includeNodes)
         contractProcessingStart(attr);
-      else if (ContractBean.PROPERTY_ELEMENT.equals(name) & this.includeNodes) {
+      else if (ContractBean.PROPERTY_ELEMENT.equals(name) && this.includeNodes) {
         this.insideProperties = true;
         propertyProcessingStart(uri, name, raw, attr);
       }
     } else {
-      if (!this.insideProperties & this.includeNodes & this.insideStructurer
-          & this.allowMarkup)
+      if (!this.insideProperties && this.includeNodes && this.insideStructurer
+          && this.allowMarkup)
         super.startElement(uri, name, raw, attr);
-      if (!this.insideProperties & this.includeNodes & !this.insideStructurer)
+      if (!this.insideProperties && this.includeNodes && !this.insideStructurer)
         super.startElement(uri, name, raw, attr);
     }
   }
@@ -471,18 +486,18 @@ public class DispatcherTransformer extends AbstractSAXTransformer implements
     } else if (DispatcherHelper.DISPATCHER_NAMESPACE_URI.equals(uri)) {
       if (STRUCTURER_ELEMENT.equals(name))
         structurerProcessingEnd(raw);
-      else if (ContractBean.CONTRACT_ELEMENT.equals(name) & this.includeNodes)
+      else if (ContractBean.CONTRACT_ELEMENT.equals(name) && this.includeNodes)
         contractProcessingEnd();
-      else if (DISPATCHER_HOOK_ELEMENT.equals(name) & this.includeNodes)
+      else if (DISPATCHER_HOOK_ELEMENT.equals(name) && this.includeNodes)
         if (path.lastIndexOf("/") > -1)
           path = path.substring(0, path.lastIndexOf("/"));
         else
           path = null;
     } else {
-      if (!this.insideProperties & this.includeNodes & this.insideStructurer
-          & this.allowMarkup)
+      if (!this.insideProperties && this.includeNodes && this.insideStructurer
+          && this.allowMarkup)
         super.endElement(uri, name, raw);
-      if (!this.insideProperties & this.includeNodes & !this.insideStructurer)
+      if (!this.insideProperties && this.includeNodes && !this.insideStructurer)
         super.endElement(uri, name, raw);
     }
   }
@@ -503,10 +518,10 @@ public class DispatcherTransformer extends AbstractSAXTransformer implements
         currentFormat = value;
       }
       if (localName.equals(STRUCTURER_HOOK_XPATH_ATTRIBUTE)) {
-        if ("/".equals(String.valueOf(value.charAt(0))) & value.length() != 1) {
+        if ("/".equals(String.valueOf(value.charAt(0))) && value.length() != 1) {
           path = "result" + value;
         } else if ("/".equals(String.valueOf(value.charAt(0)))
-            & value.length() == 1) {
+            && value.length() == 1) {
           path = "result";
         } else {
           path = "result/" + value;
@@ -517,7 +532,7 @@ public class DispatcherTransformer extends AbstractSAXTransformer implements
       localRecycle();
       try {
         if (null == this.dispatcherHelper)
-          this.dispatcherHelper = new DispatcherHelper(manager);
+          this.dispatcherHelper = new DispatcherHelper(m_resolver);
         if (null == this.processor)
           this.processor = (XPathProcessor) this.manager
               .lookup(XPathProcessor.ROLE);
@@ -530,7 +545,7 @@ public class DispatcherTransformer extends AbstractSAXTransformer implements
       String propertyURI = "cocoon://" + requestId + ".props";
       try {
         this.defaultProperties = org.apache.forrest.dispatcher.util.SourceUtil
-            .readDOM(propertyURI, this.manager);
+            .readDOM(propertyURI, m_resolver);
       } catch (Exception e1) {
         String error = "dispatcherError:\n" + "Could not get the properties for "
             + propertyURI + "\n DispatcherStack: " + e1;
@@ -640,7 +655,7 @@ public class DispatcherTransformer extends AbstractSAXTransformer implements
   private void contractProcessingStart(Attributes attr) throws SAXException {
     try {
       if (contract == null)
-        contract = new ContractBeanDOMImpl(this.manager, parameterHelper,
+        contract = new ContractBeanDOMImpl(m_resolver, parameterHelper,
             defaultProperties, (URIResolver) this);
     } catch (Exception e) {
       String error = DispatcherException.ERROR_500 + "\n"
@@ -658,9 +673,11 @@ public class DispatcherTransformer extends AbstractSAXTransformer implements
         contract.setContractName(value);
         String contractUri = ContractBean.CONTRACT_RESOLVE_PREFIX + "."
             + currentFormat + "." + value;
+        Source contractSource = null;
         try {
+        contractSource = m_resolver.resolveURI(contractUri);
           Document doc = org.apache.forrest.dispatcher.util.SourceUtil.readDOM(
-              contractUri, this.manager);
+              contractUri, m_resolver);
           contract.setContractImpl(doc, contractUri);
           // contract.setContractImpl(contractUri);
         } catch (Exception e) {
@@ -673,6 +690,8 @@ public class DispatcherTransformer extends AbstractSAXTransformer implements
               + contractUri + "\".\n\n" + "dispatcherErrorStack:\n" + e;
           getLogger().error(error);
           throw new SAXException(error);
+        }finally{
+          release(contractSource);
         }
         if (getLogger().isDebugEnabled()) {
           getLogger().debug(
@@ -682,10 +701,11 @@ public class DispatcherTransformer extends AbstractSAXTransformer implements
       } else if (ContractBean.CONTRACT_NUGGET_ATTRIBUTE.equals(localName)) {
         // contract is a nugget-contract
         contract.setNugget(true);
+        Source contractRawSource =null;
         try {
-          
+          contractRawSource = m_resolver.resolveURI(value);
           Document doc = org.apache.forrest.dispatcher.util.SourceUtil.readDOM(
-              value, this.manager);
+              value, m_resolver);
           contract.setContractRawData(doc);
           // contract.setNuggetUri(value);
         } catch (Exception e) {
@@ -698,6 +718,8 @@ public class DispatcherTransformer extends AbstractSAXTransformer implements
               + value + "\".\n\n" + "dispatcherErrorStack:\n " + e;
           getLogger().error(error);
           throw new SAXException(error);
+        } finally{
+          release(contractRawSource);
         }
         if (getLogger().isDebugEnabled()) {
           getLogger().debug(
@@ -886,26 +908,26 @@ public class DispatcherTransformer extends AbstractSAXTransformer implements
   }
 
   public void characters(char c[], int start, int len) throws SAXException {
-    if (this.insideProperties & this.includeNodes)
+    if (this.insideProperties && this.includeNodes)
       this.builder.characters(c, start, len);
-    else if (!this.insideProperties & this.includeNodes
-        & !this.insideStructurer)
+    else if (!this.insideProperties && this.includeNodes
+        && !this.insideStructurer)
       super.contentHandler.characters(c, start, len);
   }
 
   public void startCDATA() throws SAXException {
-    if (this.insideProperties & this.includeNodes)
+    if (this.insideProperties && this.includeNodes)
       this.builder.startCDATA();
-    else if (!this.insideProperties & this.includeNodes
-        & !this.insideStructurer)
+    else if (!this.insideProperties && this.includeNodes
+        && !this.insideStructurer)
       super.lexicalHandler.startCDATA();
   }
 
   public void endCDATA() throws SAXException {
-    if (this.insideProperties & this.includeNodes)
+    if (this.insideProperties && this.includeNodes)
       this.builder.endCDATA();
-    else if (!this.insideProperties & this.includeNodes
-        & !this.insideStructurer)
+    else if (!this.insideProperties && this.includeNodes
+        && !this.insideStructurer)
       super.lexicalHandler.endCDATA();
   }
 
@@ -913,7 +935,7 @@ public class DispatcherTransformer extends AbstractSAXTransformer implements
 
   public void startPrefixMapping(String prefix, String uri) throws SAXException {
     super.startPrefixMapping(prefix, uri);
-    if (this.insideProperties & this.includeNodes) {
+    if (this.insideProperties && this.includeNodes) {
       this.builder.startPrefixMapping(prefix, uri);
     } else {
       storePrefixMapping(prefix, uri);
@@ -1019,7 +1041,7 @@ public class DispatcherTransformer extends AbstractSAXTransformer implements
 
       return null;
     } finally {
-      m_resolver.release(xslSource);
+        release(xslSource);
     }
   }
 

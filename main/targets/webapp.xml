@@ -158,7 +158,14 @@
        =============================================================== -->
   <target name="war" depends="run-webapp"
    description="* Generates a dynamic servlet-based website (a packaged .war file)">
-    <move file="${project.webapp}/WEB-INF/xconf/forrest-core-webapp.xconf" tofile="${project.webapp}/WEB-INF/xconf/forrest-core.xconf"/>
+    <xslt force="true"
+      in="${project.webapp}/WEB-INF/cocoon.xconf"
+      out="${project.webapp}/WEB-INF/cocoon.xconf2"
+      style="${forrest.core}/var/fixWarXconf.xsl">
+      <outputproperty name="indent" value="yes"/>
+    </xslt>
+<!-- FIXME: The xslt task did not like writing to the same file (Mac OS X?) -->
+    <move file="${project.webapp}/WEB-INF/cocoon.xconf2" tofile="${project.webapp}/WEB-INF/cocoon.xconf"/>
     <jar destfile="${project.war}">
       <fileset dir="${project.webapp}"/>
       <fileset dir="${forrest.home}">
