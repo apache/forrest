@@ -27,6 +27,9 @@ import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 import javax.xml.stream.XMLStreamWriter;
+import javax.xml.stream.util.XMLEventAllocator;
+
+import com.ctc.wstx.evt.DefaultEventAllocator;
 
 /**
  * Helper class that eases the usage of StAX in your plugins.
@@ -47,6 +50,7 @@ public class StAX extends Loggable {
    */
   public StAX() {
     inputFactory = XMLInputFactory.newInstance();
+    inputFactory.setEventAllocator(DefaultEventAllocator.getDefaultInstance());
     outputFactory = XMLOutputFactory.newInstance();
     eventFactory = XMLEventFactory.newInstance();
   }
@@ -107,11 +111,19 @@ public class StAX extends Loggable {
   }
 
   /**
-   * Get the ready to used EventFactory
+   * Get the ready to use EventFactory
    * 
-   * @return ready to used EventFactory
+   * @return ready to use EventFactory
    */
   public XMLEventFactory getEventFactory() {
     return eventFactory;
+  }
+  
+  /**
+   *  Get the ready to use Event Allocator
+   * @return ready to use Event Allocator
+   */
+  public XMLEventAllocator getEventAllocator() {
+    return  inputFactory.getEventAllocator();
   }
 }

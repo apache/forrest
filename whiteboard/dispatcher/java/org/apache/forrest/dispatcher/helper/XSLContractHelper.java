@@ -19,26 +19,38 @@ package org.apache.forrest.dispatcher.helper;
 import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.StringReader;
+import java.util.HashMap;
+import java.util.Iterator;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.stream.XMLEventWriter;
 import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 import javax.xml.stream.XMLStreamWriter;
+import javax.xml.stream.util.XMLEventAllocator;
 import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Result;
 import javax.xml.transform.Source;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.stream.StreamSource;
 
 import org.apache.forrest.dispatcher.helper.StAX;
 import org.apache.forrest.dispatcher.impl.XSLContract;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
 
 public class XSLContractHelper extends StAX {
 
   private Transformer transformer = null;
-
-  private boolean allowXmlProperties = false;
 
   public static final String NS = "http://apache.org/forrest/templates/1.0";
 
@@ -65,9 +77,12 @@ public class XSLContractHelper extends StAX {
    * @param allowXmlProperties
    *          whether or not we want to allow xml properties
    * @throws TransformerConfigurationException
+   * @throws ParserConfigurationException 
+   * @throws IOException 
+   * @throws SAXException 
    */
-  public void prepareTransformation(Source xslSource, boolean allowXmlProperties)
-      throws TransformerConfigurationException {
+  public void prepareTransformation(Source xslSource, boolean allowXmlProperties, HashMap<String, ?> params)
+      throws TransformerConfigurationException, ParserConfigurationException, SAXException, IOException {
     TransformerFactory transFact = TransformerFactory.newInstance();
     // prepare transformation
     transformer = transFact.newTransformer(xslSource);
@@ -75,7 +90,20 @@ public class XSLContractHelper extends StAX {
     transformer.setOutputProperty(OutputKeys.INDENT, "yes");
     transformer.setOutputProperty(OutputKeys.METHOD, "xml");
     // do we allow xml properties?
-    this.allowXmlProperties = allowXmlProperties;
+    if(!allowXmlProperties){
+      for (Iterator<String> iter = params.keySet().iterator(); iter.hasNext();) {
+        String key = iter.next();
+        String value = (String) params.get(key);
+        transformer.setParameter(key,value);
+      }
+    }else{
+      DocumentBuilder builder = DocumentBuilderFactory.newInstance()
+      .newDocumentBuilder();
+      for (Iterator<String> iter = params.keySet().iterator(); iter.hasNext();) {
+        String key = iter.next();
+        transformer.setParameter(key, builder.parse((InputSource) params.get(key)));
+      }
+    }
   }
 
   /**
@@ -122,12 +150,11 @@ public class XSLContractHelper extends StAX {
   public void setTemplate(InputStream stream, XSLContract contract)
       throws XMLStreamException {
     XMLStreamReader parser = getParser(stream);
-    ByteArrayOutputStream out = new ByteArrayOutputStream();
-    XMLStreamWriter writer = getStreamWriter(out);
     boolean process = true;
     while (process) {
       int event = parser.next();
       switch (event) {
+
       case XMLStreamConstants.END_DOCUMENT:
         process = false;
         break;
@@ -137,8 +164,121 @@ public class XSLContractHelper extends StAX {
         if (localName.equals(CONTRACT_ELEMENT)) {
           contract.setName(processContract(parser));
         }
+        if (localName.equals(DESCRIPTION_ELEMENT)) {
+          contract.setDescription(processDescription(parser));
+        }
+        if (localName.equals(USAGE_ELEMENT)) {
+          contract.setUsage(processUsage(parser));
+        }
+
+        if (localName.equals(TEMPLATE_ELEMENT)) {
+          contract.setXslSource(processTemplate(parser));
+        }
+
+      default:
+        break;
       }
     }
+  }
+
+  private Source processTemplate(XMLStreamReader parser)
+      throws XMLStreamException {
+    ByteArrayOutputStream out = new ByteArrayOutputStream();
+    XMLEventWriter writer = getWriter(out);
+    XMLEventAllocator allocator = getEventAllocator();
+    String role = "";
+    for (int i = 0; i < parser.getAttributeCount(); i++) {
+      // Get attribute name
+      String localName = parser.getAttributeLocalName(i);
+      if (localName.equals(TEMPLATE_FORMAT_ATT)) {
+        // Return value
+        role = parser.getAttributeValue(i);
+      }
+    }
+    boolean process = true;
+    if (role.equals("xsl")) {
+      while (process) {
+        int event = parser.next();
+        switch (event) {
+
+        case XMLStreamConstants.END_ELEMENT:
+          if (parser.getNamespaceURI() != null) {
+            if (parser.getNamespaceURI().equals(NS)
+                & parser.getLocalName().equals(TEMPLATE_ELEMENT)) {
+              process = false;
+            } else {
+              writer.add(allocator.allocate(parser));
+            }
+          } else {
+            writer.add(allocator.allocate(parser));
+          }
+          break;
+
+        default:
+          writer.add(allocator.allocate(parser));
+          break;
+        }
+      }
+    }
+    writer.flush();
+    //log.debug(out.toString());
+    Source source = new StreamSource(new BufferedInputStream(
+        new ByteArrayInputStream(out.toByteArray())));
+    return source;
+  }
+
+  private String processUsage(XMLStreamReader parser) throws XMLStreamException {
+    boolean process = true;
+    String usage = "";
+    while (process) {
+      int event = parser.next();
+      switch (event) {
+
+      case XMLStreamConstants.CHARACTERS:
+        if (parser.getText().replace(" ", "").length() > 1) {
+          usage = parser.getText().trim();
+        }
+        break;
+
+      case XMLStreamConstants.END_ELEMENT:
+        if (parser.getLocalName().equals(USAGE_ELEMENT)) {
+          process = false;
+        }
+        break;
+
+      default:
+        break;
+      }
+    }
+    return usage;
+  }
+
+  private String processDescription(XMLStreamReader parser)
+      throws XMLStreamException {
+    boolean process = true;
+    String description = "";
+    while (process) {
+      int event = parser.next();
+      switch (event) {
+
+      case XMLStreamConstants.CHARACTERS:
+        if (parser.getText().replace(" ", "").length() > 1) {
+          description = parser.getText().trim();
+        }
+        break;
+
+      case XMLStreamConstants.END_ELEMENT:
+        if (parser.getLocalName().equals(DESCRIPTION_ELEMENT)) {
+          process = false;
+        }
+        break;
+
+      default:
+        break;
+      }
+    }
+
+    return description;
   }
 
   private String processContract(XMLStreamReader parser) {
@@ -153,5 +293,10 @@ public class XSLContractHelper extends StAX {
       }
     }
     return contractName;
+  }
+
+  public void transform(InputStream dataStream, Result streamResult) throws TransformerException {
+    Source dataSource = new StreamSource(dataStream);
+    transformer.transform(dataSource, streamResult);
   }
 }

@@ -16,13 +16,20 @@
  */
 package org.apache.forrest.dispatcher.impl;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.HashMap;
 
+import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.stream.XMLStreamException;
+import javax.xml.transform.Result;
 import javax.xml.transform.Source;
 import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.stream.StreamResult;
 
 import org.apache.forrest.dispatcher.DispatcherException;
 import org.apache.forrest.dispatcher.api.Contract;
@@ -42,8 +49,8 @@ public class XSLContract extends Loggable implements Contract {
     this.allowXmlProperties = allowXmlProperties;
   }
 
-  public OutputStream execute(InputStream dataStream, HashMap properties)
-      throws DispatcherException {
+  public BufferedInputStream execute(InputStream dataStream,
+      HashMap<String, ?> properties) throws DispatcherException {
     if (xslSource == null || helper == null) {
       throw new DispatcherException("Contract \"" + name
           + "\" has produced an exception"
@@ -54,12 +61,17 @@ public class XSLContract extends Loggable implements Contract {
       /*
        * prepare the transformation in the helper class
        */
-      helper.prepareTransformation(xslSource, allowXmlProperties);
+      helper.prepareTransformation(xslSource, allowXmlProperties, properties);
     } catch (TransformerConfigurationException e) {
       throw new DispatcherException("Contract \"" + name
           + "\" has produced an exception"
           + "Could not setup the transformer for"
-          + "the contract. We cannot proceed without this.",e);
+          + "the contract. We cannot proceed without this.", e);
+    } catch (Exception e) {
+      throw new DispatcherException("Contract \"" + name
+          + "\" has produced an exception"
+          + "Could not setup the DOM Parser for"
+          + "the contract. We cannot proceed without this.", e);
     }
     /*
      * If no dataStream is present we need to create an empty xml doc to be able
@@ -72,11 +84,22 @@ public class XSLContract extends Loggable implements Contract {
         throw new DispatcherException("Contract \"" + name
             + "\" has produced an exception"
             + "Could not create an empty xml document for"
-            + "the contract. We cannot proceed without this.",e);
+            + "the contract. We cannot proceed without this.", e);
       }
     }
-
-    return null;
+    ByteArrayOutputStream out = new ByteArrayOutputStream();
+    // create a StreamResult and use it for the transformation
+    Result streamResult = new StreamResult(new BufferedOutputStream(out));
+    try {
+      helper.transform(dataStream,streamResult);
+    } catch (TransformerException e) {
+      throw new DispatcherException("Contract \"" + name
+          + "\" has produced an exception"
+          + "Could not invoke the transformation for"
+          + "the contract. We cannot proceed without this.", e);
+    }
+    log.debug(out.toString());
+    return new BufferedInputStream(new ByteArrayInputStream(out.toByteArray()));
   }
 
   public void initializeFromStream(InputStream stream)
@@ -126,7 +149,7 @@ public class XSLContract extends Loggable implements Contract {
   public void setAllowXmlProperties(boolean allowXmlProperties) {
     this.allowXmlProperties = allowXmlProperties;
   }
-  
+
   public Source getXslSource() {
     return xslSource;
   }
