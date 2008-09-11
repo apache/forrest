@@ -19,6 +19,8 @@
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns:fo="http://www.w3.org/1999/XSL/Format"
     xmlns:prop="http://apache.org/forrest/properties/1.0"
+    xmlns:i18n="http://apache.org/cocoon/i18n/2.1"
+    exclude-result-prefixes="i18n"
     version="1.0">
   <xsl:variable
         name="config"
@@ -597,7 +599,8 @@
                 select="@id" />
       <xsl:call-template
                 name="insertPageBreaks" />
-<!-- insert i18n stuff here --> NOTICE: <xsl:apply-templates />
+<!-- insert i18n stuff here -->
+      <i18n:text i18n:catalogue="pdfmessages">NOTICE:</i18n:text> <xsl:apply-templates />
     </fo:block>
   </xsl:template>
   <xsl:template
@@ -620,7 +623,7 @@
       <xsl:apply-templates select="@tag"/>
       <xsl:choose>
         <xsl:when test="starts-with(., '$Revision: ')">
-<!-- insert i18n stuff here --> Version <xsl:value-of select="substring(., 12, string-length(.) -11-2)"/>
+<!-- insert i18n stuff here --> <i18n:text i18n:catalogue="pdfmessages">Version</i18n:text> <xsl:value-of select="substring(., 12, string-length(.) -11-2)"/>
         </xsl:when>
         <xsl:otherwise>
           <xsl:value-of select="."/>
@@ -636,7 +639,7 @@
             font-size="smaller">
       <xsl:call-template
                 name="insertPageBreaks" />
-<!-- insert i18n stuff here --> by <xsl:for-each
+<!-- insert i18n stuff here --> <i18n:text i18n:catalogue="pdfmessages">by</i18n:text> <xsl:for-each
                 select="person">
         <xsl:value-of
                     select="@name" />
@@ -658,7 +661,9 @@
               id="__toc__">
         <xsl:call-template name="insertPageBreaks"/>
         <!-- insert i18n stuff here -->
-        <xsl:text>Table of contents</xsl:text>
+        <xsl:text>
+          <i18n:text i18n:catalogue="pdfmessages">Table of contents</i18n:text>
+        </xsl:text>
       </fo:block>
       <fo:block
         font-family="{$TOCFontFamily}"

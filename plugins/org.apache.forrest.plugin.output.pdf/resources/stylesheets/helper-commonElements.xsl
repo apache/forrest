@@ -15,8 +15,12 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 -->
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-  xmlns:fo="http://www.w3.org/1999/XSL/Format" version="1.0">
+<xsl:stylesheet
+    xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+    xmlns:fo="http://www.w3.org/1999/XSL/Format"
+    xmlns:i18n="http://apache.org/cocoon/i18n/2.1"
+    exclude-result-prefixes="i18n"
+    version="1.0">
 
   <xsl:include href="lm://transform.xml.pathutils"/>
 
@@ -284,7 +288,10 @@
         <xsl:when test="@label">
           <xsl:value-of select="@label"/>
         </xsl:when>
-        <xsl:otherwise>Warning: </xsl:otherwise>
+        <xsl:otherwise>
+        <!-- insert i18n stuff here -->
+          <i18n:text i18n:catalogue="pdfmessages">Warning:</i18n:text>
+        </xsl:otherwise>
       </xsl:choose>
       <xsl:value-of select="title"/>
     </fo:block>
@@ -323,7 +330,9 @@
           <xsl:value-of select="@label"/>
         </xsl:when>
         <!-- insert i18n stuff here -->
-        <xsl:otherwise>Note: </xsl:otherwise>
+        <xsl:otherwise>
+          <i18n:text i18n:catalogue="pdfmessages">Note:</i18n:text>
+        </xsl:otherwise>
       </xsl:choose>
       <xsl:value-of select="title"/>
     </fo:block>
@@ -357,7 +366,8 @@
             keep-with-next.within-column="always">
       <xsl:copy-of select="@id"/>
       <xsl:call-template name="insertPageBreaks"/>
-      <!-- insert i18n stuff here --> FIXME (
+      <!-- insert i18n stuff here -->
+      <i18n:text i18n:catalogue="pdfmessages">FIXME</i18n:text> (
       <xsl:value-of select="@author"/>):
       <xsl:value-of select="title"/> </fo:block>
     <fo:block margin-left="0.25in" margin-right="0.25in"
@@ -552,7 +562,8 @@
     <xsl:if test="caption">
       <fo:block font-size="10pt" text-align="left" font-weight="normal"
         margin-top="5pt" keep-with-next.within-column="always">
-        <!-- insert i18n stuff here --> Table
+        <!-- insert i18n stuff here -->
+        <i18n:text i18n:catalogue="pdfmessages">Table</i18n:text>
         <xsl:text>
         </xsl:text>
         <xsl:number count="table" level="multiple"/>
