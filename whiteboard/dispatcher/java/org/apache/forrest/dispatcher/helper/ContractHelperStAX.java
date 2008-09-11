@@ -26,12 +26,12 @@ import java.io.Writer;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Iterator;
-
+/*
 import javanet.staxutils.BaseXMLInputFactory;
 import javanet.staxutils.BaseXMLOutputFactory;
 import javanet.staxutils.events.ProcessingInstructionEvent;
 import javanet.staxutils.io.XMLWriterUtils;
-
+*/
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.stream.FactoryConfigurationError;
@@ -53,9 +53,9 @@ import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 
 import org.xml.sax.SAXException;
-
+/*
 import com.bea.xml.stream.XMLEventAllocatorBase;
-
+*/
 public class ContractHelperStAX {
 
     public static final String NS = "http://apache.org/forrest/templates/1.0";
@@ -76,9 +76,9 @@ public class ContractHelperStAX {
 
     private String name, usage, description;
 
-    private XMLOutputFactory outputFactory = BaseXMLOutputFactory.newInstance();
+    private XMLOutputFactory outputFactory = null;//BaseXMLOutputFactory.newInstance();
 
-    private XMLInputFactory inputFactory = BaseXMLInputFactory.newInstance();
+    private XMLInputFactory inputFactory = null;//BaseXMLInputFactory.newInstance();
 
     private DispatcherPropertiesHelper propertiesHelper;
 
@@ -176,7 +176,7 @@ public class ContractHelperStAX {
         String fileName = destination;
         File cache = new File(fileName), contractFile = new File(sourceUrl);
         // caching is ATM implemetent by writing the template to disk
-        boolean useCache = false;
+     /*   boolean useCache = false;
         // if no file exist, create it
         if (!cache.isFile()) {
             try {
@@ -234,7 +234,7 @@ public class ContractHelperStAX {
             }
             writer.flush();
             parser.close();
-        }
+        }*/
         return cache;
     }
 

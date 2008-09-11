@@ -28,13 +28,13 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
-
+/*
 import javanet.staxutils.BaseXMLInputFactory;
 import javanet.staxutils.BaseXMLOutputFactory;
 import javanet.staxutils.events.EventFactory;
 import javanet.staxutils.events.ProcessingInstructionEvent;
 import javanet.staxutils.io.XMLWriterUtils;
-
+*/
 import javax.xml.stream.FactoryConfigurationError;
 import javax.xml.stream.XMLEventFactory;
 import javax.xml.stream.XMLEventWriter;
@@ -54,7 +54,7 @@ import org.apache.forrest.dispatcher.api.ContractOld;
 import org.apache.forrest.dispatcher.impl.DefaultContract;
 import org.apache.forrest.dispatcher.utils.CommonString;
 
-import com.bea.xml.stream.XMLEventAllocatorBase;
+//import com.bea.xml.stream.XMLEventAllocatorBase;
 
 public class StructurerHelperStAX {
 
@@ -84,9 +84,9 @@ public class StructurerHelperStAX {
 
     private String structurerId;
 
-    private XMLInputFactory inputFactory = BaseXMLInputFactory.newInstance();
+    private XMLInputFactory inputFactory =null;// BaseXMLInputFactory.newInstance();
 
-    private XMLOutputFactory outputFactory = BaseXMLOutputFactory.newInstance();
+    private XMLOutputFactory outputFactory = null;//BaseXMLOutputFactory.newInstance();
 
     private static DispatcherPropertiesHelper propertiesHelper;
 
@@ -94,7 +94,7 @@ public class StructurerHelperStAX {
 
     private LinkedHashMap<String, LinkedHashSet> resultTree = new LinkedHashMap<String, LinkedHashSet>();
 
-    private XMLEventFactory eventFactory = EventFactory.newInstance();
+    private XMLEventFactory eventFactory = null;//EventFactory.newInstance();
 
     private XMLEventAllocator allocator;
 
@@ -144,7 +144,7 @@ public class StructurerHelperStAX {
         else
             structurerUrl = new URL("file:///" + sourceUrl);
         InputStream in = structurerUrl.openStream();
-        inputFactory.setEventAllocator(new XMLEventAllocatorBase());
+        //inputFactory.setEventAllocator(new XMLEventAllocatorBase());
         allocator = inputFactory.getEventAllocator();
         XMLStreamReader parser = inputFactory.createXMLStreamReader(in);
         // Create the output factory
@@ -498,9 +498,9 @@ public class StructurerHelperStAX {
         Writer result = null;
         try {
             result = new FileWriter(cache.getAbsoluteFile());
-            ProcessingInstruction procInst = new ProcessingInstructionEvent("xml",
+           /* ProcessingInstruction procInst = new ProcessingInstructionEvent("xml",
                     "version=\"1.0\" encoding=\"UTF-8\"");
-            XMLWriterUtils.writeProcessingInstruction(procInst, result);
+            XMLWriterUtils.writeProcessingInstruction(procInst, result);*/
         } catch (IOException e) {
             throw new XMLStreamException("IOException: "+e.getMessage());
         }
