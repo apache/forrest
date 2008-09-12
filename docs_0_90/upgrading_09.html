@@ -327,6 +327,14 @@ document.write("Last Published: " + document.lastModified);
 <a href="#new">New Features</a>
 </li>
 <li>
+<a href="#cocoon">Notes about Cocoon version</a>
+<ul class="minitoc">
+<li>
+<a href="#cocoon-upgrade">Cocoon upgrade issues</a>
+</li>
+</ul>
+</li>
+<li>
 <a href="#missing-symbols">Missing project symbols file in some projects</a>
 </li>
 <li>
@@ -345,7 +353,7 @@ document.write("Last Published: " + document.lastModified);
 </div>
 </div>
     
-<a name="N1000D"></a><a name="introduction"></a>
+<a name="N1000E"></a><a name="introduction"></a>
 <h2 class="underlined_10">Introduction</h2>
 <div class="section">
 <div class="note">
@@ -372,7 +380,7 @@ document.write("Last Published: " + document.lastModified);
       </p>
 </div>
     
-<a name="N10030"></a><a name="new"></a>
+<a name="N10031"></a><a name="new"></a>
 <h2 class="underlined_10">New Features</h2>
 <div class="section">
 <p>
@@ -381,6 +389,11 @@ document.write("Last Published: " + document.lastModified);
         for each plugin.
       </p>
 <ul>
+        
+<li>
+          Our packaged Apache Cocoon is upgraded, along with various other
+          important supporting products such as Apache Xerces and Apache Xalan, etc.
+        </li>
         
 <li>[Placeholder]</li>
       
@@ -393,7 +406,66 @@ document.write("Last Published: " + document.lastModified);
       </p>
 </div>
     
-<a name="N1004F"></a><a name="missing-symbols"></a>
+<a name="N10053"></a><a name="cocoon"></a>
+<h2 class="underlined_10">Notes about Cocoon version</h2>
+<div class="section">
+<p>
+        Our packaged version of Apache Cocoon has been upgraded to use the
+        latest version of their stable 2.1 branch. This is a major step forward
+        for Forrest. It enables us to use a reliable and up-to-date Cocoon.
+        Forrest developers can again participate at Cocoon to fix issues or
+        develop new blocks. A number of major performance issues are already
+        fixed in this version.
+      </p>
+<p>
+        In previous versions of Forrest we were using a development version of
+        Cocoon trunk (i.e. 2.2). A number of things happened which caused us to
+        fall out of synchronisation with Cocoon. They started using Maven as a
+        build system, which took a long time to settle down. In turn that meant
+        that Apache Gump could not perform continuous integration, which shut
+        Forrest off. At the same time Cocoon trunk was making technical advances
+        which changed some of the ways that Forrest interacts with Cocoon. In
+        particular the command-line interface which Forrest uses to build a
+        complete static site.
+        See other notes via <a href="http://issues.apache.org/jira/browse/FOR-1017">FOR-1017</a>.
+      </p>
+<p>
+        Cocoon-2.1 is closer to our stalled version of Cocoon-2.2 than the
+        current head of Cocoon-2.2 trunk.
+      </p>
+<p>
+        Note that this move does not preclude us from future updates to other
+        versions of Cocoon or even to another xml processing framework.
+      </p>
+<p>
+        If you want to use your own version of Cocoon-2.1, for example to add
+        another Cocoon Block or to enhance a particular existing block, then
+        see the notes in the <span class="codefrag">$FORREST_HOME/etc/cocoon_upgrade</span>
+        directory.
+      </p>
+<a name="N1006F"></a><a name="cocoon-upgrade"></a>
+<h3 class="underlined_5">Cocoon upgrade issues</h3>
+<p>
+          There are only two minor issues for those upgrading from the previous
+          version of Forrest:
+        </p>
+<p>
+          When you first use this in your existing projects, there will probably
+          be a message about a certain cache item. On the second run all is well.
+          A way to avoid that would be to do 'forrest clean-work' in each of
+          your projects to remove the old Cocoon cache.
+        </p>
+<p>
+          Our previous version of Cocoon had a facility called "Running modes"
+          which enabled one set of a minimal group of properties for development
+          and a different set for production. This is not available in Cocoon-2.1
+          version. If you were using this feature, then simply move your defined
+          properties into the <span class="codefrag">main/webapp/WEB-INF/properties/core.properties</span>
+          file.
+        </p>
+</div>
+    
+<a name="N10083"></a><a name="missing-symbols"></a>
 <h2 class="underlined_10">Missing project symbols file in some projects</h2>
 <div class="section">
 <p>Users of 0.8, and developers with older 0.9-dev, who based their sites on 'forrest seed-basic' rather than 'forrest seed-sample' will be affected by FOR-1075. There was a partially implemented xml catalog with missing symbols file.
@@ -412,7 +484,7 @@ document.write("Last Published: " + document.lastModified);
       
 </p>
 <p>
-        This "project symbols" ability using xml entities is useful in two ways. 
+        This "project symbols" ability using xml entities is useful in two ways.
         To provide commons symbols, words, and phrases, in your source documents
         (added in v0.8 - <a href="../docs_0_90/faq.html#xml-entities">FAQ</a>).
         To configure some Cocoon sitemap components
@@ -420,7 +492,7 @@ document.write("Last Published: " + document.lastModified);
       </p>
 </div>
     
-<a name="N10071"></a><a name="docs"></a>
+<a name="N100A5"></a><a name="docs"></a>
 <h2 class="underlined_10">Notes about documentation</h2>
 <div class="section">
 <p>
@@ -436,7 +508,7 @@ document.write("Last Published: " + document.lastModified);
       </p>
 </div>
     
-<a name="N10083"></a><a name="tips"></a>
+<a name="N100B7"></a><a name="tips"></a>
 <h2 class="underlined_10">General upgrade tips</h2>
 <div class="section">
 <p>
@@ -452,11 +524,11 @@ document.write("Last Published: " + document.lastModified);
       </p>
 </div>
     
-<a name="N10093"></a><a name="project-sitemap"></a>
+<a name="N100C7"></a><a name="project-sitemap"></a>
 <h2 class="underlined_10">Remove project sitemap if not necessary</h2>
 <div class="section">
 <p>
-        It has come to our attention that some people have a 
+        It has come to our attention that some people have a
         <a href="../docs_0_90/project-sitemap.html">project sitemap</a>
         even though they are not using it. Such un-necessary sitemaps should be
         removed to avoid maintenance issues.
@@ -467,7 +539,7 @@ document.write("Last Published: " + document.lastModified);
       </p>
 </div>
     
-<a name="N100A8"></a><a name="To+be+continued..."></a>
+<a name="N100DC"></a><a name="To+be+continued..."></a>
 <h2 class="underlined_10">To be continued...</h2>
 <div class="section">
 <p>
