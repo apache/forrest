@@ -29,10 +29,10 @@ import junit.framework.TestCase;
 
 public class TestContract extends TestCase {
 
+  private static final String CONTRACT_XML = "master.contract.xml";
   public void testContractWithoutParameter() throws DispatcherException, FileNotFoundException {
     Contract contract = new XSLContract(false);
-    String rawContract = "master.contract.xml";
-    InputStream xslStream = this.getClass().getResourceAsStream(rawContract);
+    InputStream xslStream = this.getClass().getResourceAsStream(CONTRACT_XML);
     contract.initializeFromStream(xslStream);
     // testing the transformation without parameters
     HashMap<String, String> properties = new HashMap<String, String>();
@@ -40,8 +40,7 @@ public class TestContract extends TestCase {
   }
   public void testContractWithParameter() throws DispatcherException, FileNotFoundException {
     Contract contract = new XSLContract(false);
-    String rawContract = "master.contract.xml";
-    InputStream xslStream = this.getClass().getResourceAsStream(rawContract);
+    InputStream xslStream = this.getClass().getResourceAsStream(CONTRACT_XML);
     contract.initializeFromStream(xslStream);
     HashMap<String, String> properties = new HashMap<String, String>();
     // testing the transformation with parameters
@@ -50,8 +49,7 @@ public class TestContract extends TestCase {
   }
   public void testContractWithXMLParameter() throws DispatcherException, FileNotFoundException {
     Contract contract = new XSLContract(true);
-    String rawContract = "master.contract.xml";
-    InputStream xslStream = this.getClass().getResourceAsStream(rawContract);
+    InputStream xslStream = this.getClass().getResourceAsStream(CONTRACT_XML);
     contract.initializeFromStream(xslStream);
     HashMap<String, InputSource> properties = new HashMap<String, InputSource>();
     // testing the transformation with parameters
