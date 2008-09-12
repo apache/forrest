@@ -51,6 +51,10 @@
         for each plugin.
       </p>
       <ul>
+        <li>
+          Our packaged Apache Cocoon is upgraded, along with various other
+          important supporting products such as Apache Xerces and Apache Xalan, etc.
+        </li>
         <li>[Placeholder]</li>
       </ul>
       <p>
@@ -59,6 +63,65 @@
         documentation and changes log. This includes the new Dispatcher. See
         <a href="site:status-themes">Status of Themes: Skins and Dispatcher</a>.
       </p>
+    </section>
+    <section id="cocoon">
+      <title>Notes about Cocoon version</title>
+      <p>
+        Our packaged version of Apache Cocoon has been upgraded to use the
+        latest version of their stable 2.1 branch. This is a major step forward
+        for Forrest. It enables us to use a reliable and up-to-date Cocoon.
+        Forrest developers can again participate at Cocoon to fix issues or
+        develop new blocks. A number of major performance issues are already
+        fixed in this version.
+      </p>
+      <p>
+        In previous versions of Forrest we were using a development version of
+        Cocoon trunk (i.e. 2.2). A number of things happened which caused us to
+        fall out of synchronisation with Cocoon. They started using Maven as a
+        build system, which took a long time to settle down. In turn that meant
+        that Apache Gump could not perform continuous integration, which shut
+        Forrest off. At the same time Cocoon trunk was making technical advances
+        which changed some of the ways that Forrest interacts with Cocoon. In
+        particular the command-line interface which Forrest uses to build a
+        complete static site.
+        See other notes via <a href="http://issues.apache.org/jira/browse/FOR-1017">FOR-1017</a>.
+      </p>
+      <p>
+        Cocoon-2.1 is closer to our stalled version of Cocoon-2.2 than the
+        current head of Cocoon-2.2 trunk.
+      </p>
+      <p>
+        Note that this move does not preclude us from future updates to other
+        versions of Cocoon or even to another xml processing framework.
+      </p>
+      <p>
+        If you want to use your own version of Cocoon-2.1, for example to add
+        another Cocoon Block or to enhance a particular existing block, then
+        see the notes in the <code>$FORREST_HOME/etc/cocoon_upgrade</code>
+        directory.
+      </p>
+
+      <section id="cocoon-upgrade">
+        <title>Cocoon upgrade issues</title>
+        <p>
+          There are only two minor issues for those upgrading from the previous
+          version of Forrest:
+        </p>
+        <p>
+          When you first use this in your existing projects, there will probably
+          be a message about a certain cache item. On the second run all is well.
+          A way to avoid that would be to do 'forrest clean-work' in each of
+          your projects to remove the old Cocoon cache.
+        </p>
+        <p>
+          Our previous version of Cocoon had a facility called "Running modes"
+          which enabled one set of a minimal group of properties for development
+          and a different set for production. This is not available in Cocoon-2.1
+          version. If you were using this feature, then simply move your defined
+          properties into the <code>main/webapp/WEB-INF/properties/core.properties</code>
+          file.
+        </p>
+      </section>
     </section>
     <section id="missing-symbols">
       <title>Missing project symbols file in some projects</title>
@@ -77,7 +140,7 @@
         <code>cp $FORREST_HOME/main/fresh-site/src/documentation/resources/schema/symbols-project-v10.ent $PROJECT/src/documentation/resources/schema/symbols-project-v10.ent</code>
       </p>
       <p>
-        This "project symbols" ability using xml entities is useful in two ways. 
+        This "project symbols" ability using xml entities is useful in two ways.
         To provide commons symbols, words, and phrases, in your source documents
         (added in v0.8 - <a href="site:faq/xml-entities">FAQ</a>).
         To configure some Cocoon sitemap components
@@ -115,7 +178,7 @@
     <section id="project-sitemap">
       <title>Remove project sitemap if not necessary</title>
       <p>
-        It has come to our attention that some people have a 
+        It has come to our attention that some people have a
         <a href="site:project-sitemap">project sitemap</a>
         even though they are not using it. Such un-necessary sitemaps should be
         removed to avoid maintenance issues.
