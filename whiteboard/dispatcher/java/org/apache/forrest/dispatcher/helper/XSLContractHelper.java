@@ -206,15 +206,15 @@ public class XSLContractHelper extends StAX {
                 & reader.getLocalName().equals(TEMPLATE_ELEMENT)) {
               process = false;
             } else {
-              writer.add(allocator.allocate(reader));
+              allocator.allocate(reader,writer);
             }
           } else {
-            writer.add(allocator.allocate(reader));
+            allocator.allocate(reader,writer);
           }
           break;
 
         default:
-          writer.add(allocator.allocate(reader));
+          allocator.allocate(reader,writer);
           break;
         }
       }
