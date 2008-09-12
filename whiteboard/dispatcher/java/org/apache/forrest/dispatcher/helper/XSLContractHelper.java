@@ -51,7 +51,7 @@ public class XSLContractHelper extends StAX {
 
   private Transformer transformer = null;
 
-  public static final String NS = "http://apache.org/forrest/templates/1.0";
+  public static final String NS = "http://apache.org/forrest/templates/2.0";
 
   public static final String CONTRACT_ELEMENT = "contract";
 
@@ -220,7 +220,7 @@ public class XSLContractHelper extends StAX {
       }
     }
     writer.flush();
-    //log.debug(out.toString());
+    log.debug(out.toString());
     Source source = new StreamSource(new BufferedInputStream(
         new ByteArrayInputStream(out.toByteArray())));
     return source;
