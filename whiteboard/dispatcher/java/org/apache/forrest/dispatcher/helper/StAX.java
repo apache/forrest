@@ -46,7 +46,7 @@ public class StAX extends Loggable {
   private XMLInputFactory inputFactory = null;
 
   /**
-   * Easy helper to get StAX based parser and writer.
+   * Easy helper to get StAX based reader and writer.
    */
   public StAX() {
     inputFactory = XMLInputFactory.newInstance();
@@ -84,30 +84,30 @@ public class StAX extends Loggable {
   }
 
   /**
-   * Get an event Parser based on the incoming stream
+   * Get an event Reader based on the incoming stream
    * 
    * @param in
    *                the stream we want to read from
-   * @return ready to use event parser
+   * @return ready to use event reader
    * @throws XMLStreamException
    */
-  public XMLEventReader getEventParser(InputStream in)
+  public XMLEventReader getEventReader(InputStream in)
       throws XMLStreamException {
-    XMLEventReader parser = inputFactory.createXMLEventReader(in);
-    return parser;
+    XMLEventReader reader = inputFactory.createXMLEventReader(in);
+    return reader;
   }
 
   /**
-   * Get a stream Parser based on the incoming stream
+   * Get a stream reader based on the incoming stream
    * 
    * @param in
    *                the stream we want to read from
-   * @return ready to use stream parser
+   * @return ready to use stream reader
    * @throws XMLStreamException
    */
-  public XMLStreamReader getParser(InputStream in) throws XMLStreamException {
-    XMLStreamReader parser = inputFactory.createXMLStreamReader(in);
-    return parser;
+  public XMLStreamReader getReader(InputStream in) throws XMLStreamException {
+    XMLStreamReader reader = inputFactory.createXMLStreamReader(in);
+    return reader;
   }
 
   /**

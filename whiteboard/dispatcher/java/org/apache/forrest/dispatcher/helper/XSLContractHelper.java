@@ -21,7 +21,6 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.StringReader;
 import java.util.HashMap;
 import java.util.Iterator;
 
@@ -149,10 +148,10 @@ public class XSLContractHelper extends StAX {
    */
   public void setTemplate(InputStream stream, XSLContract contract)
       throws XMLStreamException {
-    XMLStreamReader parser = getParser(stream);
+    XMLStreamReader reader = getReader(stream);
     boolean process = true;
     while (process) {
-      int event = parser.next();
+      int event = reader.next();
       switch (event) {
 
       case XMLStreamConstants.END_DOCUMENT:
@@ -160,19 +159,19 @@ public class XSLContractHelper extends StAX {
         break;
 
       case XMLStreamConstants.START_ELEMENT:
-        String localName = parser.getLocalName();
+        String localName = reader.getLocalName();
         if (localName.equals(CONTRACT_ELEMENT)) {
-          contract.setName(processContract(parser));
+          contract.setName(processContract(reader));
         }
         if (localName.equals(DESCRIPTION_ELEMENT)) {
-          contract.setDescription(processDescription(parser));
+          contract.setDescription(processDescription(reader));
         }
         if (localName.equals(USAGE_ELEMENT)) {
-          contract.setUsage(processUsage(parser));
+          contract.setUsage(processUsage(reader));
         }
 
         if (localName.equals(TEMPLATE_ELEMENT)) {
-          contract.setXslSource(processTemplate(parser));
+          contract.setXslSource(processTemplate(reader));
         }
 
       default:
@@ -181,41 +180,41 @@ public class XSLContractHelper extends StAX {
     }
   }
 
-  private Source processTemplate(XMLStreamReader parser)
+  private Source processTemplate(XMLStreamReader reader)
       throws XMLStreamException {
     ByteArrayOutputStream out = new ByteArrayOutputStream();
     XMLEventWriter writer = getWriter(out);
     XMLEventAllocator allocator = getEventAllocator();
     String role = "";
-    for (int i = 0; i < parser.getAttributeCount(); i++) {
+    for (int i = 0; i < reader.getAttributeCount(); i++) {
       // Get attribute name
-      String localName = parser.getAttributeLocalName(i);
+      String localName = reader.getAttributeLocalName(i);
       if (localName.equals(TEMPLATE_FORMAT_ATT)) {
         // Return value
-        role = parser.getAttributeValue(i);
+        role = reader.getAttributeValue(i);
       }
     }
     boolean process = true;
     if (role.equals("xsl")) {
       while (process) {
-        int event = parser.next();
+        int event = reader.next();
         switch (event) {
 
         case XMLStreamConstants.END_ELEMENT:
-          if (parser.getNamespaceURI() != null) {
-            if (parser.getNamespaceURI().equals(NS)
-                & parser.getLocalName().equals(TEMPLATE_ELEMENT)) {
+          if (reader.getNamespaceURI() != null) {
+            if (reader.getNamespaceURI().equals(NS)
+                & reader.getLocalName().equals(TEMPLATE_ELEMENT)) {
               process = false;
             } else {
-              writer.add(allocator.allocate(parser));
+              writer.add(allocator.allocate(reader));
             }
           } else {
-            writer.add(allocator.allocate(parser));
+            writer.add(allocator.allocate(reader));
           }
           break;
 
         default:
-          writer.add(allocator.allocate(parser));
+          writer.add(allocator.allocate(reader));
           break;
         }
       }
@@ -227,21 +226,21 @@ public class XSLContractHelper extends StAX {
     return source;
   }
 
-  private String processUsage(XMLStreamReader parser) throws XMLStreamException {
+  private String processUsage(XMLStreamReader reader) throws XMLStreamException {
     boolean process = true;
     String usage = "";
     while (process) {
-      int event = parser.next();
+      int event = reader.next();
       switch (event) {
 
       case XMLStreamConstants.CHARACTERS:
-        if (parser.getText().replace(" ", "").length() > 1) {
-          usage = parser.getText().trim();
+        if (reader.getText().replace(" ", "").length() > 1) {
+          usage = reader.getText().trim();
         }
         break;
 
       case XMLStreamConstants.END_ELEMENT:
-        if (parser.getLocalName().equals(USAGE_ELEMENT)) {
+        if (reader.getLocalName().equals(USAGE_ELEMENT)) {
           process = false;
         }
         break;
@@ -253,22 +252,22 @@ public class XSLContractHelper extends StAX {
     return usage;
   }
 
-  private String processDescription(XMLStreamReader parser)
+  private String processDescription(XMLStreamReader reader)
       throws XMLStreamException {
     boolean process = true;
     String description = "";
     while (process) {
-      int event = parser.next();
+      int event = reader.next();
       switch (event) {
 
       case XMLStreamConstants.CHARACTERS:
-        if (parser.getText().replace(" ", "").length() > 1) {
-          description = parser.getText().trim();
+        if (reader.getText().replace(" ", "").length() > 1) {
+          description = reader.getText().trim();
         }
         break;
 
       case XMLStreamConstants.END_ELEMENT:
-        if (parser.getLocalName().equals(DESCRIPTION_ELEMENT)) {
+        if (reader.getLocalName().equals(DESCRIPTION_ELEMENT)) {
           process = false;
         }
         break;
@@ -281,14 +280,14 @@ public class XSLContractHelper extends StAX {
     return description;
   }
 
-  private String processContract(XMLStreamReader parser) {
+  private String processContract(XMLStreamReader reader) {
     String contractName = "";
-    for (int i = 0; i < parser.getAttributeCount(); i++) {
+    for (int i = 0; i < reader.getAttributeCount(); i++) {
       // Get attribute name
-      String localName = parser.getAttributeLocalName(i);
+      String localName = reader.getAttributeLocalName(i);
       if (localName.equals(CONTRACT_NAME_ATT)) {
         // Return value
-        contractName = parser.getAttributeValue(i);
+        contractName = reader.getAttributeValue(i);
         return contractName;
       }
     }
