@@ -35,7 +35,7 @@
       -->
       <append>false</append>
       <!--
-        rotation: allows you to rotate log files one they meet certain
+        rotation: allows you to rotate log files when they meet certain
                   criteria. In example below, files are rotated once they
                   are one hour old or bigger than 100 Mb.
 
@@ -48,9 +48,32 @@
       -->
     </cocoon>
 
+    <cocoon id="deprecation">
+      <filename>${context-root}/WEB-INF/logs/deprecation.log</filename>
+      <format type="cocoon">
+        %7.7{priority} %{time}   [%{category}] (%{uri}) %{thread}/%{class:short}: %{message}\n
+      </format>
+      <append>false</append>
+    </cocoon>
+
+    <cocoon id="debug">
+      <filename>${context-root}/WEB-INF/logs/debug.log</filename>
+      <format type="cocoon">
+        %7.7{priority} %{time}   [%{category}] (%{uri}) %{thread}/%{class:short}: %{message}\n%{throwable}
+      </format>
+      <append>false</append>
+    </cocoon>
+
     <cocoon id="sitemap">
       <filename>${context-root}/WEB-INF/logs/sitemap.log</filename>
+      <format type="cocoon">
+        %7.7{priority} %{time}   [%{category}] (%{uri}) %{thread}/%{class:short}: %{message}\n%{throwable}
+      </format>
+      <append>false</append>
+    </cocoon>
 
+    <cocoon id="sitemap-execution" >
+      <filename>${context-root}/WEB-INF/logs/sitemap-execution.log</filename>
       <format type="cocoon">
         %7.7{priority} %{time}   [%{category}] (%{uri}) %{thread}/%{class:short}: %{message}\n%{throwable}
       </format>
@@ -60,7 +83,7 @@
     <cocoon id="linkrewriter">
       <filename>${context-root}/WEB-INF/logs/linkrewriter.log</filename>
       <format type="cocoon">
-        %7.7{priority} [%{category}] (%{uri}): %{message}\n%{throwable}
+        %7.7{priority} %{time}   [%{category}] (%{uri}): %{message}\n%{throwable}
       </format>
       <append>false</append>
     </cocoon>
@@ -68,7 +91,7 @@
     <cocoon id="locationmap">
       <filename>${context-root}/WEB-INF/logs/locationmap.log</filename>
       <format type="cocoon">
-        %7.7{priority} [%{category}] (%{uri}): %{message}\n%{throwable}
+        %7.7{priority} %{time}   [%{category}] (%{uri}): %{message}\n%{throwable}
       </format>
       <append>false</append>
     </cocoon>
@@ -76,7 +99,7 @@
     <cocoon id="idgen">
       <filename>${context-root}/WEB-INF/logs/idgen.log</filename>
       <format type="cocoon">
-        %7.7{priority} [%{category}] (%{uri}) %{thread}/%{class:short}: %{message}\n%{throwable}
+        %7.7{priority} %{time}   [%{category}] (%{uri}) %{thread}/%{class:short}: %{message}\n%{throwable}
       </format>
       <append>false</append>
     </cocoon>
@@ -119,28 +142,30 @@
         <append>false</append>
       </cocoon>
     </priority-filter>
-
-     <!-- Sitemap execution messages -->
-      <cocoon id="debug" >
-        <filename>${context-root}/WEB-INF/logs/debug.log</filename>
-        <format type="cocoon">
-          %7.7{priority} %{time}   [%{category}] (%{uri}) %{thread}/%{class:short}: %{message}\n%{throwable}
-        </format>
-        <append>false</append>
-      </cocoon>
   </targets>
 
+  <!--+
+      | Categories 'route' log events to particular targets, filtering
+      | on importance level (one of DEBUG, INFO, WARN, ERROR, FATAL_ERROR, 
+      | ordered from most verbose to least verbose) and on the 'category'
+      | used by the producer of the log event to further classify it.
+      | Some of these log categories are hardwired in the code and some
+      | others are user-selectable, for example for sitemap components
+      | where you can specify the category in their sitemap declaration.
+      |
+      | Category names can be dot-separated (example, 'sitemap.generator.file')
+      | and the variuos pieces are treated as 'sub-categories'. By nesting
+      | the <category> element you achieve sub-category filtering and you can
+      | even have different log level filtering per category and subcategory. 
+      | (See the comments below for an example of this)
+      |
+      | NOTE: not all subcategories are defined in this file. Not defined
+      | subcategories will be created automatically and they will inherit 
+      | the settings of the parent subcategory. When defining a subcategory 
+      | manually, it is required that you specify the log target, because 
+      | they are not inherited in this case.
+      +-->
   <categories>
-    <!--
-      log-level: One of DEBUG, INFO, WARN, ERROR, FATAL_ERROR.
-      Log level could be different for every category and subcategory.
-
-      Not all subcategories are defined in this file. Not defined
-      subcategories will be created automatically inheriting settings
-      of the parent subcategory.
-      When defining subcategory manually, it is required to specify log
-      targets, because they are not inherited in this case.
-    -->
     <category name="core" log-level="WARN">
       <!-- Startup component manager logger -->
       <category name="startup" log-level="WARN">
@@ -164,12 +189,6 @@
 
       <!-- Cocoon component manager logger -->
       <category name="manager" log-level="WARN">
-        <log-target id-ref="core"/>
-        <log-target id-ref="error"/>
-      </category>
-
-      <!-- Cocoon cache and stores logger -->
-      <category name="store" log-level="WARN">
         <log-target id-ref="core"/>
         <log-target id-ref="error"/>
       </category>
@@ -225,15 +244,24 @@
       <log-target id-ref="sitemap"/>
       <log-target id-ref="error"/>
     </category>
-    
+
+    <category name="deprecation" log-level="WARN">
+      <log-target id-ref="deprecation"/>
+    </category>
+
+    <!-- Cocoon will issue heaps of debug messages, so beware of file size -->
     <category name="debug" log-level="DEBUG">
       <log-target id-ref="debug"/>
     </category>
-      
+
+    <!--+
+        | This is the main category. The empty name attribute indicates that
+        | this rule will match all log events from all categories.
+        +-->
     <category name="" log-level="WARN">
       <log-target id-ref="core"/>
       <log-target id-ref="error"/>
     </category>
-      
+
   </categories>
 </logkit>
