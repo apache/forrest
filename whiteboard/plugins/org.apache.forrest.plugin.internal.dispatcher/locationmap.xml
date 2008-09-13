@@ -113,33 +113,48 @@
     </selectors>
   </components>
   <locator>
-    <match pattern="transform.project.text">
-      <location
-          src="{lm:dispatcher.home}/resources/stylesheets/project-to-text.xsl"/>
-    </match>
-<!-- Base location of the project themes-->
+    <!--+
+        | Configuration of general location
+        +-->
+    <!--+
+        |  Base location of the project themes
+        +-->
     <match pattern="themer.project.dir">
       <location src="{properties:resources}/themes" />
     </match>
-<!-- Base location of the builded dispatcher plugin-->
+    <!--+
+        |  Base location of the project structurer
+        +-->
+    <match pattern="structurer.project.dir">
+      <location src="{properties:resources}/structurer" />
+    </match>
+    <!--+
+        | contracts (e.g. html) that can be used in the project. 
+        +-->
+    <match pattern="themer.contracts.dir">
+      <location src="{lm:dispatcher.themer}/themes" />
+    </match>
+    <!--+
+        | Base location of the builded dispatcher plugin
+        +-->
     <match pattern="dispatcher.home">
       <location src="{properties:forrest.plugins}/{properties:dispatcher.home}" />
     </match>
-<!-- Base location of the builded themer plugin-->
+    <!--+
+        | Base location of the builded themer plugin
+        +-->
     <match pattern="dispatcher.themer">
       <location src="{properties:forrest.plugins}/{properties:dispatcher.themer}" />
     </match>
-<!-- xhtml2 to html core transformation -->
-    <match pattern="transform.xhtml2.html.structurer">
-      <location 
-            src="{lm:dispatcher.home}/resources/stylesheets/html/xhtml2_to_html.xsl" 
-            />
-    </match>
+    <!--+
+        | Configuration of general location
+        | END
+        +-->
 <!-- resource types -->
     <match pattern="dispatcher.structurer.resourceType.**">
       <select>
         <location 
-                    src="{properties:resources}/structurer/resource-types/{1}{properties:dispatcher.theme-ext}" 
+                    src="{lm:structurer.project.dir}/resource-types/{1}{properties:dispatcher.theme-ext}" 
                     />
         <location 
                     src="{lm:dispatcher.themer}/structurer/resource-types/{1}{properties:dispatcher.theme-ext}" 
@@ -182,7 +197,7 @@
 <!-- project-based 
           url-based (url location) -->
         <location 
-                    src="{properties:resources}/structurer/url/{1}{properties:dispatcher.theme-ext}" 
+                    src="{lm:structurer.project.dir}/url/{1}{properties:dispatcher.theme-ext}" 
                     />
         <!--<act type="sourcetype" 
                     src="{properties:content.xdocs}{1}.xml">
@@ -254,14 +269,7 @@
                     />
       </select>
     </match>
-<!-- Some input need to be striped by their root element. -->
-    <match pattern="root-strip.xsl">
-      <select type="exists">
-        <location 
-                    src="{lm:dispatcher.home}/resources/stylesheets/root-strip.xsl" 
-                    />
-      </select>
-    </match>
+
 <!-- Next coming from themer -->
 <!-- Project implementation of templates have priority before default ones.
         If no implementation can be found we use the noFt (~ - no forrest:template) implementation.  
@@ -292,7 +300,72 @@
                     />
       </select>
     </match>
-<!-- dataModel -->
+
+<!-- generic match for theme image resources -->
+<!-- 
+      {1} name
+      {2} extension (note we assume e.g. {1}.gif)
+      -->
+    <match pattern="themes/images/**.*">
+      <select type="exists">
+        <location 
+                    src="{lm:themer.project.dir}/{properties:dispatcher.theme}/images/{1}.{2}" 
+                    />
+        <location 
+                    src="{lm:themer.project.dir}/{properties:dispatcher.fallback.theme}/images/{1}.{2}" 
+                    />
+        <location 
+                    src="{lm:dispatcher.themer}/themes/{properties:dispatcher.theme}/images/{1}.{2}" 
+                    />
+        <location 
+                    src="{properties:forrest.plugins}/org.apache.forrest.themes.core/themes/common/images/{1}.{2}" 
+                    />
+        <location 
+                    src="{lm:dispatcher.themer}/themes/{properties:dispatcher.fallback.theme}/images/{1}.{2}" 
+                    />
+      </select>
+    </match>
+<!-- generic match for theme resources like css and js. -->
+<!-- 
+      {1} name
+      {2} extension (note we assume e.g. PATH/css/{1}.css)
+      -->
+    <match pattern="themes/**.*">
+      <select type="exists">
+        <location 
+                    src="{lm:themer.project.dir}/{properties:dispatcher.theme}/{2}/{1}.{2}" />
+        <location 
+                    src="{lm:themer.project.dir}/{properties:dispatcher.fallback.theme}/{2}/{1}.{2}" 
+                    />
+<!--  plugin provided contracts -->
+        <location src="{lm:resolvePluginThemes.{2}.{1}}" />
+        <location 
+                    src="{lm:dispatcher.themer}/themes/{properties:dispatcher.theme}/{2}/{1}.{2}" 
+                    />
+        <location 
+                    src="{lm:dispatcher.themer}/themes/{properties:dispatcher.fallback.theme}/{2}/{1}.{2}" 
+                    />
+      </select>
+    </match>
+    
+    <!--+
+        | various helper xsl matches 
+        +-->
+    <!-- xhtml2 to html core transformation -->
+    <match pattern="transform.xhtml2.html.structurer">
+      <location 
+            src="{lm:dispatcher.home}/resources/stylesheets/html/xhtml2_to_html.xsl" 
+            />
+    </match>
+    <!-- Some input need to be striped by their root element. -->
+    <match pattern="root-strip.xsl">
+      <select type="exists">
+        <location 
+                    src="{lm:dispatcher.home}/resources/stylesheets/root-strip.xsl" 
+                    />
+      </select>
+    </match>
+    <!-- dataModel -->
 <!-- A project can to supersede the standard <format>-to-<format>.xsl file to add specific feature.
              to include the standard in the new stylesheet, just import the standard stylesheet has follows :
                 <xsl:import href="lm://std-dataModel-xml-document-to-<format>.xsl"/>
@@ -364,63 +437,9 @@
             src="{lm:dispatcher.home}/resources/stylesheets/ls.contracts-to-document.xsl" 
             />
     </match>
-<!--Theme dir-->
-    <match pattern="themer.project.dir">
-      <select type="exists">
-        <location src="{properties:resources}themes"/>
-<!-- v1 location -->
-        <location src="{properties:resources}templates" />
-      </select>
-    </match>
-<!-- contracts (e.g. html) that can be used in the project. -->
-    <match pattern="themer.contracts.dir">
-      <location src="{lm:dispatcher.themer}/themes" />
-    </match>
-<!-- generic match for theme image resources -->
-<!-- 
-      {1} name
-      {2} extension (note we assume e.g. {1}.gif)
-      -->
-    <match pattern="themes/images/**.*">
-      <select type="exists">
-        <location 
-                    src="{lm:themer.project.dir}/{properties:dispatcher.theme}/images/{1}.{2}" 
-                    />
-        <location 
-                    src="{lm:themer.project.dir}/{properties:dispatcher.fallback.theme}/images/{1}.{2}" 
-                    />
-        <location 
-                    src="{lm:dispatcher.themer}/themes/{properties:dispatcher.theme}/images/{1}.{2}" 
-                    />
-        <location 
-                    src="{properties:forrest.plugins}/org.apache.forrest.themes.core/themes/common/images/{1}.{2}" 
-                    />
-        <location 
-                    src="{lm:dispatcher.themer}/themes/{properties:dispatcher.fallback.theme}/images/{1}.{2}" 
-                    />
-      </select>
-    </match>
-<!-- generic match for theme resources like css and js. -->
-<!-- 
-      {1} name
-      {2} extension (note we assume e.g. PATH/css/{1}.css)
-      -->
-    <match pattern="themes/**.*">
-      <select type="exists">
-        <location 
-                    src="{lm:themer.project.dir}/{properties:dispatcher.theme}/{2}/{1}.{2}" />
-        <location 
-                    src="{lm:themer.project.dir}/{properties:dispatcher.fallback.theme}/{2}/{1}.{2}" 
-                    />
-<!--  plugin provided contracts -->
-        <location src="{lm:resolvePluginThemes.{2}.{1}}" />
-        <location 
-                    src="{lm:dispatcher.themer}/themes/{properties:dispatcher.theme}/{2}/{1}.{2}" 
-                    />
-        <location 
-                    src="{lm:dispatcher.themer}/themes/{properties:dispatcher.fallback.theme}/{2}/{1}.{2}" 
-                    />
-      </select>
+    <match pattern="transform.project.text">
+      <location
+          src="{lm:dispatcher.home}/resources/stylesheets/project-to-text.xsl"/>
     </match>
 <!--  Extracts the style sheet from the contract.  -->
     <match pattern="contract-strip-xsl.xsl">
