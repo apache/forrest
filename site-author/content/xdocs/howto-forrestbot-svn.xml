@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one or more
+  contributor license agreements.  See the NOTICE file distributed with
+  this work for additional information regarding copyright ownership.
+  The ASF licenses this file to You under the Apache License, Version 2.0
+  (the "License"); you may not use this file except in compliance with
+  the License.  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<!DOCTYPE howto PUBLIC "-//APACHE//DTD How-to V2.0//EN" "http://forrest.apache.org/dtd/howto-v20.dtd">
+<howto>
+  <header>
+    <title>How to deploy documentation with the Forrestbot "svn" workstage</title>
+    <abstract>
+      This How-To describes the building and deployment of a documentation set
+      with the help of the forrestbot "svn" workstage.
+    </abstract>
+    <last-modified-content-date date="2008-09-12"/>
+  </header>
+  <audience title="Intended Audience">
+    <p>
+      Anyone who generates a static documentation set with Forrest will need
+      to deploy the results, whether that be to a remote server or locally.
+    </p>
+  </audience>
+  <purpose title="Purpose">
+    <p>
+      This howto will explain one method of using the Forrestbot, by way of the
+      worked example for managing the Apache Forrest project website. The Forrestbot has a number of deployment methods. After you understand the principles then you will be able to apply that to whatever method is relevant.
+    </p>
+    <p>
+      The secondary purpose is to explain to Forrest committers how to manage
+      our project documentation. Other ASF projects will also find it useful.
+    </p>
+  </purpose>
+  <prerequisites title="Prerequisites">
+    <p>
+      Refer to the <a href="site:forrestbot">Forrestbot</a> documentation.
+      It is not necessary to have thorough knowledge, but a basic understanding
+      will help.
+    </p>
+  </prerequisites>
+  <steps title="Steps">
+    <section id="introduction">
+      <title>Introduction</title>
+      <p>
+        In this document "we/our" refers to the Apache Forrest project committers, who
+        manage the documentation. Even though other developers can help to
+        enhance the documentation by way of contributed patches, only the set of
+        committers can deploy (publish) it.
+      </p>
+      <p>
+        Our source documents are managed in the project's Subversion (SVN) version control system. Each committer has a local SVN working copy on their office computer. We can prepare source changes and review them with 'forrest run' and 'forrest validate-xdocs'. When satisfied we 'svn commit' those changes. Our Forrestbot uses the "getsrc.local" workstage to retrieve the sources from the local svn checkout.
+      </p>
+      <p>
+        The generated static documents which form the website are also stored in SVN. So our Forrestbot uses the "deploy.svn" workstage to deploy the generated documents. To publish the website, a regular cron job on the apache.org server automatically does 'svn update' in the website's document space. Elegant.
+      </p>
+      <p>
+        That is what we call a "local forrestbot". Each committer can conduct
+        the workstages on their local computer. This enables a distributed team to manage the documentation.
+      </p>
+      <p>
+        We have another Forrestbot on our "zone" 
+        <a href="http://forrest.zones.apache.org/">demonstration server</a>.
+        It runs automatically via cron each hour. Its workstages are not described in this howto, but essentially it gets the sources using the "getsrc.svn" workstage and it deploys the results to the local webserver htdocs directory on that machine using the "deploy.local" workstage. See that <a href="http://svn.apache.org/repos/asf/forrest/zone/htdocs/ft/forrest-docs.xml">buildfile</a>.
+      </p>
+    </section>
+    <section id="follow">
+      <title>Follow along on your local system</title>
+      <p>
+        You have all the sources for the Forrest project in your Forrest distribution in the "$FORREST_HOME/site-author" directory. If you are using the release then you have a snapshot of the documentation. Of course if you have SVN trunk then you are up-to-date.
+      </p>
+      <p>
+        The Forrestbot build files for our site are also available. This means that you can run the "build" workstage. However you will not be able to do the "deploy" worskstage unless you are a Forrest committer.
+      </p>
+      <p>
+        There is a brief explanation of how to publish our site in the document
+        <a href="http://svn.apache.org/repos/asf/forrest/trunk/etc/publishing_our_site.txt">$FORREST_HOME/etc/publishing_our_site.txt</a>
+      </p>
+    </section>
+    <section id="settings">
+      <title>The deploy.svn.settings file</title>
+      <p>
+        As explained in the above document, each committer needs a
+        <code>deploy.svn.settings</code> file to provide their credentials.
+      </p>
+      <source><![CDATA[<?xml version="1.0"?>
+<project>
+  <property name="deploy.svn.user" value="myApacheUsername"/>
+  <property name="deploy.svn.password" value="mySvnPassword"/>
+</project>]]></source>
+    </section>
+    <section id="buildfile">
+      <title>The Forrestbot buildfile</title>
+      <p>
+        The Forrestbot buildfile sets some properties and declares the workstages (i.e. Ant targets) that need to be carried out. Of course this is fully explained in the <a href="site:forrestbot">Forrestbot</a>
+        documentation.
+      </p>
+      <p>
+        Our buildfile is at
+        <a href="http://svn.apache.org/repos/asf/forrest/trunk/site-author/publish.xml">$FORREST_HOME/site-author/publish.xml</a>
+        ...
+      </p>
+      <source><![CDATA[<?xml version="1.0"?>
+<project name="forrest-docs" default="main">
+  <property name="getsrc.local.root-dir" location="."/>
+  <target name="getsrc" depends="getsrc.clean-workdir, getsrc.local"/>
+  <import file="../deploy.svn.settings" optional="true"/>
+  <property name="deploy.svn.url"
+    value="https://svn.apache.org/repos/asf/forrest/site"/>
+  <target name="deploy" depends="deploy.svn"/>
+  <property environment="env"/>
+  <import file="${env.FORREST_HOME}/tools/forrestbot/core/forrestbot.xml"/>
+</project>]]></source>
+      <p>
+        So it gets the sources relative to the current directory. Actually
+        it reads the <code>forrest.properties</code> configuration file
+        to find out where other stuff is located.
+      </p>
+      <p>
+        It deploys the generated files directly to the forrest/site SVN repository.
+      </p>
+    </section>
+    <section id="build">
+      <title>The "build" workstage</title>
+      <p>
+        After doing the usual process to edit source documents, review them with
+        'forrest run', and ensure that things are in order with 'forrest validate'.
+      </p>
+      <p>
+        Now do the build:
+      </p>
+      <source>cd $FORREST_HOME/site-author
+forrest -f publish.xml build</source>
+      <p>
+        This does the normal site build to generate the complete set of static documents. Watch for errors.
+      </p>
+      <p>
+        To review, see the built docs in <code>build/forrest-docs</code> directory.
+      </p>
+    </section>
+    <section id="deploy">
+      <title>The "deploy" workstage</title>
+      <p>
+        When satisfied, then deploy the built docs:
+      </p>
+      <source>forrest -f publish.xml deploy -Ddeploy.svn.commit-message="my commit message"</source>
+      <p>
+        If no commit message is supplied, then forrestbot will use a default.
+      </p>
+      <p>
+        Now don't get frightened. It might seem like nothing is happening.
+        The first time that the "deploy" worskstage is used it will need to
+        do an 'svn checkout' of the site repository. This will take some time.
+        On subsequent deploys, it will need to do an 'svn update'. So be patient.
+      </p>
+      <p>
+        The files that are being committed will now be listed. That is it.
+        They are now in the "<a href="http://svn.apache.org/repos/asf/forrest/site">forrest/site</a>" SVN repository.
+      </p>
+    </section>
+    <section id="production">
+      <title>Moving the documents into production</title>
+      <p>
+        Next a cron job on the server will automatically publish it.
+        However, if quicker turnaround is required, then do this:
+      </p>
+      <source>ssh people.apache.org
+cd /www/forrest.apache.org
+umask 002
+svn update</source>
+      <p>
+        Next an rsync cronjob will publish it to the production webserver.
+        See other <a href="http://apache.org/dev/project-site.html">notes</a>
+        about how the ASF project websites are managed.
+      </p>
+    </section>
+  </steps>
+  <extension title="Further Reading">
+    <ul>
+      <li><a href="site:forrestbot-scp">How to deploy documentation with the Forrestbot "scp" workstage</a></li>
+      <li><a href="site:forrestbot">Forrestbot - automated building and deploying</a></li>
+    </ul>
+  </extension>
+</howto>

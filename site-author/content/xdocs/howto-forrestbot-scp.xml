@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one or more
+  contributor license agreements.  See the NOTICE file distributed with
+  this work for additional information regarding copyright ownership.
+  The ASF licenses this file to You under the Apache License, Version 2.0
+  (the "License"); you may not use this file except in compliance with
+  the License.  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<!DOCTYPE howto PUBLIC "-//APACHE//DTD How-to V2.0//EN" "http://forrest.apache.org/dtd/howto-v20.dtd">
+<howto>
+  <header>
+    <title>How to deploy documentation with the Forrestbot "scp" workstage</title>
+    <abstract>
+      This How-To describes the building and deployment of a documentation set
+      with the help of the forrestbot "scp" workstage.
+    </abstract>
+    <last-modified-content-date date="2008-09-12"/>
+  </header>
+  <audience title="Intended Audience">
+    <p>
+      Anyone who generates a static documentation set with Forrest will need
+      to deploy the results, whether that be to a remote server or locally.
+    </p>
+  </audience>
+  <purpose title="Purpose">
+    <p>
+      This howto will explain one method of using the Forrestbot, by way of the
+      worked example for managing a company or private website, and using "Secure Copy (SCP)" to deploy to a remote webserver. The Forrestbot has a number of deployment methods. After you understand the principles then you will be able to apply that to whatever method is relevant.
+    </p>
+    <p>
+      The secondary purpose is to explain to ASF committers how to manage
+      project documentation, e.g. for an "Apache Labs" investigation.
+    </p>
+    <p>
+      This howto also explains the use of the Apache Cocoon "checksums" facility
+      to only process and deploy the changed files.
+    </p>
+  </purpose>
+  <prerequisites title="Prerequisites">
+    <p>
+      Refer to the <a href="site:forrestbot">Forrestbot</a> documentation.
+      It is not necessary to have thorough knowledge, but a basic understanding
+      will help.
+    </p>
+    <p>
+      An account on a server configured to use SSH access.
+      e.g. <a href="http://apache.org/dev/new-committers-guide.html#ssh">ASF Guide for new committers</a>.
+    </p>
+    <p>
+      Review the <a href="site:forrestbot-svn">Forrestbot svn</a> howto documentation.
+      That explains more generally how to use a Forrestbot.
+    </p>
+    <p>
+      Therefore this "scp" howto can have minimal content.
+    </p>
+  </prerequisites>
+  <steps title="Steps">
+    <section id="introduction">
+      <title>Introduction</title>
+      <p>
+      This Forrestbot uses the "getsrc.local" workstage to retrieve the sources from the local project workspace filesystem, i.e. from the top-level of your Forrest project site.
+      </p>
+      <p>
+        This Forrestbot uses the "deploy.scp" workstage to copy the generated documents
+        to the remote server. They go into a "stage" directory on the web server
+        which has a .htaccess file to enable selected people to review before putting into production.
+      </p>
+    </section>
+    <section id="settings">
+      <title>The deploy.scp.settings file</title>
+      <p>
+        Create a file at the top-level of your project site named
+        <code>deploy.scp.settings</code> to provide your ssh credentials.
+        Set its file permissions so that only you can read it.
+      </p>
+      <source><![CDATA[<?xml version="1.0"?>
+<project>
+  <property name="deploy.scp.keyfile" value="/Users/me/.ssh/id_rsa"/>
+  <property name="deploy.scp.passphrase" value="#$!*%#..."/>
+</project>]]></source>
+    </section>
+    <section id="buildfile">
+      <title>The Forrestbot buildfile</title>
+      <p>
+        The Forrestbot buildfile sets some properties and declares the workstages (i.e. Ant targets) that need to be carried out. Of course this is fully explained in the <a href="site:forrestbot">Forrestbot</a>
+        documentation.
+      </p>
+      <p>
+        Create a file at the top-level of your project website named, e.g.
+        <code>publish-stage.xml</code>
+      </p>
+      <source><![CDATA[<?xml version="1.0"?>
+<project name="my-lab-docs" default="main">
+  <property name="getsrc.local.root-dir" location="."/>
+  <target name="getsrc" depends="getsrc.clean-workdir, getsrc.local"/>
+  <property name="deploy.scp.dest"
+    value="username@apache.org:public_html/my-lab/stage"/>
+  <import file="deploy.settings" optional="true"/>
+  <target name="deploy" depends="deploy.scp"/>
+  <property environment="env"/>
+  <import file="${env.FORREST_HOME}/tools/forrestbot/core/forrestbot.xml"/>
+</project>]]></source>
+      <p>
+        So it gets the sources relative to the current directory. Actually
+        it reads the <code>forrest.properties</code> configuration file
+        to find out where other stuff is located.
+      </p>
+      <p>
+        It deploys the generated files directly to the user's "public_html" webspace
+        into a "stage" sub-directory. Of course this "deploy.scp.dest" location
+        could be a full pathname to an htdocs directory on the remove remote server.
+      </p>
+    </section>
+    <section id="checksums">
+      <title>The Cocoon "checksums" facility</title>
+      <p>
+        Instruct Forrest's Cocoon to use a "checksums" file to record the checksum
+        of each document that it has processed. This enables subsequent builds to
+        only process the documents that have changed. This means that each file's
+        timestamp will only be touched if it is a changed document, which enables
+        the Forrestbot deploy.scp workstage to only deploy the changed files.
+      </p>
+      <p>
+        Follow the "<a href="site:faq/checksums">checksums</a>" FAQ.
+      </p>
+    </section>
+    <section id="build">
+      <title>The "build" workstage</title>
+      <p>
+        After doing the usual process to edit source documents, review them with
+        'forrest run', and ensure that things are in order with 'forrest validate'.
+      </p>
+      <p>
+        Now do the build:
+      </p>
+      <source>forrest -f publish-stage.xml build</source>
+      <p>
+        This does the normal site build to generate the complete set of static documents. Watch for errors.
+      </p>
+      <p>
+        To review, see the built docs in <code>build/my-lab-docs</code> directory.
+      </p>
+    </section>
+    <section id="deploy">
+      <title>The "deploy" workstage</title>
+      <p>
+        When satisfied, then deploy the built docs:
+      </p>
+      <source>forrest -f publish-satge.xml deploy</source>
+      <p>
+        The files that are being transferred to the remote server will now be listed.
+      </p>
+    </section>
+    <section id="production">
+      <title>Moving the documents into production</title>
+      <p>
+       The reason for deploying the documents into a "stage" directory was so that
+       clients or collaborators could review it before going into production.
+       So ask them to review your people.apache.org/my-lab/stage/ site.
+       When satisfied, then: 
+      </p>
+      <source>ssh people.apache.org
+cd publish_html/my-lab/stage
+cp -Rf * ..
+</source>
+      <p>
+        That is it.
+      </p>
+    </section>
+  </steps>
+  <extension title="Further Reading">
+    <ul>
+      <li><a href="site:forrestbot-svn">How to deploy documentation with the Forrestbot "svn" workstage</a></li>
+      <li><a href="site:forrestbot">Forrestbot - automated building and deploying</a></li>
+    </ul>
+  </extension>
+</howto>
