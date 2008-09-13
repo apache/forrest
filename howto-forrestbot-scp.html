@@ -5,7 +5,7 @@
 <meta content="Apache Forrest" name="Generator">
 <meta name="Forrest-version" content="0.9-dev">
 <meta name="Forrest-skin-name" content="pelt">
-<title>ForrestFriday monthly get-together</title>
+<title>How to deploy documentation with the Forrestbot "scp" workstage</title>
 <link type="text/css" href="skin/basic.css" rel="stylesheet">
 <link media="screen" type="text/css" href="skin/screen.css" rel="stylesheet">
 <link media="print" type="text/css" href="skin/print.css" rel="stylesheet">
@@ -108,8 +108,8 @@ document.write("Last Published: " + document.lastModified);
     |start Menu
     +-->
 <div id="menu">
-<div onclick="SwitchMenu('menu_selected_1.1', 'skin/')" id="menu_selected_1.1Title" class="menutitle" style="background-image: url('skin/images/chapter_open.gif');">Getting involved</div>
-<div id="menu_selected_1.1" class="selectedmenuitemgroup" style="display: block;">
+<div onclick="SwitchMenu('menu_1.1', 'skin/')" id="menu_1.1Title" class="menutitle">Getting involved</div>
+<div id="menu_1.1" class="menuitemgroup">
 <div class="menuitem">
 <a href="contrib.html" title="Everyone is a developer and has something to contribute">Contributing</a>
 </div>
@@ -119,8 +119,8 @@ document.write("Last Published: " + document.lastModified);
 <div class="menuitem">
 <a href="issues.html" title="Issue tracker manages known issues and desired enhancements">Reporting bugs and issues</a>
 </div>
-<div class="menupage">
-<div class="menupagetitle">ForrestFriday IRC</div>
+<div class="menuitem">
+<a href="forrest-friday.html" title="ForrestFriday monthly get-together">ForrestFriday IRC</a>
 </div>
 <div class="menuitem">
 <a href="events.html" title="List of upcoming related conferences and meetings">Events</a>
@@ -171,16 +171,16 @@ document.write("Last Published: " + document.lastModified);
 <a href="todo.html">Todo</a>
 </div>
 </div>
-<div onclick="SwitchMenu('menu_1.3', 'skin/')" id="menu_1.3Title" class="menutitle">Best Practices and Procedures</div>
-<div id="menu_1.3" class="menuitemgroup">
+<div onclick="SwitchMenu('menu_selected_1.3', 'skin/')" id="menu_selected_1.3Title" class="menutitle" style="background-image: url('skin/images/chapter_open.gif');">Best Practices and Procedures</div>
+<div id="menu_selected_1.3" class="selectedmenuitemgroup" style="display: block;">
 <div class="menuitem">
 <a href="howto-dev.html" title="Describes tips and procedures for efficiently developing with Forrest.">Development tips</a>
 </div>
 <div class="menuitem">
 <a href="howto-forrestbot-svn.html" title="Publish documentation with Forrestbot svn workstage">Forrestbot svn</a>
 </div>
-<div class="menuitem">
-<a href="howto-forrestbot-scp.html" title="Publish documentation with Forrestbot scp workstage">Forrestbot scp</a>
+<div class="menupage">
+<div class="menupagetitle">Forrestbot scp</div>
 </div>
 <div class="menuitem">
 <a href="subversion_bestpractices.html" title="Best practice notes for Subversion">Subversion</a>
@@ -228,7 +228,7 @@ document.write("Last Published: " + document.lastModified);
     +-->
 <div id="content">
 <div title="Portable Document Format" class="pdflink">
-<a class="dida" href="forrest-friday.pdf"><img alt="PDF -icon" src="skin/images/pdfdoc.gif" class="skin"><br>
+<a class="dida" href="howto-forrestbot-scp.pdf"><img alt="PDF -icon" src="skin/images/pdfdoc.gif" class="skin"><br>
         PDF</a>
 </div>
 <div class="trail">Font size: 
@@ -236,202 +236,224 @@ document.write("Last Published: " + document.lastModified);
 	          &nbsp;<input value="-a" class="smallerfont" title="Shrink text" onclick="ndeSetTextSize('decr'); return false;" type="button">
 	          &nbsp;<input value="+a" class="biggerfont" title="Enlarge text" onclick="ndeSetTextSize('incr'); return false;" type="button">
 </div>
-<h1>ForrestFriday monthly get-together</h1>
+<h1>How to deploy documentation with the Forrestbot "scp" workstage</h1>
 <div id="front-matter">
+<div class="abstract">
+      This How-To describes the building and deployment of a documentation set
+      with the help of the forrestbot "scp" workstage.
+    </div>
 <div id="minitoc-area">
 <ul class="minitoc">
 <li>
-<a href="#overview">Overview</a>
+<a href="#Intended Audience">Intended Audience</a>
 </li>
 <li>
-<a href="#purpose">Purpose</a>
+<a href="#Purpose">Purpose</a>
 </li>
 <li>
-<a href="#how">How to participate</a>
+<a href="#Prerequisites">Prerequisites</a>
 </li>
 <li>
-<a href="#op">Notes for channel operator</a>
+<a href="#Steps">Steps</a>
+<ul class="minitoc">
+<li>
+<a href="#introduction">Introduction</a>
+</li>
+<li>
+<a href="#settings">The deploy.scp.settings file</a>
+</li>
+<li>
+<a href="#buildfile">The Forrestbot buildfile</a>
+</li>
+<li>
+<a href="#checksums">The Cocoon "checksums" facility</a>
+</li>
+<li>
+<a href="#build">The "build" workstage</a>
+</li>
+<li>
+<a href="#deploy">The "deploy" workstage</a>
+</li>
+<li>
+<a href="#production">Moving the documents into production</a>
+</li>
+</ul>
+</li>
+<li>
+<a href="#Further Reading">Further Reading</a>
 </li>
 </ul>
 </div>
 </div>
-    
-<a name="N1000E"></a><a name="overview"></a>
-<h2 class="underlined_10">Overview</h2>
+<a name="N10010"></a><a name="Intended Audience"></a>
+<h2 class="underlined_10">Intended Audience</h2>
 <div class="section">
 <p>
-        On the second Friday of each month we have a 24-hour get-together using
-        the dev mailing list, Internet Relay Chat (IRC), and other collaborative
-        tools, to work on Forrest development and get to know each other.
-      </p>
-<p>
-        ForrestFriday starts at 06:00 UTC (6am Greenwich Mean Time in London)
-        and lasts for 24 hours.
-      </p>
-<p>
-        The next event will take place on <strong>?? ?? 2006</strong>. (Note:
-        See recent mail discussion - not happening until further notice.) See
-        <a href="http://www.timeanddate.com/worldclock/fixedtime.html?year=2006&amp;month=07&amp;day=14&amp;hour=6&amp;min=0&amp;sec=0">start
-        time</a> and
-        <a href="http://www.timeanddate.com/worldclock/meetingtime.html?day=14&amp;month=07&amp;year=2006&amp;p1=136&amp;p2=48&amp;p3=176&amp;p4=240&amp;p5=224&amp;p6=213">zone
-        overlap</a>.
-      </p>
+      Anyone who generates a static documentation set with Forrest will need
+      to deploy the results, whether that be to a remote server or locally.
+    </p>
 </div>
-    
-<a name="N10029"></a><a name="purpose"></a>
+<a name="N10018"></a><a name="Purpose"></a>
 <h2 class="underlined_10">Purpose</h2>
 <div class="section">
 <p>
-        The day is devoted to working collaboratively to solve particular issues
-        and getting to know each other. In the weeks leading up to each event,
-        decide on the dev mailing list what the main topic should be. Probably
-        something that needs groups work (e.g. moving the internal format to be
-        XHTML2).
+      This howto will explain one method of using the Forrestbot, by way of the
+      worked example for managing a company or private website, and using "Secure Copy (SCP)" to deploy to a remote webserver. The Forrestbot has a number of deployment methods. After you understand the principles then you will be able to apply that to whatever method is relevant.
+    </p>
+<p>
+      The secondary purpose is to explain to ASF committers how to manage
+      project documentation, e.g. for an "Apache Labs" investigation.
+    </p>
+<p>
+      This howto also explains the use of the Apache Cocoon "checksums" facility
+      to only process and deploy the changed files.
+    </p>
+</div>
+<a name="N10026"></a><a name="Prerequisites"></a>
+<h2 class="underlined_10">Prerequisites</h2>
+<div class="section">
+<p>
+      Refer to the <a href="tools/forrestbot.html">Forrestbot</a> documentation.
+      It is not necessary to have thorough knowledge, but a basic understanding
+      will help.
+    </p>
+<p>
+      An account on a server configured to use SSH access.
+      e.g. <a href="http://apache.org/dev/new-committers-guide.html#ssh">ASF Guide for new committers</a>.
+    </p>
+<p>
+      Review the <a href="howto-forrestbot-svn.html">Forrestbot svn</a> howto documentation.
+      That explains more generally how to use a Forrestbot.
+    </p>
+<p>
+      Therefore this "scp" howto can have minimal content.
+    </p>
+</div>
+<a name="N10043"></a><a name="Steps"></a>
+<h2 class="underlined_10">Steps</h2>
+<div class="section">
+<a name="N10048"></a><a name="introduction"></a>
+<h3 class="underlined_5">Introduction</h3>
+<p>
+      This Forrestbot uses the "getsrc.local" workstage to retrieve the sources from the local project workspace filesystem, i.e. from the top-level of your Forrest project site.
       </p>
 <p>
-        There will also be an effort to clean up the <a href="issues.html">Issue
-        Tracker</a>.
+        This Forrestbot uses the "deploy.scp" workstage to copy the generated documents
+        to the remote server. They go into a "stage" directory on the web server
+        which has a .htaccess file to enable selected people to review before putting into production.
+      </p>
+<a name="N10055"></a><a name="settings"></a>
+<h3 class="underlined_5">The deploy.scp.settings file</h3>
+<p>
+        Create a file at the top-level of your project site named
+        <span class="codefrag">deploy.scp.settings</span> to provide your ssh credentials.
+        Set its file permissions so that only you can read it.
+      </p>
+<pre class="code">&lt;?xml version="1.0"?&gt;
+&lt;project&gt;
+  &lt;property name="deploy.scp.keyfile" value="/Users/me/.ssh/id_rsa"/&gt;
+  &lt;property name="deploy.scp.passphrase" value="#$!*%#..."/&gt;
+&lt;/project&gt;</pre>
+<a name="N10066"></a><a name="buildfile"></a>
+<h3 class="underlined_5">The Forrestbot buildfile</h3>
+<p>
+        The Forrestbot buildfile sets some properties and declares the workstages (i.e. Ant targets) that need to be carried out. Of course this is fully explained in the <a href="tools/forrestbot.html">Forrestbot</a>
+        documentation.
       </p>
 <p>
-        The dev mailing list is still the main form of communication and all
-        decisions are made there. The IRC channel is to support that and provide
-        a place for near real-time discussion.
+        Create a file at the top-level of your project website named, e.g.
+        <span class="codefrag">publish-stage.xml</span>
+      
+</p>
+<pre class="code">&lt;?xml version="1.0"?&gt;
+&lt;project name="my-lab-docs" default="main"&gt;
+  &lt;property name="getsrc.local.root-dir" location="."/&gt;
+  &lt;target name="getsrc" depends="getsrc.clean-workdir, getsrc.local"/&gt;
+  &lt;property name="deploy.scp.dest"
+    value="username@apache.org:public_html/my-lab/stage"/&gt;
+  &lt;import file="deploy.settings" optional="true"/&gt;
+  &lt;target name="deploy" depends="deploy.scp"/&gt;
+  &lt;property environment="env"/&gt;
+  &lt;import file="${env.FORREST_HOME}/tools/forrestbot/core/forrestbot.xml"/&gt;
+&lt;/project&gt;</pre>
+<p>
+        So it gets the sources relative to the current directory. Actually
+        it reads the <span class="codefrag">forrest.properties</span> configuration file
+        to find out where other stuff is located.
       </p>
 <p>
-        The IRC channel is definitely not open continuously. It is only for
-        temporary communications at this monthly meeting.
+        It deploys the generated files directly to the user's "public_html" webspace
+        into a "stage" sub-directory. Of course this "deploy.scp.dest" location
+        could be a full pathname to an htdocs directory on the remove remote server.
+      </p>
+<a name="N10087"></a><a name="checksums"></a>
+<h3 class="underlined_5">The Cocoon "checksums" facility</h3>
+<p>
+        Instruct Forrest's Cocoon to use a "checksums" file to record the checksum
+        of each document that it has processed. This enables subsequent builds to
+        only process the documents that have changed. This means that each file's
+        timestamp will only be touched if it is a changed document, which enables
+        the Forrestbot deploy.scp workstage to only deploy the changed files.
       </p>
 <p>
-        This is not a user help forum, please do that on the user mailing list.
+        Follow the "<a href="docs_0_90/faq.html#checksums">checksums</a>" FAQ.
+      </p>
+<a name="N10098"></a><a name="build"></a>
+<h3 class="underlined_5">The "build" workstage</h3>
+<p>
+        After doing the usual process to edit source documents, review them with
+        'forrest run', and ensure that things are in order with 'forrest validate'.
+      </p>
+<p>
+        Now do the build:
+      </p>
+<pre class="code">forrest -f publish-stage.xml build</pre>
+<p>
+        This does the normal site build to generate the complete set of static documents. Watch for errors.
+      </p>
+<p>
+        To review, see the built docs in <span class="codefrag">build/my-lab-docs</span> directory.
+      </p>
+<a name="N100B2"></a><a name="deploy"></a>
+<h3 class="underlined_5">The "deploy" workstage</h3>
+<p>
+        When satisfied, then deploy the built docs:
+      </p>
+<pre class="code">forrest -f publish-satge.xml deploy</pre>
+<p>
+        The files that are being transferred to the remote server will now be listed.
+      </p>
+<a name="N100C3"></a><a name="production"></a>
+<h3 class="underlined_5">Moving the documents into production</h3>
+<p>
+       The reason for deploying the documents into a "stage" directory was so that
+       clients or collaborators could review it before going into production.
+       So ask them to review your people.apache.org/my-lab/stage/ site.
+       When satisfied, then: 
+      </p>
+<pre class="code">ssh people.apache.org
+cd publish_html/my-lab/stage
+cp -Rf * ..
+</pre>
+<p>
+        That is it.
       </p>
 </div>
-    
-<a name="N10043"></a><a name="how"></a>
-<h2 class="underlined_10">How to participate</h2>
+<a name="N100D4"></a><a name="Further Reading"></a>
+<h2 class="underlined_10">Further Reading</h2>
 <div class="section">
 <ul>
-        
-<li>
-          All volunteers are welcome.
-        </li>
-        
-<li>
-          Get an IRC client (some are mentioned at <a href="http://irchelp.org/">irchelp.org</a>)
-          and see <a href="http://www.irchelp.org/irchelp/irctutorial.html">IRC Tutorial</a>.
-        </li>
-        
-<li>
-          Read the dev mailing list. That is where any decisions will be
-          made and the name of the IRC channel will be announced.
-        </li>
-        
-<li>
-          At the start time, connect to irc.freenode.net and join the channel.
-        </li>
-        
-<li>
-          The discussion will be logged, summarised, and added to our
-          "<a href="http://svn.apache.org/repos/asf/forrest/events/forrest-friday/">events</a>"
-          SVN repository.
-        </li>
-        
-<li>
-          ASF committers should try to use a nickname that matches their ASF
-          committer id.
-          Please also apply for an "IRC hostname
-          <a href="http://freenode.net/faq.shtml#cloaks">cloak</a>".
-          This hides your machine hostname. It also enables ASF oversight
-          processes to ensure that project PMC members are participating.
-          Instructions are in our SVN at
-          <a href="https://svn.apache.org/repos/private/committers/docs/freenode-cloaks.txt">https://svn.apache.org/repos/private/committers/docs/freenode-cloaks.txt</a>
-</li>
-        
-<li>
-          See notes about the <a href="plan/index.html">topic of the day</a>.
-        </li>
-        
-<li>
-          We hope to also have a Lenya instance. This will enable a "whiteboard"
-          for the day, and also be the first step for later Forrest-Lenya integration.
-        </li>
       
-</ul>
-</div>
+<li>
+<a href="howto-forrestbot-svn.html">How to deploy documentation with the Forrestbot "svn" workstage</a>
+</li>
+      
+<li>
+<a href="tools/forrestbot.html">Forrestbot - automated building and deploying</a>
+</li>
     
-<a name="N1007C"></a><a name="op"></a>
-<h2 class="underlined_10">Notes for channel operator</h2>
-<div class="section">
-<ul>
-        
-<li>
-          Send a reminder email to dev- prior to the event. Send one about a
-          week beforehand so that the Topic can be decided and to remind people
-          that it is happening (it comes around quickly). Send another the day
-          before the event. Then do the following on the day ...
-        </li>
-        
-<li>
-          The first person to join the IRC channel is the operator.
-        </li>
-        
-<li>
-          See the irchelp.org
-          <a href="http://www.irchelp.org/irchelp/changuide.html">guide</a>
-          for channel operators.
-        </li>
-        
-<li>
-          Make sure that your irc client is creating a logfile.
-        </li>
-        
-<li>
-          Decide on a channel name. Join it a bit before the start time, then do
-          this setup ...
-        </li>
-        
-<li>
-          Set the channel mode: <span class="codefrag">/mode +n</span>
-</li>
-        
-<li>
-          Declare today's topic: <span class="codefrag">/topic ForrestFriday: XHTML2 core and Jira cleanup</span>
-</li>
-        
-<li>Ask cheche to start the logger bot and tell the URL for the live logfile.
-        </li>
-        
-<li>
-          Make sure that your client is creating a logfile.
-        </li>
-        
-<li>
-          Begin a summary text file in the "forrest-events" SVN. Committers
-          should add to this during the day. Don't leave it until the end.
-        </li>
-        
-<li>
-          Announce to the dev mailing list that the channel is open and tell the channel name
-          and the URL for the live log.
-        </li>
-        
-<li>
-          During the session, occasionally refer to the live logfile URL. People can read
-          what they missed, and also refer to previous discussion by stating the time that
-          it occurred.
-        </li>
-        
-<li>
-          At the end, everyone leaves the channel and it will automatically close.
-          Ask cheche to stop the logger bot.
-        </li>
-        
-<li>
-          Add the logfile to the Forrest Events repository.
-        </li>
-      
 </ul>
 </div>
-  
 </div>
 <!--+
     |end content

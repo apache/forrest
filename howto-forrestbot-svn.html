@@ -5,7 +5,7 @@
 <meta content="Apache Forrest" name="Generator">
 <meta name="Forrest-version" content="0.9-dev">
 <meta name="Forrest-skin-name" content="pelt">
-<title>How to write a How-To</title>
+<title>How to deploy documentation with the Forrestbot "svn" workstage</title>
 <link type="text/css" href="skin/basic.css" rel="stylesheet">
 <link media="screen" type="text/css" href="skin/screen.css" rel="stylesheet">
 <link media="print" type="text/css" href="skin/print.css" rel="stylesheet">
@@ -176,8 +176,8 @@ document.write("Last Published: " + document.lastModified);
 <div class="menuitem">
 <a href="howto-dev.html" title="Describes tips and procedures for efficiently developing with Forrest.">Development tips</a>
 </div>
-<div class="menuitem">
-<a href="howto-forrestbot-svn.html" title="Publish documentation with Forrestbot svn workstage">Forrestbot svn</a>
+<div class="menupage">
+<div class="menupagetitle">Forrestbot svn</div>
 </div>
 <div class="menuitem">
 <a href="howto-forrestbot-scp.html" title="Publish documentation with Forrestbot scp workstage">Forrestbot scp</a>
@@ -188,8 +188,8 @@ document.write("Last Published: " + document.lastModified);
 <div class="menuitem">
 <a href="documentation_bestpractices.html" title="Best practice notes for documentation">Documentation</a>
 </div>
-<div class="menupage">
-<div class="menupagetitle">Write a How-to</div>
+<div class="menuitem">
+<a href="howto-howto.html" title="Instructions for writing             a new howto-document">Write a How-to</a>
 </div>
 <div onclick="SwitchMenu('menu_1.3.7', 'skin/')" id="menu_1.3.7Title" class="menutitle">Committer notes</div>
 <div id="menu_1.3.7" class="menuitemgroup">
@@ -228,7 +228,7 @@ document.write("Last Published: " + document.lastModified);
     +-->
 <div id="content">
 <div title="Portable Document Format" class="pdflink">
-<a class="dida" href="howto-howto.pdf"><img alt="PDF -icon" src="skin/images/pdfdoc.gif" class="skin"><br>
+<a class="dida" href="howto-forrestbot-svn.pdf"><img alt="PDF -icon" src="skin/images/pdfdoc.gif" class="skin"><br>
         PDF</a>
 </div>
 <div class="trail">Font size: 
@@ -236,11 +236,11 @@ document.write("Last Published: " + document.lastModified);
 	          &nbsp;<input value="-a" class="smallerfont" title="Shrink text" onclick="ndeSetTextSize('decr'); return false;" type="button">
 	          &nbsp;<input value="+a" class="biggerfont" title="Enlarge text" onclick="ndeSetTextSize('incr'); return false;" type="button">
 </div>
-<h1>How to write a How-To</h1>
+<h1>How to deploy documentation with the Forrestbot "svn" workstage</h1>
 <div id="front-matter">
 <div class="abstract">
-      This How-To describes the steps necessary to write a How-To document.
-      Writing documentation is a valuable way to give back to the community.
+      This How-To describes the building and deployment of a documentation set
+      with the help of the forrestbot "svn" workstage.
     </div>
 <div id="minitoc-area">
 <ul class="minitoc">
@@ -257,286 +257,210 @@ document.write("Last Published: " + document.lastModified);
 <a href="#Steps">Steps</a>
 <ul class="minitoc">
 <li>
-<a href="#overview">Write the Overview</a>
+<a href="#introduction">Introduction</a>
 </li>
 <li>
-<a href="#audience">Describe your Intended Audience</a>
+<a href="#follow">Follow along on your local system</a>
 </li>
 <li>
-<a href="#purpose">State the Purpose</a>
+<a href="#settings">The deploy.svn.settings file</a>
 </li>
 <li>
-<a href="#prerequisites">List any Prerequisites</a>
+<a href="#buildfile">The Forrestbot buildfile</a>
 </li>
 <li>
-<a href="#steps">Describe the Steps of your How-To</a>
+<a href="#build">The "build" workstage</a>
 </li>
 <li>
-<a href="#extension">Extend the Learning</a>
+<a href="#deploy">The "deploy" workstage</a>
 </li>
 <li>
-<a href="#summarize">Summarize the Entire Process</a>
-</li>
-<li>
-<a href="#tips">Additional Tips or FAQs</a>
-</li>
-<li>
-<a href="#references">References</a>
-</li>
-<li>
-<a href="#contribute">Submit via the project issue tracker</a>
-</li>
-<li>
-<a href="#feedback">Get some feedback</a>
+<a href="#production">Moving the documents into production</a>
 </li>
 </ul>
 </li>
 <li>
-<a href="#Extension">Extension</a>
-</li>
-<li>
-<a href="#Frequently Asked Questions">Frequently Asked Questions</a>
-<ul class="minitoc">
-<li>
-<a href="#1+General+issues">1 General issues</a>
-<ul class="minitoc">
-<li>
-<a href="#1.1+What+is+the+difference+between+a+How-To+and+a+tutorial%3F">1.1 What is the difference between a How-To and a tutorial?</a>
-</li>
-</ul>
-</li>
-<li>
-<a href="#2+Style+issues">2 Style issues</a>
-<ul class="minitoc">
-<li>
-<a href="#2.1+What+spelling+convention+should+I+follow%3F">2.1 What spelling convention should I follow?</a>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>
-<a href="#Tips">Tips</a>
-<ul class="minitoc">
-<li>
-<a href="#tip-dtd">How-To dtd</a>
-</li>
-</ul>
-</li>
-<li>
-<a href="#References">References</a>
+<a href="#Further Reading">Further Reading</a>
 </li>
 </ul>
 </div>
 </div>
-<a name="N10013"></a><a name="Intended Audience"></a>
+<a name="N10010"></a><a name="Intended Audience"></a>
 <h2 class="underlined_10">Intended Audience</h2>
 <div class="section">
 <p>
-      Users who are ready to share their knowledge and experiences with the
-      community.
+      Anyone who generates a static documentation set with Forrest will need
+      to deploy the results, whether that be to a remote server or locally.
     </p>
 </div>
-<a name="N1001B"></a><a name="Purpose"></a>
+<a name="N10018"></a><a name="Purpose"></a>
 <h2 class="underlined_10">Purpose</h2>
 <div class="section">
 <p>
-      These guidelines are based on successful how-to document structures used
-      by other open source projects with diverse author groups. Following these
-      tried and true guidelines will help to ensure the effectiveness of your
-      work.
+      This howto will explain one method of using the Forrestbot, by way of the
+      worked example for managing the Apache Forrest project website. The Forrestbot has a number of deployment methods. After you understand the principles then you will be able to apply that to whatever method is relevant.
+    </p>
+<p>
+      The secondary purpose is to explain to Forrest committers how to manage
+      our project documentation. Other ASF projects will also find it useful.
     </p>
 </div>
 <a name="N10023"></a><a name="Prerequisites"></a>
 <h2 class="underlined_10">Prerequisites</h2>
 <div class="section">
 <p>
-      How-To authors should have:
+      Refer to the <a href="tools/forrestbot.html">Forrestbot</a> documentation.
+      It is not necessary to have thorough knowledge, but a basic understanding
+      will help.
     </p>
-<ul>
-      
-<li>A unique How-To topic, related to using Forrest, which fulfills a
-      specific need. Look at existing How-Tos to find a niche for your work.
-      Consider posting your idea for the How-To to user mailing list, to make
-      sure another author's draft is not already in process.</li>
-      
-<li>A sufficient ability in English to write the document. However, we would
-      rather that you just make a start, as the community can help to
-      fine-tune the document.</li>
-      
-<li>Copy this template document "howto-howto.xml" to be modified with
-      your own content as necessary.</li>
-      
-<li>An understanding of the How-To document structure. Just use this
-      template document and you will be safe.
-      Make sure you run '<span class="codefrag">forrest validate-xdocs</span>' before
-      contributing your document.</li>
-    
-</ul>
-<div class="note">
-<div class="label">Note</div>
-<div class="content">
-      See the <a href="docs_0_90/../dtdx/howto-v20.dtdx.html">DTD documentation</a> which explains
-      the document structure.
-    </div>
 </div>
-</div>
-<a name="N10044"></a><a name="Steps"></a>
+<a name="N1002F"></a><a name="Steps"></a>
 <h2 class="underlined_10">Steps</h2>
 <div class="section">
+<a name="N10034"></a><a name="introduction"></a>
+<h3 class="underlined_5">Introduction</h3>
 <p>
-      Here is how to proceed.
-    </p>
-<a name="N1004C"></a><a name="overview"></a>
-<h3 class="underlined_5">Write the Overview</h3>
-<p>
-        An overview helps potential readers to determine quickly if a particular
-        How-To matches their interests or needs. In a few sentences, summarize
-        the main points of your How-To. Make sure to include any critical
-        definitions which will help readers evaluate the utility of your How-To.
-        Consider writing the overview last, after you have completed all other
-        sections.
+        In this document "we/our" refers to the Apache Forrest project committers, who
+        manage the documentation. Even though other developers can help to
+        enhance the documentation by way of contributed patches, only the set of
+        committers can deploy (publish) it.
       </p>
-<a name="N10056"></a><a name="audience"></a>
-<h3 class="underlined_5">Describe your Intended Audience</h3>
 <p>
-        If your How-To is targetted at a specific audience, describe it here.
-        For example, potential readers will have different levels of skill using
-        Forrest. They will also bring different areas of expertise and
-        backgrounds to their How-To learning experience. When you clarify your
-        target audience up front, you will save all other readers time and
-        confusion.
+        Our source documents are managed in the project's Subversion (SVN) version control system. Each committer has a local SVN working copy on their office computer. We can prepare source changes and review them with 'forrest run' and 'forrest validate-xdocs'. When satisfied we 'svn commit' those changes. Our Forrestbot uses the "getsrc.local" workstage to retrieve the sources from the local svn checkout.
       </p>
-<a name="N10060"></a><a name="purpose"></a>
-<h3 class="underlined_5">State the Purpose</h3>
 <p>
-        State the purpose of your How-To. Explain how the reader will benefit by
-        reading it. Give your reader an incentive or two to continue.
+        The generated static documents which form the website are also stored in SVN. So our Forrestbot uses the "deploy.svn" workstage to deploy the generated documents. To publish the website, a regular cron job on the apache.org server automatically does 'svn update' in the website's document space. Elegant.
       </p>
-<a name="N1006A"></a><a name="prerequisites"></a>
-<h3 class="underlined_5">List any Prerequisites</h3>
 <p>
-        Inform your reader about any required knowledge, configuration, or
-        resources they may need before stepping through your How-To. Assist them
-        in this preparation by linking to other useful resources on the Forrest
-        site or the web. Helping your readers to prepare increases the
-        likelihood that they will continue reading your How-To.
+        That is what we call a "local forrestbot". Each committer can conduct
+        the workstages on their local computer. This enables a distributed team to manage the documentation.
       </p>
-<a name="N10074"></a><a name="steps"></a>
-<h3 class="underlined_5">Describe the Steps of your How-To</h3>
 <p>
-        In a precise, step-by-step approach, walk your reader through the
-        process. Make sure your reader can reproduce your intended result by
-        following your exact steps. Make the learning process efficient by
-        supplying sample code snippets or configuration details as necessary.
+        We have another Forrestbot on our "zone" 
+        <a href="http://forrest.zones.apache.org/">demonstration server</a>.
+        It runs automatically via cron each hour. Its workstages are not described in this howto, but essentially it gets the sources using the "getsrc.svn" workstage and it deploys the results to the local webserver htdocs directory on that machine using the "deploy.local" workstage. See that <a href="http://svn.apache.org/repos/asf/forrest/zone/htdocs/ft/forrest-docs.xml">buildfile</a>.
       </p>
-<a name="N1007E"></a><a name="extension"></a>
-<h3 class="underlined_5">Extend the Learning</h3>
+<a name="N10052"></a><a name="follow"></a>
+<h3 class="underlined_5">Follow along on your local system</h3>
 <p>
-        Provide your reader with a few real-world examples of how the techniques
-        or capabilities gained from your How-To could be applied. Reward the
-        reader for successfully completing the How-To with a few ideas about how
-        it will pay off.
+        You have all the sources for the Forrest project in your Forrest distribution in the "$FORREST_HOME/site-author" directory. If you are using the release then you have a snapshot of the documentation. Of course if you have SVN trunk then you are up-to-date.
       </p>
-<a name="N10088"></a><a name="summarize"></a>
-<h3 class="underlined_5">Summarize the Entire Process</h3>
 <p>
-        In a few sentences, remind the reader what they have just learned. This
-        helps to reinforce the main points of your How-To.
+        The Forrestbot build files for our site are also available. This means that you can run the "build" workstage. However you will not be able to do the "deploy" worskstage unless you are a Forrest committer.
       </p>
-<a name="N10092"></a><a name="tips"></a>
-<h3 class="underlined_5">Additional Tips or FAQs</h3>
 <p>
-        In some cases, step-by-step instructions simply aren't enough. Use this
-        section to pass on any other tips or frequently asked questions.
-        Anticipating the needs of your readers will increase the overall success
-        of your writing effort.
+        There is a brief explanation of how to publish our site in the document
+        <a href="http://svn.apache.org/repos/asf/forrest/trunk/etc/publishing_our_site.txt">$FORREST_HOME/etc/publishing_our_site.txt</a>
+      
+</p>
+<a name="N10066"></a><a name="settings"></a>
+<h3 class="underlined_5">The deploy.svn.settings file</h3>
+<p>
+        As explained in the above document, each committer needs a
+        <span class="codefrag">deploy.svn.settings</span> file to provide their credentials.
       </p>
-<a name="N1009C"></a><a name="references"></a>
-<h3 class="underlined_5">References</h3>
+<pre class="code">&lt;?xml version="1.0"?&gt;
+&lt;project&gt;
+  &lt;property name="deploy.svn.user" value="myApacheUsername"/&gt;
+  &lt;property name="deploy.svn.password" value="mySvnPassword"/&gt;
+&lt;/project&gt;</pre>
+<a name="N10077"></a><a name="buildfile"></a>
+<h3 class="underlined_5">The Forrestbot buildfile</h3>
 <p>
-        Remember to acknowledge any third-party resources or individuals who
-        contributed to the development of your How-To. Consider providing links
-        for those motivated readers who want to learn more.
+        The Forrestbot buildfile sets some properties and declares the workstages (i.e. Ant targets) that need to be carried out. Of course this is fully explained in the <a href="tools/forrestbot.html">Forrestbot</a>
+        documentation.
       </p>
-<a name="N100A6"></a><a name="contribute"></a>
-<h3 class="underlined_5">Submit via the project issue tracker</h3>
 <p>
-        Create an attachment for your How-To document, and submit it via the
-        project <a href="issues.html">issue tracker</a>.
+        Our buildfile is at
+        <a href="http://svn.apache.org/repos/asf/forrest/trunk/site-author/publish.xml">$FORREST_HOME/site-author/publish.xml</a>
+        ...
       </p>
-<a name="N100B4"></a><a name="feedback"></a>
-<h3 class="underlined_5">Get some feedback</h3>
+<pre class="code">&lt;?xml version="1.0"?&gt;
+&lt;project name="forrest-docs" default="main"&gt;
+  &lt;property name="getsrc.local.root-dir" location="."/&gt;
+  &lt;target name="getsrc" depends="getsrc.clean-workdir, getsrc.local"/&gt;
+  &lt;import file="../deploy.svn.settings" optional="true"/&gt;
+  &lt;property name="deploy.svn.url"
+    value="https://svn.apache.org/repos/asf/forrest/site"/&gt;
+  &lt;target name="deploy" depends="deploy.svn"/&gt;
+  &lt;property environment="env"/&gt;
+  &lt;import file="${env.FORREST_HOME}/tools/forrestbot/core/forrestbot.xml"/&gt;
+&lt;/project&gt;</pre>
 <p>
-        When the committers have added your document then it will be available
-        for everyone to to build upon and enhance. Feedback will happen via the
-        <a href="mail-lists.html">mailing lists</a>.
+        So it gets the sources relative to the current directory. Actually
+        it reads the <span class="codefrag">forrest.properties</span> configuration file
+        to find out where other stuff is located.
       </p>
-</div>
-<a name="N100C2"></a><a name="Extension"></a>
-<h2 class="underlined_10">Extension</h2>
-<div class="section">
 <p>
-      Solutions can be extended to cover many different problem domains. A
-      nearly unlimited number of potential How-To topics, from simple to
-      complex, are available right now, limited only by your imagination.
-    </p>
-</div>
-<a name="N100CA"></a><a name="Frequently Asked Questions"></a>
-<h2 class="underlined_10">Frequently Asked Questions</h2>
-<div class="section">
-<a name="N100CE"></a><a name="1+General+issues"></a>
-<h3 class="underlined_5">1 General issues</h3>
-<a name="N100D2"></a><a name="1.1+What+is+the+difference+between+a+How-To+and+a+tutorial%3F"></a>
-<h4>1.1 What is the difference between a How-To and a tutorial?</h4>
+        It deploys the generated files directly to the forrest/site SVN repository.
+      </p>
+<a name="N10099"></a><a name="build"></a>
+<h3 class="underlined_5">The "build" workstage</h3>
 <p>
-            The goal of a How-To is to help the reader to accomplish a specific
-            task with clear and consise instructions. While tutorials may
-            contain How-To-like instructions and content, they also include
-            additional background and conceptual content to help teach their
-            readers higher order concepts along the way. How-Tos are concerned
-            about filling an immediate, short-term need. Tutorials often provide
-            long-term knowledge which can be applied across a range of needs.
-          </p>
-<a name="N100DA"></a><a name="2+Style+issues"></a>
-<h3 class="underlined_5">2 Style issues</h3>
-<a name="N100DE"></a><a name="2.1+What+spelling+convention+should+I+follow%3F"></a>
-<h4>2.1 What spelling convention should I follow?</h4>
+        After doing the usual process to edit source documents, review them with
+        'forrest run', and ensure that things are in order with 'forrest validate'.
+      </p>
 <p>
-            Use whatever spelling convention (American, British, etc.) that is
-            most intuitive to you.
-          </p>
-</div>
-<a name="N100E6"></a><a name="Tips"></a>
-<h2 class="underlined_10">Tips</h2>
-<div class="section">
-<a name="N100EB"></a><a name="tip-dtd"></a>
-<h3 class="underlined_5">How-To dtd</h3>
+        Now do the build:
+      </p>
+<pre class="code">cd $FORREST_HOME/site-author
+forrest -f publish.xml build</pre>
 <p>
-        The document structure is likely to change at some time. Please note
-        that this HOWTO page is likely to change as well.
+        This does the normal site build to generate the complete set of static documents. Watch for errors.
+      </p>
+<p>
+        To review, see the built docs in <span class="codefrag">build/forrest-docs</span> directory.
+      </p>
+<a name="N100B3"></a><a name="deploy"></a>
+<h3 class="underlined_5">The "deploy" workstage</h3>
+<p>
+        When satisfied, then deploy the built docs:
+      </p>
+<pre class="code">forrest -f publish.xml deploy -Ddeploy.svn.commit-message="my commit message"</pre>
+<p>
+        If no commit message is supplied, then forrestbot will use a default.
+      </p>
+<p>
+        Now don't get frightened. It might seem like nothing is happening.
+        The first time that the "deploy" worskstage is used it will need to
+        do an 'svn checkout' of the site repository. This will take some time.
+        On subsequent deploys, it will need to do an 'svn update'. So be patient.
+      </p>
+<p>
+        The files that are being committed will now be listed. That is it.
+        They are now in the "<a href="http://svn.apache.org/repos/asf/forrest/site">forrest/site</a>" SVN repository.
+      </p>
+<a name="N100CE"></a><a name="production"></a>
+<h3 class="underlined_5">Moving the documents into production</h3>
+<p>
+        Next a cron job on the server will automatically publish it.
+        However, if quicker turnaround is required, then do this:
+      </p>
+<pre class="code">ssh people.apache.org
+cd /www/forrest.apache.org
+umask 002
+svn update</pre>
+<p>
+        Next an rsync cronjob will publish it to the production webserver.
+        See other <a href="http://apache.org/dev/project-site.html">notes</a>
+        about how the ASF project websites are managed.
       </p>
 </div>
-<a name="N100F5"></a><a name="References"></a>
-<h2 class="underlined_10">References</h2>
+<a name="N100E3"></a><a name="Further Reading"></a>
+<h2 class="underlined_10">Further Reading</h2>
 <div class="section">
-<p>
-      This is not the first, nor will it be the last, How-To on writing How-Tos.
-      For other ideas and opinions on the matter, check out the following
-      sources.
-    </p>
 <ul>
       
-<li>Joel D. Canfield's <a href="http://www.evolt.org/article/How_To_Write_A_How_To/9741/18250/index.html" rel="nofollow">How
-      to Write a How-To</a> on evolt.org.</li>
+<li>
+<a href="howto-forrestbot-scp.html">How to deploy documentation with the Forrestbot "scp" workstage</a>
+</li>
       
-<li>The Linux Documentation Project's <a href="http://www.tldp.org/HOWTO/HOWTO-INDEX/index.html" rel="nofollow">HOWTO</a>
-      index page provides many excellent How-To documents to inspire your
-      efforts.</li>
+<li>
+<a href="tools/forrestbot.html">Forrestbot - automated building and deploying</a>
+</li>
     
 </ul>
 </div>
-<span class="version">0.3</span>
 </div>
 <!--+
     |end content
