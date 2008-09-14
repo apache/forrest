@@ -34,7 +34,6 @@ import com.ctc.wstx.evt.DefaultEventAllocator;
 /**
  * Helper class that eases the usage of StAX in your plugins.
  * 
- * @author thorsten
  * @version 1.0
  * 
  */

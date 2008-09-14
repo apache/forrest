@@ -23,7 +23,6 @@ import org.apache.forrest.dispatcher.api.ContractOld;
 import org.apache.forrest.dispatcher.helper.ContractHelperStAX;
 
 /**
- * @author thorsten
  * 
  */
 public class DefaultContract implements ContractOld {

@@ -41,7 +41,6 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 /**
- * @author thorsten
  * 
  */
 public class ContractBeanDOMImpl extends Beans implements ContractBean {

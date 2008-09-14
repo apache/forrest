@@ -22,7 +22,6 @@ import org.apache.commons.logging.LogFactory;
 /**
  * Simple wrapper class to easier debug/log.
  * 
- * @author thorsten
  * @version 1.0
  */
 public class Loggable {

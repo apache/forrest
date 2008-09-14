@@ -20,7 +20,6 @@ import java.io.File;
 import java.util.HashMap;
 
 /**
- * @author thorsten
  *
  */
 public interface ContractOld {
