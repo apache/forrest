@@ -133,7 +133,7 @@ public class XSLContractHelper extends StAX {
    */
   public InputStream createEmptyXml() throws XMLStreamException {
     ByteArrayOutputStream out = createEmptyXmlOutput();
-    return new BufferedInputStream(new ByteArrayInputStream(out.toByteArray()));
+    return (out !=null)?new BufferedInputStream(new ByteArrayInputStream(out.toByteArray())):null;
   }
 
   /**

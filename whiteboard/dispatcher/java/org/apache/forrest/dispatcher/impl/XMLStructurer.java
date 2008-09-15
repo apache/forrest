@@ -5,19 +5,25 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.StringReader;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 
 import javax.xml.stream.XMLEventWriter;
 import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
+import javax.xml.stream.XMLStreamWriter;
+import javax.xml.stream.events.EndElement;
+import javax.xml.stream.events.StartElement;
 import javax.xml.stream.events.XMLEvent;
 import javax.xml.stream.util.XMLEventAllocator;
 
 import org.apache.forrest.dispatcher.DispatcherException;
 import org.apache.forrest.dispatcher.api.Contract;
 import org.apache.forrest.dispatcher.helper.StAX;
+import org.apache.forrest.dispatcher.utils.CommonString;
 import org.xml.sax.InputSource;
 
 public class XMLStructurer extends StAX {
@@ -44,12 +50,16 @@ public class XMLStructurer extends StAX {
 
   private static final Object VALUE_ATT = "value";
 
+  private static final Object CONTRACT_RESULT_XPATH = "xpath";
+
   private String format = "";
   private InputStream dataStream = null;
 
   private String currentPath = "";
 
   private boolean allowXmlProperties = false;
+  
+  private LinkedHashMap<String, LinkedHashSet<XMLEvent>> resultTree = new LinkedHashMap<String, LinkedHashSet<XMLEvent>>();
 
   public boolean isAllowXmlProperties() {
     return allowXmlProperties;
@@ -84,6 +94,7 @@ public class XMLStructurer extends StAX {
   }
 
   public BufferedInputStream execute() throws DispatcherException {
+    BufferedInputStream stream = null;
     try {
       XMLStreamReader reader = getReader(dataStream);
       boolean process = true;
@@ -115,7 +126,7 @@ public class XMLStructurer extends StAX {
                 path = "/" + path;
               }
               currentPath = path;
-              processStructure(reader);
+              stream = processStructure(reader);
             } else {
               log.debug("no-matched");
             }
@@ -131,21 +142,52 @@ public class XMLStructurer extends StAX {
     } catch (IOException e) {
       throw new DispatcherException(e);
     }
-    return null;
+    return stream;
   }
 
-  private void processStructure(XMLStreamReader reader)
+  private BufferedInputStream processStructure(XMLStreamReader reader)
       throws XMLStreamException, DispatcherException, IOException {
     boolean process = true;
     String elementName = null;
+    ByteArrayOutputStream out = new ByteArrayOutputStream();
+    XMLEventWriter writer = getWriter(out);
     while (process) {
       int event = reader.next();
       switch (event) {
       case XMLStreamConstants.END_ELEMENT:
         elementName = reader.getLocalName();
         if (elementName.equals(STRUCTURE_ELEMENT)) {
-          // TODO: add logic here to produce the response
-          process = false;
+          writer.add(getEventFactory().createStartDocument("UTF-8", "1.0"));
+          Iterator<String> iterator = resultTree.keySet().iterator();
+          String[] paths = resultTree.keySet().toArray(new String[1]);
+          String rootPath = CommonString.common(paths);
+          String[] tokenizer = rootPath.split("/");
+          openPaths(writer, tokenizer);
+          while (iterator.hasNext()) {
+            String element = iterator.next();
+            final String replaceFirst = element.replaceFirst(rootPath,
+                    "");
+            final String[] split = replaceFirst.split("/");
+            if (split.length > 1) {
+                openPaths(writer, split);
+                injectResult(writer, element);
+                closingPaths(writer, split);
+            } else {
+                StartElement start = getEventFactory().createStartElement(
+                        "", "", replaceFirst);
+                writer.add((XMLEvent) start);
+                
+                injectResult(writer, element);
+                EndElement end = getEventFactory().createEndElement("", "",
+                        replaceFirst);
+                writer.add((XMLEvent) end);
+            }
+
+        }
+        closingPaths(writer, tokenizer);
+        writer.add(getEventFactory().createEndDocument());
+        resultTree.clear();
+        process = false;
         }
         break;
 
@@ -165,7 +207,8 @@ public class XMLStructurer extends StAX {
 
       }
     }
-
+    log.debug(out.toString());
+    return (out !=null)?new BufferedInputStream(new ByteArrayInputStream(out.toByteArray())):null;
   }
 
   private void processContract(XMLStreamReader reader)
@@ -215,7 +258,10 @@ public class XMLStructurer extends StAX {
           if (null != dataStream) {
             dataStream.close();
           }
-          // FIXME: add the stream to the result map with the actual path
+          processContractResult(resultStream);
+          if (null!=resultStream){
+            resultStream.close();
+          }
           process = false;
         }
         break;
@@ -234,6 +280,87 @@ public class XMLStructurer extends StAX {
     }
   }
 
+  private void processContractResult(InputStream resultStream) throws XMLStreamException {
+    XMLStreamReader contractResultReader = getReader(resultStream);
+    String xpath = "", injectionPoint = "";
+    LinkedHashSet<XMLEvent> pathElement =null;
+    boolean process = true;
+    while (process) {
+      int resultEvent = contractResultReader.next();
+      switch (resultEvent) {
+      case XMLStreamConstants.START_ELEMENT:
+        if (contractResultReader.getLocalName().equals("part")) {
+            // Get attribute names
+            for (int i = 0; i < contractResultReader.getAttributeCount(); i++) {
+                String localName = contractResultReader
+                        .getAttributeLocalName(i);
+                if (localName.equals(CONTRACT_RESULT_XPATH)) {
+                    // Return value
+                    xpath = contractResultReader.getAttributeValue(i);
+                }
+            }
+            if (xpath.equals("")) {
+                // iterate through the children and add them
+                // to the pathElement
+                if (resultTree.containsKey(currentPath))
+                    pathElement = resultTree.get(currentPath);
+                else
+                    pathElement = new LinkedHashSet<XMLEvent>();
+                injectionPoint = currentPath;
+                inject(pathElement, contractResultReader, injectionPoint);
+                // as soon as you find the end element add
+                // it back to the resultTree
+            } else {
+                // iterate through the children and add them
+                // to the xpath defined
+                if (resultTree.containsKey(xpath))
+                    pathElement = resultTree.get(xpath);
+                else
+                    pathElement = new LinkedHashSet<XMLEvent>();
+                injectionPoint = xpath;
+                inject(pathElement, contractResultReader, injectionPoint);
+            }
+        }
+        break;
+    case XMLStreamConstants.END_DOCUMENT:
+      process=false;
+        
+    default:
+        break;
+    
+      
+      }
+    }
+  }
+
+  private void inject(LinkedHashSet<XMLEvent> pathElement,
+      XMLStreamReader parser, String injectionPoint)
+      throws XMLStreamException {
+  log.debug("injectionPoint " + injectionPoint);
+  XMLEventAllocator allocator = getEventAllocator();
+  boolean process = true;
+  while (process) {
+      int event = parser.next();
+      
+      XMLEvent currentEvent = allocator.allocate(parser);
+      switch (event) {
+      case XMLStreamConstants.END_ELEMENT:
+          if (parser.getLocalName().equals("part")) {
+              log.debug("Trying to add to hash " + injectionPoint);
+              resultTree.put(injectionPoint, pathElement);
+              process=false;
+          } else {
+              pathElement.add(currentEvent);
+          }
+          break;
+          
+      default:
+          pathElement.add(currentEvent);
+          break;
+      }
+  }
+}
+  
   private void processProperty(XMLStreamReader reader, HashMap param)
       throws XMLStreamException {
     String propertyName = null, propertyValue = null;
@@ -287,5 +414,31 @@ public class XMLStructurer extends StAX {
         .toByteArray()));
     return value;
   }
+  private void openPaths(XMLEventWriter writer, String[] tokenizer) throws XMLStreamException {
+    for (int i = 0; i < tokenizer.length; i++) {
+        if (!tokenizer[i].equals("")) {
+            StartElement value = getEventFactory().createStartElement(
+                    "", "", tokenizer[i]);
+            writer.add((XMLEvent) value);
+        }
+    }
+}
 
+private void closingPaths(XMLEventWriter writer, String[] tokenizer) throws XMLStreamException {
+    // closing the initial paths again
+    for (int j = tokenizer.length - 1; j >= 0; j--) {
+        if (!tokenizer[j].equals("")) {
+            EndElement value = getEventFactory().createEndElement("",
+                    "", tokenizer[j]);
+            writer.add((XMLEvent) value);
+        }
+    }
+}
+private void injectResult(XMLEventWriter writer, String element) throws XMLStreamException {
+  LinkedHashSet<XMLEvent> part=resultTree.get(element);
+  Object[] partResult = part.toArray();
+  for (int i = 0; i < partResult.length; i++) {
+      writer.add((XMLEvent) partResult[i]);
+  }
+}
 }
