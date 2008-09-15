@@ -19,8 +19,6 @@
   xmlns:i18n="http://apache.org/cocoon/i18n/2.1"
   xmlns:forrest="http://apache.org/forrest/templates/2.0"
   name="master">
-<!--NOTE: 
-  THIS IS JUST AN EXPLANATION!!!-->
   <description>
     <p>
       This is just a master contract, it will output something but *nothing* in
@@ -37,34 +35,17 @@
       <xsl:param name="test-inline" select="'No parameter has been passed'"/>
       <xsl:param name="test-inline-xml" select="'No xml parameter has been passed'"/>
       <xsl:template match="/">
-<!-- The dispatcher needs a well-formed xml document to work with. 
-            The forrest:content element (as root element) can contain as many forrest:part's as you want. -->
         <forrest:content xmlns:forrest="http://apache.org/forrest/templates/1.0">
-<!-- forrest:part within this element the actual content is going to. 
-            If you use no @xpath then we insert content on the current structurer position.-->
           <forrest:part>
             Content going to the location defined by the structurer.
             $test-inline: <xsl:value-of select="$test-inline"/>
             $test-inline-xml: <xsl:copy-of select="$test-inline-xml"/>
           </forrest:part>
-<!--If you want to inject the content into a certain DOM position and
-              *not* the current position in the structurer, you can use the @xpath attribute. -->
           <forrest:part xpath="/html/head">
             <meta content=" Content going to a fixed location defined by the contract (here: /html/head)." name="Description" />
           </forrest:part>
         </forrest:content>
       </xsl:template>
-<!-- copy n paste -->
-<!--
-      <xsl:param name="defaultVariables" select="'test.html'"/>
-      <xsl:variable name="skin-img-dir" select="$defaultVariables/*/*[@name='skin-img-dir']/@value"/>
-      <xsl:template match="/">
-        <forrest:content>
-          <forrest:part/>
-          <forrest:part xpath="/html/head"/>
-        </forrest:content>
-      </xsl:template>
-      -->
     </xsl:stylesheet>
   </forrest:template>
 </forrest:contract>
