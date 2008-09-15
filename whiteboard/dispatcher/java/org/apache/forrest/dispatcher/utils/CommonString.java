@@ -32,7 +32,6 @@ public class CommonString {
         Collections.sort(list, STRING_LENGTH_ORDER);
         int length = list.size(), i = 0;
         String common = "";
-        System.out.println("length: " + length);
         for (Iterator<String> iter = list.iterator(); i < length;) {
             i = i + 1;
             String path = iter.next();
@@ -41,8 +40,6 @@ public class CommonString {
             } else {
                 common = common(common, path);
             }
-            System.out.println("common: " + common + "\npath: " + path + "\ni: "
-                    + i);
         }
         return common;
     }
