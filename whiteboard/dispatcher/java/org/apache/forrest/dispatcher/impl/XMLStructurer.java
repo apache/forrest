@@ -190,7 +190,9 @@ public class XMLStructurer extends StAX {
         this.contractUriPrefix + name + this.contractUriSufix);
     contract.initializeFromStream(xslStream);
     // closing stream
-    xslStream.close();
+    if(xslStream!=null){
+      xslStream.close();
+    }
     /*
      * HACK END
      */
@@ -203,7 +205,9 @@ public class XMLStructurer extends StAX {
         elementName = reader.getLocalName();
         if (elementName.equals(CONTRACT_ELEMENT)) {
           InputStream resultStream = contract.execute(dataStream, param);
-          dataStream.close();
+          if (null!=dataStream){
+            dataStream.close();
+          }
           // FIXME: add the stream to the result map with the actual path
           process = false;
         }
