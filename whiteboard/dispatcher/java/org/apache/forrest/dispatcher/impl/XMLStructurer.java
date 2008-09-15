@@ -185,7 +185,7 @@ public class XMLStructurer extends StAX {
      * THIS ONLY WORKS FOR JUNIT ATM!!!
      */
     dataStream = null;
-    Contract contract = new XSLContract(false);
+    Contract contract = new XSLContract(allowXmlProperties);
     InputStream xslStream = this.getClass().getResourceAsStream(
         this.contractUriPrefix + name + this.contractUriSufix);
     contract.initializeFromStream(xslStream);
