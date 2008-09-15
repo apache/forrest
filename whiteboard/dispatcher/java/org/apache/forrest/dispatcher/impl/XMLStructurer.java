@@ -1,17 +1,24 @@
 package org.apache.forrest.dispatcher.impl;
 
 import java.io.BufferedInputStream;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.StringReader;
 import java.util.HashMap;
 
+import javax.xml.stream.XMLEventWriter;
 import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
+import javax.xml.stream.events.XMLEvent;
+import javax.xml.stream.util.XMLEventAllocator;
 
 import org.apache.forrest.dispatcher.DispatcherException;
 import org.apache.forrest.dispatcher.api.Contract;
 import org.apache.forrest.dispatcher.helper.StAX;
+import org.xml.sax.InputSource;
 
 public class XMLStructurer extends StAX {
 
@@ -190,7 +197,7 @@ public class XMLStructurer extends StAX {
         this.contractUriPrefix + name + this.contractUriSufix);
     contract.initializeFromStream(xslStream);
     // closing stream
-    if(xslStream!=null){
+    if (xslStream != null) {
       xslStream.close();
     }
     /*
@@ -205,7 +212,7 @@ public class XMLStructurer extends StAX {
         elementName = reader.getLocalName();
         if (elementName.equals(CONTRACT_ELEMENT)) {
           InputStream resultStream = contract.execute(dataStream, param);
-          if (null!=dataStream){
+          if (null != dataStream) {
             dataStream.close();
           }
           // FIXME: add the stream to the result map with the actual path
@@ -227,7 +234,8 @@ public class XMLStructurer extends StAX {
     }
   }
 
-  private void processProperty(XMLStreamReader reader, HashMap param) {
+  private void processProperty(XMLStreamReader reader, HashMap param)
+      throws XMLStreamException {
     String propertyName = null, propertyValue = null;
     // Get attribute names
     for (int i = 0; i < reader.getAttributeCount(); i++) {
@@ -240,11 +248,44 @@ public class XMLStructurer extends StAX {
       }
     }
     if (allowXmlProperties) {
-      // FIXME: record the events that are coming now
+      param.put(propertyName, recordXmlProperies(reader));
     } else if (null != propertyValue && null != propertyName) {
       param.put(propertyName, propertyValue);
     }
 
+  }
+
+  private InputSource recordXmlProperies(XMLStreamReader reader)
+      throws XMLStreamException {
+    ByteArrayOutputStream out = new ByteArrayOutputStream();
+    XMLEventWriter writerProperty = getWriter(out);
+    XMLEventAllocator allocator = getEventAllocator();
+    XMLEvent currentEvent = allocator.allocate(reader);
+    writerProperty.add(currentEvent);
+    boolean process = true;
+    while (process) {
+      int event = reader.next();
+      currentEvent = allocator.allocate(reader);
+      switch (event) {
+      case XMLStreamConstants.END_ELEMENT:
+        if (reader.getLocalName().equals(PROPERTY_ELEMENT)) {
+          writerProperty.add(currentEvent);
+          writerProperty.flush();
+          writerProperty.close();
+          process = false;
+        } else {
+          writerProperty.add(currentEvent);
+        }
+        break;
+
+      default:
+        writerProperty.add(currentEvent);
+        break;
+      }
+    }
+    InputSource value = new InputSource(new ByteArrayInputStream(out
+        .toByteArray()));
+    return value;
   }
 
 }
