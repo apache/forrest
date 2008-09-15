@@ -1,6 +1,7 @@
 package org.apache.forrest.dispatcher.impl;
 
 import java.io.BufferedInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 
@@ -120,12 +121,14 @@ public class XMLStructurer extends StAX {
       }
     } catch (XMLStreamException e) {
       throw new DispatcherException(e);
+    } catch (IOException e) {
+      throw new DispatcherException(e);
     }
     return null;
   }
 
   private void processStructure(XMLStreamReader reader)
-      throws XMLStreamException, DispatcherException {
+      throws XMLStreamException, DispatcherException, IOException {
     boolean process = true;
     String elementName = null;
     while (process) {
@@ -159,7 +162,7 @@ public class XMLStructurer extends StAX {
   }
 
   private void processContract(XMLStreamReader reader)
-      throws XMLStreamException, DispatcherException {
+      throws XMLStreamException, DispatcherException, IOException {
     boolean process = true;
     String elementName = null;
     String name = "", data = "";
@@ -186,6 +189,8 @@ public class XMLStructurer extends StAX {
     InputStream xslStream = this.getClass().getResourceAsStream(
         this.contractUriPrefix + name + this.contractUriSufix);
     contract.initializeFromStream(xslStream);
+    // closing stream
+    xslStream.close();
     /*
      * HACK END
      */
@@ -198,8 +203,9 @@ public class XMLStructurer extends StAX {
         elementName = reader.getLocalName();
         if (elementName.equals(CONTRACT_ELEMENT)) {
           InputStream resultStream = contract.execute(dataStream, param);
+          dataStream.close();
           // FIXME: add the stream to the result map with the actual path
-          process=false;
+          process = false;
         }
         break;
 
