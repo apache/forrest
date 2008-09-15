@@ -100,7 +100,8 @@ public class XSLContractHelper extends StAX {
       .newDocumentBuilder();
       for (Iterator<String> iter = params.keySet().iterator(); iter.hasNext();) {
         String key = iter.next();
-        transformer.setParameter(key, builder.parse((InputSource) params.get(key)));
+        InputSource source = (InputSource) params.get(key);
+        transformer.setParameter(key, builder.parse(source));
       }
     }
   }
