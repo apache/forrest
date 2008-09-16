@@ -135,6 +135,14 @@ limitations under the License.
           <xsl:otherwise><xsl:value-of select="$sans-serif"/></xsl:otherwise>
         </xsl:choose>
       </xsl:param>
+      <xsl:param name="rootFontFamily">
+        <xsl:choose>
+          <xsl:when test="$defaultVariables/*/*[@name='output.pdf.fontFamily.rootFontFamily']">
+            <xsl:value-of select="$defaultVariables/*/*[@name='output.pdf.fontFamily.rootFontFamily']/@value"/>
+          </xsl:when>
+          <xsl:otherwise><xsl:value-of select="$serif"/></xsl:otherwise>
+        </xsl:choose>
+      </xsl:param>
       <xsl:variable name="background-color"
         select="$config/page/@background-color"/>
       <xsl:variable name="heading-color" select="$config/headings/@color"/>
@@ -144,6 +152,7 @@ limitations under the License.
       <xsl:template match="/">
         <forrest:content>
           <forrest:part xpath="/fo/xsl-region-body/body">
+            <rootFontFamily value="{$rootFontFamily}" />
             <fo:block text-align="{$text-align}" padding-before="18pt"
               padding-after="18pt">
               <xsl:apply-templates select="//body/*"/>

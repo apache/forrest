@@ -18,9 +18,13 @@
 <xsl:stylesheet version="1.0"
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   xmlns:fo="http://www.w3.org/1999/XSL/Format">
+  <xsl:param name="rootFontFamily" select="//rootFontFamily/@value"/>
   <xsl:key name="static-content" match="fo:static-content" use="@flow-name"/>
   <xsl:template match="/">
-    <fo:root xmlns:fo="http://www.w3.org/1999/XSL/Format">
+    <fo:root
+            xmlns:fo="http://www.w3.org/1999/XSL/Format"
+            font-family="{$rootFontFamily}"
+            font-size="12pt">
       <fo:layout-master-set>
         <xsl:copy-of select="/fo/layout-master-set/*"/>
       </fo:layout-master-set>
@@ -46,4 +50,5 @@
       </fo:page-sequence>
     </fo:root>
   </xsl:template>
+  <xsl:template match="//rootFontFamily"/>
 </xsl:stylesheet>
