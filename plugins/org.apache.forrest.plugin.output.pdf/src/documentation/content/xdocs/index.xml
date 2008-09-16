@@ -61,7 +61,7 @@
       <title>Font Family Configuration</title>
 
       <p>The font family can be specifed in different steps of granularity. As
-      of version 0.4 of the PDF plugin, all of the configuration can be done
+      of the svn version of the PDF plugin, all of the configuration can be done
       on a per project basis. There is no need to touch the plugin itself, as
       it used to be.</p>
 
@@ -75,24 +75,43 @@
 
         <ol>
           <li>Follow the instructions at <a
-          href="http://cocoon.apache.org/2.1/userdocs/pdf-serializer.html">http://cocoon.apache.org/2.1/userdocs/pdf-serializer.html</a>
-          to create a font configuration file and font metrics files at
+          href="http://xmlgraphics.apache.org/fop/0.95/configuration.html">http://xmlgraphics.apache.org/fop/0.95/configuration.html</a>
+          to create a FOP configuration file at
           <code>$PROJECT_HOME/src/documentation/resources/fonts</code> (you
-          may have to create the <code>fonts</code> folder).</li>
+          may have to create the <code>fonts</code> folder). The FOP
+          configuarion file can a.o. give you access to locally installed
+          fonts.</li>
 
-          <li>Specify the absolute path to the font configuration file you
+          <li>Specify the absolute path to the FOP configuration file you
           created in step 1 as the value of the entity
           <code>&amp;pdf-config-file;</code> in the project entity file. The
           file is located at:
           <code>$PROJECT_HOME/src/documentation/resources/schema/symbols-project-v10.ent</code>.
-          The result should look something like:<source>&lt;!ENTITY pdf-config-file "/Users/foo/forrestproject/src/documentation/resources/fonts/config.xml"&gt;</source>(the
+          The result should look something like:
+<source>&lt;!ENTITY pdf-config-file "/Users/foo/forrestproject/src/documentation/resources/fonts/config.xml"&gt;</source>
+          (the
           above would work for a user named <code>foo</code> on a typical
           MacOS X system - adapt to your local OS as needed, but the path
           needs to be absolute)</li>
-
-          <li>Finally, add the necessary configuration options to your
-          <code>forrest.properties.xml</code> file, as described below.</li>
         </ol>
+
+        <p>A minimal FOP configuration file to give you access to all fonst
+        installed on the local OS looks like:</p>
+
+        <source><![CDATA[<fop>
+ <renderers>
+   <renderer mime="application/pdf">
+     <fonts>
+       <auto-detect/>
+     </fonts>
+   </renderer>
+ </renderers>
+</fop>]]></source>
+
+        <p>See the link above for more details.</p>
+
+        <p>Continue with the configuration in your
+        <code>forrest.properties.xml</code> file as described below.</p>
       </section>
 
       <section>
@@ -133,7 +152,17 @@
   &lt;property name="output.pdf.fontFamily.noticeFontFamily"        value="serif"      /&gt;</source>
 
         <p>The given values are defaults, and should be replaced with what you
-        want. If you want, you can further specify the font family for
+        want.</p>
+
+        <note>The value specified for the properties should be the font family
+        name. If the font family name contains spaces, enclose the name in
+        single quotes.</note>
+
+        <note>If you are using Dispatcher (in the whiteboard), the property
+        <code>output.pdf.fontFamily.versionFontFamily</code> does not have any
+        effect. Hopefully this will be corrected in the future.</note>
+
+        <p>If you want, you can further specify the font family for
         variants of the
         <code>output.pdf.fontFamily.headerFooterFontFamily</code> property
         using the following properties instead:</p>
