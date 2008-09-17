@@ -18,7 +18,7 @@
 <forrest:contract 
   xmlns:i18n="http://apache.org/cocoon/i18n/2.1"
   xmlns:forrest="http://apache.org/forrest/templates/1.0"
-  name="ajax-example" type="nugget">
+  name="ajax-example">
   <description>
     <p>
       This contract is an example how to use ajax in forrest.
@@ -37,10 +37,13 @@
 <![CDATA[<forrest:contract name="ajax-example"/>]]>
   </usage>
   <forrest:template xmlns:forrest="http://apache.org/forrest/templates/1.0"
-    format="html" name="ajax-example" inputFormat="xsl" body="true" head="true">
+   name="ajax-example" inputFormat="xsl">
     <xsl:stylesheet version="1.1" 
         xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
-      <xsl:template name="ajax-example-head">
+      <xsl:param name="ajax-example-head">
+      <xsl:template match="/">
+        <forrest:content>
+          <forrest:part xpath="/html/head">
 <script type="text/javascript">
              function preview(div){
                $(div).innerHTML="please stand by";
@@ -51,8 +54,12 @@
               alert('Sorry. There was an error.');
             }
         </script>
+        </forrest:part>
+        </forrest:content>
       </xsl:template>
       <xsl:template name="ajax-example-body">
+      <forrest:content>
+      <forrest:part>
         <div class="warning">
           <div class="label">Warning</div>
           <div class="content">This example <strong>only</strong> works in <strong>http://localhost:8888/</strong>.</div>
@@ -64,6 +71,8 @@
           'http://localhost:8888/less.contract.project-ajax-example.xml';
         </p>
         <div id="testDiv">testDiv</div>
+          </forrest:part>
+        </forrest:content>
       </xsl:template>
     </xsl:stylesheet>
   </forrest:template>
