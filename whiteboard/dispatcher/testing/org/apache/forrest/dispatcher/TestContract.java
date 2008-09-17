@@ -22,6 +22,7 @@ import java.io.StringReader;
 import java.util.HashMap;
 
 import org.apache.forrest.dispatcher.api.Contract;
+import org.apache.forrest.dispatcher.exception.DispatcherException;
 import org.apache.forrest.dispatcher.impl.XSLContract;
 import org.xml.sax.InputSource;
 

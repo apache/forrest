@@ -30,11 +30,11 @@ import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.stream.StreamResult;
 
-import org.apache.forrest.dispatcher.DispatcherException;
 import org.apache.forrest.dispatcher.api.Contract;
+import org.apache.forrest.dispatcher.exception.DispatcherException;
 
-import org.apache.forrest.dispatcher.helper.Loggable;
-import org.apache.forrest.dispatcher.helper.XSLContractHelper;
+import org.apache.forrest.dispatcher.impl.helper.Loggable;
+import org.apache.forrest.dispatcher.impl.helper.XSLContractHelper;
 
 public class XSLContract extends Loggable implements Contract {
 
@@ -68,9 +68,8 @@ public class XSLContract extends Loggable implements Contract {
           + "the contract. We cannot proceed without this.", e);
     } catch (Exception e) {
       throw new DispatcherException("Contract \"" + name
-          + "\" has produced an exception"
-          + "Could not setup the DOM Parser for"
-          + "the contract. We cannot proceed without this.", e);
+          + "\" has produced an exception."
+          + "We cannot proceed without this.", e);
     }
     /*
      * If no dataStream is present we need to create an empty xml doc to be able
