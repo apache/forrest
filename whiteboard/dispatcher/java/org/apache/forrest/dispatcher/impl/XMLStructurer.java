@@ -217,7 +217,7 @@ public class XMLStructurer extends StAX implements Structurer {
     }
     log.debug("data "+data);
     InputStream dataStream=null;
-    if(null != data){
+    if(null != data && !data.equals("")){
       dataStream = resolver.resolve(data);
     }
     Contract contract = contractRep.resolve(name);
