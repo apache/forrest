@@ -14,19 +14,22 @@ import javax.xml.stream.XMLEventWriter;
 import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
-import javax.xml.stream.XMLStreamWriter;
 import javax.xml.stream.events.EndElement;
 import javax.xml.stream.events.StartElement;
 import javax.xml.stream.events.XMLEvent;
 import javax.xml.stream.util.XMLEventAllocator;
 
-import org.apache.forrest.dispatcher.DispatcherException;
 import org.apache.forrest.dispatcher.api.Contract;
-import org.apache.forrest.dispatcher.helper.StAX;
+import org.apache.forrest.dispatcher.api.Resolver;
+import org.apache.forrest.dispatcher.api.Structurer;
+import org.apache.forrest.dispatcher.config.DispatcherBean;
+import org.apache.forrest.dispatcher.exception.DispatcherException;
+import org.apache.forrest.dispatcher.factories.ContractFactory;
+import org.apache.forrest.dispatcher.impl.helper.StAX;
 import org.apache.forrest.dispatcher.utils.CommonString;
 import org.xml.sax.InputSource;
 
-public class XMLStructurer extends StAX {
+public class XMLStructurer extends StAX implements Structurer {
 
   public static final String NS = "http://apache.org/forrest/templates/2.0";
 
@@ -52,51 +55,29 @@ public class XMLStructurer extends StAX {
 
   private static final Object CONTRACT_RESULT_XPATH = "xpath";
 
-  private String format = "";
-  private InputStream dataStream = null;
-
   private String currentPath = "";
+  
+  private Resolver resolver = null;
 
   private boolean allowXmlProperties = false;
 
   private LinkedHashMap<String, LinkedHashSet<XMLEvent>> resultTree = new LinkedHashMap<String, LinkedHashSet<XMLEvent>>();
 
-  public boolean isAllowXmlProperties() {
-    return allowXmlProperties;
+  private ContractFactory contractRep =null;
+  
+  public XMLStructurer(DispatcherBean config) {
+    this.contractRep = new ContractFactory(config);
+    this.resolver = config.getResolver();
+    this.allowXmlProperties = config.isAllowXmlProperties();
   }
 
-  public void setAllowXmlProperties(boolean allowXmlProperties) {
-    this.allowXmlProperties = allowXmlProperties;
-  }
-
-  private String contractUriPrefix = "";
-  private String contractUriSufix = ".contract.xml";
-
-  public String getContractUriPrefix() {
-    return contractUriPrefix;
-  }
-
-  public void setContractUriPrefix(String contractUriPrefix) {
-    this.contractUriPrefix = contractUriPrefix;
-  }
-
-  public String getContractUriSufix() {
-    return contractUriSufix;
-  }
-
-  public void setContractUriSufix(String contractUriSufix) {
-    this.contractUriSufix = contractUriSufix;
-  }
-
-  public XMLStructurer(InputStream dataStream, String format) {
-    this.format = format;
-    this.dataStream = dataStream;
-  }
-
-  public BufferedInputStream execute() throws DispatcherException {
+  /* 
+   * @see org.apache.forrest.dispatcher.impl.Structurer#execute(java.io.InputStream, java.lang.String)
+   */
+  public InputStream execute(InputStream structurerStream, String format) throws DispatcherException {
     BufferedInputStream stream = null;
     try {
-      XMLStreamReader reader = getReader(dataStream);
+      XMLStreamReader reader = getReader(structurerStream);
       boolean process = true;
       while (process) {
         int event = reader.next();
@@ -141,6 +122,14 @@ public class XMLStructurer extends StAX {
       throw new DispatcherException(e);
     } catch (IOException e) {
       throw new DispatcherException(e);
+    }finally{
+      if (null!=structurerStream){
+        try {
+          structurerStream.close();
+        } catch (IOException e) {
+          throw new DispatcherException(e);
+        };
+      }
     }
     return stream;
   }
@@ -215,7 +204,7 @@ public class XMLStructurer extends StAX {
       throws XMLStreamException, DispatcherException, IOException {
     boolean process = true;
     String elementName = null;
-    String name = "", data = "";
+    String name = "", data= null;
     // Get attribute names
     for (int i = 0; i < reader.getAttributeCount(); i++) {
       String localName = reader.getAttributeLocalName(i);
@@ -226,26 +215,12 @@ public class XMLStructurer extends StAX {
         data = reader.getAttributeValue(i);
       }
     }
-    /*
-     * FIXME: TEMPORAL HACK ONLY Use source resolver/contract factory when
-     * fixing this.
-     * 
-     * Ignoring dataStream completely for now
-     * 
-     * THIS ONLY WORKS FOR JUNIT ATM!!!
-     */
-    dataStream = null;
-    Contract contract = new XSLContract(allowXmlProperties);
-    InputStream xslStream = this.getClass().getResourceAsStream(
-        this.contractUriPrefix + name + this.contractUriSufix);
-    contract.initializeFromStream(xslStream);
-    // closing stream
-    if (xslStream != null) {
-      xslStream.close();
+    log.debug("data "+data);
+    InputStream dataStream=null;
+    if(null != data){
+      dataStream = resolver.resolve(data);
     }
-    /*
-     * HACK END
-     */
+    Contract contract = contractRep.resolve(name);
 
     HashMap<String, ?> param = new HashMap();
     while (process) {
