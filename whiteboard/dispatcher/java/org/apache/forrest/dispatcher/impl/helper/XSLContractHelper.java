@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.forrest.dispatcher.helper;
+package org.apache.forrest.dispatcher.impl.helper;
 
 import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
@@ -42,7 +42,6 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.stream.StreamSource;
 
-import org.apache.forrest.dispatcher.helper.StAX;
 import org.apache.forrest.dispatcher.impl.XSLContract;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;

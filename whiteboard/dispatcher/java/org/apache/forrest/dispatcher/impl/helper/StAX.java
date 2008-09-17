@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.forrest.dispatcher.helper;
+package org.apache.forrest.dispatcher.impl.helper;
 
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -28,6 +28,7 @@ import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 import javax.xml.stream.XMLStreamWriter;
 import javax.xml.stream.util.XMLEventAllocator;
+
 
 import com.ctc.wstx.evt.DefaultEventAllocator;
 
