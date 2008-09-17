@@ -19,7 +19,7 @@ package org.apache.forrest.dispatcher.api;
 import java.io.InputStream;
 import java.util.HashMap;
 
-import org.apache.forrest.dispatcher.DispatcherException;
+import org.apache.forrest.dispatcher.exception.DispatcherException;
 
 public interface Contract {
 
