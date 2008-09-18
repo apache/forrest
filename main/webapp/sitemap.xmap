@@ -46,6 +46,8 @@ $Revision: 1.12 $
                      src="org.apache.cocoon.generation.TextGenerator">
         <parameter name="localizable" value="true"/>
       </map:generator>
+      <map:generator name="module" 
+        src="org.apache.forrest.generation.ModuleGenerator"/>
     </map:generators>
     <map:transformers default="xslt">
 <!-- Add values to skinconf that need extra processing like the color shades -->
@@ -611,6 +613,17 @@ $Revision: 1.12 $
             <map:mount uri-prefix="" src="raw.xmap" check-reload="yes" />
           </map:when>
         </map:select>
+      </map:match>
+    </map:pipeline>
+<!-- ============================================================ -->
+<!-- input-module properties file                                 -->
+<!-- ============================================================ -->
+    <map:pipeline internal-only="false">
+      <map:match pattern="module.*.properties">
+        <map:generate type="module">
+          <map:parameter name="input-module" value="{1}"/>
+        </map:generate>
+        <map:serialize type="xml"/>
       </map:match>
     </map:pipeline>
 <!-- ============================================================ -->
