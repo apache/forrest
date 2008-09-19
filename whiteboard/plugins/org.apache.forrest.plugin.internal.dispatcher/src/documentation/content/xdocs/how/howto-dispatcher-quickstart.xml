@@ -106,7 +106,7 @@
       <note>
         We use <code>${themer.project.dir}</code> for
         PROJECT_HOME/src/documentation/resources/themes (create the new
-        directory folder first). You can change this location by adding
+        directory first). You can change this location by adding
 <![CDATA[<match pattern="themer.project.dir">
           <location src="{properties:resources}/themes" />
         </match> ]]>
@@ -133,6 +133,27 @@
         From here on there is no need to re-start 'forrest run'. Just edit the
         structurer and see the effect.
       </p>
+      <warning>
+      Right now the dispatcher is heavely cached, so maybe in the current version it should be
+      necessary to reboot the system in order to see the changes. To avoid temporally this problem,
+      turn off the cache system changing:
+      
+<![CDATA[
+<forrest:views xmlns:forrest="http://apache.org/forrest/templates/1.0"
+	xmlns:jx="http://apache.org/cocoon/templates/jx/1.0"
+	jx:cache-key="#{$cocoon/parameters/getRequest}"
+	jx:cache-validity="${Packages.org.apache.excalibur.source.impl.validity.NOPValidity()}">
+]]>
+      
+      to
+      
+<![CDATA[
+<forrest:views xmlns:forrest="http://apache.org/forrest/templates/1.0"
+	xmlns:jx="http://apache.org/cocoon/templates/jx/1.0">
+]]>
+      
+      in your THEMER_PLUGIN/themes/pelt.fv file.
+      </warning>
     </section>
     <section id="remove-default-contract">
       <title>Remove a default contract</title>
@@ -211,7 +232,7 @@
           Copy THEMER_PLUGIN/themes/common/html/siteinfo-current-time.ft
           into your project at
           ${themer.project.dir}/common/html/siteinfo-doodad.ft
-          (create the new directory folders first).
+          (create the new directory first).
         </li>
         <li>
           Edit it to suit. Replace all occurrences of "siteinfo-current-time" with
@@ -247,11 +268,39 @@
 -->
     <section id="manage">
       <title>Decide how to manage your contracts</title>
-      <fixme author="open">
-        Glean content from Ross' discussion:
-        <a href="http://marc.theaimsgroup.com/?l=forrest-dev&amp;m=113748831226697">Re:
-        Dispatcher quickstart</a>.
-      </fixme>
+      <p>
+      Depending on the use of a new contract you can place it in different 
+      locations. General use contracts should be placed in the THEME_PLUGIN 
+      directory. Contracts only suitable for one theme should be stored in 
+      the specific theme directory, that is, 
+      <code>THEMER_PLUGIN/resources/themes/THEME_NAME/OUTPUT_FORMAT</code>. 
+      Otherwise, common contracts should be place in the common folder: 
+      <code>THEMER_PLUGIN/resources/themes/common/OUTPUT_FORMAT</code>.
+      </p>
+      <p>
+      If the contract is specific to a particular purpose, that is a 
+      particular plugin, it should be included with the plugin itself. 
+      For example, the "employment history" contract is specific to the 
+      resume plugin so it should be placed there. The correct location for 
+      contrats with a particular purpose is 
+      <code>PLUGIN_NAME/resources/themes/THEME_NAME/OUTPUT_FORMAT</code>.
+      </p>
+      <p>
+      There is another category for contracts, those that are both specific 
+      to a particular purpose and defined for a specific site. For example, 
+      a "process order" contract that integrates with an in-house order 
+      management system. In this case, another location is more suitable. 
+      However, before proceed think again about the uniqueness of the contract.
+      Most contracts can be generalised to be useful in more than one 
+      environment and so one of the above locations can be used. If you are 
+      still sure that this is a site-specific contract then place it in 
+      <code>PROJECT_HOME/src/documentation/resources/themes/common</code>.
+      </p>
+      <p>
+      If you develop a new contract, please provide a patch via our 
+      <a href="https://issues.apache.org/jira">issue tracker</a> so that we 
+      can include it in future releases of Forrest.
+      </p>
     </section>
   </steps>
   <extension title="Further Reading">
