@@ -55,17 +55,20 @@ public class XMLStructurer extends StAX implements Structurer {
 
   private static final Object CONTRACT_RESULT_XPATH = "xpath";
 
-  private String currentPath = "";
-  
-  private Resolver resolver = null;
+  private final boolean dom;
 
-  private boolean allowXmlProperties = false;
+  private final Resolver resolver;
+
+  private final boolean allowXmlProperties;
+  
+  private final ContractFactory contractRep;
 
   private LinkedHashMap<String, LinkedHashSet<XMLEvent>> resultTree = new LinkedHashMap<String, LinkedHashSet<XMLEvent>>();
-
-  private ContractFactory contractRep =null;
   
+  private String currentPath = "";
+
   public XMLStructurer(DispatcherBean config) {
+    this.dom= config.isDomEnabled();
     this.contractRep = new ContractFactory(config);
     this.resolver = config.getResolver();
     this.allowXmlProperties = config.isAllowXmlProperties();
@@ -139,43 +142,22 @@ public class XMLStructurer extends StAX implements Structurer {
     boolean process = true;
     String elementName = null;
     ByteArrayOutputStream out = new ByteArrayOutputStream();
-    XMLEventWriter writer = getWriter(out);
     while (process) {
       int event = reader.next();
       switch (event) {
       case XMLStreamConstants.END_ELEMENT:
         elementName = reader.getLocalName();
         if (elementName.equals(STRUCTURE_ELEMENT)) {
-          writer.add(getEventFactory().createStartDocument("UTF-8", "1.0"));
-          Iterator<String> iterator = resultTree.keySet().iterator();
-          String[] paths = resultTree.keySet().toArray(new String[1]);
-          String rootPath = CommonString.common(paths);
-          String[] tokenizer = rootPath.split("/");
-          openPaths(writer, tokenizer);
-          while (iterator.hasNext()) {
-            String element = iterator.next();
-            final String replaceFirst = element.replaceFirst(rootPath, "");
-            final String[] split = replaceFirst.split("/");
-            if (split.length > 1) {
-              openPaths(writer, split);
-              injectResult(writer, element);
-              closingPaths(writer, split);
-            } else {
-              StartElement start = getEventFactory().createStartElement("", "",
-                  replaceFirst);
-              writer.add((XMLEvent) start);
-
-              injectResult(writer, element);
-              EndElement end = getEventFactory().createEndElement("", "",
-                  replaceFirst);
-              writer.add((XMLEvent) end);
-            }
-
+          if(dom){
+            // TODO implement me.
+          }else{
+            XMLEventWriter writer = getWriter(out);
+            createResultStax(writer);
           }
-          closingPaths(writer, tokenizer);
-          writer.add(getEventFactory().createEndDocument());
           resultTree.clear();
           process = false;
+        }else if (elementName.equals(HOOK_ELEMENT)){
+          processHook(reader, false);
         }
         break;
 
@@ -186,6 +168,7 @@ public class XMLStructurer extends StAX implements Structurer {
           processContract(reader);
         } else if (elementName.equals(HOOK_ELEMENT)) {
           log.debug("HOOKS " + elementName);
+          processHook(reader, true);
           log.info("HOOKS transformation NOT YET IMPLEMENTED");
         }
         break;
@@ -198,6 +181,52 @@ public class XMLStructurer extends StAX implements Structurer {
     log.debug(out.toString());
     return (out != null) ? new BufferedInputStream(new ByteArrayInputStream(out
         .toByteArray())) : null;
+  }
+  
+  /**
+   * Create the outcome of the hooks and contracts.
+   * Here we need to find the injectionPoints that 
+   * can be defined in the different contracts.
+   * 
+   * This injectionPoints can be within or extending other. 
+   */
+
+  private void createResultStax(XMLEventWriter writer)
+      throws XMLStreamException {
+    // We start with creating a new result document
+    writer.add(getEventFactory().createStartDocument("UTF-8", "1.0"));
+    // get a iterator about the injectionPoints we use
+    Iterator<String> iterator = resultTree.keySet().iterator();
+    // create an path array 
+    String[] paths = resultTree.keySet().toArray(new String[1]);
+    // determine the common root path for all paths
+    String rootPath = CommonString.common(paths);
+    // Prepare the creation of the root path  
+    String[] tokenizer = rootPath.split("/");
+    // create the events related to the root path
+    openPaths(writer, tokenizer);
+    while (iterator.hasNext()) {
+      String element = iterator.next();
+      final String replaceFirst = element.replaceFirst(rootPath, "");
+      final String[] split = replaceFirst.split("/");
+      if (split.length > 1) {
+        openPaths(writer, split);
+        injectResult(writer, element);
+        closingPaths(writer, split);
+      } else {
+        StartElement start = getEventFactory().createStartElement("", "",
+            replaceFirst);
+        writer.add((XMLEvent) start);
+
+        injectResult(writer, element);
+        EndElement end = getEventFactory().createEndElement("", "",
+            replaceFirst);
+        writer.add((XMLEvent) end);
+      }
+
+    }
+    closingPaths(writer, tokenizer);
+    writer.add(getEventFactory().createEndDocument());
   }
 
   private void processContract(XMLStreamReader reader)
@@ -277,10 +306,11 @@ public class XMLStructurer extends StAX implements Structurer {
           if (xpath.equals("")) {
             // iterate through the children and add them
             // to the pathElement
-            if (resultTree.containsKey(currentPath))
+            if (resultTree.containsKey(currentPath)){
               pathElement = resultTree.get(currentPath);
-            else
+            }else{
               pathElement = new LinkedHashSet<XMLEvent>();
+            }
             injectionPoint = currentPath;
             inject(pathElement, contractResultReader, injectionPoint);
             // as soon as you find the end element add
@@ -305,6 +335,45 @@ public class XMLStructurer extends StAX implements Structurer {
 
       }
     }
+  }
+  
+  private void processHook(XMLStreamReader reader, boolean start) throws XMLStreamException {
+    
+    /*log.debug("currentPath: "+currentPath);
+    if(start){
+      String xpath= calculateXpathFromAtrributes(reader);
+      //currentPath+="/"+
+      log.debug(currentPath+"/"+HOOK_ELEMENT.toUpperCase()+xpath);
+      currentPath+="/"+HOOK_ELEMENT;
+    }*/
+    LinkedHashSet<XMLEvent> pathElement;
+    if (resultTree.containsKey(currentPath)){
+      pathElement = resultTree.get(currentPath);
+    }else{
+      pathElement = new LinkedHashSet<XMLEvent>();
+    }
+    XMLEventAllocator allocator = getEventAllocator();
+    XMLEvent currentEvent = allocator.allocate(reader);
+    pathElement.add(currentEvent);
+    resultTree.put(currentPath, pathElement);
+    /*if(!start){
+      currentPath=currentPath.substring(0,currentPath.lastIndexOf(("/"+HOOK_ELEMENT)));
+    }
+    log.debug("currentPath (after): "+currentPath);*/
+  }
+
+  private String calculateXpathFromAtrributes(XMLStreamReader reader) {
+    String xpath="";
+    for (int i = 0; i < reader.getAttributeCount(); i++) {
+      // Get attribute name
+      String key = reader.getAttributeLocalName(i);
+      String  value = reader.getAttributeValue(i);
+      xpath="@"+key+":"+value;
+    }
+    if(!xpath.equals("")){
+      xpath="["+xpath+"]";
+    }
+    return xpath;
   }
 
   private void inject(LinkedHashSet<XMLEvent> pathElement,
@@ -390,10 +459,10 @@ public class XMLStructurer extends StAX implements Structurer {
 
   private void openPaths(XMLEventWriter writer, String[] tokenizer)
       throws XMLStreamException {
-    for (int i = 0; i < tokenizer.length; i++) {
-      if (!tokenizer[i].equals("")) {
+    for (String string : tokenizer) {
+      if (!string.equals("")) {
         StartElement value = getEventFactory().createStartElement("", "",
-            tokenizer[i]);
+            string);
         writer.add((XMLEvent) value);
       }
     }

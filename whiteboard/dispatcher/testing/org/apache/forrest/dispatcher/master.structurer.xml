@@ -15,18 +15,25 @@
   -->
 <structurer xmlns="http://apache.org/forrest/templates/2.0">
   <structure type="html" hooksXpath="/html/body">
-    <contract name="master">
-      <property name="test-inline-xml">
-        <css url="common.css" />
+    <hook id="example">
+      <contract name="master">
+        <property name="test-inline-xml">
+          <css url="common.css" />
 <!--<nupp/>-->
-      </property>
-      <property name="test-inline" value="test" />
-    </contract>
+        </property>
+        <property name="test-inline" value="position:hook/contract" />
+      </contract>
+      <hook id="level2">
+        <contract name="master">
+          <property name="test-inline" value="position:hook/hook/contract" />
+        </contract>
+      </hook>
+    </hook>
     <contract name="m2" dataURI="">
       <property name="test-inline" value="xxx" />
     </contract>
   </structure>
   <structure type="xml" hooksXpath="/">
-    <contract name="convertor" dataURI="/org/apache/forrest/dispatcher/common.fv"/>
+    <contract name="convertor" dataURI="/org/apache/forrest/dispatcher/common.fv" />
   </structure>
 </structurer>
