@@ -1,9 +1,19 @@
 <?xml version='1.0'?>
-<xsl:stylesheet xmlns:xsl='http://www.w3.org/1999/XSL/Transform'
-  xmlns:datetime="http://exslt.org/dates-and-times"
-  version='1.0'>
+<xsl:stylesheet
+    xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+    xmlns:datetime="http://exslt.org/dates-and-times"
+    xmlns:prop="http://apache.org/forrest/properties/1.0"
+    version="1.0">
 
-  <xsl:template match='document'>
+  <xsl:variable
+        name="properties"
+        select="//prop:properties" />
+
+  <xsl:variable
+        name="reference-section"
+        select="$properties/*[@name='output.tei.reference-section']/@value" />
+
+  <xsl:template match='/'>
     <xsl:text disable-output-escaping="yes">
   <![CDATA[
   <!DOCTYPE TEI.2 PUBLIC "-//TEI//DTD TEI Lite 1.0//EN" "">
@@ -11,7 +21,7 @@
 </xsl:text>
     
     <TEI.2>
-      <xsl:apply-templates />
+      <xsl:apply-templates select="/site/document" />
     </TEI.2>
   </xsl:template>
 
@@ -25,14 +35,20 @@
         </titleStmt>
 
         <publicationStmt>
-          <publisher>OSS Watch, Oxford University</publisher>
-          <authority>OSS Watch</authority>
+          <publisher>
+            <xsl:value-of select="$properties/*[@name='output.tei.publisher']/@value"/>
+          </publisher>
+          <authority>
+            <xsl:value-of select="$properties/*[@name='output.tei.authority']/@value"/>
+          </authority>
           <address>
-            <email>info@oss-watch.ac.uk</email>
+            <email>
+              <xsl:value-of select="$properties/*[@name='output.tei.email']/@value"/>
+            </email>
           </address>
           <availability>
             <licence>
-              http://creativecommons.org/licenses/by-sa/2.0/uk/
+              <xsl:value-of select="$properties/*[@name='output.tei.licence']/@value"/>
             </licence>
           </availability>
           <date><xsl:value-of select="datetime:date()"/></date>
@@ -59,6 +75,11 @@
     <text>
       <body>
         <xsl:apply-templates />
+        <xsl:choose>
+          <xsl:when test="$reference-section = 'true'">
+            <xsl:call-template name="references"/>
+          </xsl:when>
+        </xsl:choose>
       </body>
     </text>
   </xsl:template>
@@ -132,4 +153,23 @@
     </xsl:choose>
   </xsl:template>
 
+  <!-- FIXME: add parameter to remove this field, remove duplicates, remove mailto field -->
+  <xsl:template name="references">
+    <div>
+      <head>References</head>
+      <ul>
+        <xsl:for-each select="//link">
+          <xsl:sort select ="."/>
+          <li>
+            <a>
+              <xsl:attribute name="href">
+                <xsl:value-of select="@href"/>
+              </xsl:attribute>
+              <xsl:value-of select="."/>
+            </a>
+          </li>
+        </xsl:for-each>
+      </ul>
+    </div>
+  </xsl:template>
 </xsl:stylesheet>

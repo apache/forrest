@@ -21,12 +21,17 @@
 
   <map:pipeline>
 
-    <map:match pattern="**.tei">      
-        <map:generate src="cocoon://{1}.xml"/>
-        <map:transform src="{lm:tei.transform.document.teiLite}"/>
-        <map:serialize type="xml"/>
+    <map:match pattern="**.tei">
+      <map:aggregate element="site">
+        <map:part src="cocoon://module.properties.properties"/>
+        <map:part src="cocoon://{1}.xml"/>
+      </map:aggregate>
+      <map:transform src="{lm:tei.transform.document.teiLite}"/>
+      <map:serialize type="xml"/>
     </map:match>  
+
   </map:pipeline>
+
 </map:pipelines>
 
 </map:sitemap>
