@@ -55,8 +55,6 @@ public class XMLStructurer extends StAX implements Structurer {
 
   private static final Object CONTRACT_RESULT_XPATH = "xpath";
 
-  private final boolean dom;
-
   private final Resolver resolver;
 
   private final boolean allowXmlProperties;
@@ -68,7 +66,6 @@ public class XMLStructurer extends StAX implements Structurer {
   private String currentPath = "";
 
   public XMLStructurer(DispatcherBean config) {
-    this.dom= config.isDomEnabled();
     this.contractRep = new ContractFactory(config);
     this.resolver = config.getResolver();
     this.allowXmlProperties = config.isAllowXmlProperties();
@@ -148,12 +145,8 @@ public class XMLStructurer extends StAX implements Structurer {
       case XMLStreamConstants.END_ELEMENT:
         elementName = reader.getLocalName();
         if (elementName.equals(STRUCTURE_ELEMENT)) {
-          if(dom){
-            // TODO implement me.
-          }else{
-            XMLEventWriter writer = getWriter(out);
-            createResultStax(writer);
-          }
+          XMLEventWriter writer = getWriter(out);
+          createResultStax(writer);
           resultTree.clear();
           process = false;
         }else if (elementName.equals(HOOK_ELEMENT)){
@@ -339,13 +332,6 @@ public class XMLStructurer extends StAX implements Structurer {
   
   private void processHook(XMLStreamReader reader, boolean start) throws XMLStreamException {
     
-    /*log.debug("currentPath: "+currentPath);
-    if(start){
-      String xpath= calculateXpathFromAtrributes(reader);
-      //currentPath+="/"+
-      log.debug(currentPath+"/"+HOOK_ELEMENT.toUpperCase()+xpath);
-      currentPath+="/"+HOOK_ELEMENT;
-    }*/
     LinkedHashSet<XMLEvent> pathElement;
     if (resultTree.containsKey(currentPath)){
       pathElement = resultTree.get(currentPath);
@@ -356,24 +342,6 @@ public class XMLStructurer extends StAX implements Structurer {
     XMLEvent currentEvent = allocator.allocate(reader);
     pathElement.add(currentEvent);
     resultTree.put(currentPath, pathElement);
-    /*if(!start){
-      currentPath=currentPath.substring(0,currentPath.lastIndexOf(("/"+HOOK_ELEMENT)));
-    }
-    log.debug("currentPath (after): "+currentPath);*/
-  }
-
-  private String calculateXpathFromAtrributes(XMLStreamReader reader) {
-    String xpath="";
-    for (int i = 0; i < reader.getAttributeCount(); i++) {
-      // Get attribute name
-      String key = reader.getAttributeLocalName(i);
-      String  value = reader.getAttributeValue(i);
-      xpath="@"+key+":"+value;
-    }
-    if(!xpath.equals("")){
-      xpath="["+xpath+"]";
-    }
-    return xpath;
   }
 
   private void inject(LinkedHashSet<XMLEvent> pathElement,

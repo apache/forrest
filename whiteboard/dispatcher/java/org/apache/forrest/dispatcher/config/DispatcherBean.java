@@ -28,7 +28,6 @@ import org.apache.forrest.dispatcher.api.Resolver;
 public class DispatcherBean {
   
   private boolean allowXmlProperties = false;
-  private boolean domEnabled = false;
   private Resolver resolver = null;
 
   private String contractUriPrefix = "";
@@ -64,14 +63,6 @@ public class DispatcherBean {
 
   public void setContractUriSufix(String contractUriSufix) {
     this.contractUriSufix = contractUriSufix;
-  }
-
-  public boolean isDomEnabled() {
-    return domEnabled;
-  }
-  
-  public void setDomEnabled(boolean domEnabled) {
-    this.domEnabled = domEnabled;
   }
 
 }
