@@ -35,11 +35,11 @@ public class XMLStructurer extends StAX implements Structurer {
   private final Resolver resolver;
 
   private final boolean allowXmlProperties;
-  
+
   private final ContractFactory contractRep;
 
   private LinkedHashMap<String, LinkedHashSet<XMLEvent>> resultTree = new LinkedHashMap<String, LinkedHashSet<XMLEvent>>();
-  
+
   private String currentPath = "";
 
   public XMLStructurer(DispatcherBean config) {
@@ -48,10 +48,13 @@ public class XMLStructurer extends StAX implements Structurer {
     this.allowXmlProperties = config.isAllowXmlProperties();
   }
 
-  /* 
-   * @see org.apache.forrest.dispatcher.impl.Structurer#execute(java.io.InputStream, java.lang.String)
+  /*
+   * @see
+   * org.apache.forrest.dispatcher.impl.Structurer#execute(java.io.InputStream,
+   * java.lang.String)
    */
-  public InputStream execute(InputStream structurerStream, String format) throws DispatcherException {
+  public InputStream execute(InputStream structurerStream, String format)
+      throws DispatcherException {
     BufferedInputStream stream = null;
     try {
       XMLStreamReader reader = getReader(structurerStream);
@@ -99,13 +102,14 @@ public class XMLStructurer extends StAX implements Structurer {
       throw new DispatcherException(e);
     } catch (IOException e) {
       throw new DispatcherException(e);
-    }finally{
-      if (null!=structurerStream){
+    } finally {
+      if (null != structurerStream) {
         try {
           structurerStream.close();
         } catch (IOException e) {
           throw new DispatcherException(e);
-        };
+        }
+        ;
       }
     }
     return stream;
@@ -126,7 +130,7 @@ public class XMLStructurer extends StAX implements Structurer {
           createResultStax(writer);
           resultTree.clear();
           process = false;
-        }else if (elementName.equals(Captions.HOOK_ELEMENT)){
+        } else if (elementName.equals(Captions.HOOK_ELEMENT)) {
           processHook(reader, false);
         }
         break;
@@ -152,13 +156,12 @@ public class XMLStructurer extends StAX implements Structurer {
     return (out != null) ? new BufferedInputStream(new ByteArrayInputStream(out
         .toByteArray())) : null;
   }
-  
+
   /**
-   * Create the outcome of the hooks and contracts.
-   * Here we need to find the injectionPoints that 
-   * can be defined in the different contracts.
+   * Create the outcome of the hooks and contracts. Here we need to find the
+   * injectionPoints that can be defined in the different contracts.
    * 
-   * This injectionPoints can be within or extending other. 
+   * This injectionPoints can be within or extending other.
    */
 
   private void createResultStax(XMLEventWriter writer)
@@ -167,11 +170,11 @@ public class XMLStructurer extends StAX implements Structurer {
     writer.add(getEventFactory().createStartDocument("UTF-8", "1.0"));
     // get a iterator about the injectionPoints we use
     Iterator<String> iterator = resultTree.keySet().iterator();
-    // create an path array 
+    // create an path array
     String[] paths = resultTree.keySet().toArray(new String[1]);
     // determine the common root path for all paths
     String rootPath = CommonString.common(paths);
-    // Prepare the creation of the root path  
+    // Prepare the creation of the root path
     String[] tokenizer = rootPath.split("/");
     // create the events related to the root path
     openPaths(writer, tokenizer);
@@ -203,7 +206,7 @@ public class XMLStructurer extends StAX implements Structurer {
       throws XMLStreamException, DispatcherException, IOException {
     boolean process = true;
     String elementName = null;
-    String name = "", data= null;
+    String name = "", data = null;
     // Get attribute names
     for (int i = 0; i < reader.getAttributeCount(); i++) {
       String localName = reader.getAttributeLocalName(i);
@@ -214,9 +217,9 @@ public class XMLStructurer extends StAX implements Structurer {
         data = reader.getAttributeValue(i);
       }
     }
-    log.debug("data "+data);
-    InputStream dataStream=null;
-    if(null != data && !data.equals("")){
+    log.debug("data " + data);
+    InputStream dataStream = null;
+    if (null != data && !data.equals("")) {
       dataStream = resolver.resolve(data);
     }
     Contract contract = contractRep.resolve(name);
@@ -276,9 +279,9 @@ public class XMLStructurer extends StAX implements Structurer {
           if (xpath.equals("")) {
             // iterate through the children and add them
             // to the pathElement
-            if (resultTree.containsKey(currentPath)){
+            if (resultTree.containsKey(currentPath)) {
               pathElement = resultTree.get(currentPath);
-            }else{
+            } else {
               pathElement = new LinkedHashSet<XMLEvent>();
             }
             injectionPoint = currentPath;
@@ -306,13 +309,14 @@ public class XMLStructurer extends StAX implements Structurer {
       }
     }
   }
-  
-  private void processHook(XMLStreamReader reader, boolean start) throws XMLStreamException {
-    
+
+  private void processHook(XMLStreamReader reader, boolean start)
+      throws XMLStreamException {
+
     LinkedHashSet<XMLEvent> pathElement;
-    if (resultTree.containsKey(currentPath)){
+    if (resultTree.containsKey(currentPath)) {
       pathElement = resultTree.get(currentPath);
-    }else{
+    } else {
       pathElement = new LinkedHashSet<XMLEvent>();
     }
     XMLEventAllocator allocator = getEventAllocator();
