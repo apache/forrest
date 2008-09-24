@@ -25,35 +25,12 @@ import org.apache.forrest.dispatcher.api.Structurer;
 import org.apache.forrest.dispatcher.config.DispatcherBean;
 import org.apache.forrest.dispatcher.exception.DispatcherException;
 import org.apache.forrest.dispatcher.factories.ContractFactory;
+import org.apache.forrest.dispatcher.impl.helper.Captions;
 import org.apache.forrest.dispatcher.impl.helper.StAX;
 import org.apache.forrest.dispatcher.utils.CommonString;
 import org.xml.sax.InputSource;
 
 public class XMLStructurer extends StAX implements Structurer {
-
-  public static final String NS = "http://apache.org/forrest/templates/2.0";
-
-  public static final String STRUCTURER_ELEMENT = "structurer";
-
-  public static final String STRUCTURE_ELEMENT = "structure";
-
-  public static final String TYPE_ATT = "type";
-
-  public static final String HOOKS_ATT = "hooksXpath";
-
-  public static final String CONTRACT_ELEMENT = "contract";
-
-  public static final String NAME_ATT = "name";
-
-  public static final String DATA_ATT = "dataURI";
-
-  public static final String PROPERTY_ELEMENT = "property";
-
-  public static final String HOOK_ELEMENT = "hook";
-
-  private static final Object VALUE_ATT = "value";
-
-  private static final Object CONTRACT_RESULT_XPATH = "xpath";
 
   private final Resolver resolver;
 
@@ -88,15 +65,15 @@ public class XMLStructurer extends StAX implements Structurer {
 
         case XMLStreamConstants.START_ELEMENT:
           String elementName = reader.getLocalName();
-          if (elementName.equals(STRUCTURE_ELEMENT)) {
+          if (elementName.equals(Captions.STRUCTURE_ELEMENT)) {
             String m_type = "", path = "";
             // Get attribute names
             for (int i = 0; i < reader.getAttributeCount(); i++) {
               String localName = reader.getAttributeLocalName(i);
-              if (localName.equals(TYPE_ATT)) {
+              if (localName.equals(Captions.TYPE_ATT)) {
                 // Return value
                 m_type = reader.getAttributeValue(i);
-              } else if (localName.equals(HOOKS_ATT)) {
+              } else if (localName.equals(Captions.HOOKS_ATT)) {
                 path = reader.getAttributeValue(i);
               }
             }
@@ -144,22 +121,22 @@ public class XMLStructurer extends StAX implements Structurer {
       switch (event) {
       case XMLStreamConstants.END_ELEMENT:
         elementName = reader.getLocalName();
-        if (elementName.equals(STRUCTURE_ELEMENT)) {
+        if (elementName.equals(Captions.STRUCTURE_ELEMENT)) {
           XMLEventWriter writer = getWriter(out);
           createResultStax(writer);
           resultTree.clear();
           process = false;
-        }else if (elementName.equals(HOOK_ELEMENT)){
+        }else if (elementName.equals(Captions.HOOK_ELEMENT)){
           processHook(reader, false);
         }
         break;
 
       case XMLStreamConstants.START_ELEMENT:
         elementName = reader.getLocalName();
-        if (elementName.equals(CONTRACT_ELEMENT)) {
+        if (elementName.equals(Captions.CONTRACT_ELEMENT)) {
           log.debug("Path " + currentPath);
           processContract(reader);
-        } else if (elementName.equals(HOOK_ELEMENT)) {
+        } else if (elementName.equals(Captions.HOOK_ELEMENT)) {
           log.debug("HOOKS " + elementName);
           processHook(reader, true);
           log.info("HOOKS transformation NOT YET IMPLEMENTED");
@@ -230,10 +207,10 @@ public class XMLStructurer extends StAX implements Structurer {
     // Get attribute names
     for (int i = 0; i < reader.getAttributeCount(); i++) {
       String localName = reader.getAttributeLocalName(i);
-      if (localName.equals(NAME_ATT)) {
+      if (localName.equals(Captions.NAME_ATT)) {
         // Return value
         name = reader.getAttributeValue(i);
-      } else if (localName.equals(DATA_ATT)) {
+      } else if (localName.equals(Captions.DATA_ATT)) {
         data = reader.getAttributeValue(i);
       }
     }
@@ -250,7 +227,7 @@ public class XMLStructurer extends StAX implements Structurer {
       switch (event) {
       case XMLStreamConstants.END_ELEMENT:
         elementName = reader.getLocalName();
-        if (elementName.equals(CONTRACT_ELEMENT)) {
+        if (elementName.equals(Captions.CONTRACT_ELEMENT)) {
           InputStream resultStream = contract.execute(dataStream, param);
           if (null != dataStream) {
             dataStream.close();
@@ -265,7 +242,7 @@ public class XMLStructurer extends StAX implements Structurer {
 
       case XMLStreamConstants.START_ELEMENT:
         elementName = reader.getLocalName();
-        if (elementName.equals(PROPERTY_ELEMENT)) {
+        if (elementName.equals(Captions.PROPERTY_ELEMENT)) {
           processProperty(reader, param);
         }
         break;
@@ -291,7 +268,7 @@ public class XMLStructurer extends StAX implements Structurer {
           // Get attribute names
           for (int i = 0; i < contractResultReader.getAttributeCount(); i++) {
             String localName = contractResultReader.getAttributeLocalName(i);
-            if (localName.equals(CONTRACT_RESULT_XPATH)) {
+            if (localName.equals(Captions.CONTRACT_RESULT_XPATH)) {
               // Return value
               xpath = contractResultReader.getAttributeValue(i);
             }
@@ -377,10 +354,10 @@ public class XMLStructurer extends StAX implements Structurer {
     // Get attribute names
     for (int i = 0; i < reader.getAttributeCount(); i++) {
       String localName = reader.getAttributeLocalName(i);
-      if (localName.equals(NAME_ATT)) {
+      if (localName.equals(Captions.NAME_ATT)) {
         // Return value
         propertyName = reader.getAttributeValue(i);
-      } else if (localName.equals(VALUE_ATT)) {
+      } else if (localName.equals(Captions.VALUE_ATT)) {
         propertyValue = reader.getAttributeValue(i);
       }
     }
@@ -405,7 +382,7 @@ public class XMLStructurer extends StAX implements Structurer {
       currentEvent = allocator.allocate(reader);
       switch (event) {
       case XMLStreamConstants.END_ELEMENT:
-        if (reader.getLocalName().equals(PROPERTY_ELEMENT)) {
+        if (reader.getLocalName().equals(Captions.PROPERTY_ELEMENT)) {
           writerProperty.add(currentEvent);
           writerProperty.flush();
           writerProperty.close();

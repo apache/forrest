@@ -50,22 +50,6 @@ public class XSLContractHelper extends StAX {
 
   private Transformer transformer = null;
 
-  public static final String NS = "http://apache.org/forrest/templates/2.0";
-
-  public static final String CONTRACT_ELEMENT = "contract";
-
-  public static final String CONTRACT_NAME_ATT = "name";
-
-  public static final String DESCRIPTION_ELEMENT = "description";
-
-  public static final String TEMPLATE_ELEMENT = "template";
-
-  public static final String TEMPLATE_FORMAT_ATT = "inputFormat";
-
-  public static final String USAGE_ELEMENT = "usage";
-
-  public static final String RESULT_XPATH = "xpath";
-
   /**
    * This method will prepare the transformation from the data and the xsl
    * stylesheet from the contract.
@@ -160,17 +144,17 @@ public class XSLContractHelper extends StAX {
 
       case XMLStreamConstants.START_ELEMENT:
         String localName = reader.getLocalName();
-        if (localName.equals(CONTRACT_ELEMENT)) {
+        if (localName.equals(Captions.CONTRACT_ELEMENT)) {
           contract.setName(processContract(reader));
         }
-        if (localName.equals(DESCRIPTION_ELEMENT)) {
+        if (localName.equals(Captions.DESCRIPTION_ELEMENT)) {
           contract.setDescription(processDescription(reader));
         }
-        if (localName.equals(USAGE_ELEMENT)) {
+        if (localName.equals(Captions.USAGE_ELEMENT)) {
           contract.setUsage(processUsage(reader));
         }
 
-        if (localName.equals(TEMPLATE_ELEMENT)) {
+        if (localName.equals(Captions.TEMPLATE_ELEMENT)) {
           contract.setXslSource(processTemplate(reader));
         }
 
@@ -189,7 +173,7 @@ public class XSLContractHelper extends StAX {
     for (int i = 0; i < reader.getAttributeCount(); i++) {
       // Get attribute name
       String localName = reader.getAttributeLocalName(i);
-      if (localName.equals(TEMPLATE_FORMAT_ATT)) {
+      if (localName.equals(Captions.TEMPLATE_FORMAT_ATT)) {
         // Return value
         role = reader.getAttributeValue(i);
       }
@@ -202,8 +186,8 @@ public class XSLContractHelper extends StAX {
 
         case XMLStreamConstants.END_ELEMENT:
           if (reader.getNamespaceURI() != null) {
-            if (reader.getNamespaceURI().equals(NS)
-                & reader.getLocalName().equals(TEMPLATE_ELEMENT)) {
+            if (reader.getNamespaceURI().equals(Captions.NS)
+                & reader.getLocalName().equals(Captions.TEMPLATE_ELEMENT)) {
               process = false;
             } else {
               allocator.allocate(reader,writer);
@@ -240,7 +224,7 @@ public class XSLContractHelper extends StAX {
         break;
 
       case XMLStreamConstants.END_ELEMENT:
-        if (reader.getLocalName().equals(USAGE_ELEMENT)) {
+        if (reader.getLocalName().equals(Captions.USAGE_ELEMENT)) {
           process = false;
         }
         break;
@@ -267,7 +251,7 @@ public class XSLContractHelper extends StAX {
         break;
 
       case XMLStreamConstants.END_ELEMENT:
-        if (reader.getLocalName().equals(DESCRIPTION_ELEMENT)) {
+        if (reader.getLocalName().equals(Captions.DESCRIPTION_ELEMENT)) {
           process = false;
         }
         break;
@@ -285,7 +269,7 @@ public class XSLContractHelper extends StAX {
     for (int i = 0; i < reader.getAttributeCount(); i++) {
       // Get attribute name
       String localName = reader.getAttributeLocalName(i);
-      if (localName.equals(CONTRACT_NAME_ATT)) {
+      if (localName.equals(Captions.CONTRACT_NAME_ATT)) {
         // Return value
         contractName = reader.getAttributeValue(i);
         return contractName;
