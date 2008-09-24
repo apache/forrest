@@ -13,6 +13,8 @@
         name="reference-section"
         select="$properties/*[@name='output.tei.reference-section']/@value" />
 
+  <xsl:key name="references" match="*" use="concat(name(), '::', .)" />
+  
   <xsl:template match='/'>
     <xsl:text disable-output-escaping="yes">
   <![CDATA[
@@ -153,12 +155,13 @@
     </xsl:choose>
   </xsl:template>
 
-  <!-- FIXME: add parameter to remove this field, remove duplicates, remove mailto field -->
+  <!-- FIXME: remove mailto field -->
   <xsl:template name="references">
     <div>
       <head>References</head>
       <ul>
-        <xsl:for-each select="//link">
+        <xsl:for-each select="//link[generate-id(.) =
+            generate-id(key('references', concat(name(), '::', .))[1])]">
           <xsl:sort select ="."/>
           <li>
             <a>
