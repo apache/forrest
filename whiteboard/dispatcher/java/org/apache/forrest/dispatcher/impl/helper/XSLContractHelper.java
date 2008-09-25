@@ -16,8 +16,6 @@
  */
 package org.apache.forrest.dispatcher.impl.helper;
 
-import java.io.BufferedInputStream;
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -116,8 +114,9 @@ public class XSLContractHelper extends StAX {
    */
   public InputStream createEmptyXml() throws XMLStreamException {
     ByteArrayOutputStream out = createEmptyXmlOutput();
-    return (out !=null)?new BufferedInputStream(new ByteArrayInputStream(out.toByteArray())):null;
+    return (out !=null)?StreamHelper.switchStream(out):null;
   }
+
 
   /**
    * This method sets the xslSource, name, description and usage information of
@@ -205,8 +204,7 @@ public class XSLContractHelper extends StAX {
     }
     writer.flush();
     log.debug(out.toString());
-    Source source = new StreamSource(new BufferedInputStream(
-        new ByteArrayInputStream(out.toByteArray())));
+    Source source = new StreamSource(StreamHelper.switchStream(out));
     return source;
   }
 
