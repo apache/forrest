@@ -258,7 +258,7 @@ p.quote {
         <forrest:contract name="search-input">
           <forrest:property name="input-size">25</forrest:property>
           <forrest:property name="search-input">
-            <search name="MyProject" domain="mydomain" provider="google"/>
+            <search name="MyProject" domain="example.org" provider="google"/>
           </forrest:property>
         </forrest:contract>
         <forrest:hook name="nav-main-hook">
@@ -300,7 +300,7 @@ p.quote {
 <!-- <forrest:contract name="search-input">
             <forrest:property name="input-size">18</forrest:property>
             <forrest:property name="search-input">
-              <search name="MyProject" domain="mydomain" provider="google"/>
+              <search name="MyProject" domain="example.org" provider="google"/>
             </forrest:property>
     </forrest:contract>-->
           <forrest:contract name="siteinfo-credits">

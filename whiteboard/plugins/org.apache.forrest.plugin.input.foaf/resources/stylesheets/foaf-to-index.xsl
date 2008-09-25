@@ -43,8 +43,8 @@
          <source>
             <![CDATA[
    <people>
-      <person id="johnDoe" location="http://example.com/john/foaf.rdf" />
-      <person id="janeDoe" location="http://example.com/jane/foaf.rdf" />
+      <person id="johnDoe" location="http://example.org/john/foaf.rdf" />
+      <person id="janeDoe" location="http://example.org/jane/foaf.rdf" />
    </people>]]>
         </source>
         

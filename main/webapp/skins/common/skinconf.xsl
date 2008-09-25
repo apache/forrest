@@ -56,7 +56,7 @@
        <project-description>MyProject Description</project-description>
      </xsl:if>
      <xsl:if test="not(project-url)">
-       <project-url>http://myproj.mygroup.org/</project-url>
+       <project-url>http://example.org/myproj/</project-url>
      </xsl:if>
      <xsl:if test="not(project-logo)">
        <project-logo>images/project.png</project-logo>
@@ -68,7 +68,7 @@
        <group-description>MyGroup Description</group-description>
      </xsl:if>
      <xsl:if test="not(group-url)">
-       <group-url>http://mygroup.org</group-url>
+       <group-url>http://example.org</group-url>
      </xsl:if>
      <xsl:if test="not(group-logo)">
        <group-logo>images/group.png</group-logo>
