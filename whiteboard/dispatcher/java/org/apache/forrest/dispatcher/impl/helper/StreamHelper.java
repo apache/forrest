@@ -19,6 +19,8 @@ package org.apache.forrest.dispatcher.impl.helper;
 import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 
 public class StreamHelper {
   /**
@@ -27,5 +29,14 @@ public class StreamHelper {
    */
   public static BufferedInputStream switchStream(ByteArrayOutputStream out) {
     return new BufferedInputStream(new ByteArrayInputStream(out.toByteArray()));
+  }
+  /**
+   * @param dataStream
+   * @throws IOException
+   */
+  public static void closeStream(InputStream dataStream) throws IOException {
+    if (null != dataStream) {
+      dataStream.close();
+    }
   }
 }

@@ -27,6 +27,7 @@ import org.apache.forrest.dispatcher.exception.DispatcherException;
 import org.apache.forrest.dispatcher.factories.ContractFactory;
 import org.apache.forrest.dispatcher.impl.helper.Captions;
 import org.apache.forrest.dispatcher.impl.helper.StAX;
+import org.apache.forrest.dispatcher.impl.helper.StreamHelper;
 import org.apache.forrest.dispatcher.utils.CommonString;
 import org.xml.sax.InputSource;
 
@@ -103,13 +104,10 @@ public class XMLStructurer extends StAX implements Structurer {
     } catch (IOException e) {
       throw new DispatcherException(e);
     } finally {
-      if (null != structurerStream) {
         try {
-          structurerStream.close();
+          StreamHelper.closeStream(structurerStream);
         } catch (IOException e) {
           throw new DispatcherException(e);
-        }
-        ;
       }
     }
     return stream;
@@ -153,8 +151,7 @@ public class XMLStructurer extends StAX implements Structurer {
       }
     }
     log.debug(out.toString());
-    return (out != null) ? new BufferedInputStream(new ByteArrayInputStream(out
-        .toByteArray())) : null;
+    return (out != null) ? StreamHelper.switchStream(out) : null;
   }
 
   /**
@@ -232,13 +229,9 @@ public class XMLStructurer extends StAX implements Structurer {
         elementName = reader.getLocalName();
         if (elementName.equals(Captions.CONTRACT_ELEMENT)) {
           InputStream resultStream = contract.execute(dataStream, param);
-          if (null != dataStream) {
-            dataStream.close();
-          }
+          StreamHelper.closeStream(dataStream);
           processContractResult(resultStream);
-          if (null != resultStream) {
-            resultStream.close();
-          }
+          StreamHelper.closeStream(resultStream);
           process = false;
         }
         break;
@@ -401,8 +394,7 @@ public class XMLStructurer extends StAX implements Structurer {
         break;
       }
     }
-    InputSource value = new InputSource(new ByteArrayInputStream(out
-        .toByteArray()));
+    InputSource value = new InputSource(StreamHelper.switchStream(out));
     return value;
   }
 
