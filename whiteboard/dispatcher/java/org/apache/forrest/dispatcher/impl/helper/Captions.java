@@ -60,4 +60,6 @@ public class Captions {
 
   public static final String RESULT_XPATH = "xpath";
 
+  public static final String PART_ELEMENT = "part";
+
 }

@@ -260,7 +260,7 @@ public class XMLStructurer extends StAX implements Structurer {
       int resultEvent = contractResultReader.next();
       switch (resultEvent) {
       case XMLStreamConstants.START_ELEMENT:
-        if (contractResultReader.getLocalName().equals("part")) {
+        if (contractResultReader.getLocalName().equals(Captions.PART_ELEMENT)) {
           // Get attribute names
           for (int i = 0; i < contractResultReader.getAttributeCount(); i++) {
             String localName = contractResultReader.getAttributeLocalName(i);
