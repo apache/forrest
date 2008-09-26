@@ -184,14 +184,19 @@ public class XMLStructurer extends StAX implements Structurer {
         injectResult(writer, element);
         closingPaths(writer, split);
       } else {
-        StartElement start = getEventFactory().createStartElement("", "",
-            replaceFirst);
-        writer.add((XMLEvent) start);
+        if(replaceFirst!=null && !replaceFirst.equals("")){
+          StartElement start = getEventFactory().createStartElement("", "",
+              replaceFirst);
+          writer.add((XMLEvent) start);
+        }
 
         injectResult(writer, element);
-        EndElement end = getEventFactory().createEndElement("", "",
-            replaceFirst);
-        writer.add((XMLEvent) end);
+ if(replaceFirst!=null && !replaceFirst.equals("")){
+   EndElement end = getEventFactory().createEndElement("", "",
+       replaceFirst);
+   writer.add((XMLEvent) end);
+        }
+        
       }
 
     }
