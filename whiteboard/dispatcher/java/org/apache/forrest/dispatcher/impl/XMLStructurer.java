@@ -104,10 +104,10 @@ public class XMLStructurer extends StAX implements Structurer {
     } catch (IOException e) {
       throw new DispatcherException(e);
     } finally {
-        try {
-          StreamHelper.closeStream(structurerStream);
-        } catch (IOException e) {
-          throw new DispatcherException(e);
+      try {
+        StreamHelper.closeStream(structurerStream);
+      } catch (IOException e) {
+        throw new DispatcherException(e);
       }
     }
     return stream;
@@ -184,19 +184,19 @@ public class XMLStructurer extends StAX implements Structurer {
         injectResult(writer, element);
         closingPaths(writer, split);
       } else {
-        if(replaceFirst!=null && !replaceFirst.equals("")){
+        if (replaceFirst != null && !replaceFirst.equals("")) {
           StartElement start = getEventFactory().createStartElement("", "",
               replaceFirst);
           writer.add((XMLEvent) start);
         }
 
         injectResult(writer, element);
- if(replaceFirst!=null && !replaceFirst.equals("")){
-   EndElement end = getEventFactory().createEndElement("", "",
-       replaceFirst);
-   writer.add((XMLEvent) end);
+        if (replaceFirst != null && !replaceFirst.equals("")) {
+          EndElement end = getEventFactory().createEndElement("", "",
+              replaceFirst);
+          writer.add((XMLEvent) end);
         }
-        
+
       }
 
     }
