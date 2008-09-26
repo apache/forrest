@@ -89,7 +89,7 @@ public class XMLStructurerAxiom extends StAX implements Structurer {
       XMLStreamReader reader = getReader(structurerStream);
       StAXOMBuilder builder = new StAXOMBuilder(reader);
       OMElement strucuturer = builder.getDocumentElement();
-      Iterator<OMNode> structures = strucuturer.getChildrenWithName(new QName(
+      Iterator<OMNode> structures = strucuturer.getChildrenWithName(qIt(
           Captions.NS, Captions.STRUCTURE_ELEMENT));
       /*
        * process all structure elements within this structurer file.
@@ -189,10 +189,10 @@ public class XMLStructurerAxiom extends StAX implements Structurer {
       throws DispatcherException, XMLStreamException, IOException,
       JaxenException {
     if (component.getQName().equals(
-        new QName(Captions.NS, Captions.CONTRACT_ELEMENT))) {
+        qIt(Captions.NS, Captions.CONTRACT_ELEMENT))) {
       processContract(component, pathNode);
     } else if (component.getQName().equals(
-        new QName(Captions.NS, Captions.HOOK_ELEMENT))) {
+        qIt(Captions.NS, Captions.HOOK_ELEMENT))) {
       processHook(component, pathNode);
     }
   }
@@ -278,7 +278,7 @@ public class XMLStructurerAxiom extends StAX implements Structurer {
       OMNamespace space = ns.next();
       spaces.add(space);
     }
-    Iterator<OMElement> parts = content.getChildrenWithName(new QName(
+    Iterator<OMElement> parts = content.getChildrenWithName(qIt(
         Captions.NS_CONTRACTS, Captions.PART_ELEMENT));
     while (parts.hasNext()) {
       OMElement part = parts.next();
@@ -317,6 +317,14 @@ public class XMLStructurerAxiom extends StAX implements Structurer {
     return new QName(name);
   }
 
+  /**
+   * @param name
+   * @param uri
+   * @return
+   */
+  private QName qIt(String uri,String name) {
+    return new QName(uri,name);
+  }
   /**
    * @param properties
    * @param param
