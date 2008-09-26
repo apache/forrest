@@ -122,7 +122,7 @@ public class XMLStructurerAxiom extends StAX implements Structurer {
       root.getFirstElement().serialize(out);
       // debug hook
       // next line will get the whole result document
-      //root.serialize(out);
+      // root.serialize(out);
     } catch (XMLStreamException e) {
       throw new DispatcherException(e);
     } catch (JaxenException e) {
@@ -269,13 +269,13 @@ public class XMLStructurerAxiom extends StAX implements Structurer {
     StAXOMBuilder builder = new StAXOMBuilder(contractResultReader);
     OMElement content = builder.getDocumentElement();
     /*
-     *  For full blown ns support we need to get all ns from the
-     *  result. This will be passed later to the XPath processor.
+     * For full blown ns support we need to get all ns from the result. This
+     * will be passed later to the XPath processor.
      */
     Iterator<OMNamespace> ns = content.getAllDeclaredNamespaces();
     HashSet<OMNamespace> spaces = new HashSet<OMNamespace>();
     while (ns.hasNext()) {
-      OMNamespace space =  ns.next();
+      OMNamespace space = ns.next();
       spaces.add(space);
     }
     Iterator<OMElement> parts = content.getChildrenWithName(new QName(
@@ -293,9 +293,10 @@ public class XMLStructurerAxiom extends StAX implements Structurer {
         xpath = PATH_PREFIX + xpath;
         // we need to feed the xpathSelector with the ns we may have
         AXIOMXPathPatched xpathSelector = new AXIOMXPathPatched(xpath);
-        
+
         for (OMNamespace space : spaces) {
-          xpathSelector.addNamespace(space.getPrefix(), space.getNamespaceURI());
+          xpathSelector
+              .addNamespace(space.getPrefix(), space.getNamespaceURI());
         }
         OMElement injectionPoint = (OMElement) xpathSelector.selectSingleNode(
             root, true);

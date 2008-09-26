@@ -29,16 +29,17 @@ import org.jaxen.JaxenException;
 /**
  * Issue: WSCOMMONS-389
  * 
- * As soon the above issue is fixed we need to drop this implementation 
- * since it will be in the AXIOMXPath.
+ * As soon the above issue is fixed we need to drop this implementation since it
+ * will be in the AXIOMXPath.
  * 
- * The process should be 
+ * The process should be
  * <ol>
- * <li> stripping this class that it is only extending super and mark this class as deprecated
- * <li> remove it the next release.
- *  
+ * <li>stripping this class that it is only extending super and mark this class
+ * as deprecated
+ * <li>remove it the next release.
+ * 
  * @version 1.0
- *
+ * 
  */
 public class AXIOMXPathPatched extends AXIOMXPath {
 
@@ -123,10 +124,10 @@ public class AXIOMXPathPatched extends AXIOMXPath {
    */
   private void calculateNsElements(LinkedHashSet<OMElement> pathNodes,
       String pathPart) {
-    
+
     /*
-     * FIXME: Need to test xpath expression such as [@id='example']
-     * I think their are NOT generated correctly!
+     * FIXME: Need to test xpath expression such as [@id='example'] I think
+     * their are NOT generated correctly!
      */
     OMElement element = null;
     OMNamespaceImpl localSpace = null;

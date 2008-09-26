@@ -28,8 +28,8 @@
       xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
       <xsl:param name="test-inline" select="'No parameter has been passed'" />
       <xsl:param name="test-inline-xml" select="'No xml parameter has been passed'" />
-      <xsl:param name="injectPointHead" select="'/html/head'"/>
-      <xsl:param name="injectPointBody" select="'/html/body/forrest:hook/forrest:hook'"/>
+      <xsl:param name="injectPointHead" select="'/html/head'" />
+      <xsl:param name="injectPointBody" select="'/html/body/forrest:hook/forrest:hook'" />
       <xsl:template match="/">
         <forrest:content xmlns:forrest="http://apache.org/forrest/templates/2.0">
           <forrest:part xpath="{$injectPointHead}">
@@ -46,7 +46,9 @@
             <xsl:copy-of select="$test-inline-xml" />
           </forrest:part>
           <forrest:part xpath="{$injectPointBody}">
-            <p><xsl:value-of select="$injectPointBody"/></p>
+            <p>
+              <xsl:value-of select="$injectPointBody" />
+            </p>
           </forrest:part>
         </forrest:content>
       </xsl:template>
