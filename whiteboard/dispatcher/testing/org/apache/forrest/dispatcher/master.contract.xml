@@ -28,8 +28,16 @@
       xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
       <xsl:param name="test-inline" select="'No parameter has been passed'" />
       <xsl:param name="test-inline-xml" select="'No xml parameter has been passed'" />
+      <xsl:param name="injectPointHead" select="'/html/head'"/>
+      <xsl:param name="injectPointBody" select="'/html/body/forrest:hook/forrest:hook'"/>
       <xsl:template match="/">
-        <forrest:content xmlns:forrest="http://apache.org/forrest/templates/1.0">
+        <forrest:content xmlns:forrest="http://apache.org/forrest/templates/2.0">
+          <forrest:part xpath="{$injectPointHead}">
+            <meta
+              content=" Content going to a fixed location defined by the contract 
+              (here: {$injectPointHead})."
+              name="Description" />
+          </forrest:part>
           <forrest:part>
             Content going to the location defined by the structurer.
             $test-inline:
@@ -37,13 +45,8 @@
             $test-inline-xml:
             <xsl:copy-of select="$test-inline-xml" />
           </forrest:part>
-          <forrest:part xpath="/html/head">
-            <meta
-              content=" Content going to a fixed location defined by the contract (here: /html/head)."
-              name="Description" />
-          </forrest:part>
-          <forrest:part xpath="/html/body/hook/hook">
-            <p>master-xxx</p>
+          <forrest:part xpath="{$injectPointBody}">
+            <p><xsl:value-of select="$injectPointBody"/></p>
           </forrest:part>
         </forrest:content>
       </xsl:template>
