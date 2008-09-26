@@ -104,8 +104,11 @@ public class XMLStructurerAxiom extends StAX implements Structurer {
           if (format.equals(m_type)) {
             log.debug("matched - need to process");
             // adding the default path
-            if (!"/".equals(String.valueOf(path.charAt(0)))) {
+            boolean startsWithRoot = "/".equals(String.valueOf(path.charAt(0)));
+            if (!startsWithRoot) {
               path = "/" + path;
+            }else if(path.length()==1 && startsWithRoot){
+              path="";
             }
             currentPath += path;
             AXIOMXPathPatched xpath = new AXIOMXPathPatched(currentPath);
