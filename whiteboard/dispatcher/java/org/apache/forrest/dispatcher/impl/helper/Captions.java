@@ -62,4 +62,6 @@ public class Captions {
 
   public static final String PART_ELEMENT = "part";
 
+  public static final String NS_CONTRACTS = NS;//"http://apache.org/forrest/templates/1.0";
+
 }
