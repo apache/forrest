@@ -246,10 +246,12 @@ public class XMLStructurerAxiom extends StAX implements Structurer {
     }
     Contract contract = contractRep.resolve(name);
     HashMap<String, ?> param = new HashMap();
-    OMElement properties = component
-        .getFirstChildWithName(qIt(Captions.PROPERTY_ELEMENT));
-    if (properties != null) {
-      processProperty(properties, param);
+    Iterator <OMNode> properties = component.getChildrenWithName(qIt(Captions.NS,Captions.PROPERTY_ELEMENT));
+    while (properties.hasNext()) {
+      OMNode node = (OMNode) properties.next();
+      if (isElement(node)){
+        processProperty((OMElement) node, param);
+      }
     }
     InputStream resultStream = contract.execute(dataStream, param);
     StreamHelper.closeStream(dataStream);
