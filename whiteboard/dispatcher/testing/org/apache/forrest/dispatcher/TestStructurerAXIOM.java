@@ -18,19 +18,25 @@ public class TestStructurerAXIOM extends TestCase {
     Structurer structurer = prepareStructurer(false);
     structurer.execute(getStream(), format);
   }
-/*
+  
   public void testStructurerWithXmlProperties() throws DispatcherException {
+    String format = "html";
+    Structurer structurer = prepareStructurer(true);
+    structurer.execute(getStream(), format);
+  }
+
+  public void testStructurerFo() throws DispatcherException {
     String format = "fo";
     Structurer structurer = prepareStructurer(false);
     structurer.execute(getStream(), format);
   }
-
+  
   public void testStructurerXmlFormat() throws DispatcherException {
     String format = "xml";
     Structurer structurer = prepareStructurer(false);
     structurer.execute(getStream(), format);
   }
-*/
+
   private Structurer prepareStructurer(boolean allowXml) {
     DispatcherBean config = new DispatcherBean();
     config.setAllowXmlProperties(allowXml);
