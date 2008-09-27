@@ -35,6 +35,6 @@ public interface Resolver {
    * @param uri the uri that we want
    * @return the stream representation of the uri.
    */
-  public InputStream resolve(String uri);
+  InputStream resolve(String uri);
 
 }

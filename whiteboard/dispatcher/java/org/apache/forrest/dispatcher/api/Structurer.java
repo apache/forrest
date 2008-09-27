@@ -22,7 +22,7 @@ import org.apache.forrest.dispatcher.exception.DispatcherException;
 
 public interface Structurer {
 
-  public abstract InputStream execute(InputStream structurerStream,
+  InputStream execute(InputStream structurerStream,
       String format) throws DispatcherException;
 
 }
