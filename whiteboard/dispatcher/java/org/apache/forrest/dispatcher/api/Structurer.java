@@ -20,8 +20,28 @@ import java.io.InputStream;
 
 import org.apache.forrest.dispatcher.exception.DispatcherException;
 
+/**
+ * Wrapper interface to enable multible structurer implementation.
+ * The StAX only implementation and the AXIOM implementation are 
+ * the first ones.
+ * 
+ * @version 1.0
+ * 
+ */
 public interface Structurer {
 
+  /**
+   * Will process the incoming structurer for the format
+   * requested. The incoming structurerStream will be closed 
+   * by this method. Implementations has to close the incoming
+   * stream before returning the returning stream to be conform 
+   * with this api.
+   * @param structurerStream the stream that contains the structurer
+   * we need to process.
+   * @param format the format we want to process. 
+   * @return the result of the processing in the requested format.
+   * @throws DispatcherException
+   */
   InputStream execute(InputStream structurerStream,
       String format) throws DispatcherException;
 
