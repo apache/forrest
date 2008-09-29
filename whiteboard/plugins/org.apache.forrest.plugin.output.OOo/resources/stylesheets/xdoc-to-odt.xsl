@@ -68,6 +68,39 @@
         <xsl:template match="body">
                 <xsl:apply-templates/>
         </xsl:template>
+        <!-- work on the TOC stuff here -->
+        <!-- <xsl:variable name="config" select="//skinconfig"/>
+  <xsl:variable name="minitoc-location" select="//skinconfig/toc/@location"/>
+  <xsl:template match="div[@id='skinconf-toc-page']">
+    <xsl:if test="$config/toc">
+      <xsl:if test="contains($minitoc-location,'page')">
+        <xsl:if test="(count(//tocitems/tocitem) >= $config/toc/@min-sections) or (//tocitems/@force = 'true')">
+          <xsl:call-template name="minitoc">
+            <xsl:with-param name="tocroot" select="//tocitems"/>
+          </xsl:call-template>
+        </xsl:if>
+      </xsl:if>
+    </xsl:if>
+  </xsl:template>
+  <xsl:template name="minitoc">
+    <xsl:param name="tocroot"/>
+    <xsl:if test="(count($tocroot/tocitem) >= $config/toc/@min-sections) or ($tocroot/@force = 'true')">
+      <xsl:if test="contains($config/toc/@location,'page')">
+        <ul class="minitoc">
+          <xsl:for-each select="$tocroot/tocitem">
+            <li><a href="{@href}">
+              <xsl:value-of select="@title"/></a>
+              <xsl:if test="@level&lt;//skinconfig/toc/@max-depth+1">
+                <xsl:call-template name="minitoc">
+                  <xsl:with-param name="tocroot" select="."/>
+                </xsl:call-template>
+              </xsl:if></li>
+          </xsl:for-each>
+        </ul>
+      </xsl:if>
+    </xsl:if>
+  </xsl:template>-->
+        <!-- work on the TOC stuff ends -->
         <xsl:template match="section">
                 <xsl:apply-templates/>
         </xsl:template>
@@ -148,8 +181,8 @@
                         <xsl:attribute name="draw:z-index">0</xsl:attribute>
                         <!-- FIXME: See FOR-1098 - The svg attributes below are being ignored. -->
                         <xsl:attribute name="svg:y">0cm</xsl:attribute>
-                        <xsl:attribute name="svg:width"><xsl:value-of select="@width div 36"/>cm</xsl:attribute>
-                        <xsl:attribute name="svg:height"><xsl:value-of select="@height div 36"/>cm</xsl:attribute>
+                        <xsl:attribute name="svg:width"><xsl:value-of select="../width div 36"/>cm</xsl:attribute>
+                        <xsl:attribute name="svg:height"><xsl:value-of select="../height div 36"/>cm</xsl:attribute>
                         <xsl:call-template name="drawImage"/>
             </draw:frame>
             <xsl:apply-templates/>
@@ -202,6 +235,12 @@
       </xsl:attribute>
     </zip:entry>
   </xsl:for-each>
+  <!-- Add default background image -->
+  <zip:entry>
+          <xsl:attribute name="name">Pictures/osswatch_background.png</xsl:attribute>
+          <xsl:attribute name="src">resources/images/osswatch_background.png</xsl:attribute>
+          <!-- FIXME: Would like to use project images dir, how to configure for that ? -->
+  </zip:entry>
 </xsl:template>
 
 <!-- 'filename' template returns just file.txt from a path such
