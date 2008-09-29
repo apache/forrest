@@ -32,25 +32,19 @@ import org.jaxen.JaxenException;
 /**
  * Issue: WSCOMMONS-389
  * 
- * As soon the above issue is fixed we need to drop this implementation since it
- * will be in the AXIOMXPath.
- * 
- * The process should be
- * <ol>
- * <li>stripping this class that it is only extending super and mark this class
- * as deprecated
- * <li>remove it the next release.
+ * As soon the above issue is fixed we need to drop this implementation since 
+ * this class will be go into the axiom code base.
  * 
  * @version 1.0
  * 
  */
-public class AXIOMXPathPatched extends AXIOMXPath {
+public class AXIOMXPathCreate extends AXIOMXPath {
 
   private static final long serialVersionUID = -4670206430863692541L;
   private String xpathExpr;
   private OMFactory factory;
 
-  public AXIOMXPathPatched(String xpathExpr) throws JaxenException {
+  public AXIOMXPathCreate(String xpathExpr) throws JaxenException {
     super(xpathExpr);
     this.xpathExpr = xpathExpr;
     this.factory = OMAbstractFactory.getOMFactory();
@@ -181,9 +175,9 @@ public class AXIOMXPathPatched extends AXIOMXPath {
    */
   private AXIOMXPath getNsXPath(String path) throws JaxenException {
     AXIOMXPath xpath = new AXIOMXPath(path);
-    Iterator iterator = this.getNamespaces().keySet().iterator();
+    Iterator<String> iterator = this.getNamespaces().keySet().iterator();
     while (iterator.hasNext()) {
-      String key = (String) iterator.next();
+      String key = iterator.next();
       String value = (String) getNamespaces().get(key);
       xpath.addNamespace(key, value);
     }

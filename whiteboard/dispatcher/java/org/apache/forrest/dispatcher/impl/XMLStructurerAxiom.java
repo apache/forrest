@@ -28,7 +28,7 @@ import org.apache.forrest.dispatcher.api.Structurer;
 import org.apache.forrest.dispatcher.config.DispatcherBean;
 import org.apache.forrest.dispatcher.exception.DispatcherException;
 import org.apache.forrest.dispatcher.factories.ContractFactory;
-import org.apache.forrest.dispatcher.impl.helper.AXIOMXPathPatched;
+import org.apache.forrest.dispatcher.impl.helper.AXIOMXPathCreate;
 import org.apache.forrest.dispatcher.impl.helper.Captions;
 import org.apache.forrest.dispatcher.impl.helper.StAX;
 import org.apache.forrest.dispatcher.impl.helper.StreamHelper;
@@ -103,7 +103,7 @@ public class XMLStructurerAxiom extends StAX implements Structurer {
               path="";
             }
             currentPath += path;
-            AXIOMXPathPatched xpath = new AXIOMXPathPatched(currentPath);
+            AXIOMXPathCreate xpath = new AXIOMXPathCreate(currentPath);
             Object pathNode = (OMElement) xpath.selectSingleNode(root, true);
             processStructure(structure, (OMElement) pathNode);
           }
@@ -289,7 +289,7 @@ public class XMLStructurerAxiom extends StAX implements Structurer {
       } else {
         xpath = PATH_PREFIX + xpath;
         // we need to feed the xpathSelector with the ns we may have
-        AXIOMXPathPatched xpathSelector = new AXIOMXPathPatched(xpath);
+        AXIOMXPathCreate xpathSelector = new AXIOMXPathCreate(xpath);
 
         for (OMNamespace space : spaces) {
           xpathSelector
