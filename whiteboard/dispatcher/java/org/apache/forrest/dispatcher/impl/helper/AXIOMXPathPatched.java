@@ -16,8 +16,11 @@
  */
 package org.apache.forrest.dispatcher.impl.helper;
 
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.axiom.om.OMAbstractFactory;
 import org.apache.axiom.om.OMElement;
@@ -124,13 +127,10 @@ public class AXIOMXPathPatched extends AXIOMXPath {
   private void calculateNsElements(LinkedHashSet<OMElement> pathNodes,
       String pathPart) {
 
-    /*
-     * FIXME: Need to test xpath expression such as [@id='example'] I think
-     * their are NOT generated correctly!
-     */
     OMElement element = null;
     OMNamespaceImpl localSpace = null;
-    String localName = pathPart;
+    HashMap<String, String> map = new HashMap<String, String>();
+    String localName = cleanFromExpressions(pathPart,map);
     String[] nameSpacedNode = localName.split(":");
     if (nameSpacedNode.length == 2) {
       final String prefix = nameSpacedNode[0];
@@ -139,7 +139,39 @@ public class AXIOMXPathPatched extends AXIOMXPath {
       localName = nameSpacedNode[1];
     }
     element = factory.createOMElement(localName, localSpace);
+    for (String key : map.keySet()) {
+      element.addAttribute(key, map.get(key), null);
+    }
     pathNodes.add(element);
+  }
+
+  private String cleanFromExpressions(String pathPart, HashMap<String, String> map) {
+    Pattern pattern = Pattern.compile("(.*)\\[(.*)\\]");
+    Matcher matcher = pattern.matcher(pathPart);
+    if (matcher.matches()){
+      pathPart=matcher.group(1);
+      String expression = matcher.group(2);
+      String [] parts = expression.split("([\\s]*and[\\s]*)");
+      for (String part : parts) {
+        pattern = Pattern.compile("@([a-zA-Z0-9]*)='(.*)'");
+        matcher = pattern.matcher(part);
+        if (matcher.matches()){
+          String key = matcher.group(1);
+          String value = matcher.group(2);
+          int end = value.indexOf("'");
+          if (end>-1){
+            /*
+             * if we have a ' in the expression it means that we have
+             * a xpath expression with operators other then "and". 
+             * We will use only the first one to create an attribute from it.
+             */
+            value= value.substring(0, end);
+          }
+          map.put(key, value);
+        }
+      }
+    }
+    return pathPart;
   }
 
   /**
