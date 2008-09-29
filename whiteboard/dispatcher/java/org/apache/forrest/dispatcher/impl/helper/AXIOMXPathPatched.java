@@ -67,15 +67,14 @@ public class AXIOMXPathPatched extends AXIOMXPath {
 
   private Object createNode(OMElement root, String path, String rest)
       throws JaxenException {
-    String m_xpath = path;
     Object xpathNode = null;
     while (true) {
-      AXIOMXPath xpath = getNsXPath(m_xpath);
+      AXIOMXPath xpath = getNsXPath(path);
       xpathNode = xpath.selectSingleNode(root);
       if (xpathNode == null) {
         int endIndex = path.lastIndexOf("/");
-        m_xpath = path.substring(0, endIndex);
         rest = path.substring(endIndex + 1) + "/" + rest;
+        path = path.substring(0, endIndex);
       } else if (xpathNode != null) {
         xpathNode = calculatePath(root, (OMElement) xpathNode, rest);
         break;
