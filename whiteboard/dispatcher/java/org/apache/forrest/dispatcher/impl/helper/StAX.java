@@ -36,7 +36,6 @@ import javax.xml.stream.util.XMLEventAllocator;
 
 import org.xml.sax.InputSource;
 
-
 import com.ctc.wstx.evt.DefaultEventAllocator;
 
 /**

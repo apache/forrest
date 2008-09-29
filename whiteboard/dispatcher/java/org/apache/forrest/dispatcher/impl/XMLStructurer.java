@@ -1,7 +1,6 @@
 package org.apache.forrest.dispatcher.impl;
 
 import java.io.BufferedInputStream;
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -29,7 +28,6 @@ import org.apache.forrest.dispatcher.impl.helper.Captions;
 import org.apache.forrest.dispatcher.impl.helper.StAX;
 import org.apache.forrest.dispatcher.impl.helper.StreamHelper;
 import org.apache.forrest.dispatcher.utils.CommonString;
-import org.xml.sax.InputSource;
 
 public class XMLStructurer extends StAX implements Structurer {
 

@@ -22,7 +22,6 @@ import org.apache.axiom.om.OMFactory;
 import org.apache.axiom.om.OMNamespace;
 import org.apache.axiom.om.OMNode;
 import org.apache.axiom.om.impl.builder.StAXOMBuilder;
-import org.apache.axiom.om.xpath.AXIOMXPath;
 import org.apache.forrest.dispatcher.api.Contract;
 import org.apache.forrest.dispatcher.api.Resolver;
 import org.apache.forrest.dispatcher.api.Structurer;
@@ -33,9 +32,7 @@ import org.apache.forrest.dispatcher.impl.helper.AXIOMXPathPatched;
 import org.apache.forrest.dispatcher.impl.helper.Captions;
 import org.apache.forrest.dispatcher.impl.helper.StAX;
 import org.apache.forrest.dispatcher.impl.helper.StreamHelper;
-import org.apache.forrest.dispatcher.utils.CommonString;
 import org.jaxen.JaxenException;
-import org.xml.sax.InputSource;
 
 public class XMLStructurerAxiom extends StAX implements Structurer {
 
