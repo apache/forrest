@@ -70,20 +70,26 @@ public class XSLContractHelper extends StAX {
     transformer.setOutputProperty(OutputKeys.INDENT, "yes");
     transformer.setOutputProperty(OutputKeys.METHOD, "xml");
     // do we allow xml properties?
-    if(!allowXmlProperties){
+    if(allowXmlProperties){
+      DocumentBuilder builder = DocumentBuilderFactory.newInstance()
+      .newDocumentBuilder();
+      for (Iterator<String> iter = params.keySet().iterator(); iter.hasNext();) {
+        String key = iter.next();
+        Class<InputSource> source = InputSource.class;
+        Object value = params.get(key);
+        if (source.isInstance(value)){
+          transformer.setParameter(key, builder.parse((InputSource)value));
+        }else{
+          transformer.setParameter(key,value);
+        }
+      }
+    }else{
       for (Iterator<String> iter = params.keySet().iterator(); iter.hasNext();) {
         String key = iter.next();
         String value = (String) params.get(key);
         transformer.setParameter(key,value);
       }
-    }else{
-      DocumentBuilder builder = DocumentBuilderFactory.newInstance()
-      .newDocumentBuilder();
-      for (Iterator<String> iter = params.keySet().iterator(); iter.hasNext();) {
-        String key = iter.next();
-        InputSource source = (InputSource) params.get(key);
-        transformer.setParameter(key, builder.parse(source));
-      }
+      
     }
   }
 
