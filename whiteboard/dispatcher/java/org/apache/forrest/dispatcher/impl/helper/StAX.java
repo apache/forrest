@@ -16,18 +16,25 @@
  */
 package org.apache.forrest.dispatcher.impl.helper;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.HashMap;
 
 import javax.xml.stream.XMLEventFactory;
 import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.XMLEventWriter;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLOutputFactory;
+import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 import javax.xml.stream.XMLStreamWriter;
+import javax.xml.stream.events.XMLEvent;
 import javax.xml.stream.util.XMLEventAllocator;
+
+import org.xml.sax.InputSource;
 
 
 import com.ctc.wstx.evt.DefaultEventAllocator;
@@ -125,5 +132,84 @@ public class StAX extends Loggable {
    */
   public XMLEventAllocator getEventAllocator() {
     return  inputFactory.getEventAllocator();
+  }
+
+  /**
+   * @param reader
+   * @return
+   * @throws XMLStreamException
+   */
+  protected InputSource recordXmlProperies(XMLStreamReader reader) throws XMLStreamException {
+    ByteArrayOutputStream out = new ByteArrayOutputStream();
+    XMLEventWriter writerProperty = getWriter(out);
+    XMLEventAllocator allocator = getEventAllocator();
+    XMLEvent currentEvent = allocator.allocate(reader);
+    writerProperty.add(currentEvent);
+    boolean process = true;
+    boolean hadChilds = false;
+    while (process) {
+      int event = reader.next();
+      currentEvent = allocator.allocate(reader);
+      switch (event) {
+      case XMLStreamConstants.START_ELEMENT:
+        if (!reader.getLocalName().equals(Captions.PROPERTY_ELEMENT)){
+          hadChilds=true;
+        }
+        writerProperty.add(currentEvent);
+        break;
+      
+      case XMLStreamConstants.END_ELEMENT:
+        if (reader.getLocalName().equals(Captions.PROPERTY_ELEMENT)) {
+          writerProperty.add(currentEvent);
+          writerProperty.flush();
+          writerProperty.close();
+          process = false;
+        } else {
+          writerProperty.add(currentEvent);
+        }
+        break;
+  
+      default:
+        writerProperty.add(currentEvent);
+        break;
+      }
+    }
+    InputSource value = null;
+    if(hadChilds){
+      value = new InputSource(new ByteArrayInputStream(out.toByteArray()));
+    }
+    return value;
+  }
+  
+  /**
+   * @param properties
+   * @param param
+   * @param propertyName
+   * @param propertyValue
+   * @throws XMLStreamException
+   */
+  protected void addProperties(XMLStreamReader reader, HashMap param,
+      String propertyName, String propertyValue,boolean allowXmlProperties) throws XMLStreamException {
+    /*
+     *  if we are in allowXmlProperties mode then
+     *  we need to see whether we have an input stream meaning child
+     *  elements of the property element.
+     */
+    if (allowXmlProperties ) {
+      InputSource recordXmlProperies = recordXmlProperies(reader);
+      if(null != recordXmlProperies){
+        param.put(propertyName, recordXmlProperies);
+        return;
+      }
+    }
+    /*
+     *  Add resolved properties that are not null.
+     *  If we are in allowXmlProperties and come up to here
+     *  this means the property had no child elements. We
+     *  assume then that it had a @value attribute.
+     */
+    if (null != propertyValue && null != propertyName){
+      param.put(propertyName, new String(propertyValue));    
+    }
   }
 }

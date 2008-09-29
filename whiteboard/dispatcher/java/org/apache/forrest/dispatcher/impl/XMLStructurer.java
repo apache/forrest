@@ -363,44 +363,7 @@ public class XMLStructurer extends StAX implements Structurer {
         propertyValue = reader.getAttributeValue(i);
       }
     }
-    if (allowXmlProperties) {
-      param.put(propertyName, recordXmlProperies(reader));
-    } else if (null != propertyValue && null != propertyName) {
-      param.put(propertyName, propertyValue);
-    }
-
-  }
-
-  private InputSource recordXmlProperies(XMLStreamReader reader)
-      throws XMLStreamException {
-    ByteArrayOutputStream out = new ByteArrayOutputStream();
-    XMLEventWriter writerProperty = getWriter(out);
-    XMLEventAllocator allocator = getEventAllocator();
-    XMLEvent currentEvent = allocator.allocate(reader);
-    writerProperty.add(currentEvent);
-    boolean process = true;
-    while (process) {
-      int event = reader.next();
-      currentEvent = allocator.allocate(reader);
-      switch (event) {
-      case XMLStreamConstants.END_ELEMENT:
-        if (reader.getLocalName().equals(Captions.PROPERTY_ELEMENT)) {
-          writerProperty.add(currentEvent);
-          writerProperty.flush();
-          writerProperty.close();
-          process = false;
-        } else {
-          writerProperty.add(currentEvent);
-        }
-        break;
-
-      default:
-        writerProperty.add(currentEvent);
-        break;
-      }
-    }
-    InputSource value = new InputSource(StreamHelper.switchStream(out));
-    return value;
+    addProperties(reader, param, propertyName, propertyValue,allowXmlProperties);
   }
 
   private void openPaths(XMLEventWriter writer, String[] tokenizer)
