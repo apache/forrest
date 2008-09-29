@@ -19,6 +19,7 @@ package org.apache.forrest.dispatcher.impl.helper;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -123,7 +124,7 @@ public class AXIOMXPathCreate extends AXIOMXPath {
 
     OMElement element = null;
     OMNamespaceImpl localSpace = null;
-    HashMap<String, String> map = new HashMap<String, String>();
+    Map<String, String> map = new HashMap<String, String>();
     String localName = cleanFromExpressions(pathPart,map);
     String[] nameSpacedNode = localName.split(":");
     if (nameSpacedNode.length == 2) {
@@ -139,7 +140,7 @@ public class AXIOMXPathCreate extends AXIOMXPath {
     pathNodes.add(element);
   }
 
-  private String cleanFromExpressions(String pathPart, HashMap<String, String> map) {
+  private String cleanFromExpressions(String pathPart, Map<String, String> map) {
     Pattern pattern = Pattern.compile("(.*)\\[(.*)\\]");
     Matcher matcher = pattern.matcher(pathPart);
     if (matcher.matches()){
