@@ -116,17 +116,23 @@
     <!--+
         | Configuration of general location
         +-->
+     <!--+
+         | resources home
+         +-->
+    <match pattern="resources.home">
+      <location src="{properties:resources}"/>
+    </match>
     <!--+
         |  Base location of the project themes
         +-->
     <match pattern="themer.project.dir">
-      <location src="{properties:resources}/themes" />
+      <location src="{lm:resources.home}/themes" />
     </match>
     <!--+
         |  Base location of the project structurer
         +-->
     <match pattern="structurer.project.dir">
-      <location src="{properties:resources}/structurer" />
+      <location src="{lm:resources.home}/structurer" />
     </match>
     <!--+
         | contracts (e.g. html) that can be used in the project. 
@@ -135,16 +141,22 @@
       <location src="{lm:dispatcher.themer}/themes" />
     </match>
     <!--+
+        | Base location for plugins
+        +-->
+    <match pattern="plugins.home">
+            <location src="{properties:forrest.plugins}"/>
+    </match>
+    <!--+
         | Base location of the builded dispatcher plugin
         +-->
     <match pattern="dispatcher.home">
-      <location src="{properties:forrest.plugins}/{properties:dispatcher.home}" />
+      <location src="{lm:plugins.home}/{properties:dispatcher.home}" />
     </match>
     <!--+
         | Base location of the builded themer plugin
         +-->
     <match pattern="dispatcher.themer">
-      <location src="{properties:forrest.plugins}/{properties:dispatcher.themer}" />
+      <location src="{lm:plugins.home}/{properties:dispatcher.themer}" />
     </match>
     <!--+
         | Configuration of general location
@@ -288,7 +300,7 @@
         <location 
                     src="{lm:dispatcher.themer}/themes/{properties:dispatcher.theme}/{1}/{2}{properties:dispatcher.contract-ext}" />
         <location 
-                    src="{properties:forrest.plugins}/org.apache.forrest.themes.core/themes/common/{1}/{2}{properties:dispatcher.contract-ext}" 
+                    src="{lm:plugins.home}/org.apache.forrest.themes.core/themes/common/{1}/{2}{properties:dispatcher.contract-ext}" 
                     />
 <!--  forrest-application-based default fallback -->
         <location 
@@ -318,7 +330,7 @@
                     src="{lm:dispatcher.themer}/themes/{properties:dispatcher.theme}/images/{1}.{2}" 
                     />
         <location 
-                    src="{properties:forrest.plugins}/org.apache.forrest.themes.core/themes/common/images/{1}.{2}" 
+                    src="{lm:plugins.home}/org.apache.forrest.themes.core/themes/common/images/{1}.{2}" 
                     />
         <location 
                     src="{lm:dispatcher.themer}/themes/{properties:dispatcher.fallback.theme}/images/{1}.{2}" 
@@ -374,7 +386,7 @@
     <match pattern="dataModel-xml-document-to-**.xsl">
       <select type="exists">
         <location 
-                    src="{properties:resources}stylesheets/xslt/xml/document-to-{1}.xsl" 
+                    src="{lm:resources.home}stylesheets/xslt/xml/document-to-{1}.xsl" 
                     />
         <location 
                     src="{lm:std-dataModel-xml-document-to-{1}.xsl}" 
@@ -384,7 +396,7 @@
     <match pattern="dataModel-html-**.xsl">
       <select type="exists">
         <location 
-                    src="{properties:resources}stylesheets/xslt/html/{1}.xsl" 
+                    src="{lm:resources.home}stylesheets/xslt/html/{1}.xsl" 
                     />
         <location 
                     src="{lm:std-dataModel-html-{1}.xsl}" 
