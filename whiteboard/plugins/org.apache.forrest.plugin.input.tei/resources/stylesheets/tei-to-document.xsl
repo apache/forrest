@@ -11,7 +11,7 @@
 		<document>
 		
 			<header>
-	           <title><xsl:value-of select="teiHeader/titleStmt/title"/></title> 
+                                <title><xsl:value-of select="teiHeader/fileDesc/titleStmt/title"/></title> 
 			</header>
 			
 				<xsl:apply-templates/>
