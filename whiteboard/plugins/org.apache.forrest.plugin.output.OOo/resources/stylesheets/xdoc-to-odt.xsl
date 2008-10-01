@@ -29,6 +29,7 @@
                 xmlns:xlink="http://www.w3.org/1999/xlink"
                 xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0"
                 xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0"
+                xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0"
                 xmlns:datetime="http://exslt.org/dates-and-times"
                 exclude-result-prefixes="datetime">
 
@@ -193,10 +194,9 @@
                         <xsl:attribute name="draw:name"><xsl:value-of select="@alt"/></xsl:attribute>
                         <xsl:attribute name="text:anchor-type">paragraph</xsl:attribute>
                         <xsl:attribute name="draw:z-index">0</xsl:attribute>
-                        <!-- FIXME: See FOR-1098 - The svg attributes below are being ignored. -->
-                        <xsl:attribute name="svg:y">0cm</xsl:attribute>
-                        <xsl:attribute name="svg:width"><xsl:value-of select="@width"/>px</xsl:attribute>
-                        <xsl:attribute name="svg:height"><xsl:value-of select="@height"/>px</xsl:attribute>
+                        <!-- <xsl:attribute name="svg:y">0cm</xsl:attribute> -->
+                        <xsl:attribute name="svg:width"><xsl:value-of select="substring-before(@width, 'p') div 36"/>cm</xsl:attribute>
+                        <xsl:attribute name="svg:height"><xsl:value-of select="substring-before(@height, 'p') div 36"/>cm</xsl:attribute>
                         <xsl:call-template name="drawImage"/>
             </draw:frame>
             <xsl:apply-templates/>
