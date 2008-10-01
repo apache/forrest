@@ -111,7 +111,7 @@
           <text:a xlink:type="simple" xlink:href="{@href}"><xsl:value-of select="."/></text:a>
         </xsl:template>
         <xsl:template match="p">
-                <text:p><xsl:apply-templates/></text:p>
+                <text:p text:style-name="P2"><xsl:apply-templates/></text:p>
         </xsl:template>
         <xsl:template match="ul">
                 <text:list>
@@ -181,8 +181,8 @@
                         <xsl:attribute name="draw:z-index">0</xsl:attribute>
                         <!-- FIXME: See FOR-1098 - The svg attributes below are being ignored. -->
                         <xsl:attribute name="svg:y">0cm</xsl:attribute>
-                        <xsl:attribute name="svg:width"><xsl:value-of select="../width div 36"/>cm</xsl:attribute>
-                        <xsl:attribute name="svg:height"><xsl:value-of select="../height div 36"/>cm</xsl:attribute>
+                        <xsl:attribute name="svg:width"><xsl:value-of select="@width"/>px</xsl:attribute>
+                        <xsl:attribute name="svg:height"><xsl:value-of select="@height"/>px</xsl:attribute>
                         <xsl:call-template name="drawImage"/>
             </draw:frame>
             <xsl:apply-templates/>
