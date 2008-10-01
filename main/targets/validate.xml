@@ -112,15 +112,7 @@ then generate your site with 'forrest', then do 'forrest validate-site'.
     </fail>
     <xmlvalidate failonerror="${forrest.validate.site.failonerror}" lenient="no" warn="yes">
       <attribute name="http://apache.org/xml/features/validation/dynamic"  value="true"/>
-      <xmlcatalog id="fcatalog" >
-        <catalogpath>
-          <pathelement
-            location="${forrest.core.webapp}/resources/schema/catalog.xcat"/>
-          <pathelement
-            location="${forrest.plugins-dir}/catalog.xcat"/>
-          <pathelement location="${catalog}"/>
-        </catalogpath>
-      </xmlcatalog>
+      <xmlcatalog refid="fcatalog" />
       <fileset dir="${project.site-dir}"
         includes="${forrest.validate.xdocs.includes}"
         excludes="${forrest.validate.xdocs.excludes}"/>
