@@ -164,6 +164,13 @@
             <xsl:value-of select="."/>
           </text:span>
         </xsl:template>
+        <xsl:template match="source">
+          <text:p text:style-name="Standard">
+            <text:span text:style-name="Source_20_Text">
+              <xsl:value-of select="."/>
+            </text:span>
+          </text:p>
+        </xsl:template>
         <xsl:template match="strong">
           <text:span text:style-name="Strong_20_Text">
             <xsl:value-of select="."/>
