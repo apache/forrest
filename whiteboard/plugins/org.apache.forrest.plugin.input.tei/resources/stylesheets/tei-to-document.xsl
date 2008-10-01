@@ -83,6 +83,12 @@
         <xsl:apply-templates/>
       </source>
     </xsl:template>
+
+    <xsl:template match="emph">
+      <em>
+        <xsl:apply-templates/>
+      </em>
+    </xsl:template>
     
     <xsl:template match="hi">
       <strong><xsl:apply-templates/></strong>
