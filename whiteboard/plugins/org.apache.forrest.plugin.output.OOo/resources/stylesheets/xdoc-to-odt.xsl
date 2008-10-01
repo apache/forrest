@@ -111,7 +111,14 @@
           <text:a xlink:type="simple" xlink:href="{@href}"><xsl:value-of select="."/></text:a>
         </xsl:template>
         <xsl:template match="p">
-                <text:p text:style-name="P2"><xsl:apply-templates/></text:p>
+          <xsl:choose>
+                  <xsl:when test="ol|ul">
+              <xsl:apply-templates/>
+            </xsl:when>
+            <xsl:otherwise>
+              <text:p text:style-name="P2"><xsl:apply-templates/></text:p>
+            </xsl:otherwise>
+          </xsl:choose>
         </xsl:template>
         <xsl:template match="ul">
                 <text:list>
