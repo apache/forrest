@@ -100,7 +100,8 @@
     
     <xsl:template match="figure">
       <img>
-        <xsl:apply-templates/>
+        <xsl:attribute name="src">oss<xsl:value-of select="@url"/></xsl:attribute>
+        <xsl:attribute name="alt"><xsl:value-of select="@rend"/></xsl:attribute>
       </img>
     </xsl:template>
     
