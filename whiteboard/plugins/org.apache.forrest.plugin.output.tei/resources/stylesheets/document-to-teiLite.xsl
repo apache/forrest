@@ -155,13 +155,13 @@
     </xsl:choose>
   </xsl:template>
 
-  <!-- FIXME: remove mailto field -->
   <xsl:template name="references">
     <div>
       <head>References</head>
       <ul>
         <xsl:for-each select="//link[generate-id(.) =
-            generate-id(key('references', concat(name(), '::', .))[1])]">
+            generate-id(key('references', concat(name(), '::', .))[1])
+            and not (contains(@href, 'mailto:'))]">
           <xsl:sort select ="."/>
           <li>
             <a>

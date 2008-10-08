@@ -37,7 +37,8 @@
             <ul>
             <xsl:comment>+ |start reference-links +</xsl:comment>
               <xsl:for-each select="//link[generate-id(.) =
-              generate-id(key('references', concat(name(), '::', .))[1])]">
+                generate-id(key('references', concat(name(), '::', .))[1])
+                and not (contains(@href, 'mailto:'))]">
                 <xsl:sort select="."/>
                   <li>
                     <a>
