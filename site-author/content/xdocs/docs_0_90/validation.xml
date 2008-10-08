@@ -44,7 +44,7 @@
         Forrest also uses the XML Document Type Declaration to effect the
         <link href="site:cap">Content Aware Pipelines</link>. Remember that you
         are not required to use DTDs (for example Forrest can also respond to a
-        namespace) so RELAX NG or W3c XML Schema can be used.
+        namespace) so RELAX NG or W3C XML Schema can be used.
       </p>
       <p>
         If you do use DTDs, then forrest is automatically configured to do XML
@@ -136,7 +136,7 @@
           from Forrest. This is what we'll demonstrate here, using our earlier
           <link href="site:your-project/new_content_type">download format</link>
           as an example. Our download format adds a group of new elements to the
-          standard 'documentv13' format. Our new elements are described by the
+          standard 'documentv20' format. Our new elements are described by the
           following DTD:
         </p>
         <source>
@@ -154,14 +154,14 @@ name CDATA #REQUIRED
 size CDATA #IMPLIED&gt;
         </source>
         <p>
-          The document-v13 entities are defined in a reusable 'module':
-          <code>forrest/main/webapp/resources/schema/dtd/document-v13.mod</code>
+          The document-v20 entities are defined in a reusable 'module':
+          <code>forrest/main/webapp/resources/schema/dtd/document-v20.mod</code>
           The
-          <code>forrest/main/webapp/resources/schema/dtd/document-v13.dtd</code>
+          <code>forrest/main/webapp/resources/schema/dtd/document-v20.dtd</code>
           file provides a full description and basic example of how to pull in
           modules. In our example, our DTD reuses modules
           <code>common-charents-v10.mod</code> and
-          <code>document-v13.mod</code>. Here is the full DTD, with explanation
+          <code>document-v20.mod</code>. Here is the full DTD, with explanation
           to follow.
         </p>
         <source>
@@ -194,8 +194,8 @@ TYPICAL INVOCATION:
 &lt;!-- Document --&gt;
 &lt;!-- =============================================================== --&gt;
 
-&lt;!ENTITY % document PUBLIC "-//APACHE//ENTITIES Documentation V1.3//EN"
-"document-v13.mod"&gt;
+&lt;!ENTITY % document PUBLIC "-//APACHE//ENTITIES Documentation V2.0//EN"
+"document-v20.mod"&gt;
 
 &lt;!-- Override this entity so that 'release' is allowed below 'section' --&gt;
 &lt;!ENTITY % local.sections "|release"&gt;
@@ -235,10 +235,10 @@ size CDATA #IMPLIED&gt;
           defines character symbol sets. We then define the 'document' entity.
           However, before the <code>%document;</code> PE reference, we first
           override the 'local.section' entity. This is a hook into
-          document-v13.mod. By setting its value to '|release', we declare that
+          document-v20.mod. By setting its value to '|release', we declare that
           our &lt;release&gt; element is to be allowed wherever "local sections"
           are used. There are five or so such hooks for different areas of the
-          document; see document-v13.dtd for more details. We then import the
+          document; see document-v20.dtd for more details. We then import the
           %document; contents, and declare the rest of our DTD elements.
         </p>
         <p>
