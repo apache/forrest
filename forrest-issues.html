@@ -265,10 +265,10 @@ document.write("Last Published: " + document.lastModified);
 <a href="#%5BFOR-705%5D+Target+of+LocationMap+rewriteDemo+causes+build+failure+when+target+not+available">[FOR-705] Target of LocationMap rewriteDemo causes build failure when target not available</a>
 </li>
 <li>
-<a href="#%5BFOR-776%5D+rationalise+the+pluginTemplate+and+current+plugins+to+have+minimal+configuration+files%2C+etc.">[FOR-776] rationalise the pluginTemplate and current plugins to have minimal configuration files, etc.</a>
+<a href="#%5BFOR-785%5D+plugins%2F*%2Fskinconf.xml+does+not+validate+since+using+entity+to+ease+management">[FOR-785] plugins/*/skinconf.xml does not validate since using entity to ease management</a>
 </li>
 <li>
-<a href="#%5BFOR-785%5D+plugins%2F*%2Fskinconf.xml+does+not+validate+since+using+entity+to+ease+management">[FOR-785] plugins/*/skinconf.xml does not validate since using entity to ease management</a>
+<a href="#%5BFOR-936%5D+Forrest+%22looses%22+the+locale+when+switching+pages">[FOR-936] Forrest "looses" the locale when switching pages</a>
 </li>
 </ul>
 </div>
@@ -585,26 +585,7 @@ For various reasons given in [1] and [2] this default feature should remain but 
 &lt;br/&gt;
 </p>
 </div>
-<a name="N10125"></a><a name="%5BFOR-776%5D+rationalise+the+pluginTemplate+and+current+plugins+to+have+minimal+configuration+files%2C+etc."></a>
-<h2 class="underlined_10">[FOR-776] rationalise the pluginTemplate and current plugins to have minimal configuration files, etc.</h2>
-<div class="section">
-<p>
-<a href="http://issues.apache.org/jira/browse/FOR-776">http://issues.apache.org/jira/browse/FOR-776</a>
-</p>
-<p>forrest.properties can have minimal entries and rely on the default.forrest.properties&lt;br/&gt;
-Remove PDF from each &amp;quot;project.required.plugins&amp;quot;&lt;br/&gt;
-&lt;br/&gt;
-skinconf.xml needs to be ready-to-go for Apache Forrest hosted plugins. Helps with keeping the plugin docs consistent. (The need for skinconf.xml will probably go away with the new Dispatcher.)&lt;br/&gt;
-&lt;br/&gt;
-Fix whitespace in pluginTemplate files and existing plugins. Helps to use diff to keep consistent config.&lt;br/&gt;
-&lt;br/&gt;
-xdocs/images should be in documentation/resources/images&lt;br/&gt;
-&lt;br/&gt;
-site.xml needs to be consistent and remove any unneccessary files for xdocs.&lt;br/&gt;
-&lt;br/&gt;
-Tidy up the pluginTempate/status.xml</p>
-</div>
-<a name="N10131"></a><a name="%5BFOR-785%5D+plugins%2F*%2Fskinconf.xml+does+not+validate+since+using+entity+to+ease+management"></a>
+<a name="N10125"></a><a name="%5BFOR-785%5D+plugins%2F*%2Fskinconf.xml+does+not+validate+since+using+entity+to+ease+management"></a>
 <h2 class="underlined_10">[FOR-785] plugins/*/skinconf.xml does not validate since using entity to ease management</h2>
 <div class="section">
 <p>
@@ -613,6 +594,24 @@ Tidy up the pluginTempate/status.xml</p>
 <p>Recently i split the skinconf.xml for each plugin to refer to common stuff via an external entity. Works nicely.&lt;br/&gt;
 &lt;br/&gt;
 Okay, i admit it ... forgot to do 'build test' :-) and it doesn't validate. The DTD insists on having the elements in a specific order.</p>
+</div>
+<a name="N10131"></a><a name="%5BFOR-936%5D+Forrest+%22looses%22+the+locale+when+switching+pages"></a>
+<h2 class="underlined_10">[FOR-936] Forrest "looses" the locale when switching pages</h2>
+<div class="section">
+<p>
+<a href="http://issues.apache.org/jira/browse/FOR-936">http://issues.apache.org/jira/browse/FOR-936</a>
+</p>
+<p>When moving from one page to another and switching locales in between, the chosen locale is lost when entering the new page. To reproduce:&lt;br/&gt;
+&lt;br/&gt;
+1) set up and run forrest with i18n ON&lt;br/&gt;
+2) open a localized page&lt;br/&gt;
+3) switch locale by appending '?locale=XY' in the address field&lt;br/&gt;
+4) open another page available in both the original locale (before the switch) and the new locale XY&lt;br/&gt;
+5) notice how the new page is displayed in the original locale, NOT the expected XY locale&lt;br/&gt;
+&lt;br/&gt;
+Although one could argue that the described behaviour is wanted in some cases, I believe that to most users it would be natural that the locale is &amp;quot;sticky&amp;quot; once changed - it should not change back by itself. Thus, the &amp;quot;sticky&amp;quot; behaviour should be default in Forrest.&lt;br/&gt;
+&lt;br/&gt;
+The fix is simple, patch to come soon.</p>
 </div>
 </div>
 <!--+

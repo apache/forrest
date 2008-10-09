@@ -211,6 +211,9 @@ document.write("Last Published: " + document.lastModified);
 <a href="../docs_0_90/locationmap.html">Locationmap</a>
 </div>
 <div class="menuitem">
+<a href="../docs_0_90/properties.html">Properties system</a>
+</div>
+<div class="menuitem">
 <a href="../docs_0_90/sitemap-ref.html">Sitemap Reference</a>
 </div>
 <div class="menuitem">
@@ -374,7 +377,7 @@ document.write("Last Published: " + document.lastModified);
         Forrest also uses the XML Document Type Declaration to effect the
         <a href="../docs_0_90/cap.html">Content Aware Pipelines</a>. Remember that you
         are not required to use DTDs (for example Forrest can also respond to a
-        namespace) so RELAX NG or W3c XML Schema can be used.
+        namespace) so RELAX NG or W3C XML Schema can be used.
       </p>
 <p>
         If you do use DTDs, then forrest is automatically configured to do XML
@@ -473,7 +476,7 @@ document.write("Last Published: " + document.lastModified);
           from Forrest. This is what we'll demonstrate here, using our earlier
           <a href="../docs_0_90/your-project.html#adding_new_content_type">download format</a>
           as an example. Our download format adds a group of new elements to the
-          standard 'documentv13' format. Our new elements are described by the
+          standard 'documentv20' format. Our new elements are described by the
           following DTD:
         </p>
 <pre class="code">
@@ -491,14 +494,14 @@ name CDATA #REQUIRED
 size CDATA #IMPLIED&gt;
         </pre>
 <p>
-          The document-v13 entities are defined in a reusable 'module':
-          <span class="codefrag">forrest/main/webapp/resources/schema/dtd/document-v13.mod</span>
+          The document-v20 entities are defined in a reusable 'module':
+          <span class="codefrag">forrest/main/webapp/resources/schema/dtd/document-v20.mod</span>
           The
-          <span class="codefrag">forrest/main/webapp/resources/schema/dtd/document-v13.dtd</span>
+          <span class="codefrag">forrest/main/webapp/resources/schema/dtd/document-v20.dtd</span>
           file provides a full description and basic example of how to pull in
           modules. In our example, our DTD reuses modules
           <span class="codefrag">common-charents-v10.mod</span> and
-          <span class="codefrag">document-v13.mod</span>. Here is the full DTD, with explanation
+          <span class="codefrag">document-v20.mod</span>. Here is the full DTD, with explanation
           to follow.
         </p>
 <pre class="code">
@@ -531,8 +534,8 @@ TYPICAL INVOCATION:
 &lt;!-- Document --&gt;
 &lt;!-- =============================================================== --&gt;
 
-&lt;!ENTITY % document PUBLIC "-//APACHE//ENTITIES Documentation V1.3//EN"
-"document-v13.mod"&gt;
+&lt;!ENTITY % document PUBLIC "-//APACHE//ENTITIES Documentation V2.0//EN"
+"document-v20.mod"&gt;
 
 &lt;!-- Override this entity so that 'release' is allowed below 'section' --&gt;
 &lt;!ENTITY % local.sections "|release"&gt;
@@ -573,10 +576,10 @@ size CDATA #IMPLIED&gt;
           defines character symbol sets. We then define the 'document' entity.
           However, before the <span class="codefrag">%document;</span> PE reference, we first
           override the 'local.section' entity. This is a hook into
-          document-v13.mod. By setting its value to '|release', we declare that
+          document-v20.mod. By setting its value to '|release', we declare that
           our &lt;release&gt; element is to be allowed wherever "local sections"
           are used. There are five or so such hooks for different areas of the
-          document; see document-v13.dtd for more details. We then import the
+          document; see document-v20.dtd for more details. We then import the
           %document; contents, and declare the rest of our DTD elements.
         </p>
 <p>
