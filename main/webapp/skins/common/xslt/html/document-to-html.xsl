@@ -36,8 +36,8 @@ Section handling
   <xsl:param name="notoc"/>
   <xsl:param name="path"/>
 <!-- <xsl:include href="split.xsl"/> -->
-  <xsl:include href="dotdots.xsl"/>
-  <xsl:include href="pathutils.xsl"/>
+  <xsl:include href="lm://transform.xml.dotdots"/>
+  <xsl:include href="lm://transform.xml.pathutils"/>
 <!-- Path to site root, eg '../../' -->
   <xsl:variable name="root">
     <xsl:call-template name="dotdots">
