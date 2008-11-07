@@ -21,7 +21,7 @@
     <document>
       <header>
         <xsl:choose>
-          <xsl:when test="not(result/@status='0')">
+          <xsl:when test="not(response/lst[@name='responseHeader']/int[@name='status']/text()='0')">
             <title>error in solr operation </title>
           </xsl:when>
           <xsl:otherwise>
@@ -30,11 +30,11 @@
         </xsl:choose>
       </header>
       <body>
-        <xsl:apply-templates select="result"/>
+        <xsl:apply-templates select="response"/>
       </body>
     </document>
   </xsl:template>
-  <xsl:template match="result">
+  <xsl:template match="response">
     <section id="result">
       <title>solr server response</title>
       <p>
@@ -42,7 +42,7 @@
         <xsl:value-of select="$command"/>
       </p>
       <xsl:choose>
-        <xsl:when test="not(@status='0')">
+        <xsl:when test="not(lst[@name='responseHeader']/int[@name='status']/text()='0')">
           <warning>
             There was a problem:
             <xsl:value-of select="."/>
