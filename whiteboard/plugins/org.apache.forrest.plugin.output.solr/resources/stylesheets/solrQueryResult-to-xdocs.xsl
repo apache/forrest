@@ -64,7 +64,7 @@
         <section id="result-{$id}">
           <title><xsl:value-of select="str[@name='title']"/></title>
           <p>
-            <a href="{concat(substring-before($id,'.xml'),'.html')}">
+            <a href="{concat(substring-after(substring-before($id,'.xml'),':'),'.html')}">
             <xsl:value-of select="str[@name='title']"/>
             </a>
           </p>
