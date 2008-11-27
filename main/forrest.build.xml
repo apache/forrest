@@ -36,13 +36,14 @@ FORREST SITE BUILDER
   <property name="forrest.build.lib-dir"      location="${forrest.home}/build"/>
   <property name="forrest.core"               location="${forrest.home}/main"/>
   <property name="forrest.core.webapp"        location="${forrest.core}/webapp"/>
+  <path id="fcatalog.path">
+    <pathelement location="${forrest.core.webapp}/resources/schema/catalog.xcat"/>
+    <pathelement location="${forrest.plugins-dir}/catalog.xcat"/>
+    <pathelement location="${catalog}"/>
+  </path>
   <xmlcatalog id="fcatalog">
     <catalogpath>
-      <pathelement
-        location="${forrest.core.webapp}/resources/schema/catalog.xcat"/>
-      <pathelement
-        location="${forrest.plugins-dir}/catalog.xcat"/>
-      <pathelement location="${catalog}"/>
+      <path refid="fcatalog.path"/>
     </catalogpath>
   </xmlcatalog>
   <import file="targets/validate.xml"/>

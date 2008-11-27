@@ -121,10 +121,7 @@ then generate your site with 'forrest', then do 'forrest validate-site'.
   </target>
   <target name="validate-xdocs" depends="init, validation-props" if="validate.xdocs"
       description="Validate the project xdocs">
-    <echo level="verbose" message="Using these catalog descriptors:
-forrest.core.webapp=${forrest.core.webapp}/resources/schema/catalog.xcat
-forrest.plugins-dir=${forrest.plugins-dir}/catalog.xcat
-catalog=${catalog}"/>
+    <echo level="verbose" message="Using these catalog descriptors: ${toString:fcatalog.path}"/>
     <xmlvalidate failonerror="${forrest.validate.xdocs.failonerror}" lenient="no" warn="yes" classpathref="forrest.cp" classname="org.apache.xerces.parsers.SAXParser">
       <attribute name="http://apache.org/xml/features/validation/dynamic"  value="true"/>
       <xmlcatalog refid="fcatalog" />
