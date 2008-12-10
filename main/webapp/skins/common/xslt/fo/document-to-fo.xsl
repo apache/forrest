@@ -689,7 +689,7 @@
             <xsl:if
                 test="not(following-sibling::li[1])">
                 <xsl:attribute
-                    name="space-after">6pt"</xsl:attribute>
+                    name="space-after">6pt</xsl:attribute>
             </xsl:if>
             <fo:list-item-label
                 end-indent="label-end()"
