@@ -1,5 +1,6 @@
 <?xml version='1.0'?>
-<xsl:stylesheet xmlns:xsl='http://www.w3.org/1999/XSL/Transform' version='1.0'>
+<xsl:stylesheet xmlns:xsl='http://www.w3.org/1999/XSL/Transform' version='1.0'
+                xmlns:fn="http://www.w3.org/2006/xpath-functions">
 
 <xsl:output method="xml" version="1.0" indent="yes" cdata-section-elements="Program"/>
 
@@ -100,8 +101,9 @@
     
     <xsl:template match="figure">
       <img>
-        <xsl:attribute name="src">oss<xsl:value-of select="@url"/></xsl:attribute>
-        <xsl:attribute name="alt"><xsl:value-of select="@rend"/></xsl:attribute>
+        <xsl:attribute name="src"><xsl:value-of select="@url"/></xsl:attribute>
+        <!-- <xsl:attribute name="alt"><xsl:value-of select="@rend"/></xsl:attribute> -->
+        <!-- Uncomment above line once we have images being displayed -->
       </img>
     </xsl:template>
     
