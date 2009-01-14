@@ -83,6 +83,11 @@
         <indent>yes</indent>
         <omit-xml-declaration>yes</omit-xml-declaration>
       </map:serializer>
+      <map:serializer name="html" mime-type="text/html" src="org.apache.cocoon.serialization.HTMLSerializer">
+        <doctype-public>&serializer-html-doctype-public;</doctype-public>
+        <doctype-system>&serializer-html-doctype-system;</doctype-system>
+        <encoding>&serializer-html-encoding;</encoding>
+      </map:serializer>
       <map:serializer mime-type="image/png" name="svg2png" 
         src="org.apache.cocoon.serialization.SVGSerializer">
 <!--<parameter name="background_color" type="color" value="#ff00ff"/>-->
@@ -180,10 +185,10 @@
         <map:transform 
           src="lm://transform.xml.xml-namespace-stripped" 
           />
-        <map:transform 
-          src="lm://strip-dispatcher-remains-html.xsl" 
-          />
-        <map:serialize type="xhtml" />
+        <map:transform src="lm://strip-dispatcher-remains-html.xsl">
+          <map:parameter name="serializer" value="&dispatcher-output-serializer;"/>
+        </map:transform>
+        <map:serialize type="&dispatcher-output-serializer;"/>
       </map:match>
 <!--
         Last processing step. 

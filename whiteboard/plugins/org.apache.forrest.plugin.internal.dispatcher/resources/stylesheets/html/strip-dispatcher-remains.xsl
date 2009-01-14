@@ -17,8 +17,25 @@
 -->
 <xsl:stylesheet version="1.0"
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+  <xsl:param name="serializer" select="'xhtml'"/>
   <xsl:template match="/">
-    <html xmlns="http://www.w3.org/1999/xhtml">
+    <xsl:choose>
+      <xsl:when test="$serializer='html'">
+        <xsl:call-template name="do-html"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:call-template name="do-xhtml"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+  <xsl:template name="do-xhtml">
+    <html namespace="http://www.w3.org/1999/xhtml">
+      <xsl:copy-of select="html/head"/>
+      <xsl:copy-of select="html/body"/>
+    </html>
+  </xsl:template>
+  <xsl:template name="do-html">
+    <html>
       <xsl:copy-of select="html/head"/>
       <xsl:copy-of select="html/body"/>
     </html>

@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one or more
+  contributor license agreements.  See the NOTICE file distributed with
+  this work for additional information regarding copyright ownership.
+  The ASF licenses this file to You under the Apache License, Version 2.0
+  (the "License"); you may not use this file except in compliance with
+  the License.  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<!DOCTYPE document PUBLIC "-//APACHE//DTD Documentation V2.0//EN" 
+  "http://forrest.apache.org/dtd/document-v20.dtd">
+<document>
+  <header>
+    <title>Configure output serializer and doctype as xhtml or html</title>
+  </header>
+  <body>
+    <p>
+      The default html output serializer for Dispatcher-based projects is the
+      "xhtml" serializer and the document type declaration is "XHTML 1.0 Strict".
+      That is fine for applications which require xml input. For example, running Forrest as a back-end server and some other tool utilising the forrest output.
+    </p>
+    <p>
+      However for some websites it would be better to serve plain old html.
+    </p>
+    <p>
+      To do this, simply add the following line to your project's symbols file.
+      That file is at:
+      <code>PROJECT_HOME/src/documentation/resources/schema/symbols-project-v10.ent</code>
+    </p>
+    <source><![CDATA[...
+<!ENTITY dispatcher-output-serializer "html">
+...]]></source>
+    <p>
+      and then re-start Forrest.
+    </p>
+    <p>
+      The output will now be serialized as "html" and the document type declaration
+      will be "HTML 4.01 Transitional".
+    </p>
+    <note>
+      If your project does not yet have a "symbols file" then follow the
+      <a href="http://forrest.apache.org/faq.html#sitemap-entities">FAQ</a>.
+    </note>
+    <p>
+      To change the document type declaration (perhaps to "Strict"), copy
+      the relevant entities from the main configuration file at
+      <code>$FORREST_HOME/main/webapp/resources/schema/entity/symbols-core-v10.ent</code>
+      to your "symbols file" and over-ride them, i.e.
+    </p>
+    <source><![CDATA[...
+<!ENTITY serializer-html-doctype-public "-//W3C//DTD HTML 4.01//EN">
+<!ENTITY serializer-html-doctype-system "http://www.w3.org/TR/html4/strict.dtd">
+...]]></source>
+    <p>
+      and then re-start Forrest.
+    </p>
+    <p>
+      In HTML, the System Identifier is optional, so it can be set to be empty: 
+    </p>
+    <source><![CDATA[...
+<!ENTITY serializer-html-doctype-public "-//W3C//DTD HTML 4.01//EN">
+<!ENTITY serializer-html-doctype-system "">
+...]]></source>
+  </body>
+</document>
