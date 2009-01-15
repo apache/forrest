@@ -42,7 +42,7 @@
           <map:parameter name="destinationUrl" value="{properties:solr.select.url}"/>
         </map:generate>
         <map:transform type="solr"/>
-        <map:transform src="resources/stylesheets/solrQueryResult-to-xdocs.xsl">
+        <map:transform src="{lm:solr.transform.solrQueryResult.xdocs}">
           <map:parameter name="searchForm" value="{request:servletPath}"/>
         </map:transform>
         <map:serialize/>
@@ -50,7 +50,7 @@
 <!--Generating xdocs-->
       <map:match pattern="**.do.xml">
         <map:generate src="cocoon://{1}.do"/>
-        <map:transform src="resources/stylesheets/solrResult-to-xdocs.xsl">
+        <map:transform src="{lm:solr.transform.solrResult.xdocs}">
           <map:parameter name="command" value="{1}"/>
         </map:transform>
         <map:serialize/>

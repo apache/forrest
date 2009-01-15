@@ -51,14 +51,14 @@
       <map:match pattern="index-creation.solr.add">
         <map:generate src="cocoon://abs-linkmap"/>
         <map:transform src="{lm:transform.site.book}"/>
-        <map:transform src="resources/stylesheets/book-to-cinclude-solr.xsl"/>
+        <map:transform src="{lm:solr.transform.book.cinclude-solr}"/>
         <map:transform type="cinclude"/>
         <map:serialize/>
       </map:match>
 <!-- Output xdocs as solr docs -->
       <map:match pattern="**.solr">
         <map:generate src="cocoon://{1}.xml"/>
-        <map:transform src="resources/stylesheets/xdocs-to-solrDoc.xsl">
+        <map:transform src="{lm:solr.transform.xdocs.solrDoc}">
           <map:parameter name="document-url" value="{1}.xml"/>
           <map:parameter name="project" value="{properties:project.name}"/>
         </map:transform>
@@ -68,13 +68,13 @@
 <!-- ADD -->
       <map:match pattern="**.solr.add">
         <map:generate src="cocoon://{1}.solr"/>
-        <map:transform src="resources/stylesheets/solrDoc-add.xsl"/>
+        <map:transform src="{lm:solr.transform.solrDoc-add}"/>
         <map:serialize/>
       </map:match>
 <!-- DELETE -->
       <map:match pattern="**.solr.delete">
         <map:generate src="cocoon://{1}.solr"/>
-        <map:transform src="resources/stylesheets/solrDoc-delete.xsl"/>
+        <map:transform src="{lm:solr.transform.solrDoc-delete}"/>
         <map:serialize/>
       </map:match>
 <!--Testing-->
