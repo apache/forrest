@@ -199,6 +199,7 @@ NOTES:
 <!ELEMENT map ( area+)>
 <!ATTLIST map
   name CDATA #IMPLIED
+  %common.att;
 >
 <!ELEMENT area EMPTY>
 <!ATTLIST area
