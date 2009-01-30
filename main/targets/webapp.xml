@@ -166,12 +166,34 @@
     </xslt>
 <!-- FIXME: The xslt task did not like writing to the same file (Mac OS X?) -->
     <move file="${project.webapp}/WEB-INF/cocoon.xconf2" tofile="${project.webapp}/WEB-INF/cocoon.xconf"/>
-    <jar destfile="${project.war}">
-      <fileset dir="${project.webapp}"/>
-      <fileset dir="${forrest.home}">
+   
+   <!-- Generate the war.
+    We need to copy not only the core libararies but as well any that may come from
+    the plugins (cp. FOR-1074) -->
+    <war destfile="${project.war}"
+      webxml="${project.webapp}/WEB-INF/web.xml">
+      <lib dir="${project.webapp}/WEB-INF/lib">
+        <include name="*.jar"/>
+        <exclude name="servlet*.jar"/>
+      </lib>
+      <lib dir="${forrest.home}/${build.plugins-dir}/lib">
+        <include name="*.jar"/>
+        <exclude name="servlet*.jar"/>
+      </lib>
+      <webinf dir="${project.webapp}/WEB-INF">
+        <exclude name="**/web.xml"/>
+        <exclude name="**/lib/*"/>
+      </webinf>
+      <fileset dir="${project.webapp}">
+        <exclude name="**/WEB-INF/"/>
+      </fileset>
+     <fileset dir="${forrest.home}">
+        <exclude name="${build.plugins-dir}/**/lib/"/>
         <include name="${build.plugins-dir}/**"/>
       </fileset>
-    </jar>
+    </war>
+   
+   <!-- Finishing by echoing the location of the ready to use war -->
     <echo>
 ---------------------------------
 Webapp .war file generated:
