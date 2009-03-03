@@ -171,7 +171,7 @@ projectInfo.transform.changes.rss
         precedence, then plugins, then core.
       </p>
       <p>
-        So let us get back to our specifc example,
+        So let us get back to our specific example,
         "<code>lm:transform.linkmap.document</code>". The "lm:" part means use
         the locationmap protocol. There is no specific match for this in your
         project locationmap, nor in any of the plugin locationmaps, so this
@@ -211,7 +211,7 @@ projectInfo.transform.changes.rss
     <section id="selector">
       <title>Multiple Location Selectors</title>
       <p>
-        You can define multiple possble locations for a file in the locationmap
+        You can define multiple possible locations for a file in the locationmap
         with the following code:
       </p>
       <source>
@@ -355,11 +355,72 @@ char-encoding=latin1
           ensure that they are matched by the locationmap.
         </warning>
       </section>
+      <section id="enhancePDFOutput">
+        <title>Enhanced PDF-output plugin</title>
+	<p>In order to change PDF rendered output, e.g. for your own skin
+          it is necessary to enhance/change the
+	  plugin 'org.apache.forrest.plugin.output.pdf'. However, by default the plugin
+	  takes its own locationmap pointing to the file 'document-to-fo.xsl' of the
+	  plugin.
+	</p>
+	<source>
+&lt;match pattern="pdf.transform.*.*"&gt;
+  &lt;select&gt;
+    &lt;location src="resources/stylesheets/{1}-to-{2}.xsl"/&gt;
+    &lt;location
+      src="{forrest:forrest.plugins}/org.apache.forrest.plugin.output.pdf/resources/stylesheets/{1}-to-{2}.xsl"/&gt;
+  &lt;/select&gt;
+&lt;/match&gt;
+	</source>
+	<p>To override this choice you can add this to your locationmap:
+	</p>
+	<source>
+&lt;match pattern="pdf.transform.*.*"&gt;
+  &lt;location src="{properties:skins-dir}/yourskin/xslt/fo/{1}-to-{2}.xsl"/&gt;
+&lt;/match&gt;
+	</source>
+	<p>Next, you can write your own 'document-to-fo.xsl' in the place specified above.
+	  For example, you like to have a special paragraph that looks different to 
+	  default paragraphs by setting the font to 'oblique' and align it right:
+	</p>
+	<source>
+&lt;?xml version="1.0"?&gt;
+
+&lt;xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+                xmlns:fo="http://www.w3.org/1999/XSL/Format"
+                version="1.0"&gt;
+
+&lt;xsl:include href="lm://globalpdf.transform.document.fo" /&gt;
+
+ &lt;xsl:template match="p[@class='special']"&gt;
+   &lt;fo:block
+     font-size="10pt"
+     text-align="right"
+     font-style="oblique"&gt;
+     &lt;xsl:apply-templates/&gt;
+   &lt;/fo:block&gt;
+ &lt;/xsl:template&gt;
+
+&lt;/xsl:stylesheet&gt;
+	</source>
+	<p>
+	  You may notice that this file contains only your definition and 
+	  a reference to "lm://globalpdf.transform.document.fo" which needs
+	  to be resolved again in your locationmap with an entry that points to the
+	  plugins 'document-to-fo.xsl'-file where all the other definitions are made:
+	</p>
+	<source>   
+&lt;match pattern="globalpdf.transform.*.*"&gt;
+  &lt;location 
+  src="{forrest:forrest.plugins}/org.apache.forrest.plugin.output.pdf/resources/stylesheets/{1}-to-{2}.xsl"/&gt;
+&lt;/match&gt;
+	</source>
+      </section>
       <section id="sourceResolving">
         <title>Source Resolving</title>
         <p>
           As well as being able to use the locationmap as a parameter in the
-          sitemap, it is also possible to use it as a psuedo-protocol within
+          sitemap, it is also possible to use it as a pseudo-protocol within
           resources processed by Forrest. For example, you can use it to import
           an XSL provided by one plugin within another plugin:
         </p>
@@ -383,7 +444,7 @@ char-encoding=latin1
         <p>
           With the above match in the locationmap, a link which has
           <code>href="lm:rewriteDemo/index"</code> will be rewritten to an
-          offsite address at <code>domain.org</code>
+          off-site address at <code>domain.org</code>
         </p>
       </section>
       <section id="debugging">
@@ -405,11 +466,45 @@ char-encoding=latin1
           Output from this logger can be found in
           $PROJECT_HOME/build/webapp/WEB-INF/logs/locationmap.log
         </p>
+	<p>If you are interested in your local locationmap 
+	  (<code>PROJECT_HOME/src/documentation/content/locationmap.xml</code>)
+	  the following lines at the top of the log-file indicate that the file
+	  was read with success:
+        </p>
+	<source>
+...
+DEBUG   (2009-02-26) 14:11.30:322   [core.modules.mapper.lm] (/): 
+         loading location map at cocoon://locationmap.xml
+...
+DEBUG   (2009-02-26) 14:11.30:385   [core.modules.mapper.lm] (/): 
+         loading mounted location map at cocoon://locationmap-project.xml
+...
+	</source>
+	<p>If you find any Java-Exception below these lines, you should deactivate
+	  your changes and locate the wrong piece of code, otherwise your locationmap 
+	  will be ignored.
+	</p>
+	<p>In addition it is sometimes useful to increase the log level for the 
+	  sitemap too, since it may give hints on the locationmaps searched
+	  in $FORREST_HOME and $PROJECT_HOME. Thus, changing the following line
+	  in the same file from "ERROR" to "DEBUG" results in detailed output in 
+          $PROJECT_HOME/build/webapp/WEB-INF/logs/sitemap.log:
+	</p>
+        <source>
+<![CDATA[<category name="sitemap" log-level="ERROR">]]>
+        </source>
         <p>
           You should not run production systems with this logger set higher than
-          "INFO as each request can generate large amounts of log information.
+          "INFO" and "ERROR" as each request can generate large amounts of log information.
         </p>
       </section>
     </section>
   </body>
 </document>
+
+<!--  LocalWords:  xml namingConvention locationmap locationmaps CDATA src xsl
+ -->
+<!--  LocalWords:  plugins plugin Forrest projectInfo stylesheet href sitemap
+ -->
+<!--  LocalWords:  sitemaps lm http XDoc SVN ASF's docs
+ -->
