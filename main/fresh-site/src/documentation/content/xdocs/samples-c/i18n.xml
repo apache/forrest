@@ -23,13 +23,154 @@
   <body>
     <section id="intro">
       <title>Introduction</title>
-      <p></p>
+
+      <p>
+        Forrest has inherited cocoon's i18n capabilities. As such, you can
+        create content in several languages and have the user access it in his
+        preferred language.
+      </p>
+
+      <p>
+        First of all, this feature has to be enabled in your project's
+        properties. Open the forrest.properties file in your project folder with
+        the editor of your choice and make sure that there is a line
+        saying<br /><code> project.i18n=true </code><br />(no comment mark "#"
+        in front of it). Also make sure that you are using an i18n-enabled skin,
+        e.g. "pelt".
+      </p>
     </section>
-    <fixme author="">
-      This sample will explain and demonstrate the i18n capabilities. Issue
-      <a href="http://issues.apache.org/jira/browse/FOR-707">FOR-707</a> has
-      some discussion and doc links. We need to summarise it all into this demo.
-    </fixme>
+    <section id="forrest-i18n-features">
+      <title>How Forrest provides i18n features</title>
+
+      <section>
+        <title>Off-the-shelf</title>
+
+        <p>
+          Forrest uses three file groups for basic off-the-shelf i18n
+          translation of tabs and menus as well as skin texts:
+        </p>
+
+        <ul>
+          <li>tabs_*.xml in the <em>src/documentation/translations</em>
+          directory of your project</li>
+
+          <li>menu_*.xml in the <em>src/documentation/translations</em>
+        directory of your project</li>
+
+          <li>CommonMessages_*.xml in the
+          <em>main/webapp/skins/common/translations</em> directory of your
+          Forrest installation<p>You will find the last group also in the
+          <em>build/site/??/skin</em> directory of your project ("??" being the
+          locale of your system or your JVM) after running <code>forrest site
+          </code>but these are only temporary.</p></li>
+        </ul>
+
+        <p>
+          These file groups match the following pattern: After the underscore
+          there is the locale that the translation is for. Each file contains a
+          <code>&lt;catalogue&gt;</code> of <code>&lt;message&gt;</code> elements.
+          Each <code>message</code> element has a <code>key</code> attribute
+          containing text that matches text defined in the <em>tabs.xml</em> or
+          <em>site.xml</em> in your <em>src/documentation/content/xdocs</em>
+          directory, or the skin used.
+        </p>
+
+        <p>
+          There are default files for tabs and menus (<em>tabs.xml</em> and
+          <em>menu.xml</em>) which you can use as a template for languages you
+          want to provide. Just copy them attaching an underscore and the locale
+          you want to provide a translation for, e.g.
+        </p>
+
+        <p>
+          <code> copy tabs.xml *_cz.xml</code>
+        </p>
+
+        <p>
+          <code> copy menu.xml *_cz.xml</code>
+        </p>
+
+        <p>
+          in Windows, and edit the texts in the message elements. If you create
+          new tabs or menu entries in your project make sure you provide matching
+          <code>message</code> elements. If you make additions or changes to texts
+          in the skin used you will have to apply these to the
+          <em>CommonMessages_*.xml</em> files as well.
+        </p>
+      </section>
+      <section id="your_content">
+        <title>Your content</title>
+
+      <p>Providing your content in more than one language is easy enough. Just
+      copy the file containg the content in your project's
+      <em>src/documentation/content/xdocs</em> directory adding a dot and the
+      locale to the filename before the extention, e.g.</p>
+
+      <p><code> copy legal.xml *.de.xml</code></p>
+
+      <p>in Windows, and translate the contents of the new file. The contents
+      of the file without locale marker will be used if the user's locale
+      cannot be matched.</p> 
+
+      <note>Please note the difference in the filenames: It is an
+      <strong>underscore</strong> ("_") in the basic i18n files and a dot
+      (".") in your content files.</note>
+
+      </section>
+    </section>
+
+    <section id="serving_i18n">
+      <title>Serving i18n content</title>
+
+      <section id="using_jetty">
+        <title>Using Jetty</title>
+
+        <p>
+          If you are using Forrest's built-in jetty server using
+          <code>forrest run</code> your work is almost done. Any user browsing
+          to this server will be served the content matching to his preferred
+          language if
+        </p>
+
+        <ul>
+          <li>his browser provides this information to the server</li>
+
+          <li>and you have created corresponding translations</li>
+        </ul>
+
+        <p>
+          You can test this by using the locale request parameter (see
+          below).
+        </p>
+      </section>
+
+      <section id="static_content">
+        <title>Static content</title>
+
+        <p>
+          If you need to provide static content you will have to do a
+          <code>forrest site</code> for each language/locale you want to serve.
+          You will have change the locale of the JVM used by forrest. In Windows
+          this is done by adding <code>-Duser.language=de
+          -Duser.region=de</code> parameters (example for Germany) to the Java
+          call in <em>forrestant.bat</em> in the <em>tools\ant\bin</em>
+          directory of your Forrest installation. For this you may want to use
+          environment variables that you can change at ease or use modified
+          copies of the <em>forrestant.bat</em> that called by modified copies
+          of the forrest.bat in the <em>bin</em> directory of your Forrest
+          installation. You will find a method that suits your needs.
+        </p>
+
+        <p>
+          With each <code>forrest site</code> a locale subdirectory in the
+          <em>build/site</em> directory of your project's directory will be
+          generated, e.g. <em>build/site/de</em>, with all your project's
+          content for this locale. You can upload these to your webserver and
+          create an index page providing links to the different locale branches.
+        </p>
+      </section>
+    </section>
+
     <section id="locale-request-param">
       <title>Using the locale request parameter</title>
       <p>
