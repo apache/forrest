@@ -129,5 +129,8 @@ Usage: $0 [-h] [-v] startDir configFile > logfile
 
 Note: It will skip directories with name /build/
 
+HEADSUP: You need to have "tidy" installed in your system and 
+         it must be in reachable via the commandline. 
+
 !;
 }
