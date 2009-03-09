@@ -83,8 +83,8 @@ sub process_file {
   $fileName =~ s/^\.\///; # strip leading ./
   my $pathName = $startDir . "/" . $fileName;
   $countTotal++;
-  if ($opt_v) { print "$fileName : \n"; }
-  open (TIDY, "$command $fileName |") or die "Cannot run 'tidy': $!";
+  if ($opt_v) { print "$pathName : \n"; }
+  open (TIDY, "$command $pathName |") or die "Cannot run 'tidy': $!";
   while (<TIDY>) {
     print;
   }
