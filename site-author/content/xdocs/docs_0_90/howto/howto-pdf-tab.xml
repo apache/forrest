@@ -23,7 +23,7 @@
       This How-To describes the generation of a PDF document for each group of
       documents that is defined by a tab.
     </abstract>
-    <last-modified-content-date date="2008-08-04"/>
+    <last-modified-content-date date="2005-07-19"/>
   </header>
   <audience title="Intended Audience">
     <p>
@@ -39,11 +39,87 @@
       certain parts of the site.
     </p>
   </purpose>
+  <prerequisites title="Prerequisites">
+    <ul>
+      <li>Understand how to create project-specific sitemaps by following the
+      <link href="site:your-project">Using Forrest</link> document.</li>
+    </ul>
+  </prerequisites>
   <steps title="Steps">
     <p>
-      The procedure outlined below will define a new link similar to the wholesite-feature, 
-      which generates a document containing only the selected parts of your site.
+      The procedure outlined below will define a project
+      <code>sitemap.xmap</code> and create a new <code>pdf-tab.xmap</code>.
     </p>
+    <section id="sitemap">
+      <title>Create your project's main sitemap.xmap</title>
+      <p>
+        If you do not have already a sitemap then create a new empty one in your
+        <code>src/documentation</code> directory (or wherever
+        ${project.sitemap-dir} points to).
+      </p>
+    </section>
+    <section id="aggregator">
+      <title>Create another sitemap: pdf-tab.xmap</title>
+      <p>
+        Like before create an empty sitemap and name it pdf-tab.xmap.
+      </p>
+    </section>
+    <section id="mount">
+      <title>Edit project sitemap.xmap to mount pdf-tab.xmap</title>
+      <p>
+        Your sitemap should look something like this.
+      </p>
+      <source>
+<![CDATA[
+<map:sitemap xmlns:map="http://apache.org/cocoon/sitemap/1.0">
+  <map:pipelines>
+    <map:pipeline internal-only="false">
+      <map:match pattern="**.xml">
+        <!-- pdf-tab definitions -->
+        <map:match pattern="pdf-tab.xml">
+          <map:mount uri-prefix="" src="pdf-tab.xmap"
+            check-reload="yes" />
+        </map:match>
+        <!-- end of pdf-tab definitions -->
+      </map:match>
+    </map:pipeline>
+  </map:pipelines>
+</map:sitemap>]]>
+      </source>
+    </section>
+    <section id="edit-aggregator">
+      <title>Edit the file <code>pdf-tab.xmap</code></title>
+      <p>
+        The <code>
+<![CDATA[<map:match pattern="*.xml">]]>
+        </code> element should look like the following:
+      </p>
+      <source>
+<![CDATA[
+<map:sitemap xmlns:map="http://apache.org/cocoon/sitemap/1.0">
+  <map:pipelines>
+    <map:pipeline internal-only="false">
+     <map:match pattern="*.xml">
+	<map:generate src="cocoon://abs-linkmap"/>
+	  <map:transform type="xpath">
+	  	<map:parameter name="include" value="//*[@wholesite='true']"/>
+		<map:parameter name="exclude" value="//*[@wholesite='false']"/>
+	  </map:transform>
+	  <map:transform src="resources/stylesheets/site2book.xsl" />
+	  <map:transform src="resources/stylesheets/aggregates/book2cinclude.xsl">
+	     <map:parameter name="title"
+		value="{conf:project-name}: Still My Foo Site"/>
+	     </map:transform>
+	  <map:transform type="cinclude"/>
+	  <map:transform src="resources/stylesheets/aggregates/doc2doc-uniqueids.xsl"/>
+	  <map:transform src="resources/stylesheets/aggregates/docs2document.xsl"/>
+	  <map:serialize type="xml"/>
+    </map:match>    
+   </map:pipeline>
+  </map:pipelines>
+</map:sitemap>]]>
+      </source>
+    </section>
     <section id="edit-site">
       <title>Edit your site.xml</title>
       <note>
@@ -98,17 +174,13 @@
     <section id="explain">
       <title>Explanation of the operation</title>
       <p>
-        The aggregation of all relavant documents is done by the submap "aggregate-pdf-tab.xmap". 
-        It works similar to the submap "aggregate.xmap", which is used to generate the whosite-documents, 
-        with only one difference. There is a additional rule in line 50 and 69 for a transformation 
-        to filter the linkmap using the parameter <em>wholesite</em>
+        Line 4 of our example
         <br/>
         <code>
-<![CDATA[<map:transform type="xpath">
-  <map:parameter name="include" value="//*[@wholesite='true']"/>
-  <map:parameter name="exclude" value="//*[@wholesite='false']"/>
-</map:transform>]]></code>
-        For example, to use the "samples" tab ...
+<![CDATA[<map:parameter name="include" value="//*[@wholesite='true']"/>]]>
+        </code> looks at your site.xml and will match every element containing
+        the <code>wholesite="true"</code> attribute. For example, to use the
+        "samples" tab ...
       </p>
       <source>
 <![CDATA[
@@ -142,9 +214,9 @@
         attribute will be as well inherited by all children of the element.
       </p>
       <p>
-        Line 57 of the submap "aggregate-pdf-tab.xmap" defines the title of the pdf 
-        file by taking the content of the project-name variable in <code>skinconf.xml</code> 
-        and adding some funny text:
+        Line 8 defines the title of the pdf file by taking the content of the
+        project-name variable in <code>skinconf.xml</code> and adding some funny
+        text:
         <br/>
         <code>
 <![CDATA[<map:parameter name="title" value="{conf:project-name}: Still My Foo Site"/>]]>
@@ -156,6 +228,10 @@
     <p>
       Please provide feedback about this document via the
       <link href="site:mail-lists">mailing lists</link>.
+    </p>
+    <p>
+      In the future, this ability will probably be incorporated into the main
+      Forrest process.
     </p>
   </feedback>
 </howto>
