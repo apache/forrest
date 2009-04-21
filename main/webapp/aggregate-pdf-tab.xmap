@@ -47,10 +47,14 @@ $Revision: 1.2 $
 <!-- Aggregation of all XML in the site -->
       <map:match pattern="*.xml">
         <map:generate src="cocoon://abs-linkmap"/>
+	  		<map:transform type="xpath">
+	  			<map:parameter name="include" value="//*[@wholesite='true']"/>
+					<map:parameter name="exclude" value="//*[@wholesite='false']"/>
+	  		</map:transform>
         <map:transform src="{lm:transform.site.book}" />
         <map:transform src="{lm:transform-aggregate.book.cinclude}">
           <map:parameter name="ignore" value="{1}"/>
-          <map:parameter name="title" value="{conf:project-name}"/>
+					<map:parameter name="title" value="{conf:project-name}: Online-Hilfe"/> 
         </map:transform>
         <map:transform type="cinclude"/>
         <map:transform src="{lm:transform-aggregate.doc.doc-uniqueids}"/>
@@ -64,6 +68,10 @@ $Revision: 1.2 $
       by the stylesheet. -->
       <map:match pattern="linkmap-*.*">
         <map:generate src="cocoon://abs-linkmap" />
+	  		<map:transform type="xpath">
+	  			<map:parameter name="include" value="//*[@wholesite='true']"/>
+					<map:parameter name="exclude" value="//*[@wholesite='false']"/>
+	  		</map:transform>
         <map:transform src="{lm:transform-aggregate.linkmap.relativized-linkmap}">
           <map:parameter name="path" value="{1}.{2}" />
         </map:transform>

@@ -35,11 +35,16 @@
       <xsl:value-of select="concat('#', ancestor::section/@id, .)"/>
     </xsl:attribute>
   </xsl:template>
-<!-- Translate relative links to '#link' -->
-  <xsl:template match="section/document//link/@href[not(starts-with(., 'http:') or starts-with(., 'https:'))]">
+<!-- Translate relative links to 'dir/link' -->
+  <xsl:template match="section/document//link/@href[not(starts-with(., '#') or starts-with(., 'http:') or starts-with(., 'https:') or starts-with(., 'site:') or starts-with(., 'ext:') or starts-with(., 'lm:'))]">
+    <xsl:variable name="page-root">
+      <xsl:call-template name="str:substring-before-last">
+        <xsl:with-param name="input" select="ancestor::section/@id"/>
+        <xsl:with-param name="substr" select="'/'"/>
+      </xsl:call-template>
+    </xsl:variable>
     <xsl:attribute name="href">
-<xsl:text>#</xsl:text>
-      <xsl:value-of select="."/>
+	    <xsl:value-of select="concat($page-root,'/', .)"/>
     </xsl:attribute>
   </xsl:template>
   <xsl:template match="section/document//figure|img[starts-with(@src, 'my-images')]">
