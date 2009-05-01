@@ -209,7 +209,7 @@
         </tr>
         <tr>
           <th width="25%">
-            Minimum Forrest version required *
+            Minimum Forrest version required
           </th>
           <td>
             <xsl:value-of select="forrestVersion" />
@@ -217,7 +217,7 @@
         </tr>
         <xsl:if test="../@type='whiteboard'">
           <tr>
-            <th width="25%">
+            <th class="warning" width="25%">
               Warning
             </th>
             <td>
