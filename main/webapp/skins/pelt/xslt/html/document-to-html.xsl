@@ -140,8 +140,17 @@ imported document-to-html.xsl for details.
   </xsl:template>
   <xsl:template match="figure">
     <xsl:apply-templates select="@id"/>
-    <div style="text-align: center;" id="{@id}">
-      <img src="{@src}" alt="{@alt}" class="figure"  id="{@id}">
+    <div style="text-align: center;">
+        <xsl:if test="@id">
+	  <xsl:attribute name="id">
+	    <xsl:value-of select="@id"/>
+	  </xsl:attribute>
+        </xsl:if>
+      <img src="{@src}" alt="{@alt}" class="figure">
+        <xsl:if test="@id">
+          <xsl:attribute name="id">
+          <xsl:value-of select="@id"/>-figure</xsl:attribute>
+        </xsl:if>
         <xsl:if test="@height">
           <xsl:attribute name="height">
             <xsl:value-of select="@height"/>

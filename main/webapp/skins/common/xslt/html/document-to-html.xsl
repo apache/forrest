@@ -215,9 +215,14 @@ Section handling
   <xsl:template match="figure">
     <xsl:apply-templates select="@id"/>
     <div align="center">
-      <xsl:copy-of select="@id"/>
+      <xsl:if test="@id">
+        <xsl:attribute name="id"><xsl:value-of select="@id"/></xsl:attribute>
+      </xsl:if>
       <img class="figure">
-        <xsl:copy-of select="@height | @width | @src | @alt | @id"/>
+        <xsl:copy-of select="@height | @width | @src | @alt"/>
+	<xsl:if test="@id">
+          <xsl:attribute name="id"><xsl:value-of select="@id"/>-figure</xsl:attribute>
+        </xsl:if>
       </img>
     </div>
   </xsl:template>
