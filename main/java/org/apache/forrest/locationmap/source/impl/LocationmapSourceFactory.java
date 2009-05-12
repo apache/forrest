@@ -20,6 +20,8 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.Map;
 
+import org.apache.avalon.framework.configuration.Configurable;
+import org.apache.avalon.framework.configuration.Configuration;
 import org.apache.avalon.framework.configuration.ConfigurationException;
 import org.apache.avalon.framework.context.Context;
 import org.apache.avalon.framework.context.ContextException;
@@ -37,18 +39,12 @@ import org.apache.excalibur.source.Source;
 import org.apache.excalibur.source.SourceException;
 import org.apache.excalibur.source.SourceFactory;
 
-/**
- * A <code>Source</code> that takes its content from the 
- * locationmap module.
- * <p>The URI syntax is "lm//:<location>",
- * where the location is any given String that 
- * will be match by the locationmap module.
- */
 public class LocationmapSourceFactory extends AbstractLogEnabled implements
-        Serviceable, SourceFactory, ThreadSafe, Contextualizable {
+        Serviceable, SourceFactory, ThreadSafe, Contextualizable, Configurable{
 
     protected ServiceManager m_manager;
     private Context context;
+    private String prefix;
     public static final String LM_PREFIX = "lm";
     public static final String LM_SOURCE_SCHEME =LM_PREFIX+ ":";
 
@@ -106,4 +102,17 @@ public class LocationmapSourceFactory extends AbstractLogEnabled implements
         this.m_manager = manager;
     }
 
+    /* FOR-1164
+     * We can configure like:
+    <source-factories>
+      <component-instance class="org.apache.forrest.locationmap.source.impl.LocationmapSourceFactory"
+      name="lmx" prefix="lmx"/>
+    </source-factories>
+   And call the other instance of Locationmap with uris like this "lmx://*"
+     * @see org.apache.avalon.framework.configuration.Configurable#configure(org.apache.avalon.framework.configuration.Configuration)
+     */
+    public void configure(Configuration configuration)
+        throws ConfigurationException {
+      prefix = configuration.getAttribute("prefix", LM_PREFIX);
+    }
 }
