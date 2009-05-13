@@ -299,7 +299,15 @@ The skin that most likely resembles these ones is called 'pelt'.
 <!-- ===============================================================
        Echo's the settings if requested. [-Dforrest.echo=true]
        =============================================================== -->
-  <target name="echo-settings" if="forrest.echo">
+
+  <target name="echo-settings-condition" if="forrest.echo">
+    <property name="forrest.echo.istrue" value="${forrest.echo}"/>
+    <condition property="echo.true">
+      <istrue value="${forrest.echo.istrue}"/>
+    </condition>
+  </target>
+
+  <target name="echo-settings" depends="echo-settings-condition" if="echo.true">
     <loadfile property="echo-settings-message" srcFile="${forrest.core}/var/echo-settings-message.txt">
       <filterchain>
         <expandproperties/>
