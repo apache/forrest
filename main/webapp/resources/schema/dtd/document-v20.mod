@@ -282,7 +282,7 @@ NOTES:
 <!ENTITY % cell.span 'colspan CDATA "1"
          rowspan CDATA "1"'>
 <!-- Table element -->
-<!ELEMENT table (caption?, tr+)>
+<!ELEMENT table (caption?, (tr | xi:include)+)>
 <!ATTLIST table
   %common.att; 
 >
