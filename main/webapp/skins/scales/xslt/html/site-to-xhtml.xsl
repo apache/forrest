@@ -319,6 +319,10 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
                   <xsl:value-of select="$config/vendor"/>
                 </xsl:otherwise>
               </xsl:choose>
+              <xsl:if test="$config/trademark-statement">
+                <br />
+                <xsl:value-of select="$config/trademark-statement"/>
+              </xsl:if>
             </div>
           </xsl:if>
           <xsl:if test="$filename = 'index.html'">

@@ -148,6 +148,10 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
           </xsl:otherwise>
         </xsl:choose>
         All rights reserved.
+        <xsl:if test="$config/trademark-statement">
+          <br />
+          <xsl:value-of select="$config/trademark-statement"/>
+        </xsl:if>
         <script language="JavaScript" type="text/javascript"><![CDATA[<!--
           document.write(" - "+"Last Published: " + document.lastModified);
           //  -->]]></script>

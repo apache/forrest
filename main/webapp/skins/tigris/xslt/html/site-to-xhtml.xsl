@@ -437,6 +437,10 @@ if (VERSION > 3) {
               </xsl:otherwise>
             </xsl:choose>
       All rights reserved.
+            <xsl:if test="$config/trademark-statement">
+              <br />
+              <xsl:value-of select="$config/trademark-statement"/>
+            </xsl:if>
             <br/>
 <script language="JavaScript" type="text/javascript"><![CDATA[<!--
               document.write(" - "+"Last Published: " + document.lastModified);
