@@ -111,6 +111,7 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
   |HTML-body
   +-->
       <body onload="init()">
+        <xsl:call-template name="carry-body-attribs"/>
 <script type="text/javascript">ndeSetTextSize();</script>
 <!--+Site structure
   +++++++++++++++++++++++++++

@@ -396,4 +396,18 @@ along with all other "link" elements. -->
       </xsl:if>
     </xsl:if>
   </xsl:template>
+  <xsl:template name="carry-body-attribs">
+    <!-- <div id="content"/> is used to carry attribs from XDocs to 
+          final HTML -->
+    <xsl:apply-templates 
+      select="//div[@id='content']/@*" mode="carry-body-attribs"/>
+  </xsl:template>
+  <xsl:template match="@id" mode="carry-body-attribs">
+    <!-- Ignore @id -->
+  </xsl:template>
+  <xsl:template match="@class" mode="carry-body-attribs">
+    <xsl:attribute name="class">
+      <xsl:value-of select="."/>
+    </xsl:attribute>
+  </xsl:template>
 </xsl:stylesheet>

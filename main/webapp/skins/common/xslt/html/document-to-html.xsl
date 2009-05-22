@@ -376,4 +376,12 @@ Section handling
       <xsl:apply-templates/>
     </xsl:copy>
   </xsl:template>
+  <xsl:template match="body" mode="carry-body-attribs">
+    <xsl:apply-templates select="@*" mode="carry-body-attribs"/>
+  </xsl:template>
+  <xsl:template match="@class" mode="carry-body-attribs">
+    <xsl:attribute name="class">
+      <xsl:value-of select="."/>
+    </xsl:attribute>
+  </xsl:template>
 </xsl:stylesheet>

@@ -27,6 +27,7 @@ imported document-to-html.xsl for details.
       <xsl:apply-templates select="header/link"/>
     </meta-data>
     <div id="content">
+      <xsl:apply-templates select="body" mode="carry-body-attribs"/>
       <div id="skinconf-printlink"/>
       <div id="skinconf-xmllink"/>
       <div id="skinconf-podlink"/>
