@@ -10,8 +10,8 @@ rm generated/my-logo.png; ant
 
 * Unfortunately, even though it doesn't use Forrest, the Ant build file
 uses batik*.jar from Forrest's lib directory. So you need to checkout
-forrest/trunk (or at least trunk/lib) and not just tools/logos.
-Need to use Ivy.
+forrest/trunk (or at least trunk/lib) and not just tools/logos or add
+the batik*.jar locally.
 
 ---------------------------------------
 History
