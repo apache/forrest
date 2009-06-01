@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one or more
+  contributor license agreements.  See the NOTICE file distributed with
+  this work for additional information regarding copyright ownership.
+  The ASF licenses this file to You under the Apache License, Version 2.0
+  (the "License"); you may not use this file except in compliance with
+  the License.  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<?schema apache.org/forrest/schema/xdoc/document/2.0?>
+<document xmlns:xi="http://www.w3.org/2001/XInclude">
+  <header>
+    <title>Process xml source documents without DTD declaration</title>
+  </header>
+  <body>
+    <p>
+      The xml source documents that have a Document Type Declaration using
+      a Public Identifier are automatically handled by the <code>forrest.xmap</code>
+      sitemap using the <a href="ext:forrest/cap">SourceTypeAction (Content Aware Pipelines)</a>.
+    </p>
+    <p>
+      Using a DTD is not always desirable, so another mechanism is needed to
+      detect the content type. SourceTypeAction can instead detect an xml
+      "Processing Instruction".
+    </p>
+    <p>
+      The source for this current document starts like this ...
+    </p>
+    <source>
+<![CDATA[<?xml version="1.0" encoding="UTF-8"?>
+<?schema apache.org/forrest/schema/xdoc/document/2.0?>
+<document>
+  <header>
+    ...]]></source>
+    <p>
+      Note that there is no space before the closing of the processing-instruction.
+    </p>
+    <p>
+      Similarly, a howto document is declared like this ...
+    </p>
+    <source>
+<![CDATA[<?xml version="1.0" encoding="UTF-8"?>
+<?schema apache.org/forrest/schema/xdoc/howto/2.0?>
+<howto>
+  <header>
+    ...]]></source>
+    <p>
+      Such documents are not validated by 'forrest validate-xdocs'. Instead see
+      <a href="ext:forrest/dev/debug-validation">Using Cocoon Validation Transformers</a>.
+    </p>
+    <p>
+      See further notes at Issue
+      <a href="https://issues.apache.org/jira/browse/FOR-1173">FOR-1173</a>.
+    </p>
+    <xi:include href="cocoon://samples-b/no-dtd-xinclude.xml"/>
+  </body>
+</document>
