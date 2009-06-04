@@ -118,7 +118,8 @@ CHANGE HISTORY:
 ==================================================================== -->
 <!ENTITY % link.att 'href      CDATA             #REQUIRED
          role      CDATA                         #IMPLIED
-         title     CDATA                         #IMPLIED '>
+         title     CDATA                         #IMPLIED
+         rel       CDATA                         #IMPLIED '>
 <!-- =============================================================== -->
 <!-- General definitions -->
 <!-- =============================================================== -->
