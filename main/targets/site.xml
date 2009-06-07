@@ -176,6 +176,44 @@ Cocoon will report the status of each document:
   Copying broken links file to site root.
       </echo>
       <copy toFile="${project.site-dir}/broken-links.xml" file="${project.brokenlinkfile}"/>
+<!-- FIXME: need better way to determine *.validation.xml are present -->
+      <available property="project.validation.content.present"
+          file="${project.site-dir}/index.validation.xml"/>
+      <if>
+        <equals arg1="${project.validation.content.present}" arg2="true"/>
+        <then>
+          <echo message="Assembling validation report ..."/>
+<!-- FIXME: See Ant - Bug 18897 Add option to suppress xslt warning messages
+  Available in upcoming Ant-1.8.0
+-->
+          <xslt basedir="${project.site-dir}" destdir="${project.temp-dir}/validation"
+              extension=".xml"
+              includes="**/*.validation.xml"
+              style="${forrest.core.webapp}/resources/stylesheets/validation-insert-filename.xsl"
+              filenameparameter="filename"
+              filedirparameter="filedir"
+          />
+          <replaceregexp byline="true">
+            <regexp pattern="^&lt;\?[^?>]+\?>"/>
+            <substitution expression=""/>
+            <fileset dir="${project.temp-dir}/validation" includes="**/*.validation.xml"/>
+          </replaceregexp>
+          <concat destfile="${project.temp-dir}/validation/reports.xml" fixlastline="yes">
+            <header>&lt;?xml version="1.0" encoding="UTF-8"?>
+              &lt;reports></header>
+            <fileset dir="${project.temp-dir}/validation" includes="**/*.validation.xml"/>
+            <footer>&lt;/reports></footer>
+          </concat>
+          <xslt in="${project.temp-dir}/validation/reports.xml"
+              out="${project.temp-dir}/validation-reports.html"
+              style="${forrest.core.webapp}/resources/stylesheets/validation-reports.xsl"/>
+          <delete>
+            <fileset dir="${project.site-dir}" includes="**/*.validation.xml"/>
+          </delete>
+          <delete file="${project.site-dir}/linkmap.validation-start.xml"/>
+          <delete dir="${project.temp-dir}/validation"/>
+        </then>
+      </if>
     </sequential>
     <if>
       <equals arg1="${buildResult}" arg2="1"/>

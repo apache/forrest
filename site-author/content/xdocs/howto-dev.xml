@@ -489,14 +489,12 @@ $ svn merge -r 303:302
           The Validation Block is already added to Forrest and configured. To
           use it simply add entries to your sitemap like this and followed by a serializer:
         </p>
-        <source>
-<![CDATA[
+        <source><![CDATA[
 ...
 <map:transform type="validation-report"
   src="{forrest:forrest.context}/resources/schema/relaxng/unstable/any.rng"/>
 ...
-]]>
-        </source>
+]]></source>
         <p>
           That can be added at any point where you want to validate the xml.
           There is a default validation by reqesting the URI
@@ -511,6 +509,23 @@ $ svn merge -r 303:302
           <a href="http://cocoon.zones.apache.org/daisy/documentation/components/1058/g2/691.html">ValidationReportTransformer</a>.
           See <a href="http://cocoon.zones.apache.org/demos/21branch/samples/blocks/validation/welcome">Validation Block Samples</a> demos at the Cocoon zone.
           See <a href="http://cocoon.apache.org/2.1/apidocs/org/apache/cocoon/components/validation/Validator.html">API</a> docs.
+        </p>
+      </section>
+      <section id="validate-intermediate">
+        <title>Validate all intermediate xml content</title>
+        <p>
+          Add a text file at <code>src/documentation/conf/uris.txt</code>
+          which contains the line <code>linkmap.validation-start.xml</code>
+          (and any other extra URIs that you want Cocoon to process).
+        </p>
+        <p>
+          Add the line
+          <code>project.urifile=${project.home}/src/documentation/conf/uris.txt</code>
+          to your project's <code>forrest.properties</code> file.
+        </p>
+        <p>
+          After generating the complete site with '<code>forrest site</code>'
+          see the document <code>build/tmp/validation-reports.html</code>
         </p>
       </section>
       <section id="debug-java">

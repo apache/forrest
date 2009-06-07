@@ -46,6 +46,17 @@ $Revision: 1.2 $
         <map:transform src="{lm:transform.linkmap.document}"/>
         <map:serialize type="xml" />
       </map:match>
+      <map:match pattern="linkmap.validation-start.xml">
+        <map:generate src="cocoon://linkmap.html"/>
+        <map:transform src="{lm:transform.linkmap.validation}"/>
+        <map:serialize type="xml" />
+      </map:match>
+      <map:match pattern="linkmap.validation.xml">
+        <map:generate src="cocoon://linkmap.xml"/>
+        <map:transform type="validation-report"
+          src="{forrest:forrest.context}/resources/schema/relaxng/unstable/document-v13.rng"/>
+        <map:serialize type="xml"/>
+      </map:match>
 <!-- site.xml with @href's appended to be context-relative. -->
       <map:match pattern="abs-linkmap">
         <map:generate src="cocoon://site.navigation.links.xml"/>
