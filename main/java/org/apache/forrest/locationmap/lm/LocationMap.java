@@ -16,12 +16,10 @@
  */
 package org.apache.forrest.locationmap.lm;
 
-import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-import org.apache.avalon.framework.component.WrapperComponentManager;
 import org.apache.avalon.framework.configuration.Configuration;
 import org.apache.avalon.framework.configuration.ConfigurationException;
 import org.apache.avalon.framework.container.ContainerUtil;
@@ -30,10 +28,10 @@ import org.apache.avalon.framework.logger.Logger;
 import org.apache.avalon.framework.service.DefaultServiceManager;
 import org.apache.avalon.framework.service.DefaultServiceSelector;
 import org.apache.avalon.framework.service.ServiceManager;
+import org.apache.cocoon.acting.Action;
 import org.apache.cocoon.components.treeprocessor.InvokeContext;
 import org.apache.cocoon.matching.Matcher;
 import org.apache.cocoon.selection.Selector;
-import org.apache.cocoon.acting.*;
 
 /**
  * A LocationMap defines a mapping from requests to locations.
