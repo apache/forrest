@@ -126,6 +126,10 @@
     </item>
   </xsl:template>
 
+  <xsl:template match="em">
+    <emph><xsl:apply-templates/></emph>
+  </xsl:template>
+
   <xsl:template match="a|link">
     <xref>
       <xsl:attribute name="url"><xsl:call-template name="replace-substring">
