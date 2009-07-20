@@ -333,9 +333,11 @@ Credit: original from the jakarta-avalon project
     </document>
   </xsl:template>
   <xsl:template match="para">
+    <xsl:if test="normalize-space(.)">
     <p>
       <xsl:apply-templates/>
     </p>
+    </xsl:if>
   </xsl:template>
   <xsl:template match="emphasis">
     <xsl:choose>
