@@ -51,7 +51,9 @@
             <xsl:value-of select="title" />
           </title>
         </titleStmt>
-
+	<editionStmt>
+          <edition status="live"/>
+	</editionStmt>
         <publicationStmt>
           <publisher>
             <xsl:value-of select="$properties/*[@name='output.tei.publisher']/@value"/>
