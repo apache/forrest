@@ -177,22 +177,45 @@
 
   <xsl:template name="references">
     <div>
-      <head>References</head>
-      <ul>
-        <xsl:for-each select="//link[generate-id(.) =
+      <head>Further Reading</head>
+      <p>
+	<h1>Links:</h1>
+	<list type="unorderd">
+          <xsl:for-each select="//link[generate-id(.) =
             generate-id(key('references', concat(name(), '::', .))[1])
-            and not (contains(@href, 'mailto:'))]">
-          <xsl:sort select ="."/>
-          <li>
-            <a>
-              <xsl:attribute name="href">
-                <xsl:value-of select="@href"/>
-              </xsl:attribute>
-              <xsl:value-of select="."/>
-            </a>
-          </li>
-        </xsl:for-each>
-      </ul>
+            and not (contains(@href, 'mailto:'))
+            and not (starts-with(@href, 'http://www.oss-watch.ac.uk'))]">
+            <xsl:sort select ="."/>
+            <item type="unordered">
+              FIXME: Document Title
+              [<xptr>
+                <xsl:attribute name="url">
+                  <xsl:value-of select="@href"/>
+                </xsl:attribute>
+              ]</xptr>
+            </item>
+          </xsl:for-each>
+        </list>
+      </p>
+      <p>
+        <h1>Related information from OSS Watch</h1>
+        <list rend="copytosidebar" type="unordered">
+          <xsl:for-each select="//link[generate-id(.) =
+            generate-id(key('references', concat(name(), '::', .))[1])
+            and not (contains(@href, 'mailto:'))
+            and (starts-with(@href, 'http://www.oss-watch.ac.uk'))]">
+            <xsl:sort select ="."/>
+            <item type="unordered">
+              <xref>
+                <xsl:attribute name="url">
+                  <xsl:value-of select="@href"/>
+                </xsl:attribute>
+		FIXME: Document Title
+              </xref>
+            </item>
+          </xsl:for-each>
+        </list>
+      </p>
     </div>
   </xsl:template>
 </xsl:stylesheet>
