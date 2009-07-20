@@ -43,6 +43,10 @@
     </TEI.2>
   </xsl:template>
 
+  <xsl:template match="document">
+    <xsl:apply-templates/>
+  </xsl:template>
+
   <xsl:template match="header">
     <teiHeader>
       <fileDesc>
@@ -181,36 +185,34 @@
     <div>
       <head>Further Reading</head>
       <p>
-	<h1>Links:</h1>
-	<list type="unorderd">
+	<hi>Links:</hi>
+	<list type="unordered">
           <xsl:for-each select="//link[generate-id(.) =
             generate-id(key('references', concat(name(), '::', .))[1])
             and not (contains(@href, 'mailto:'))
             and not (starts-with(@href, 'http://www.oss-watch.ac.uk'))]">
             <xsl:sort select ="."/>
-            <item type="unordered">
+            <item>
               FIXME: Document Title
-              [<xptr>
-                <xsl:attribute name="url">
+              [<xptr><xsl:attribute name="url">
                   <xsl:value-of select="@href"/>
-                </xsl:attribute>
-              ]</xptr>
+                </xsl:attribute></xptr>]
             </item>
           </xsl:for-each>
         </list>
       </p>
       <p>
-        <h1>Related information from OSS Watch</h1>
+        <hi>Related information from OSS Watch</hi>
         <list rend="copytosidebar" type="unordered">
           <xsl:for-each select="//link[generate-id(.) =
             generate-id(key('references', concat(name(), '::', .))[1])
             and not (contains(@href, 'mailto:'))
             and (starts-with(@href, 'http://www.oss-watch.ac.uk'))]">
             <xsl:sort select ="."/>
-            <item type="unordered">
+            <item>
               <xref>
                 <xsl:attribute name="url">
-                  <xsl:value-of select="@href"/>
+                  <xsl:value-of select="substring(@href,27)"/>
                 </xsl:attribute>
 		FIXME: Document Title
               </xref>
