@@ -168,21 +168,41 @@
       <section id="subversion-monitoring">
         <title>Subversion Monitoring</title>
         <p>
+          The issue of whitespace is important in projects which have developers
+          on both Windows and UNIX-based operating systems. The unnecessary
+          differences obscure the real changes and so make it difficult for
+          people to be aware.
+        </p>
+        <p>
           Ensure that svn:eol-style settings are "native" for all text files.
+          Encourage people to properly
+          <a href="http://www.apache.org/dev/version-control.html#https-svn-config">configure</a>
+          their SVN client.
+          Detect such issues using a script like
+          <a href="https://svn.apache.org/repos/private/committers/tools/report_svn_text.pl">committers/tools/report_svn_text.pl</a>
+          See also some tips in
+          <a href="https://issues.apache.org/jira/browse/FOR-124">FOR-124</a>.
         </p>
         <p>
-          Ensure no line-endings issues.
+          Ensure no line-endings issues. This is coupled with the abovementioned
+          "svn:eol-style" issue.
+          Detect such issues using a script like
+          <a href="https://svn.apache.org/repos/private/committers/tools/find_carriage_returns.sh">committers/tools/find_carriage_returns.sh</a>
         </p>
         <p>
-          Regularly run xml-tidy. (Not yet ready.)
+          Regularly tidy the whitespace in xml files.
+          See the script
+          <a href="http://svn.apache.org/repos/asf/forrest/trunk/etc/tidy-xml.pl">$FORREST_HOME/etc/tidy-xml.pl</a>
+          and the
+          <a href="http://svn.apache.org/repos/asf/forrest/trunk/etc/tidy-config.txt">$FORREST_HOME/etc/tidy-config.txt</a> configuration file.
+          This is best done as part of the release process, when everyone should
+          have already committed any outstanding changes. With such an operation,
+          there is a high chance of conflicts.
+          See also some tips in
+          <a href="https://issues.apache.org/jira/browse/FOR-644">FOR-644</a>.
         </p>
         <p>
           Regularly run java-tidy. (Not yet ready.)
-        </p>
-        <p>
-          There are already some Perl scripts and other tools in the
-          "<a href="https://svn.apache.org/repos/private/committers">committers</a>"
-          SVN in the "tools" directory.
         </p>
       </section>
       <section id="legal-monitoring">
@@ -202,6 +222,8 @@
           <a href="https://issues.apache.org/jira/browse/FOR-855">FOR-855</a>
           and
           <a href="https://issues.apache.org/jira/browse/FOR-123">FOR-123</a>.
+          Also see $FORREST_HOME/etc/relicense.txt and
+          $FORREST_HOME/etc/relicense-avoid.txt files.
         </p>
         <p>
           Regularly ensure that there are appropriate matching licenses to
