@@ -26,6 +26,8 @@
 # Run the script. It will descend the directory tree.
 # Run with no parameters or -h to show usage.
 #
+# See http://forrest.apache.org/tasks.html#subversion-monitoring
+#
 ##########################################################
 
 use strict;
