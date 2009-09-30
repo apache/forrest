@@ -181,7 +181,7 @@ FORREST SITE BUILDER
     <if>
       <isset property="project.new-skin-name"/>
       <then>
-        <echo>
+        <echo level="warning">
 -- Warning --
 skin "${project.skin}" no longer exists, the skin named
 "${project.new-skin-name}" will be automatically used instead.
@@ -206,7 +206,7 @@ and so remove this warning.
         <equals arg1="${project.skin}" arg2="crust"/>
       </or>
       <then>
-        <echo>
+        <echo level="warning">
 -- Warning --
 Using skin "${project.skin}" which is deprecated.
 Please migrate to one of the new skins listed in forrest.properties.
@@ -218,7 +218,7 @@ The skin that most likely resembles these ones is called 'pelt'.
     <antcall target="echo-settings" />
 <!-- Gather some build information about this Forrest instance,
       to be used later by Cocoon. -->
-    <echo file="${project.temp-dir}/build-info.xml">&lt;info>
+    <echo level="info" file="${project.temp-dir}/build-info.xml">&lt;info>
   &lt;project-skin>${project.skin}&lt;/project-skin>
   &lt;forrest-version>${forrest.version}&lt;/forrest-version>
 &lt;/info>
@@ -284,9 +284,9 @@ The skin that most likely resembles these ones is called 'pelt'.
         <fail>Java 1.4 or higher is required; found Java ${ant.java.version} in ${java.home}</fail>
       </then>
     </if>
-    <echo message="This is apache-forrest-${forrest.version}"/>
-    <echo message="Using Java ${ant.java.version} from ${java.home}"/>
-    <echo message="Using ${ant.version} from ${ant.home}"/>
+    <echo level="info" message="This is apache-forrest-${forrest.version}"/>
+    <echo level="info" message="Using Java ${ant.java.version} from ${java.home}"/>
+    <echo level="info" message="Using ${ant.version} from ${ant.home}"/>
   </target>
   <target name="diagnostics" depends="init" description="Show the Ant diagnostics">
     <diagnostics/>
@@ -313,7 +313,7 @@ The skin that most likely resembles these ones is called 'pelt'.
         <expandproperties/>
       </filterchain>
     </loadfile>
-    <echo>${echo-settings-message}</echo>
+    <echo level="info">${echo-settings-message}</echo>
   </target>
 <!-- ===============================================================
        Set class-path.
@@ -392,13 +392,13 @@ The skin that most likely resembles these ones is called 'pelt'.
   <target name="run_custom_jetty"
    if="custom_jetty_config"
    description="Run Jetty with configuration file found in the project">
-    <echo>
+    <echo level="info">
   Note: Use Ctrl-C to stop the Jetty server
     </echo>
     <if>
       <os family="dos"/>
       <then>
-        <echo>
+        <echo level="info">
          ... and reply 'n' and press [Enter] 
   	     when asked about aborting the batch!
       </echo>
@@ -426,13 +426,13 @@ The skin that most likely resembles these ones is called 'pelt'.
   </target>
   <target name="run_default_jetty"
    description="Run Jetty with configuration file found in Forrest">
-    <echo>
+    <echo level="info">
   Note: Use Ctrl-C to stop the Jetty server
     </echo>
     <if>
       <os family="dos"/>
       <then>
-        <echo>
+        <echo level="info">
          ... and reply 'n' and press [Enter] 
   	     when asked about aborting the batch!
       </echo>
@@ -468,11 +468,11 @@ The skin that most likely resembles these ones is called 'pelt'.
 <!-- ***************************************************************** -->
 <!-- ***************************************************************** -->
   <target name="init-proxy" if="proxy.host" unless="proxy.already.set">
-    <echo>Using proxy : ${proxy.host}:${proxy.port}</echo>
+    <echo level="info">Using proxy : ${proxy.host}:${proxy.port}</echo>
     <if>
       <isset property="proxy.user"/>
       <then>
-        <echo>Proxy connection : xxxxxx/xxxxxx (confidential)</echo>
+        <echo level="info">Proxy connection : xxxxxx/xxxxxx (confidential)</echo>
         <setproxy proxyhost="${proxy.host}" proxyport="${proxy.port}" proxyuser="${proxy.user}" proxypassword="${proxy.password}"/>
       </then>
       <else>

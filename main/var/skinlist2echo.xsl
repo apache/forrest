@@ -19,7 +19,7 @@
   <xsl:template match="skins">
     <project default="echoskins">
       <target name="echoskins">
-        <echo>Available skins:
+        <echo level="info">Available skins:
 Forrest provides the following default skins which should meet most needs:
 
 Current:
@@ -39,7 +39,7 @@ to demonstrate the concept of a remote skin respository.</echo>
     </project>
   </xsl:template>
   <xsl:template match="skin">
-    <echo>
+    <echo level="info">
 * <xsl:value-of select="@name"/> - <xsl:value-of select="normalize-space(description)"/>
   - author: <xsl:value-of select="@author"/>
   - website: <xsl:value-of select="@website"/>

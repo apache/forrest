@@ -40,7 +40,7 @@
         <tstamp>
           <format property="time.start" pattern="yyyy-MM-dd hh:mm:ss"/>
         </tstamp>
-        <echo>
+        <echo level="info">
           ....... Forrest render START ${time.start}
           ... Rendering docs in ${build.work-dir}
         </echo>
@@ -49,14 +49,14 @@
           <param name="project.build-dir" value="${build.work-dir}"/>
           <param name="project.site-dir" value="${build.site-dir}"/>
         </antcall>
-        <echo>
+        <echo level="info">
           ....... Forrest render Succeeded
         </echo>
         <record name="${build.logfile}" action="stop"/>
         <property name="notify.completion-status" value="succeeded" />
       </try>
       <catch>
-        <echo>Oops, something broke</echo>
+        <echo level="error">Oops, something broke</echo>
         <record name="${build.logfile}" action="stop"/>
         <property name="notify.completion-status" value="FAILED" />
         <property name="build.failed" value="true"/>

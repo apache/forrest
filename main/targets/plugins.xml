@@ -49,10 +49,10 @@
     <if>
       <isset property="plugin.unavailable"/>
       <then>
-        <echo>${versioned.name} is not available in the build dir. Trying to fetch it...</echo>
+        <echo level="info">${versioned.name} is not available in the build dir. Trying to fetch it...</echo>
       </then>
       <else>
-        <echo>${versioned.name} is available in the build dir. Trying to update it...</echo>
+        <echo level="info">${versioned.name} is available in the build dir. Trying to update it...</echo>
       </else>
     </if>
   </target>
@@ -220,7 +220,7 @@ to be installed again unless you delete them or wish to upgrade them.
   <target name="configure-input-plugin">
 <!-- add the snippet to plugins/input.xmap that will mount the plugin
           specific input.xmap -->
-    <echo>Mounting input plugin: ${plugin}</echo>
+    <echo level="info">Mounting input plugin: ${plugin}</echo>
     <xslt in="${project.temp-dir}/input.xmap"
        out="${project.temp-dir}/input.xmap.new"
        style="${forrest.core}/var/pluginMountSnippet.xsl"
@@ -243,7 +243,7 @@ to be installed again unless you delete them or wish to upgrade them.
   <target name="configure-output-plugin">
 <!-- add the snippet to plugins/output.xmap that will mount the plugin
           specific input.xmap -->
-    <echo>Mounting output plugin: ${plugin}</echo>
+    <echo level="info">Mounting output plugin: ${plugin}</echo>
     <xslt in="${project.temp-dir}/output.xmap"
        out="${project.temp-dir}/output.xmap.new"
        style="${forrest.core}/var/pluginMountSnippet.xsl"
@@ -257,7 +257,7 @@ to be installed again unless you delete them or wish to upgrade them.
   <target name="configure-internal-plugin">
 <!-- add the snippet to plugins/internal.xmap that will mount the plugin
           specific input.xmap -->
-    <echo>Mounting internal plugin: ${plugin}</echo>
+    <echo level="info">Mounting internal plugin: ${plugin}</echo>
     <xslt in="${project.temp-dir}/internal.xmap"
        out="${project.temp-dir}/internal.xmap.new"
        style="${forrest.core}/var/pluginMountSnippet.xsl"
@@ -271,7 +271,7 @@ to be installed again unless you delete them or wish to upgrade them.
   <target name="configure-plugin-locationmap">
 <!-- add the snippet to plugins/locationmap.xml that will mount the plugin
           specific locationmap -->
-    <echo>Mounting plugin locationmap for ${plugin}</echo>
+    <echo level="info">Mounting plugin locationmap for ${plugin}</echo>
     <xslt in="${project.temp-dir}/locationmap.xml"
        out="${project.temp-dir}/locationmap.xml.new"
        style="${forrest.core}/var/pluginLmMountSnippet.xsl"
@@ -293,7 +293,7 @@ to be installed again unless you delete them or wish to upgrade them.
     <var name="plugin-counter" value="1"/>
     <for list="${forrest.plugins.descriptors}" param="url">
       <sequential>
-        <echo>Fetching plugins descriptor: @{url}</echo>
+        <echo level="info">Fetching plugins descriptor: @{url}</echo>
         <get src="@{url}" 
            dest="${project.temp-dir}/plugins-${plugin-counter}.xml"
            verbose="true" usetimestamp="true" ignoreerrors="true"/>
@@ -308,7 +308,7 @@ to be installed again unless you delete them or wish to upgrade them.
         <if>
           <available file="${project.temp-dir}/plugins-${plugin-counter}.xml"/>
           <then>
-            <echo>Plugin list loaded from @{url}.</echo>
+            <echo level="info">Plugin list loaded from @{url}.</echo>
           </then>
           <else>
             <echo>
@@ -327,7 +327,7 @@ to be installed again unless you delete them or wish to upgrade them.
   <target name="fetch-plugin" 
           
           depends="init-props, fetch-plugins-descriptors">
-    <echo>Trying to find the description of ${versioned.name} in the different descriptor files</echo>
+    <echo level="info">Trying to find the description of ${versioned.name} in the different descriptor files</echo>
     <trycatch property="plugin-found">
       <try>
         <for param="plugin-descriptor-file">
@@ -335,7 +335,7 @@ to be installed again unless you delete them or wish to upgrade them.
             <fileset dir="${project.temp-dir}" includes="plugins-*.xml"/>
           </path>
           <sequential>
-            <echo>Using the descriptor file @{plugin-descriptor-file}...</echo>
+            <echo level="info">Using the descriptor file @{plugin-descriptor-file}...</echo>
             <xslt in="@{plugin-descriptor-file}" 
 		          out="${project.temp-dir}/pluginlist2fetchbuild.xml"
 		          style="${forrest.core}/var/pluginlist2fetch.xsl"
@@ -352,7 +352,7 @@ to be installed again unless you delete them or wish to upgrade them.
         </for>
       </try>
       <catch>
-        <echo>Fetch-plugin Ok, installing !</echo>
+        <echo level="info">Fetch-plugin Ok, installing !</echo>
       </catch>
     </trycatch>
 <!-- Here we stop if the description of a plugin has not been found... -->
@@ -391,7 +391,7 @@ to be installed again unless you delete them or wish to upgrade them.
       overwrite="true"/>
     <for list="${project.required.plugins}" param="name">
       <sequential>
-        <echo>
+        <echo level="info">
       --------------------------------------------------------------
       Installing plugin: @{name}
       --------------------------------------------------------------

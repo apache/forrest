@@ -128,7 +128,7 @@ then generate your site with 'forrest', then do 'forrest validate-site'.
         includes="${forrest.validate.xdocs.includes}"
         excludes="${forrest.validate.xdocs.excludes}"/>
     </xmlvalidate>
-    <echo message="...validated site"/>
+    <echo level="info" message="...validated site"/>
   </target>
   <target name="validate-xdocs" depends="init, validation-props" if="validate.xdocs"
       description="Validate the project xdocs">
@@ -139,7 +139,7 @@ then generate your site with 'forrest', then do 'forrest validate-site'.
         includes="${forrest.validate.xdocs.includes}"
         excludes="${forrest.validate.xdocs.excludes}"/>
     </xmlvalidate>
-    <echo message="...validated xdocs"/>
+    <echo level="info" message="...validated xdocs"/>
   </target>
   <target name="validate-skinconf" depends="validation-props"
           if="validate.skinconf" description="Validate skinconf">
@@ -150,7 +150,7 @@ then generate your site with 'forrest', then do 'forrest validate-site'.
                includes="${forrest.validate.skinconf.includes}"
                excludes="${forrest.validate.skinconf.excludes}"/>
     </xmlvalidate>
-    <echo message="...validated skinconf"/>
+    <echo level="info" message="...validated skinconf"/>
   </target>
   <target name="validate-sitemap" depends="validation-props"
     if="validate.sitemap" description="Validate the project sitemap">
@@ -161,7 +161,7 @@ then generate your site with 'forrest', then do 'forrest validate-site'.
         <include name="sitemap.xmap"/>
       </fileset>
     </jing>
-    <echo message="...validated project sitemap"/>
+    <echo level="info" message="...validated project sitemap"/>
   </target>
   <target name="validate-stylesheets" depends="validation-props"
     if="validate.stylesheets" description="Validate XSL files">
@@ -170,7 +170,7 @@ then generate your site with 'forrest', then do 'forrest validate-site'.
         includes="${forrest.validate.stylesheets.includes}"
         excludes="${forrest.validate.stylesheets.excludes}" />
     </jing>
-    <echo message="...validated stylesheets"/>
+    <echo level="info" message="...validated stylesheets"/>
   </target>
   <target name="validate-skins" depends="validate-skins-stylesheets" description="Validate skins"/>
   <target name="validate-skins-stylesheets" depends="validation-props"
@@ -180,7 +180,7 @@ then generate your site with 'forrest', then do 'forrest validate-site'.
         includes="${forrest.validate.skins.stylesheets.includes}"
         excludes="${forrest.validate.skins.stylesheets.excludes}"/>
     </jing>
-    <echo message="...validated skin stylesheets"/>
+    <echo level="info" message="...validated skin stylesheets"/>
   </target>
 <!-- Check that ${project.skin} points to an existing skin. -->
   <target name="validate-skinchoice" depends="validation-props" description="Validate skin choice">
@@ -198,6 +198,6 @@ then generate your site with 'forrest', then do 'forrest validate-site'.
     <fail unless="project.skin.present">
       ${skin-not-found-message}
     </fail>
-    <echo message="...validated existence of skin '${project.skin}'"/>
+    <echo level="info" message="...validated existence of skin '${project.skin}'"/>
   </target>
 </project>

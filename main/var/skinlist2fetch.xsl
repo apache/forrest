@@ -23,7 +23,7 @@
     <project default="fetchskin">
       <target name="fetchskin" depends="fetch-versioned-skin, fetch-unversioned-skin, final-check"/>
       <target name="fetch-versioned-skin">
-        <echo>Trying to get "<xsl:value-of select="$skin-name" />" skin version 
+        <echo level="info">Trying to get "<xsl:value-of select="$skin-name" />" skin version 
                   <xsl:value-of select="$forrest-version" />...</echo>
         <get verbose="true" usetimestamp="true" ignoreerrors="true">
           <xsl:attribute name="src">
@@ -36,7 +36,7 @@
         </available>
       </target>
       <target name="fetch-unversioned-skin" unless="versioned-skin.present">
-        <echo>Versioned skin unavailable, trying to get versionless skin...</echo>
+        <echo level="info">Versioned skin unavailable, trying to get versionless skin...</echo>
         <get verbose="true" usetimestamp="true" ignoreerrors="true">
           <xsl:attribute name="src">
             <xsl:value-of select="skin[@name=$skin-name]/@url" />
@@ -55,7 +55,7 @@
               In case the reason is the network connection, you can try 
               installing the package manually by placing the file in the 
               skins directory.</fail>
-        <echo>Skin "<xsl:value-of select="$skin-name" />" correctly installed.</echo>
+        <echo level="info">Skin "<xsl:value-of select="$skin-name" />" correctly installed.</echo>
       </target>
     </project>
   </xsl:template>

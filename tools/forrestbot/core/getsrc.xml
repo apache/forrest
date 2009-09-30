@@ -53,11 +53,11 @@
       tag="${getsrc.cvs.tag}"
       failonerror="true"
       />
-    <echo>Loading ${build.cvsmodule-dir}/${getsrc.cvs.module}/forrest.properties..</echo>
+    <echo level="info">Loading ${build.cvsmodule-dir}/${getsrc.cvs.module}/forrest.properties..</echo>
     <loadproperties srcFile="${build.cvsmodule-dir}/${getsrc.cvs.module}/forrest.properties"/>
     <loadproperties srcFile="${forrest.home}/main/webapp/default-forrest.properties"/>
 <!-- only the project.content-dir directory -->
-    <echo>
+    <echo level="info">
 <![CDATA[<cvs cvsRoot=":pserver:${getsrc.cvs.user}@${getsrc.cvs.host}:${getsrc.cvs.root}"
       package="${getsrc.cvs.module}/${project.content-dir}"
       dest="${build.cvsmodule-dir}"
@@ -88,13 +88,13 @@
   <property name="getsrc.svn.revision" value="HEAD"/>
   <property name="build.svn-dir"    location="work/svn"/>
   <target name="getsrc.svn" description="FB: Get source from an SVN repository">
-    <echo>svn: ${getsrc.svn.url} -> ${build.svn-dir}/${ant.project.name}</echo>
+    <echo level="info">svn: ${getsrc.svn.url} -> ${build.svn-dir}/${ant.project.name}</echo>
     <svncheckout repositoryUrl="${getsrc.svn.url}"
       destination="${build.svn-dir}/${ant.project.name}"
       revision="${getsrc.svn.revision}"
       failonerror="true"
       recursive="true"/>
-    <echo>Loading ${build.svn-dir}/${ant.project.name}/forrest.properties..</echo>
+    <echo level="info">Loading ${build.svn-dir}/${ant.project.name}/forrest.properties..</echo>
     <loadproperties srcFile="${build.svn-dir}/${ant.project.name}/forrest.properties"/>
     <loadproperties srcFile="${forrest.home}/main/webapp/default-forrest.properties"/>
     <copy todir="${build.work-dir}" overwrite="true">

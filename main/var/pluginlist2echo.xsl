@@ -19,7 +19,7 @@
   <xsl:template match="plugins">
     <project default="echoplugins">
       <target name="echoplugins">
-        <echo>Available plugins:
+        <echo level="info">Available plugins:
 Forrest provides basic functionality for creating documentation in various
 formats from a range of source formats. However, additional functionlaity
 can be provided through plugins.
@@ -27,19 +27,19 @@ can be provided through plugins.
 Plugins may be maintained by other people and be available from
 outside the Forrest distribution. The list below details all known plugins.
 </echo>
-        <echo>
+        <echo level="info">
 =============
 Input Plugins
 =============
 </echo>
         <xsl:apply-templates select="plugin[@type='input']" />
-        <echo>
+        <echo level="info">
 ==============
 Output Plugins
 ==============
 </echo>
         <xsl:apply-templates select="plugin[@type='output']" />
-        <echo>
+        <echo level="info">
 ================
 Internal Plugins
 ================
@@ -49,7 +49,7 @@ Internal Plugins
     </project>
   </xsl:template>
   <xsl:template match="plugin">
-    <echo>
+    <echo level="info">
     * <xsl:value-of select="@name"/>
       - <xsl:value-of select="normalize-space(description)"/>
     

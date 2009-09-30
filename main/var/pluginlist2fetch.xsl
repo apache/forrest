@@ -106,7 +106,7 @@
             </antcallback>
           </target>
           <target name="get-local">
-            <echo>Trying to locally get ${local-plugin-name}${local-plugin-version}</echo>
+            <echo level="info">Trying to locally get ${local-plugin-name}${local-plugin-version}</echo>
             <trycatch property="plugin-found">
               <try>
                 <for param="plugin-src-dir">
@@ -114,13 +114,13 @@
                     <xsl:value-of select="$plugin-src-dir" />
                   </xsl:attribute>
                   <sequential>
-                    <echo>Looking in local @{plugin-src-dir}</echo>
+                    <echo level="info">Looking in local @{plugin-src-dir}</echo>
                     <if>
                       <available property="plugin.src.present" type="dir">
                         <xsl:attribute name="file">@{plugin-src-dir}/${local-plugin-name}${local-plugin-version}</xsl:attribute>
                       </available>
                       <then>
-                        <echo message="Found !"/>
+                        <echo level="info" message="Found !"/>
                         <ant target="local-deploy">
                           <xsl:attribute name="antfile">@{plugin-src-dir}/${local-plugin-name}${local-plugin-version}/build.xml</xsl:attribute>
                           <xsl:attribute name="dir">@{plugin-src-dir}/${local-plugin-name}${local-plugin-version}</xsl:attribute>
@@ -133,7 +133,7 @@
                 </for>
               </try>
               <catch>
-                <echo>Plugin ${local-plugin-name}${local-plugin-version} deployed ! Ready to configure</echo>
+                <echo level="info">Plugin ${local-plugin-name}${local-plugin-version} deployed ! Ready to configure</echo>
               </catch>
             </trycatch>
           </target>
@@ -153,7 +153,7 @@
             </available>
           </target>
           <target name="get-from-remote-site">
-            <echo>Tying to download ${download-plugin-name}${download-plugin-version} from the distribution site ...</echo>
+            <echo level="info">Tying to download ${download-plugin-name}${download-plugin-version} from the distribution site ...</echo>
 <!-- FIXME the following test does not work... -->
             <if>
               <not>
@@ -162,7 +162,7 @@
                 </equals>
               </not>
               <then>
-                <echo>Using Forrest version : ${download-forrest-version}</echo>
+                <echo level="info">Using Forrest version : ${download-forrest-version}</echo>
               </then>
             </if>
 <!-- Get from the remote URL -->
@@ -224,10 +224,10 @@
             </condition>
           </target>
           <target name="downloaded-message" if="downloaded">
-            <echo>Plugin <xsl:value-of select="$plugin-name" /> downloaded ! Ready to install</echo>
+            <echo level="info">Plugin <xsl:value-of select="$plugin-name" /> downloaded ! Ready to install</echo>
           </target>
           <target name="uptodate-message" if="up-to-date">
-            <echo>Plugin <xsl:value-of select="$plugin-name" /> was up-to-date ! Ready to configure</echo>
+            <echo level="info">Plugin <xsl:value-of select="$plugin-name" /> was up-to-date ! Ready to configure</echo>
             <property name="plugin-found" value="true"/>
           </target>
           <target name="not-found-message" unless="desired.plugin.zip.present">

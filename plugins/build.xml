@@ -91,7 +91,7 @@
   </target>
   <target name="echo-init" depends="init-build-compiler" unless="no.echo.init">
     <buildnumber file="${build.dir}/build.number"/>
-    <echo>
+    <echo level="info">
       --------------------------------------------------------------
 
       Using ${ant.version}
@@ -113,7 +113,7 @@
   <target name="local-deploy"
           description="Deploy a plugin locally"
           depends="init, jar">
-    <echo>Locally deploying ${plugin-name}</echo>
+    <echo level="info">Locally deploying ${plugin-name}</echo>
     <copy toDir="${forrest.plugins.localDeploy.dir}/${plugin-name}">
       <fileset dir="${forrest.plugins.dir}/${plugin-name}">
         <exclude name="lib/**"/>
@@ -174,7 +174,7 @@
   <target name="deploy-docs"
 		  description="Deploy the plugin documentation"
 		  depends="clean, dist, docs, checkout-deployed-docs, deploy-plugins.xml">
-    <echo>Deploying plugin documentation to the web server</echo>
+    <echo level="info">Deploying plugin documentation to the web server</echo>
 	<if>
         <contains string="${forrest.version}" substring="0.7"/>
       <then>
@@ -244,13 +244,13 @@
   <target name="release"
           description="Release the versioned plugin to the website SVN to make it available for download"
           depends="clean, deploy-plugins.xml, deploy-docs, dist, checkout-deployed-plugins">
-    <echo>Releasing versioned plugin ${plugin-name} to the download server</echo>
+    <echo level="info">Releasing versioned plugin ${plugin-name} to the download server</echo>
 <!-- Put versioned plugin in the ${forrest.version} directory -->
     <copy todir="${deploy.plugins.svn-dir}/${forrest.version}" 
           overwrite="true" 
           file="${forrest.plugins.dist.dir}/${forrest.version}/${plugin-name}-${plugin-version}.zip"/>
     <antcall target="updateSVN"/>
-    <echo>
+    <echo level="info">
 You have just released a plugin. There are other tasks to complete. For example:
 - release emails
 - SVN tagging
@@ -289,7 +289,7 @@ You have just released a plugin. There are other tasks to complete. For example:
   <target name="deploy"
           description="Deploy the unversioned plugin to the website SVN to make it available for download"
           depends="clean, deploy-plugins.xml, deploy-docs, dist, checkout-deployed-plugins">
-    <echo>Deploying unversioned plugin ${plugin-name} to the download server</echo>
+    <echo level="info">Deploying unversioned plugin ${plugin-name} to the download server</echo>
 <!-- Put unversioned plugin in the ${forrest.version} directory -->
     <copy tofile="${deploy.plugins.svn-dir}/${forrest.version}/${plugin-name}.zip" 
             overwrite="true" 
@@ -323,7 +323,7 @@ You have just released a plugin. There are other tasks to complete. For example:
     />
   </target>
   <target name="docs" depends="local-deploy">
-    <echo>Building Docs for ${plugin-name}</echo>
+    <echo level="info">Building Docs for ${plugin-name}</echo>
     <ant antfile="${forrest.core}/forrest.build.xml" target="site">
       <property name="project.home" value="${basedir}"/>
     </ant>
