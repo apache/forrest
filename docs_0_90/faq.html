@@ -550,19 +550,25 @@ document.write("Last Published: " + document.lastModified);
 <a href="#logs">5.4.  Where are the log files to find more infomation about errors? </a>
 </li>
 <li>
-<a href="#how_can_I_help">5.5.  How to help? </a>
+<a href="#verbose-ant">5.5.  How to filter or reduce the standard output messages? </a>
 </li>
 <li>
-<a href="#patch">5.6.  How to contribute a patch? </a>
+<a href="#coloured-ant">5.6.  How to enabled coloured standard output messages? </a>
 </li>
 <li>
-<a href="#jobs">5.7.  How can job positions be advertised? </a>
+<a href="#how_can_I_help">5.7.  How to help? </a>
 </li>
 <li>
-<a href="#press">5.8. Is there a press kit? Who can journalists contact?</a>
+<a href="#patch">5.8.  How to contribute a patch? </a>
 </li>
 <li>
-<a href="#security">5.9. How to report a security issue?</a>
+<a href="#jobs">5.9.  How can job positions be advertised? </a>
+</li>
+<li>
+<a href="#press">5.10. Is there a press kit? Who can journalists contact?</a>
+</li>
+<li>
+<a href="#security">5.11. How to report a security issue?</a>
 </li>
 </ul>
 </li>
@@ -1890,8 +1896,47 @@ X [0]         /docs_0_80/upgrading_08.html  BROKEN: No pipeline matched...
           Doing <span class="codefrag">'forrest -v'</span> will provide verbose build messages to
           the standard output.
         </p>
-<a name="N1060D"></a><a name="how_can_I_help"></a>
-<h3 class="underlined_5">5.5.  How to help? </h3>
+<a name="N1060D"></a><a name="verbose-ant"></a>
+<h3 class="underlined_5">5.5.  How to filter or reduce the standard output messages? </h3>
+<p>
+          Where normally you would do 
+          <span class="codefrag">'forrest'</span> or <span class="codefrag">'forrest run'</span> etc. instead use
+          the "quiet" option, and do 
+          <span class="codefrag">'forrest -q'</span> or <span class="codefrag">'forrest -q run'</span> etc.
+          If errors are reported, then drop the "quiet" option and run again to
+          get the context for the error.
+        </p>
+<p>
+          Doing <span class="codefrag">'forrest -v'</span> will provide very verbose build messages to
+          the standard output.
+        </p>
+<a name="N10627"></a><a name="coloured-ant"></a>
+<h3 class="underlined_5">5.6.  How to enabled coloured standard output messages? </h3>
+<p>
+          Adding colour to the forrest output messages will greatly assist
+          readability.
+        </p>
+<p>
+          Set the ANT_ARGS environment variable like so:<br>
+          
+<span class="codefrag">export ANT_ARGS="$ANT_ARGS -logger org.apache.tools.ant.listener.AnsiColorLogger"</span>
+        
+</p>
+<p>
+          To change the default colours, set the ANT_OPTS environment variable
+          like so:<br>
+          
+<span class="codefrag">export ANT_OPTS="$ANT_OPTS -Dant.logger.defaults=$FORREST_HOME/etc/AnsiColorLogger.properties"</span>
+<br>
+          and create that configuration file as
+          <a href="http://ant.apache.org/manual/listeners.html#AnsiColorLogger">explained</a>
+          in the Apache Ant Manual.
+        </p>
+<p>
+          Note that not all terminals support ANSI color codes.
+        </p>
+<a name="N10647"></a><a name="how_can_I_help"></a>
+<h3 class="underlined_5">5.7.  How to help? </h3>
 <p>
           Join one of the Forrest project <a href="../mail-lists.html">mailing
           lists</a> and tell us what you would like to see improved. We
@@ -1899,8 +1944,8 @@ X [0]         /docs_0_80/upgrading_08.html  BROKEN: No pipeline matched...
           newcomers&mdash;often, close proximity blinds software developers to
           faults that are obvious to everyone else. Don't be shy!
         </p>
-<a name="N10619"></a><a name="patch"></a>
-<h3 class="underlined_5">5.6.  How to contribute a patch? </h3>
+<a name="N10653"></a><a name="patch"></a>
+<h3 class="underlined_5">5.8.  How to contribute a patch? </h3>
 <p>
           Please send all contributions via our <a href="../issues.html">issue
           tracker</a>. Here are notes about
@@ -1913,8 +1958,8 @@ X [0]         /docs_0_80/upgrading_08.html  BROKEN: No pipeline matched...
           <a href="../issues.html">issue tracker</a> before diving
           in.
         </p>
-<a name="N10634"></a><a name="jobs"></a>
-<h3 class="underlined_5">5.7.  How can job positions be advertised? </h3>
+<a name="N1066E"></a><a name="jobs"></a>
+<h3 class="underlined_5">5.9.  How can job positions be advertised? </h3>
 <p>
           Employers can send notices about employment opportunities. There is a
           special jobs&lt;AT&gt;apache.org mailing list. You can also send these
@@ -1932,8 +1977,8 @@ X [0]         /docs_0_80/upgrading_08.html  BROKEN: No pipeline matched...
           (<a href="http://www.apache.org/licenses/">CCLA</a>) with The
           Apache Software Foundation.
         </p>
-<a name="N10647"></a><a name="press"></a>
-<h3 class="underlined_5">5.8. Is there a press kit? Who can journalists contact?</h3>
+<a name="N10681"></a><a name="press"></a>
+<h3 class="underlined_5">5.10. Is there a press kit? Who can journalists contact?</h3>
 <p>
          Press enquiries should be co-ordinated through the ASF Public Relations Committee (PRC).
          See <a href="http://www.apache.org/foundation/contact.html">contact</a> information.
@@ -1951,8 +1996,8 @@ X [0]         /docs_0_80/upgrading_08.html  BROKEN: No pipeline matched...
           are available.
           Unfortunately the logo is only available as PNG.
         </p>
-<a name="N1066A"></a><a name="security"></a>
-<h3 class="underlined_5">5.9. How to report a security issue?</h3>
+<a name="N106A4"></a><a name="security"></a>
+<h3 class="underlined_5">5.11. How to report a security issue?</h3>
 <p>
          Security and vulnerability issues are co-ordinated through the
          <a href="http://www.apache.org/security/">ASF Security Team</a>.
