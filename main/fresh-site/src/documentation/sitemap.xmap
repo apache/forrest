@@ -19,8 +19,15 @@
   <map:components>
     <map:actions>
       <map:action logger="sitemap.action.sourcetype" name="sourcetype" src="org.apache.forrest.sourcetype.SourceTypeAction">
+<!--
+      These actions are additional sourcetype demonstrations.
+      See the main definitions at main/webapp/forrest.xmap
+-->
         <sourcetype name="hello-v1.0">
           <document-declaration public-id="-//Acme//DTD Hello Document V1.0//EN" />
+        </sourcetype>
+        <sourcetype name="demo-exslt-v10">
+          <processing-instruction target="schema" data="demo/exslt/1.0"/>
         </sourcetype>
       </map:action>
     </map:actions>
@@ -36,6 +43,11 @@
           <map:when test="hello-v1.0">
             <map:generate src="{properties:content.xdocs}{../../1}.xml" />
             <map:transform src="{properties:resources.stylesheets}/hello2document.xsl" />
+            <map:serialize type="xml-document"/>
+          </map:when>
+          <map:when test="demo-exslt-v10">
+            <map:generate src="{properties:content.xdocs}{../../1}.xml" />
+            <map:transform src="{properties:resources.stylesheets}/demo-exslt-to-document.xsl" />
             <map:serialize type="xml-document"/>
           </map:when>
         </map:select>
