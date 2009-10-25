@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 This file is from the examples included in the XSLT Cookbook, written by Sal Mangano, published by O'Reilly
-See /legal/oreilly.codepolicy.txt and /legal/oreilly.permission.txt
+See $FORREST_HOME/lib/core/oreilly.codepolicy.txt
+and $FORREST_HOME/lib/core/oreilly.permission.txt
 -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" id="str.find-last"
   xmlns:str="http://www.ora.com/XSLTCookbook/namespaces/strings" extension-element-prefixes="str">
