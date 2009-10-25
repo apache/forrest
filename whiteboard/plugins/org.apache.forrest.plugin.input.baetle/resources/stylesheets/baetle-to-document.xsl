@@ -30,7 +30,7 @@
                                          rdf rdfs"
                 version="1.0">
 
-  <xsl:import href="utils/date.format-date.template.xsl"/>
+  <xsl:import href="lm://transform-exslt/date/functions/format-date/date.format-date.template.xsl"/>
 
   <xsl:include href="param.xsl"/>
  

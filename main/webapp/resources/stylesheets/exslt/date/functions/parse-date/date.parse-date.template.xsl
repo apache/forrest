@@ -122,7 +122,7 @@
             </xsl:call-template>
           </xsl:if>
         </xsl:when>
-        <xsl:when test="not(contains('GyMdhHmsSEDFwWakKzZ', $char))">
+        <xsl:when test="not(contains('GyMdhHmsSEDFwWakKz', $char))">
            <xsl:message>
               Invalid token in format string: <xsl:value-of select="$char" />
            </xsl:message>
