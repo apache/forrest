@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one or more
+  contributor license agreements.  See the NOTICE file distributed with
+  this work for additional information regarding copyright ownership.
+  The ASF licenses this file to You under the Apache License, Version 2.0
+  (the "License"); you may not use this file except in compliance with
+  the License.  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<!DOCTYPE document PUBLIC "-//APACHE//DTD Documentation V2.0//EN" "http://forrest.apache.org/dtd/document-v20.dtd">
+<document>
+  <header>
+    <title>Welcome to the org.apache.forrest.plugin.output.iCal Plugin</title>
+  </header>
+  <body>
+    <section id="overview">
+      <title>Apache Forrest - org.apache.forrest.plugin.output.iCal Plugin</title>
+      <p>
+        This plugin extracts todo items from a document following certain conventions, and produce an ical file as output. The ical file can then be opened in your preferred calendaring/task management application.
+      </p>
+    </section>
+    <section id="samples">
+      <title>Samples</title>
+      <p>
+        This section includes links to a number of samples using this plugin.
+        The plugin is intended to be self documenting through these samples. If
+        you require further help please ask on the dev mailing list (you should
+        use the dev mailing list since this plugin is still in the whiteboard).
+      </p>
+      <ul>
+        <li>Here's a simple <a href="memos/Meeting_2009-10-21.html">memo with a
+            task list</a>. The memo is written in the <a
+            href="http://www.jspwiki.org">jspwiki format</a>, which is itself
+            supported as an input format in Forrest by the <a
+            href="http://forrest.apache.org/pluginDocs/plugins_0_80/org.apache.forrest.plugin.input.wiki/"
+            >org.apache.forrest.plugin.output.Wiki</a> plugin. This makes it
+            very easy to create task lists. See the <a
+            href="Meeting_2009-10-21.jspwiki">source</a> to see how easy it
+            is.</li>
+        <li>Here's another sample <a href="Meeting_2009-10-21.html">memo
+            with a task list</a>, this time in the root directory.</li>
+      </ul>
+      <note>
+        The more samples included here the easier it is for users to understand
+        this plugin. If you can provide additional samples please do so.
+      </note>
+    </section>
+    <section id="urlconvention">
+      <title>URL convention</title>
+      <p>The iCal output plugin requires some information to be able to produce
+        proper iCal entries:
+      </p>
+      <ul>
+        <li>start date</li>
+        <li>name of person / person ID</li>
+      </ul>
+      <p>This information is encoded in the url, according to the following
+        convention: <code>$FILENAME_$STARTDATE_$PERSON.ics</code>. The date is
+        on the format <code>YEAR-MONTH-DAY</code> ie <code>2009-10-21</code>.
+        The filename is either the real name of the file, or a mapping to a more
+        calendaring-like name of your choice, see the properties below. Also,
+        the date needs to be part of the filename as well in the present
+        implementation. That is, the filename
+        <code>Meeting_2009-10-21.xml</code> corresponds to the iCal URL
+        <code>Meeting_2009-10-21_Joe.ics</code> for the person Joe using no
+        mapping between filename and URL. Using the default mapping the iCal
+        URL would be <code>Tasks_2009-10-21_Joe.ics</code>.
+      </p>
+    </section>
+    <section id="settings">
+      <title>Configuration</title>
+      <p>The plugin can be configured using properties in the file
+        <code>forrest.properties.xml</code> in the root folder of your project
+        tree. The following properties are presently supported:
+      </p>
+      <dl>
+        <dt><code>output.ical.URLprefix</code></dt>
+        <dd>If specified, the first part of the URL filename is mapped to the
+            value of this property. Default value is <code>Tasks</code>.</dd>
+        <dt><code>output.ical.FilePrefix</code></dt>
+        <dd>If specified, the first part of the real filename is mapped to the
+            value of this property. Default value is <code>Meeting</code>.</dd>
+        <dt><code>output.ical.defaultTimeSpan</code></dt>
+        <dd>Specifies the standard duration for a task, ie the number of days
+            from the start until it should have been completed. Default value
+            is <code>7D</code>, that is, 7 days = one week. The timespan values
+            supported are those supported by the <a
+            href="http://www.exslt.org/date/functions/add/index.html">EXSLT
+            <code>add</code> function</a>.</dd>
+      </dl>
+    </section>
+  </body>
+</document>
