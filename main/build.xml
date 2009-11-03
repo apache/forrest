@@ -424,6 +424,17 @@ Remove any build directories in a tree before running.
   <target  name="gump" description="Target used by Gump: forrest">
     <antcall target="jar"/>
   </target>
+<!-- Target used by Gump to run RAT on Forrest sources -->
+  <target name="gump-rat" depends="init"
+      description="Target used by Gump: forrest-rat">
+    <typedef resource="org/apache/rat/anttasks/antlib.xml"
+        uri="antlib:org.apache.rat.anttasks"/>
+    <rat:report xmlns:rat="antlib:org.apache.rat.anttasks">
+      <fileset dir="${forrest.home}">
+        <excludesfile name="${forrest.home}/etc/rat-avoid.txt"/>
+      </fileset>
+    </rat:report>
+  </target>
 <!-- =================================================================== -->
 <!-- Compile Cocoon java classes                                         -->
 <!-- =================================================================== -->
