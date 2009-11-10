@@ -456,8 +456,10 @@ Remove any build directories in a tree before running.
 <!-- Jar Cocoon classes                                                  -->
 <!-- =================================================================== -->
   <target name="jar" depends="init, compile">
-    <jar destfile="${build.dir}/xml-forrest.jar"
-      basedir="${build.classes}">
+    <jar destfile="${build.dir}/xml-forrest.jar">
+      <fileset dir="${build.classes}"/>
+      <fileset file="${forrest.core}/webapp/WEB-INF/ehcache.xml"/>
+ 
       <manifest>
         <section name="org/apache/forrest/">
           <attribute name="Comment" value="Support classes for Apache Forrest"/>

@@ -18,11 +18,12 @@ package org.apache.forrest.locationmap;
 
 import java.io.IOException;
 import java.util.Collections;
-import java.util.Date;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.HashMap;
 
+import net.sf.ehcache.Cache;
+import net.sf.ehcache.CacheManager;
+import net.sf.ehcache.Element;
 import org.apache.forrest.locationmap.lm.LocationMap;
 import org.apache.avalon.framework.activity.Disposable;
 import org.apache.avalon.framework.configuration.Configurable;
@@ -60,22 +61,19 @@ import org.xml.sax.SAXException;
  *  &lt;/locationmap&gt;<br>
  *  <p>
  *  You can use the same actions and selectors like you can use 
- *  in any othe sitemap.
+ *  in any other sitemap.
  */
 public class LocationMapModule extends AbstractLogEnabled
     implements InputModule, Serviceable, Configurable, Disposable, ThreadSafe {
-
-    private static final Iterator ATTNAMES = Collections.EMPTY_LIST.iterator();
-
+    
     private ServiceManager m_manager;
     private SourceResolver m_resolver;
     private String m_src;
     private SourceValidity m_srcVal;
     private LocationMap m_lm;
-    private boolean m_cacheAll;
-    private int m_cacheTtl;
-    private Date m_cacheLastLoaded;
-    private Map m_locationsCache;
+    private boolean m_cacheAll; 
+    private Cache m_cache;
+    private CacheManager m_cacheManager;
 
     // ---------------------------------------------------- lifecycle
 
@@ -90,20 +88,23 @@ public class LocationMapModule extends AbstractLogEnabled
     public void configure(Configuration configuration) throws ConfigurationException {
         m_src = configuration.getChild("file").getAttribute("src");
         m_cacheAll = configuration.getChild("cacheable").getValueAsBoolean(true);
-        m_cacheTtl = configuration.getChild("cache-lifespan").getValueAsInteger();
+        Configuration oldCacheConf = configuration.getChild("cache-lifespan", false);
         
-        debug("LM Configured cache? " + m_cacheAll);
-        debug("LM Configured cache-lifespan: " + m_cacheTtl);
+        if(oldCacheConf != null) {
+          getLogger().warn("Locationmap cache configuration is deprecated through cocoon.xconf.  " 
+        		 + "Please use ehcache.xml instead.");
+        }
         
-        if (m_cacheAll == true) {
-            m_locationsCache = new HashMap();
-            m_cacheLastLoaded = new Date();
+        if(m_cacheAll == true) {
+            m_cacheManager = new CacheManager();
+            m_cache = m_cacheManager.getCache("lm_Cache");
+            debug("LM caching enabled and configured.");
         }
     }
 
     public void dispose() {
         m_lm.dispose();
-        m_locationsCache = null;
+        m_cacheManager.shutdown();
     }
 
     private LocationMap getLocationMap() throws Exception {
@@ -146,7 +147,6 @@ public class LocationMapModule extends AbstractLogEnabled
                 m_resolver.release(source);
             }
         }
-        m_cacheLastLoaded = new Date();
         
         return m_lm;
     }
@@ -195,26 +195,14 @@ public class LocationMapModule extends AbstractLogEnabled
     	
         try {
         	if (this.m_cacheAll == true) {
-                  Date now = new Date();
-                  long cacheAge = now.getTime() - m_cacheLastLoaded.getTime();
-                  debug("LM Cache current age is: " + cacheAge + "ms");
-                 
-                  if (cacheAge > m_cacheTtl) {
-                    debug("LM Cache has expiring - contains " + m_locationsCache.size() + " objects.");
-                    synchronized (this) {
-                      m_locationsCache.clear(); 
-                      debug("LM Cache has expired - now contains " + m_locationsCache.size() + " objects.");
-                  }
-                }
-                  
-        		hasBeenCached = m_locationsCache.containsKey(name);
-        		if (hasBeenCached == true && m_locationsCache.get(name)!=null) {
-        			result =  m_locationsCache.get(name);
+        		hasBeenCached = m_cache.isKeyInCache(name);
+        		if (hasBeenCached == true && m_cache.get(name)!=null) {
+        			result =  m_cache.get(name).getObjectValue();
         			if (getLogger().isDebugEnabled()) {
         				getLogger().debug("Locationmap cached location returned for hint: " + name + " value: " + result);
         			}
-        		}else{
-                    result = getFreshResult(name, objectModel);
+        		} else{
+                            result = getFreshResult(name, objectModel);
                   }
         	}
         	
@@ -254,10 +242,12 @@ public class LocationMapModule extends AbstractLogEnabled
       result = getLocationMap().locate(name,objectModel);
       
       if (m_cacheAll == true) {
-      	m_locationsCache.put(name,result);
-      	if (getLogger().isDebugEnabled()) {
+          Element elem = new Element(name, result);
+          m_cache.put(elem);
+          
+          if (getLogger().isDebugEnabled()) {
       		getLogger().debug("Locationmap caching hint: " + name + " value: " + result);
-      	}
+          }
       }
       return result;
     }
