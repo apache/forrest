@@ -28,6 +28,7 @@ import org.apache.cocoon.components.treeprocessor.InvokeContext;
 import org.apache.cocoon.components.treeprocessor.variables.VariableResolver;
 import org.apache.cocoon.components.treeprocessor.variables.VariableResolverFactory;
 import org.apache.cocoon.sitemap.PatternException;
+import org.apache.excalibur.source.SourceNotFoundException;
 import org.apache.excalibur.source.SourceValidity;
 import org.apache.excalibur.source.SourceResolver;
 import org.apache.excalibur.source.Source;
@@ -89,7 +90,12 @@ public class MountNode extends AbstractNode {
                         m_srcVal = source.getValidity();
                         m_lm = new LocationMap(m_manager);
                         m_lm.enableLogging(getLogger());
-                        m_lm.build(loadConfiguration(source));
+                        try {
+                        	Configuration c = loadConfiguration(source);
+                        	m_lm.build(c);
+                        } catch(ConfigurationException e) {
+                        	getLogger().warn("Failed to mount locationmap at: " + m_src);
+                        }
                     }
                 }
             }
@@ -105,7 +111,12 @@ public class MountNode extends AbstractNode {
                             m_lm.dispose();
                             m_lm = new LocationMap(m_manager);
                             m_lm.enableLogging(getLogger());
-                            m_lm.build(loadConfiguration(source));
+                            try {
+                            	Configuration c = loadConfiguration(source);
+                            	m_lm.build(c);
+                            } catch(ConfigurationException e) {
+                            	getLogger().warn("Failed to mount locationmap at: " + m_src);
+                            }
                         }
                     }
                 }
