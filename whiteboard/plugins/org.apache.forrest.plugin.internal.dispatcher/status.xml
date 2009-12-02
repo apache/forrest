@@ -21,113 +21,95 @@
     <person name="Ross Gardler" email="rgardler@apache.org" id="RDG" />
     <person name="Thorsten Scherler" email="thorsten@apache.org" id="TS" />
     <person name="Gavin McDonald" email="gmcdonald@apache.org" id="GM" />
-    <person name="Volunteer needed" email="dev@forrest.apache.org" id="open"/>
+    <person name="Volunteer needed" email="dev@forrest.apache.org" id="open" />
   </developers>
-<!-- Define here the Title of the Context you want to display in the Changes pages.
+  <!-- Define here the Title of the Context you want to display in the Changes pages.
        id = the context value of actions
        title = Title of the Context
   -->
   <contexts>
-    <context id="code" title="Changes to the Code Base"/>
-    <context id="docs" title="Changes to Documentation"/>
-    <context id="admin" title="Changes to Project Administration"/>
-    <context id="design" title="Changes to Design"/>
-    <context id="build" title="Changes to Build"/>
+    <context id="code" title="Changes to the Code Base" />
+    <context id="docs" title="Changes to Documentation" />
+    <context id="admin" title="Changes to Project Administration" />
+    <context id="design" title="Changes to Design" />
+    <context id="build" title="Changes to Build" />
   </contexts>
   <changes>
-<!-- Add new releases here -->
-     <release version="0.1" date="unreleased">
-      <action context="code" dev="DC" importance="high" type="add" fixes-bug="FOR-1156">
-        Enabled the output html serializer to be configurable to either xhtml or html.
-        See docs: <link href="site:configure-serializer">Configure output serializer</link>.
-      </action>
-      <action context="docs" dev="GM" importance="high" type="add">
-       Added an examples tab and section to show working examples
-       of how to add independant and plugin dependent contracts.
-       A first example showing the POD plugin &amp; contract has
-       been started.
-      </action>
-      <action context="code" dev="TS" type="update"> Cleaning up
-        usage of structurer using the new chunks of FOR-1059. Reducing code duplications.
-        </action>
-      <action context="code" dev="TS" importance="high" type="update"> Cleaning up
-        locationmap from the former xdocs location. See
-        <link href="site:news">news #cleanup.15.06.07</link> how to update. </action>
-      <action context="code" type="fix" dev="TS" fixes-bug="FOR-975" importance="high">
-        FOR-975 Renaming tiles to panel.
-      </action>
-      <action context="code" type="add" dev="TS" fixes-bug="FOR-937" due-to="Sjur Moshagen">
-        More i18n work by Sjur on Dispatcher. This patch correctly localizes menus &amp; tabs.
-      </action>
-      <action context="code" type="fix" dev="DC" fixes-bug="FOR-939" due-to="Sjur Moshagen">
-        Rename to ContractsMessages_en.xml, part of i18n changes by Sjur.
-      </action>
-      <action context="code" type="add" dev="RDG">
-        Add ability to get a list of contracts provided by a plugin. For
-        this to work the plugin name must have "plugin" within it, e.g.
-        "org.apache.forrest.plugin.input.doap". Requesting
-        <code>ls.contracts.org.apache.forrest.plugin.input.doap.source.xml</code>
-        will return a source listing of plugins provided by the named plugin.
-        Requesting <code>ls.contracts.org.apache.forrest.plugin.input.doap.[FORMAT]</code> 
-        will return a formatted output document listing all templates supplied
-        by the identified plugin.        
-      </action>
+    <!-- Add new releases here -->
+    <release version="0.1" date="unreleased">
+      <action context="docs" dev="GM" importance="high" type="add">Added an
+      examples tab and section to show working examples of how to add
+      independant and plugin dependent contracts. A first example showing the
+      POD plugin &amp; contract has been started.</action>
+      <action context="code" dev="TS" type="update">Cleaning up usage of
+      structurer using the new chunks of FOR-1059. Reducing code
+      duplications.</action>
+      <action context="code" dev="TS" importance="high" type="update">Cleaning
+      up locationmap from the former xdocs location. See 
+      <link href="site:news">news #cleanup.15.06.07</link>how to
+      update.</action>
+      <action context="code" type="fix" dev="TS" fixes-bug="FOR-975"
+      importance="high">FOR-975 Renaming tiles to panel.</action>
+      <action context="code" type="add" dev="TS" fixes-bug="FOR-937"
+      due-to="Sjur Moshagen">More i18n work by Sjur on Dispatcher. This patch
+      correctly localizes menus &amp; tabs.</action>
+      <action context="code" type="fix" dev="DC" fixes-bug="FOR-939"
+      due-to="Sjur Moshagen">Rename to ContractsMessages_en.xml, part of i18n
+      changes by Sjur.</action>
+      <action context="code" type="add" dev="RDG">Add ability to get a list of
+      contracts provided by a plugin. For this to work the plugin name must
+      have "plugin" within it, e.g. "org.apache.forrest.plugin.input.doap".
+      Requesting 
+      <code>
+      ls.contracts.org.apache.forrest.plugin.input.doap.source.xml</code>will
+      return a source listing of plugins provided by the named plugin.
+      Requesting 
+      <code>
+      ls.contracts.org.apache.forrest.plugin.input.doap.[FORMAT]</code>will
+      return a formatted output document listing all templates supplied by the
+      identified plugin.</action>
       <action context="code" type="update" dev="DC" fixes-bug="FOR-935"
-        due-to="Sjur Moshagen">
-        i18n: Add LocaleAction action wrapper, and use the locale provided by it.
-        Was taking the locale directly from the request instead of using the standard method in Forrest: LocaleAction.
-      </action>
-      <action dev="TS" type="add" context="docs">
-        Adding the "how tos" from the site-author to this plugin.
-      </action>
-<!-- 07/2006 -->
-      <action dev="TS" type="add" context="code"> Extending the dispatcher 
-          with an internal format. This internal format is our xdoc or 
-          xhtml2. The internal format will then be contacted by e.g. html 
-          contracts. </action>
-<!-- < 07/2006 -->
-      <action dev="TS" type="add" context="admin">
-        Initial plugin code extracted from the old views plugin.
-</action>
-      <action dev="TS" type="add" context="code"> Added first implementation of 
-        the dispatcher. Including contract bean implementation and interface; 
-        dispatcher exception and dispatcher transformers. </action>
-      <action dev="GM" type="add" context="docs">
-        Added a dispatcher glossary. Thanks to Thorsten for moving to the plugin.
-      </action>
-      <action dev="TS" type="add" context="docs">
-        Added infos of the pattern the plugin is using.
-      </action>
-      <action dev="TS" type="add" context="docs">
-        Updated the "how it works" section and moved it to its own site.
-      </action>
-      <action context="code" dev="TS" type="add">
-        Adding the dispatcher concept documentation from the site-author.
-      </action>
-      <action dev="TS" type="update" context="docs" fixes-bug="FOR-768" 
-        due-to="Paul Bolger">
-       Added section "linking to external css files" to howto-structurer-dsl doc.
-      </action>
-      <action dev="TS" type="add" context="code">
-        Activated multiple output formats to be configured via a View.
-      </action>
-      <action dev="TS" type="add" context="code">
-        Added contracts and nuggets to the "view" plugins.
-      </action>
+      due-to="Sjur Moshagen">i18n: Add LocaleAction action wrapper, and use the
+      locale provided by it. Was taking the locale directly from the request
+      instead of using the standard method in Forrest: LocaleAction.</action>
+      <action dev="TS" type="add" context="docs">Adding the "how tos" from the
+      site-author to this plugin.</action>
+      <!-- 07/2006 -->
+      <action dev="TS" type="add" context="code">Extending the dispatcher with
+      an internal format. This internal format is our xdoc or xhtml2. The
+      internal format will then be contacted by e.g. html contracts.</action>
+      <!-- < 07/2006 -->
+      <action dev="TS" type="add" context="admin">Initial plugin code extracted
+      from the old views plugin.</action>
+      <action dev="TS" type="add" context="code">Added first implementation of
+      the dispatcher. Including contract bean implementation and interface;
+      dispatcher exception and dispatcher transformers.</action>
+      <action dev="GM" type="add" context="docs">Added a dispatcher glossary.
+      Thanks to Thorsten for moving to the plugin.</action>
+      <action dev="TS" type="add" context="docs">Added infos of the pattern the
+      plugin is using.</action>
+      <action dev="TS" type="add" context="docs">Updated the "how it works"
+      section and moved it to its own site.</action>
+      <action context="code" dev="TS" type="add">Adding the dispatcher concept
+      documentation from the site-author.</action>
+      <action dev="TS" type="update" context="docs" fixes-bug="FOR-768"
+      due-to="Paul Bolger">Added section "linking to external css files" to
+      howto-structurer-dsl doc.</action>
+      <action dev="TS" type="add" context="code">Activated multiple output
+      formats to be configured via a View.</action>
+      <action dev="TS" type="add" context="code">Added contracts and nuggets to
+      the "view" plugins.</action>
     </release>
   </changes>
   <todo>
     <actions priority="high">
-      <action context="docs" dev="open">
-              create some more example, that it is easier to adapt the concept. An examples section
-              has been added, but more examples needed to cover the contracts available.
-      </action>
-      <action context="core" dev="open">
-        Rewrite matches to allow other output implementation then html.
-      </action>
-      <action context="core" dev="open">
-        Extract businessHelper to their on implementation plugin.
-      </action>
+      <action context="docs" dev="open">create some more example, that it is
+      easier to adapt the concept. An examples section has been added, but more
+      examples needed to cover the contracts available.</action>
+      <action context="core" dev="open">Rewrite matches to allow other output
+      implementation then html.</action>
+      <action context="core" dev="open">Extract businessHelper to their on
+      implementation plugin.</action>
     </actions>
   </todo>
 </status>

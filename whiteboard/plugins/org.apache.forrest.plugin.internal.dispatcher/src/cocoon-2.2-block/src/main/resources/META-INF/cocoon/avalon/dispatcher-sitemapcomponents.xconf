@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+Licensed to the Apache Software Foundation (ASF) under one or more
+contributor license agreements.  See the NOTICE file distributed with
+this work for additional information regarding copyright ownership.
+The ASF licenses this file to You under the Apache License, Version 2.0
+(the "License"); you may not use this file except in compliance with
+the License.  You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+<map:components xmlns:map="http://apache.org/cocoon/sitemap/1.0">
+  <map:transformers default="xslt">
+    <map:transformer name="i18n"
+    src="org.apache.cocoon.transformation.I18nTransformer">
+      <catalogues default="contracts">
+        <catalogue id="other" name="OtherMessages"
+        location="{lm:project.translations}" />
+        <catalogue id="contracts" name="ContractsMessages"
+        location="{lm:project.translations}" />
+      </catalogues>
+      <cache-at-startup>true</cache-at-startup>
+    </map:transformer>
+  </map:transformers>
+  <map:serializers default="xhtml">
+    <map:serializer logger="sitemap.serializer.xhtml"
+    mime-type="text/html; charset=UTF-8" name="xhtml" ppool-max="64"
+    src="org.apache.cocoon.serialization.XMLSerializer">
+      <!--+
+      | You can choose from Strict, Transitional, or Frameset XHTML.
+      | For Strict XHTML set doctype to:
+      |   <doctype-public>-//W3C//DTD XHTML 1.0 Strict//EN</doctype-public>
+      |   <doctype-system>http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd</doctype-system>
+      | For Transitional XHTML set doctype to:
+      |   <doctype-public>-//W3C//DTD XHTML 1.0 Transitional//EN</doctype-public>
+      |   <doctype-system>http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd</doctype-system>
+      | For Frameset XHTML set doctype to:
+      |   <doctype-public>-//W3C//DTD XHTML 1.0 Frameset//EN</doctype-public>
+      |   <doctype-system>http://www.w3.org/TR/xhtml1/DTD/xhtml1-frameset.dtd</doctype-system>
+      |
+      | Default XHTML doctype in Cocoon is XHTML Strict. If you want to use more than one
+      | XHTML DTD simultaneously, you can define several XHTML serializers.
+      +-->
+      <!--doctype-public>-//W3C//DTD XHTML 1.0 Strict//EN</doctype-public>
+      <doctype-system>http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd</doctype-system>
+      <encoding>UTF-8</encoding-->
+      <omit-xml-declaration>yes</omit-xml-declaration>
+      <doctype-public>-//W3C//DTD XHTML 1.0 Transitional//EN</doctype-public>
+      <doctype-system>
+      http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd</doctype-system>
+      <encoding>UTF-8</encoding>
+      <indent>true</indent>
+    </map:serializer>
+  </map:serializers>
+</map:components>

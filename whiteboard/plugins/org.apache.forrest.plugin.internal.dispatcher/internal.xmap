@@ -1,4 +1,4 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="utf-8"?>
 <!--
   Licensed to the Apache Software Foundation (ASF) under one or more
   contributor license agreements.  See the NOTICE file distributed with
@@ -29,7 +29,8 @@
   structure the content from multiple input sources. Far more actually
   because it provides as well logical conditions for presentation formatting logic
 -->
-<!DOCTYPE map:sitemap [
+<!DOCTYPE map:sitemap
+[
 <!ENTITY % symbols-project
   PUBLIC "-//Apache Forrest//ENTITIES Symbols Project v1.0//EN"
   "symbols-project-v10.ent">
@@ -42,69 +43,119 @@
 <map:sitemap xmlns:map="http://apache.org/cocoon/sitemap/1.0">
   <map:components>
     <map:generators default="file">
-      <map:generator label="content" logger="sitemap.generator.xpathdirectory" 
-        name="xpathdirectory" 
-        src="org.apache.cocoon.generation.XPathDirectoryGenerator"/>
-      <map:generator name="directory" 
-        src="org.apache.cocoon.generation.DirectoryGenerator" />
-      <map:generator name="jx" logger="sitemap.generator.jx" 
-        src="org.apache.cocoon.template.JXTemplateGenerator" 
-        label="content,data" pool-max="16" />
-      <map:generator name="text" 
-        src="org.apache.cocoon.generation.TextGenerator">
+      <map:generator label="content" logger="sitemap.generator.xpathdirectory"
+      name="xpathdirectory"
+      src="org.apache.cocoon.generation.XPathDirectoryGenerator" />
+      <map:generator name="directory"
+      src="org.apache.cocoon.generation.DirectoryGenerator" />
+      <map:generator name="jx" logger="sitemap.generator.jx"
+      src="org.apache.cocoon.template.JXTemplateGenerator" label="content,data"
+      pool-max="16" />
+      <map:generator name="text"
+      src="org.apache.cocoon.generation.TextGenerator">
         <parameter name="localizable" value="true" />
       </map:generator>
     </map:generators>
     <map:transformers default="xslt">
-      <map:transformer logger="sitemap.transformer.jx" name="jx" pool-max="16" 
-        src="org.apache.cocoon.template.JXTemplateTransformer" />
-      <map:transformer logger="sitemap.transformer.jpath" name="jpath" 
-        src="org.apache.cocoon.transformation.JPathTransformer" />
-      <map:transformer name="dispatcher" 
-        src="org.apache.forrest.dispatcher.transformation.DispatcherTransformer" 
-        />
-      <map:transformer name="i18n" 
-        src="org.apache.cocoon.transformation.I18nTransformer">
+      <map:transformer logger="sitemap.transformer.jx" name="jx" pool-max="16"
+      src="org.apache.cocoon.template.JXTemplateTransformer" />
+      <map:transformer logger="sitemap.transformer.jpath" name="jpath"
+      src="org.apache.cocoon.transformation.JPathTransformer" />
+      <map:transformer name="dispatcher"
+      src="org.apache.forrest.dispatcher.transformation.DispatcherTransformer">
+        <!--+
+        |  If you want to use inline xml for contract properties be aware that setting 
+        | this properties to true will have negative influence on performance since 
+        | this feature needs to use DOM parsing!
+        |
+        | We strongly recommend to rewrite your contracts and structurer to use simple 
+        | string for the properties.
+        |   
+        | The default is set to "false".
+        +-->
+        <!-- Until we have migrated all contract to work with plain strings
+        we need this being true -->
+        <allowXml>true</allowXml>
+        <!--+
+        |  If you want to change the uri prefix of the contracts. 
+        | This may be interesting if you work with a contract repository rather then
+        | with the ones from the themer plugin. 
+        |  
+        | The default is "cocoon://resolve.contract".
+        +-->
+        <!--<contractUriPrefix>cocoon://resolve.contract.</contractUriPrefix>-->
+        <!--+
+        |  You can use either limited of full xpath support for the injection of contract 
+        | result data. We currently provide the basic support with a plain StAX implementation
+        | and the enhanced support with AXIOM.
+        |  
+        | The default is "basic".
+        +-->
+        <!--<xpathSupport>enhanced</xpathSupport>-->
+        <!--+
+        | DOWNGRADE COMPATIBLE
+        |  When using tags such as <forrest:property name="theme" value="pelt"/>
+        | and if you set this property to false, you will get the whole tag  in your contract.
+        | If you set it to true we will pass a simple string to the transformation
+        | in the form of key=@name, value=@value
+        |  
+        | The default is "true".
+        +-->
+        <!-- Until we have migrated all contract to work with plain strings
+          we need this being false -->
+        <shrink>false</shrink>
+      </map:transformer>
+      <!-- Enhanced xpath support of the dispatcher enabled for
+        formats such as fo which depend on namespaces -->
+      <map:transformer name="dispatcherEnhanced"
+      src="org.apache.forrest.dispatcher.transformation.DispatcherTransformer">
+        <!-- Until we have migrated all contract to work with plain strings
+          we need this being true -->
+        <allowXml>true</allowXml>
+        <xpathSupport>enhanced</xpathSupport>
+        <!-- Until we have migrated all contract to work with plain strings
+          we need this being true -->
+        <shrink>false</shrink>
+      </map:transformer>
+      <map:transformer name="i18n"
+      src="org.apache.cocoon.transformation.I18nTransformer">
         <catalogues default="contracts">
-          <catalogue id="other" name="OtherMessages" location="{lm:project.translations}" />
-          <catalogue id="contracts" name="ContractsMessages" 
-            location="{lm:project.translations}" />
+          <catalogue id="other" name="OtherMessages"
+          location="{lm:project.translations}" />
+          <catalogue id="contracts" name="ContractsMessages"
+          location="{lm:project.translations}" />
         </catalogues>
         <cache-at-startup>true</cache-at-startup>
       </map:transformer>
     </map:transformers>
     <map:serializers default="xml-utf8">
-      <map:serializer logger="sitemap.serializer.xhtml" mime-type="text/html" 
-        name="xhtml" pool-grow="2" pool-max="64" pool-min="2" 
-        src="org.apache.cocoon.serialization.XMLSerializer">
+      <map:serializer logger="sitemap.serializer.xhtml" mime-type="text/html"
+      name="xhtml" pool-grow="2" pool-max="64" pool-min="2"
+      src="org.apache.cocoon.serialization.XMLSerializer">
         <doctype-public>&serializer-xhtml-doctype-public;</doctype-public>
         <doctype-system>&serializer-xhtml-doctype-system;</doctype-system>
         <encoding>&serializer-xhtml-encoding;</encoding>
         <indent>yes</indent>
         <omit-xml-declaration>yes</omit-xml-declaration>
       </map:serializer>
-      <map:serializer name="html" mime-type="text/html" src="org.apache.cocoon.serialization.HTMLSerializer">
-        <doctype-public>&serializer-html-doctype-public;</doctype-public>
-        <doctype-system>&serializer-html-doctype-system;</doctype-system>
-        <encoding>&serializer-html-encoding;</encoding>
-      </map:serializer>
-      <map:serializer mime-type="image/png" name="svg2png" 
-        src="org.apache.cocoon.serialization.SVGSerializer">
-<!--<parameter name="background_color" type="color" value="#ff00ff"/>-->
-<!-- <parameter name="gamma" type="float" value="0.48"/> -->
+      <map:serializer mime-type="image/png" name="svg2png"
+      src="org.apache.cocoon.serialization.SVGSerializer">
+        <!--<parameter name="background_color" type="color" value="#ff00ff"/>-->
+        <!-- <parameter name="gamma" type="float" value="0.48"/> -->
         <parameter name="gamma" type="float" value="0" />
       </map:serializer>
-      <map:serializer name="xml-utf8" mime-type="text/xml" src="org.apache.cocoon.serialization.XMLSerializer">
+      <map:serializer name="xml-utf8" mime-type="text/xml"
+      src="org.apache.cocoon.serialization.XMLSerializer">
         <encoding>UTF-8</encoding>
       </map:serializer>
     </map:serializers>
     <map:actions>
       <map:action name="locale" src="org.apache.cocoon.acting.LocaleAction" />
     </map:actions>
-    <map:pipes default="caching"/>
+    <map:pipes default="caching" />
   </map:components>
   <map:pipelines>
-<!--FOR-808 WORKAROUND
+    <!--FOR-808 WORKAROUND
       Creating a virtual skinconf from the properties module.
       The core depends on a skinconf but the dispatcher not.
       See as well FOR-829 where we use this config.-->
@@ -114,12 +165,12 @@
         <map:serialize />
       </map:match>
     </map:pipeline>
-<!--
+    <!--
       structurer
       prepares and transforms the requested contracts (themes) and populate them with the content (businessHelper).
     -->
     <map:pipeline>
-      <map:act type="locale" >
+      <map:act type="locale">
         <map:match pattern="resolve.structurer.**">
           <map:generate src="lm://resolve.structurer.{1}" />
           <map:serialize />
@@ -133,17 +184,17 @@
         </map:match>
       </map:act>
     </map:pipeline>
-<!-- prepare the xsl:templates of the requested contract.
+    <!-- prepare the xsl:templates of the requested contract.
       {1} format to deliver
       {2} contract name
       Note - This pipeline is useful to include contracts into another. To include a contract :
             <xsl:include href="cocoon://prepare.contract.html.NameOfTheContract"/>
       Warning - At the moment, the contracts do not manage formats anymore... -->
     <map:pipeline>
-      <map:act type="locale" >
+      <map:act type="locale">
         <map:match pattern="prepare.contract.*.**">
           <map:generate src="{lm:resolve.contract.{1}.{2}}" />
-          <map:transform src="{lm:contract-strip-xsl.xsl}"/>
+          <map:transform src="{lm:contract-strip-xsl.xsl}" />
           <map:transform type="i18n">
             <map:parameter name="locale" value="{../locale}" />
           </map:transform>
@@ -151,7 +202,7 @@
         </map:match>
       </map:act>
     </map:pipeline>
-<!-- You can group elements to a template and call it from any view. 
+    <!-- You can group elements to a template and call it from any view. 
       <jx:import uri="cocoon://prepare.panels.export-link"/>
     -->
     <map:pipeline>
@@ -163,7 +214,7 @@
       </map:match>
     </map:pipeline>
     <map:pipeline>
-<!--
+      <!--
         Last processing step. 
         Here we are overriding the default skin generation.
       -->
@@ -176,21 +227,19 @@
         </map:generate>
         <map:transform type="dispatcher">
           <map:parameter name="cacheKey" value="{0}" />
-          <map:parameter name="validityFile" value="cocoon:/resolve.structurer.{1}" />
+          <map:parameter name="validityFile"
+          value="cocoon:/resolve.structurer.{1}" />
           <map:parameter name="request" value="{1}" />
+          <map:parameter name="dispatcher.caching"
+          value="{forrest:dispatcher.caching}" />
           <map:parameter name="type" value="html" />
-          <map:parameter name="hooksTransformer" value="lm://hooks-to-html.xsl" 
-            />
         </map:transform>
-        <map:transform 
-          src="lm://transform.xml.xml-namespace-stripped" 
-          />
-        <map:transform src="lm://strip-dispatcher-remains-html.xsl">
-          <map:parameter name="serializer" value="&dispatcher-output-serializer;"/>
-        </map:transform>
-        <map:serialize type="&dispatcher-output-serializer;"/>
+        <map:transform src="lm://hooks-to-html.xsl" />
+        <map:transform src="lm://transform.xml.xml-namespace-stripped" />
+        <map:transform src="lm://strip-dispatcher-remains-html.xsl" />
+        <map:serialize type="xhtml" />
       </map:match>
-<!--
+      <!--
         Last processing step. 
         Here we are overriding the default skin generation.
       -->
@@ -201,17 +250,16 @@
           <map:parameter name="getRequestExtension" value="fo" />
           <map:parameter name="contextPath" value="{request:contextPath}" />
         </map:generate>
-        <map:transform type="dispatcher">
+        <map:transform type="dispatcherEnhanced">
           <map:parameter name="cacheKey" value="{0}" />
-          <map:parameter name="validityFile" value="cocoon:/resolve.structurer.{1}" />
+          <map:parameter name="validityFile"
+          value="cocoon:/resolve.structurer.{1}" />
           <map:parameter name="request" value="{1}" />
           <map:parameter name="type" value="fo" />
-          <map:parameter name="hooksTransformer" value="lm://hooks-to-fo.xsl"/>
         </map:transform>
-        <map:transform 
-          src="lm://strip-dispatcher-remains-fo.xsl" 
-          />
-        <map:serialize  />
+        <map:transform src="lm://hooks-to-fo.xsl" />
+        <map:transform src="lm://strip-dispatcher-remains-fo.xsl" />
+        <map:serialize />
       </map:match>
       <map:match pattern="**.internal*">
         <map:generate src="cocoon:/resolve.structurer.{1}" type="jx">
@@ -222,12 +270,14 @@
         </map:generate>
         <map:transform type="dispatcher">
           <map:parameter name="cacheKey" value="{0}" />
-          <map:parameter name="validityFile" value="cocoon:/resolve.structurer.{1}" />
-          <map:parameter name="dispatcher.caching" value="{properties:dispatcher.caching}" />
+          <map:parameter name="validityFile"
+          value="cocoon:/resolve.structurer.{1}" />
+          <map:parameter name="dispatcher.caching"
+          value="{forrest:dispatcher.caching}" />
           <map:parameter name="request" value="{1}" />
           <map:parameter name="type" value="internal{2}" />
         </map:transform>
-        <map:serialize  />
+        <map:serialize />
       </map:match>
       <map:match pattern="**.prepare.dispatcher.css">
         <map:generate src="cocoon:/resolve.structurer.{1}" type="jx">
@@ -238,8 +288,10 @@
         </map:generate>
         <map:transform type="dispatcher">
           <map:parameter name="cacheKey" value="{0}" />
-          <map:parameter name="validityFile" value="cocoon:/resolve.structurer.{1}" />
-          <map:parameter name="dispatcher.caching" value="{properties:dispatcher.caching}" />
+          <map:parameter name="validityFile"
+          value="cocoon:/resolve.structurer.{1}" />
+          <map:parameter name="dispatcher.caching"
+          value="{forrest:dispatcher.caching}" />
           <map:parameter name="request" value="{1}" />
           <map:parameter name="type" value="css" />
         </map:transform>
@@ -247,11 +299,9 @@
       </map:match>
       <map:match pattern="**.dispatcher.css">
         <map:generate type="text" src="cocoon:/{1}.prepare.dispatcher.css" />
-        <map:transform type="pattern" 
-          src="{forrest:forrest.context}/resources/chaperon/grammars/link.xlex" />
-        <map:transform 
-          src="{forrest:forrest.context}/resources/chaperon/stylesheets/pattern2link.xsl" 
-          />
+        <map:transform type="pattern"
+        src="{forrest:forrest.context}/resources/chaperon/grammars/link.xlex" />
+        <map:transform src="{forrest:forrest.context}/resources/chaperon/stylesheets/pattern2link.xsl" />
         <map:serialize type="text" mime-type="text/css" />
       </map:match>
       <map:match pattern="internal.**.*">
@@ -263,8 +313,10 @@
         </map:generate>
         <map:transform type="dispatcher">
           <map:parameter name="cacheKey" value="{0}" />
-          <map:parameter name="validityFile" value="cocoon:/resolve.structurer.{1}" />
-          <map:parameter name="dispatcher.caching" value="{forrest:dispatcher.caching}" />
+          <map:parameter name="validityFile"
+          value="cocoon:/resolve.structurer.{1}" />
+          <map:parameter name="dispatcher.caching"
+          value="{forrest:dispatcher.caching}" />
           <map:parameter name="request" value="{1}" />
           <map:parameter name="type" value="xhtml2" />
         </map:transform>
@@ -272,18 +324,18 @@
       </map:match>
     </map:pipeline>
     <map:pipeline>
-<!-- businessHelper -->
-      <map:mount uri-prefix="" src="{forrest:forrest.plugins}/org.apache.forrest.plugin.internal.dispatcher/dataModel.xmap" check-reload="yes" 
-        pass-through="true" />
+      <!-- businessHelper -->
+      <map:mount uri-prefix="" src="dataModel.xmap" check-reload="yes"
+      pass-through="true" />
     </map:pipeline>
-<!-- linkmap -->
+    <!-- linkmap -->
     <map:pipeline>
-      <map:mount uri-prefix="" src="{forrest:forrest.plugins}/org.apache.forrest.plugin.internal.dispatcher/ls.xmap" check-reload="yes" 
-        pass-through="true" />
+      <map:mount uri-prefix="" src="ls.xmap" check-reload="yes"
+      pass-through="true" />
     </map:pipeline>
     <map:pipeline>
-      <map:mount uri-prefix="" src="{forrest:forrest.plugins}/org.apache.forrest.plugin.internal.dispatcher/themes.xmap" check-reload="yes" 
-        pass-through="true" />
+      <map:mount uri-prefix="" src="themes.xmap" check-reload="yes"
+      pass-through="true" />
     </map:pipeline>
   </map:pipelines>
 </map:sitemap>

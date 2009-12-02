@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <!--
   Licensed to the Apache Software Foundation (ASF) under one or more
   contributor license agreements.  See the NOTICE file distributed with
@@ -15,8 +15,8 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 -->
-<!DOCTYPE document PUBLIC "-//APACHE//DTD Documentation V2.0//EN" 
-  "http://forrest.apache.org/dtd/document-v20.dtd">
+<!DOCTYPE document PUBLIC "-//APACHE//DTD Documentation V2.0//EN"
+"http://forrest.apache.org/dtd/document-v20.dtd">
 <document>
   <header>
     <title>Living on the edge.</title>
@@ -24,63 +24,55 @@
   <body>
     <section id="introduction">
       <title>Introduction</title>
-      <p>
-        Since the dispatcher is in the whiteboard, we can afford to use the
-        latest features available in forrest. This helps to test these new
-        features and to be prepared for the future when this feature is
-        standard.
-      </p>
+      <p>Since the dispatcher is in the whiteboard, we can afford to use the
+      latest features available in forrest. This helps to test these new
+      features and to be prepared for the future when this feature is
+      standard.</p>
     </section>
     <section id="fpx">
       <title>forrest.properties.xml</title>
-      <p>
-        We needed to prevent having references from the core to a plugin. This
-        can be done with the new properties system. You can override any of the
-        following values via a <code>forrest.properties.xml</code> in your
-        project.
-      </p>
+      <p>We needed to prevent having references from the core to a plugin. This
+      can be done with the new properties system. You can override any of the
+      following values via a 
+      <code>forrest.properties.xml</code>in your project.</p>
       <source>
-<![CDATA[  <property name="dispatcher.theme" value="pelt"/>
+        <![CDATA[  <property name="dispatcher.theme" value="pelt"/>
   <property name="dispatcher.fallback.theme" value="common"/>
   <property name="dispatcher.theme-ext" value=".fv"/>
   <property name="dispatcher.fallback.theme-ext" value=".fv"/>
-  <property name="dispatcher.themer" value="org.apache.forrest.themes.core"/>
   <property name="dispatcher.home" value="org.apache.forrest.plugin.internal.dispatcher"/>]]>
-      </source>
+</source>
       <section>
         <title>Using properties in contracts</title>
-        <p> In the contract body you can access all forrest properties by</p>
+        <p>In the contract body you can access all forrest properties by</p>
         <source>
           <![CDATA[<xsl:param name="defaultVariables" select="'test.html'"/>]]>
-        </source>
+</source>
         <p>then extract the variable like:</p>
         <source>
-          <![CDATA[<xsl:variable name="skin-img-dir" select="$defaultVariables/*/*[@name='THE_PROPERTY']/@value"/>]]>
-        </source>
+          <![CDATA[<xsl:variable name="skin-img-dir" select="$defaultVariables/*[@name='THE_PROPERTY']/@value"/>]]>
+</source>
         <p>more information which variables are available can be found at
-          http://localhost:8888/**.props which connects to the
-          org.apache.forrest.plugin.output.inputModule plugin. A custom generator
-          contacts the forrest properties input module to get all aviable key/values and
-          outputs them to xml (dtd like forrest.properties.xml). </p>
+        http://localhost:8888/**.props which connects to the
+        org.apache.forrest.plugin.output.inputModule plugin. A custom generator
+        contacts the forrest properties input module to get all aviable
+        key/values and outputs them to xml (dtd like
+        forrest.properties.xml).</p>
       </section>
     </section>
     <section id="lm">
       <title>locationmap.xml</title>
-      <p>
-        One of the main features of the dispatcher is its fallback mechanism. We
-        are not only looking into one or two places but a sophisticated list of
-        locations. These locations are defined in the locationmap.xml. Like with
-        the forrest.properties.xml you can override any match in there by
-        implementing it in your project locationmap.xml.
-      </p>
+      <p>One of the main features of the dispatcher is its fallback mechanism.
+      We are not only looking into one or two places but a sophisticated list
+      of locations. These locations are defined in the locationmap.xml. Like
+      with the forrest.properties.xml you can override any match in there by
+      implementing it in your project locationmap.xml.</p>
       <section id="handson">
         <title>Hands on the lm</title>
-        <p>
-          The resolving process of the structurer responsible for the URL has
-          implemented a high amount of fallbacks. Let us have a look.
-        </p>
+        <p>The resolving process of the structurer responsible for the URL has
+        implemented a high amount of fallbacks. Let us have a look.</p>
         <source>
-<![CDATA[<match pattern="resolve.structurer.**">
+          <![CDATA[<match pattern="resolve.structurer.**">
   <!-- 
       FIXME - Problem with the pattern
       ********************************
@@ -176,7 +168,7 @@
       />
   </select>
 </match>]]>
-        </source>
+</source>
       </section>
     </section>
   </body>

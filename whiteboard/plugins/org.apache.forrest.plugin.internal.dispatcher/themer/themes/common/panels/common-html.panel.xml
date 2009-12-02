@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one or more
+  contributor license agreements.  See the NOTICE file distributed with
+  this work for additional information regarding copyright ownership.
+  The ASF licenses this file to You under the Apache License, Version 2.0
+  (the "License"); you may not use this file except in compliance with
+  the License.  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<forrest:template xmlns:forrest="http://apache.org/forrest/templates/1.0"
+xmlns:jx="http://apache.org/cocoon/templates/jx/1.0">
+  <!-- 
+        @type defines this structurer to html.
+        @hooksXpath defines where all hooks will be injected (as prefix).
+        -->
+  <forrest:contract name="branding-css-links">
+    <!-- More information around this contract
+        http://marc.theaimsgroup.com/?l=forrest-dev&m=113473237805195&w=2
+        -->
+    <!--Note: The forrest:properties element does not exit anymore (in comparison to a previous versions) -->
+    <forrest:property name="branding-css-links-input">
+      <css url="common.css" />
+    </forrest:property>
+  </forrest:contract>
+  <forrest:contract name="siteinfo-meta" dataURI="lm://project.build-info">
+    <forrest:property name="custom">
+      <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    </forrest:property>
+    <forrest:property name="theme" value="common" />
+  </forrest:contract>
+  <!--
+        nuggets (extra data requested by the contract) are now defined in the contract element. 
+        As well the former @nugget is now called @dataURI to reflect better the function of the attribute.
+      -->
+  <forrest:hook name="container">
+    <forrest:hook name="header">
+      <forrest:contract name="branding-tagline">
+        <forrest:property name="branding-tagline-name">new
+        seed</forrest:property>
+        <forrest:property name="branding-tagline-tagline">powered by the
+        dispatcher</forrest:property>
+      </forrest:contract>
+      <forrest:hook name="nav-main-hook">
+        <forrest:contract name="nav-main"
+        dataURI="cocoon://#{$getRequest}.navigation.xml" />
+        <forrest:contract name="nav-main-sub"
+        dataURI="cocoon://#{$getRequest}.navigation.xml" />
+      </forrest:hook>
+    </forrest:hook>
+    <forrest:hook name="page">
+      <forrest:hook name="leftbar">
+        <forrest:contract name="nav-section"
+        dataURI="cocoon://#{$getRequest}.navigation.xml">
+          <forrest:property name="nav-section-toc" nugget="get.toc">
+            <jx:import uri="cocoon://#{$getRequest}.toc.xml" />
+          </forrest:property>
+          <forrest:property name="toc" max-depth="2" />
+        </forrest:contract>
+      </forrest:hook>
+      <forrest:contract name="search-input">
+        <forrest:property name="search-input">
+          <search name="MyProject" domain="example.org" provider="google" />
+        </forrest:property>
+      </forrest:contract>
+    </forrest:hook>
+    <!--  
+    You can group elements (hooks and contracts) to a template 
+    and import it from any structurer. 
+  
+<forrest:hook name="export-link">
+  <forrest:contract name="content-xml-link"/>
+  <forrest:contract name="content-pdf-link"/>
+</forrest:hook>
+  
+    can be called as  <jx:import uri="cocoon://prepare.panels.export-link"/>
+    when stored in 
+    {properties:resources}/themes/{properties:dispatcher.theme}/html/export-link.vt.xml
+    or
+    {properties:dispatcher.themer}/themes/{properties:dispatcher.theme}/html/export-link.vt.xml 
+    or 
+    {properties:dispatcher.themer}/themes/{properties:dispatcher.fallback.theme}/html/export-link.vt.xml
+    
+    FIXME: The above does not work as a result of http://svn.apache.org/viewvc?view=rev&rev=520650 
+-->
+    <forrest:hook name="export-link">
+      <forrest:contract name="content-source-xml-link" />
+      <forrest:contract name="content-pdf-link" />
+    </forrest:hook>
+    <forrest:hook name="content">
+      <forrest:contract name="content-title"
+      dataURI="cocoon://#{$getRequest}.title.xml" />
+      <forrest:contract name="content-abstract"
+      dataURI="cocoon://#{$getRequest}.abstract.xml" />
+      <forrest:contract name="content-minitoc"
+      dataURI="cocoon://#{$getRequest}.toc.xml">
+        <forrest:property name="content-minitoc-conf" max-depth="2"
+        min-sections="1" location="page" />
+      </forrest:contract>
+      <forrest:contract name="content-main"
+      dataURI="cocoon://#{$getRequest}.body.xml" />
+    </forrest:hook>
+  </forrest:hook>
+  <forrest:hook name="footer">
+    <forrest:contract name="siteinfo-feedback">
+      <forrest:property name="siteinfo-feedback">
+        <feedback to="webmaster@foo.com"
+        href="mailto:webmaster@foo.com?subject=Feedback&#160;">Send feedback
+        about the website to:</feedback>
+      </forrest:property>
+    </forrest:contract>
+    <forrest:contract name="siteinfo-last-published" />
+  </forrest:hook>
+</forrest:template>

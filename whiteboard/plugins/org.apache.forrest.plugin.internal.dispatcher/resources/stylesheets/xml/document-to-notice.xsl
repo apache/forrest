@@ -22,7 +22,7 @@ imported document2html.xsl for details.
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
   <xsl:template match="document">
     <div class="notice">
-      <xsl:value-of select="header/notice"/>
+      <xsl:value-of select="header/notice" />
     </div>
   </xsl:template>
 </xsl:stylesheet>

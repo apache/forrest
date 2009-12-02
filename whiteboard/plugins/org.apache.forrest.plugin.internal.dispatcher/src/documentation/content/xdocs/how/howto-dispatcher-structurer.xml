@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <!--
   Licensed to the Apache Software Foundation (ASF) under one or more
   contributor license agreements.  See the NOTICE file distributed with
@@ -15,109 +15,98 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 -->
-<!DOCTYPE howto PUBLIC "-//APACHE//DTD How-to V2.0//EN" "http://forrest.apache.org/dtd/howto-v20.dtd">
+<!DOCTYPE howto PUBLIC "-//APACHE//DTD How-to V2.0//EN"
+"http://forrest.apache.org/dtd/howto-v20.dtd">
 <howto>
   <header>
     <title>How to use the structurer</title>
-    <abstract>
-      This How-To describes the usage of the structurer config domain specific
-      language to create beautiful websites in no time.
-    </abstract>
-    <last-modified-content-date date="2005-07-17"/>
+    <abstract>This How-To describes the usage of the structurer config domain
+    specific language to create beautiful websites in no time.</abstract>
+    <last-modified-content-date date="2005-07-17" />
   </header>
   <audience title="Intended Audience">
-    <warning>
-      The "Dispatcher" (aka "Views") is new functionality which is still in
-      development phase. That is why it is in the "whiteboard" section of the
-      Forrest distribution. This HowTo is a good start but still needs more
-      work. See <a href="ext:forrest/status-themes">Status of Themes: Skins and
-      Dispatcher</a>.
-    </warning>
-    <p>
-      This part of the the dispatcher is called the structurer and is dedicated
-      to webdesigner and user with some knowledge of css.
-    </p>
+    <warning>The "Dispatcher" (aka "Views") is new functionality which is still
+    in development phase. That is why it is in the "whiteboard" section of the
+    Forrest distribution. This HowTo is a good start but still needs more work.
+    See 
+    <a href="ext:forrest/status-themes">Status of Themes: Skins and
+    Dispatcher</a>.</warning>
+    <p>This part of the the dispatcher is called the structurer and is
+    dedicated to webdesigner and user with some knowledge of css.</p>
   </audience>
   <purpose title="Purpose">
-    <p>
-      This how-to will show you how to write a <strong>structurer</strong> from
-      the ground up. We will focus on html as the output format. As well it will
-      show how to add your own css implementation to the structurer.
-    </p>
+    <p>This how-to will show you how to write a 
+    <strong>structurer</strong>from the ground up. We will focus on html as the
+    output format. As well it will show how to add your own css implementation
+    to the structurer.</p>
   </purpose>
   <prerequisites title="Prerequisites">
     <ul>
-      <li>Installing a mozilla browser and the forrestbar helps a lot in 
-        developing.</li>
+      <li>Installing a mozilla browser and the forrestbar helps a lot in
+      developing.</li>
     </ul>
   </prerequisites>
   <steps title="Steps">
-    <note>
-      When developing with the dispatcher we assume you are using 'forrest run'
-      and the following workflow "change files -&gt; refresh browser"
-      <br/>
-      Installing a mozilla browser and the forrestbar helps a lot in developing.
-      Many instructions assumes that you have the forrestbar installed.
-    </note>
+    <note>When developing with the dispatcher we assume you are using 'forrest
+    run' and the following workflow "change files -&gt; refresh browser" 
+    <br />Installing a mozilla browser and the forrestbar helps a lot in
+    developing. Many instructions assumes that you have the forrestbar
+    installed.</note>
     <section id="emptystructurer">
       <title>Empty structurer file</title>
       <source>
-<![CDATA[<forrest:views 
+        <![CDATA[<forrest:structurer 
   xmlns:forrest="http://apache.org/forrest/templates/1.0"
   xmlns:jx="http://apache.org/cocoon/templates/jx/1.0">
-  <forrest:view type="html">
-  </forrest:view>
-</forrest:views>]]>
-      </source>
+  <forrest:structure type="html">
+  </forrest:structure>
+</forrest:structurer>]]>
+</source>
       <p>
-        <strong> The structurer</strong> is designed to be open for any format
-        that can use<strong> forrest:view</strong> as configuration file. The
-        only format we implemented is html for now. This is as well true for the
-        delivered contracts.
-      </p>
+      <strong>The structurer</strong>is designed to be open for any format that
+      can use 
+      <strong>forrest:structure</strong>as configuration file. The only format
+      we implemented is html for now. This is as well true for the delivered
+      contracts.</p>
     </section>
     <section id="firststructurer">
       <title>Creating your first structurer</title>
-      <warning>
-        The structurer is based on jx templates to allow simple presentation
-        logic (all code starting with "jx:"). Please refer to the cocoon
-        documentation about jx.
-      </warning>
-      <p>
-        In this section we will create a new structurer. We will override the
-        default structurer of the core themes for the index page of a new seed.
-        For that we will create a file called <code>index.fv</code> and save it
-        in the directory <code>{properties:resources}/structurer/url</code>
-        (create it if needed). This will make <strong>only</strong> the
-        index.html page look different from the rest of the project.
-      </p>
-      <note label="RecursiveDirectoryTraversalAction">
-        You can set a view for an individual file, a directory, or the whole
-        site. To address multiple files in a directory call your
-        <code>.fv</code> file <code>common.fv</code>. If Forrest doesn't find a
-        <code>.fv</code> file with the same name as the current file it will use
-        the common.fv file in that directory, or the first one it finds going
-        upwards through the directory structure. <code>common.fv</code> files
-        affect all subdirectories unless they are overidden by another
-        <code>common.fv</code> or a file-specific <code>foo.fv</code> file.
-      </note>
-      <p>
-        Remember: pointing your browser to
-        <code>http://localhost:8888/ls.contracts.html</code> will show a page
-        with all contracts and themes that you can use in your project provided
-        by forrest.
-      </p>
-      <p>
-        Let us use the blank structurer from the earlier step and add the
-        content-main contract. In ls.contracts.html we find the information for
-        how to use the contract in our structurer. Our <code>index.fv</code>
-        should look like:
-      </p>
+      <warning>The structurer is based on jx templates to allow simple
+      presentation logic (all code starting with "jx:"). Please refer to the
+      cocoon documentation about jx.</warning>
+      <p>In this section we will create a new structurer. We will override the
+      default structurer of the core themes for the index page of a new seed.
+      For that we will create a file called 
+      <code>index.fv</code>and save it in the directory 
+      <code>{properties:resources}/structurer/url</code>(create it if needed).
+      This will make 
+      <strong>only</strong>the index.html page look different from the rest of
+      the project.</p>
+      <note label="RecursiveDirectoryTraversalAction">You can set a view for an
+      individual file, a directory, or the whole site. To address multiple
+      files in a directory call your 
+      <code>.fv</code>file 
+      <code>common.fv</code>. If Forrest doesn't find a 
+      <code>.fv</code>file with the same name as the current file it will use
+      the common.fv file in that directory, or the first one it finds going
+      upwards through the directory structure. 
+      <code>common.fv</code>files affect all subdirectories unless they are
+      overidden by another 
+      <code>common.fv</code>or a file-specific 
+      <code>foo.fv</code>file.</note>
+      <p>Remember: pointing your browser to 
+      <code>http://localhost:8888/ls.contracts.html</code>will show a page with
+      all contracts and themes that you can use in your project provided by
+      forrest.</p>
+      <p>Let us use the blank structurer from the earlier step and add the
+      content-main contract. In ls.contracts.html we find the information for
+      how to use the contract in our structurer. Our 
+      <code>index.fv</code>should look like:</p>
       <source>
-<![CDATA[<forrest:views 
+        <![CDATA[<forrest:structurer 
   xmlns:forrest="http://apache.org/forrest/templates/1.0"
   xmlns:jx="http://apache.org/cocoon/templates/jx/1.0">
-  <forrest:view type="html">
+  <forrest:structure type="html">
     <forrest:contract name="content-main">
     <forrest:properties contract="content-main">
       <forrest:property name="content-main" nugget="get.body">
@@ -129,37 +118,33 @@
       </forrest:property>
     </forrest:properties>
   </forrest:contract>
-  </forrest:view>
-</forrest:views>]]>
-      </source>
-      <p>
-        A contract has to request the data model it want to transform. This
-        happends by defining forrest:properties which have the same name like
-        the contract. In our case we want the HTML rendered from intermediate
-        format (**.body.xml). This we are going to include via: <code>
-<![CDATA[<jx:import uri="cocoon://#{$cocoon/parameters/getRequest}.body.xml"/>]]>
-        </code>
-      </p>
-      <p>
-        Contracts can offer some property configuration of the outcome of the
-        transformation. In our case <code>
+  </forrest:structure>
+</forrest:structurer>]]>
+</source>
+      <p>A contract has to request the data model it want to transform. This
+      happends by defining forrest:properties which have the same name like the
+      contract. In our case we want the HTML rendered from intermediate format
+      (**.body.xml). This we are going to include via: 
+      <code>
+        <![CDATA[<jx:import uri="cocoon://#{$cocoon/parameters/getRequest}.body.xml"/>]]>
+</code></p>
+      <p>Contracts can offer some property configuration of the outcome of the
+      transformation. In our case 
+      <code>
 <![CDATA[<forrest:property name="content-main-conf">
         <headings type="underlined"/>
       </forrest:property>]]>
-        . </code>
-      </p>
-      <p>
-        Lets try our new structurer by pointing to
-        <code>http://localhost:8888/index.html</code>. We will see only the main
-        content. Now let us add the section navigation to our structurer. The
-        contract usage in the structurer can be looked up in ls.contracts.html.
-        Our structurer now looks like:
-      </p>
+.</code></p>
+      <p>Lets try our new structurer by pointing to 
+      <code>http://localhost:8888/index.html</code>. We will see only the main
+      content. Now let us add the section navigation to our structurer. The
+      contract usage in the structurer can be looked up in ls.contracts.html.
+      Our structurer now looks like:</p>
       <source>
-<![CDATA[<forrest:views 
+        <![CDATA[<forrest:structurer 
   xmlns:forrest="http://apache.org/forrest/templates/1.0"
   xmlns:jx="http://apache.org/cocoon/templates/jx/1.0">
-  <forrest:view type="html">
+  <forrest:structure type="html">
     <forrest:contract name="nav-main">
       <forrest:properties contract="nav-main">
         <forrest:property name="nav-main" nugget="get.navigation">
@@ -179,56 +164,43 @@
         </forrest:property>
       </forrest:properties>
     </forrest:contract>
-  </forrest:view>
-</forrest:views>]]>
-      </source>
-      <p>
-        We now find the main content and the section navigation after each other
-        and in the order we placed them in the structurer, but we want it next
-        to each other (left: nav-section; right: content-main).
-      </p>
+  </forrest:structure>
+</forrest:structurer>]]>
+</source>
+      <p>We now find the main content and the section navigation after each
+      other and in the order we placed them in the structurer, but we want it
+      next to each other (left: nav-section; right: content-main).</p>
     </section>
     <section id="hookstructurer">
       <title>Hooks in the structurer</title>
-      <p>
-        We will use now the first time a <code>
-<![CDATA[<forrest:hook name="layoutId"/>]]>
-        </code>. Hooks are the styling side of the structurer. We can imitate
-        arbitrary html skeleton with their help. Before we explain how to use
-        your own css in the structurer, we will use the default css. You can see
-        in our example that we have css included. That is a default fallback
-        coming from the implementation. In this common.css we can find
-      </p>
-      <source>/* menu */
-#leftbar {
-    width: 25%;
-    float: left;
-    background: #eae8e3;
-    border: thin dashed #565248;
-}
-      </source>
-      <p>
-        With this information we know to use <code>
-<![CDATA[<forrest:hook name="leftbar"/>]]>
-        </code> and add contracts into that container.
-      </p>
-      <p>
-        If we want to put the nav-section contract into the left-hand side
-        position of the site we need to place the contract into that hook. Like:
-      </p>
+      <p>We will use now the first time a 
+      <code>
+        <![CDATA[<forrest:hook name="layoutId"/>]]>
+</code>. Hooks are the styling side of the structurer. We can imitate arbitrary
+html skeleton with their help. Before we explain how to use your own css in the
+structurer, we will use the default css. You can see in our example that we
+have css included. That is a default fallback coming from the implementation.
+In this common.css we can find</p>
+      <source>/* menu */ #leftbar { width: 25%; float: left; background:
+      #eae8e3; border: thin dashed #565248; }</source>
+      <p>With this information we know to use 
+      <code>
+        <![CDATA[<forrest:hook name="leftbar"/>]]>
+</code>and add contracts into that container.</p>
+      <p>If we want to put the nav-section contract into the left-hand side
+      position of the site we need to place the contract into that hook.
+      Like:</p>
       <source>
-<![CDATA[<forrest:hook name="leftbar">
+        <![CDATA[<forrest:hook name="leftbar">
   <!-- Include contract here -->
 </forrest:hook>]]>
-      </source>
-      <p>
-        Our structurer will then look like:
-      </p>
+</source>
+      <p>Our structurer will then look like:</p>
       <source>
-<![CDATA[<forrest:views 
+        <![CDATA[<forrest:structurer 
   xmlns:forrest="http://apache.org/forrest/templates/1.0"
   xmlns:jx="http://apache.org/cocoon/templates/jx/1.0">
-  <forrest:view type="html">
+  <forrest:structure type="html">
     <forrest:hook name="leftbar">
       <forrest:contract name="nav-section">
         <forrest:properties contract="nav-section">
@@ -250,21 +222,20 @@
         </forrest:property>
       </forrest:properties>
     </forrest:contract>
-  </forrest:view>
-</forrest:views>]]>
-      </source>
+  </forrest:structure>
+</forrest:structurer>]]>
+</source>
     </section>
     <section id="cssstructurer">
       <title>CSS in the structurer</title>
-      <p>
-        We now know how to place contracts and hooks in our structurer. Until
-        this stage we only used the common.css. CSS-support of the structurer is
-        as easy as placing contracts/hooks. To override the common.css
-        stylesheet we use another tag within our structurer <code>
-<![CDATA[<forrest:css />]]>
-        </code>.
-      </p>
-<!--      <p>We will now create a file in <code><![CDATA[<!-#- 
+      <p>We now know how to place contracts and hooks in our structurer. Until
+      this stage we only used the common.css. CSS-support of the structurer is
+      as easy as placing contracts/hooks. To override the common.css stylesheet
+      we use another tag within our structurer 
+      <code>
+        <![CDATA[<forrest:css />]]>
+</code>.</p>
+      <!--      <p>We will now create a file in <code><![CDATA[<!-#- 
    {1} name
    {2} extension (note we assume e.g. PATH/css/{1}.css)
    -#->
@@ -272,15 +243,13 @@
         we will save a file called howTo.css in v2/src/documentation/resources/themes/common/css/howTo.css containing only 
         the following css:
       </p>-->
-      <p>
-        You can add inline and linked css with the structurer. As soon as you
-        use forrest:css you will disable the fallback css support from forrest.
-        With this tag we tell the dispatcher that we want to override the
-        common.css. After adding the following to our index.fv the design will
-        be different.
-      </p>
+      <p>You can add inline and linked css with the structurer. As soon as you
+      use forrest:css you will disable the fallback css support from forrest.
+      With this tag we tell the dispatcher that we want to override the
+      common.css. After adding the following to our index.fv the design will be
+      different.</p>
       <source>
-<![CDATA[<forrest:css >
+        <![CDATA[<forrest:css >
 /* Extra css */
 /* menu */
 #leftbar {
@@ -290,25 +259,23 @@
   border: thin solid #000000;
 }
 </forrest:css>]]>
-      </source>
-<!--<fixme author="thorsten">from here</fixme>-->
-      <p>
-        We just changed the border-style to 'solid', the background to '#CCCCFF'
-        and the color to '#000000'. So you see a white page where the menu is
-        surrounded by a solid border with the defined background.
-      </p>
+</source>
+      <!--<fixme author="thorsten">from here</fixme>-->
+      <p>We just changed the border-style to 'solid', the background to
+      '#CCCCFF' and the color to '#000000'. So you see a white page where the
+      menu is surrounded by a solid border with the defined background.</p>
       <note>
-        <code>
-<![CDATA[<forrest:css />]]>
-        </code> needs to be the direct child of <code>
-<![CDATA[<forrest:view type="html">]]>
-        </code>
-      </note>
+      <code>
+        <![CDATA[<forrest:css />]]>
+</code>needs to be the direct child of 
+      <code>
+        <![CDATA[<forrest:structure type="html">]]>
+</code></note>
       <source>
-<![CDATA[<forrest:views 
+        <![CDATA[<forrest:structurer 
   xmlns:forrest="http://apache.org/forrest/templates/1.0"
   xmlns:jx="http://apache.org/cocoon/templates/jx/1.0">
-  <forrest:view type="html">
+  <forrest:structure type="html">
     <forrest:css >
 /* Extra css */
 /* menu */
@@ -340,31 +307,23 @@
         </forrest:property>
       </forrest:properties>
     </forrest:contract>
-  </forrest:view>
-</forrest:views>]]>
-      </source>
-      <p>
-        As a second example, let us change as well the content-main by adding
-        another hook <code>
-<![CDATA[<forrest:hook name="content"/>]]>
-        </code> We need to add the new layout container to our inline css:
-      </p>
+  </forrest:structure>
+</forrest:structurer>]]>
+</source>
+      <p>As a second example, let us change as well the content-main by adding
+      another hook 
+      <code>
+        <![CDATA[<forrest:hook name="content"/>]]>
+</code>We need to add the new layout container to our inline css:</p>
+      <source>/* The actual content */ #content { margin-left: 25%; padding: 0
+      20px 0 20px; background: #B9D3EE; }</source>
+      <p>Then we have to add the 'content-main' contract to the 'content' hook.
+      The resulting structurer looks like:</p>
       <source>
-/* The actual content */
-#content {
-  margin-left: 25%;
-  padding: 0 20px 0 20px;
-  background: #B9D3EE;
-}</source>
-      <p>
-        Then we have to add the 'content-main' contract to the 'content' hook.
-        The resulting structurer looks like:
-      </p>
-      <source>
-<![CDATA[<forrest:views 
+        <![CDATA[<forrest:structurer 
   xmlns:forrest="http://apache.org/forrest/templates/1.0"
   xmlns:jx="http://apache.org/cocoon/templates/jx/1.0">
-  <forrest:view type="html">
+  <forrest:structure type="html">
     <forrest:css >
 /* Extra css */
 /* menu */
@@ -404,98 +363,74 @@
       </forrest:properties>
     </forrest:contract>
     </forrest:hook>
-  </forrest:view>
-</forrest:views>]]>
-      </source>
-      <p>
-        We are now able to place contracts into the layout container and add
-        custom css to the structurer.
-      </p>
+  </forrest:structure>
+</forrest:structurer>]]>
+</source>
+      <p>We are now able to place contracts into the layout container and add
+      custom css to the structurer.</p>
     </section>
     <section>
       <title>Linking to an external css file</title>
-      <note>
-        This will change for the next version of views (v3) where we use a
-        generic contract instead of the standalone element (forrest:css).
-      </note>
-      <p>
-        Make sure your project has the following directory structure. If it
-        doesn't you'll have to create it. "common" is the fallback for all
-        themes, if you want to override the css for a specific theme replace
-        "common" with "themeName". This is where Forrest will look for external
-        css stylesheets.
-      </p>
+      <note>This will change for the next version of views (v3) where we use a
+      generic contract instead of the standalone element (forrest:css).</note>
+      <p>Make sure your project has the following directory structure. If it
+      doesn't you'll have to create it. "common" is the fallback for all
+      themes, if you want to override the css for a specific theme replace
+      "common" with "themeName". This is where Forrest will look for external
+      css stylesheets.</p>
       <source>
-        $projectHome\src\documentation\resources\themes\common\css</source>
-      <p>
-        Where $projectHome is the directory where your project exists.
-      </p>
-      <p>
-        Put your css stylesheets in this directory. For arguement's sake let's
-        say it's called mystyles.css
-      </p>
-      <p>
-        Edit your common.fv structurer (or whatever structurer (theme) you are
-        using). This will probably be some where in:
-      </p>
+      $projectHome\src\documentation\resources\themes\common\css</source>
+      <p>Where $projectHome is the directory where your project exists.</p>
+      <p>Put your css stylesheets in this directory. For arguement's sake let's
+      say it's called mystyles.css</p>
+      <p>Edit your common.fv structurer (or whatever structurer (theme) you are
+      using). This will probably be some where in:</p>
       <source>$projectHome\src\documentation\content\xdocs</source>
-      <p>
-        or if you want to override it for the whole project in:
-      </p>
+      <p>or if you want to override it for the whole project in:</p>
       <source>$projectHome\src\documentation\resources\themes\</source>
-      <p>
-        Add the following element to the *.fv file:
-      </p>
+      <p>Add the following element to the *.fv file:</p>
       <source>
-<![CDATA[<forrest:css url="styles.css" media="screen" theme="pelt"/>]]>
-      </source>
+        <![CDATA[<forrest:css url="styles.css" media="screen" theme="pelt"/>]]>
+</source>
       <p>
-        <strong>Important!</strong> This must appear straight after the "view
-        type" element (as first child):
-      </p>
+      <strong>Important!</strong>This must appear straight after the "view
+      type" element (as first child):</p>
       <source>
-<![CDATA[<forrest:view type="html">]]>
-      </source>
+        <![CDATA[<forrest:structure type="html">]]>
+</source>
       <source>
-<![CDATA[<forrest:css url="mystyles.css" media="screen" theme="pelt"/>]]>
-      </source>
-      <p>
-        The attributes are:
-      </p>
+        <![CDATA[<forrest:css url="mystyles.css" media="screen" theme="pelt"/>]]>
+</source>
+      <p>The attributes are:</p>
       <ol>
-        <li>the url where the css exist (NOTE: it will be rewritten to "../themes/mystyles.css").</li>
-        <li>the media type, you can set different styles for screen and print. 
-          This is really useful if you want to hide elements such as navigation 
-          in the print output (#nav-section{display:none} for example).</li>
-        <li>the theme, "pelt" is the default theme (another is the "common" theme). Change this if you 
-          are using your own theme.</li>
+        <li>the url where the css exist (NOTE: it will be rewritten to
+        "../themes/mystyles.css").</li>
+        <li>the media type, you can set different styles for screen and print.
+        This is really useful if you want to hide elements such as navigation
+        in the print output (#nav-section{display:none} for example).</li>
+        <li>the theme, "pelt" is the default theme (another is the "common"
+        theme). Change this if you are using your own theme.</li>
       </ol>
-      <p>
-        You can have as many css links as you like, and they'll appear in the
-        head of your document in same order as they are in the .fv file.
-      </p>
-      <fixme author="thorsten">
-        Add more information of recent threads around css in the structurer and
-        information how you add an @import? Use e.g.
-        <a 
-        href="http://marc.theaimsgroup.com/?t=113471292700001&amp;r=1&amp;w=2">http://marc.theaimsgroup.com/?t=113471292700001&amp;r=1&amp;w=2</a>
-      </fixme>
+      <p>You can have as many css links as you like, and they'll appear in the
+      head of your document in same order as they are in the .fv file.</p>
+      <fixme author="thorsten">Add more information of recent threads around
+      css in the structurer and information how you add an @import? Use e.g. 
+      <a href="http://marc.theaimsgroup.com/?t=113471292700001&amp;r=1&amp;w=2">
+      http://marc.theaimsgroup.com/?t=113471292700001&amp;r=1&amp;w=2</a></fixme>
     </section>
   </steps>
   <extension title="Further Reading">
-    <p>
-      Congratulations you are now able to work with the structurer. From here we
-      recommend to read the following How-Tos:
-    </p>
+    <p>Congratulations you are now able to work with the structurer. From here
+    we recommend to read the following How-Tos:</p>
     <ul>
-      <li><a href="site:dispatcher/contracts">Create your own contract 
-          implementation</a></li>
+      <li>
+        <a href="site:dispatcher/contracts">Create your own contract
+        implementation</a>
+      </li>
     </ul>
   </extension>
   <feedback title="Feedback">
-    <p>
-      Please provide feedback about this document via the
-      <a href="ext:mail-lists">mailing lists</a>.
-    </p>
+    <p>Please provide feedback about this document via the 
+    <a href="ext:mail-lists">mailing lists</a>.</p>
   </feedback>
 </howto>

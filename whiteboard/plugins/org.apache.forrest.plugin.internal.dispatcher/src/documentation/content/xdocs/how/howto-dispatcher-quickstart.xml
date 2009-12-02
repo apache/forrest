@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <!--
   Licensed to the Apache Software Foundation (ASF) under one or more
   contributor license agreements.  See the NOTICE file distributed with
@@ -15,7 +15,8 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 -->
-<!DOCTYPE howto PUBLIC "-//APACHE//DTD How-to V2.0//EN" "http://forrest.apache.org/dtd/howto-v20.dtd">
+<!DOCTYPE howto PUBLIC "-//APACHE//DTD How-to V2.0//EN"
+"http://forrest.apache.org/dtd/howto-v20.dtd">
 <howto>
   <header>
     <title>Dispatcher quickstart</title>
@@ -23,234 +24,183 @@
     <last-modified-content-date date="2007-04-09" />
   </header>
   <audience title="Intended Audience">
-    <p>
-      People who are helping to develop the Dispatcher.
-    </p>
-    <warning>
-      The "Dispatcher" (previously known as "Views") is new functionality which
-      is still in development phase. That is why it is in the "whiteboard"
-      section of Forrest. This document will also need to change to keep pace.
-      We are working at the moment on moving this plugin from the whiteboard
-      into the core plugins. See <a href="ext:forrest/status-themes">Status of
-      Themes: Skins and Dispatcher</a>.
-    </warning>
+    <p>People who are helping to develop the Dispatcher.</p>
+    <warning>The "Dispatcher" (previously known as "Views") is new
+    functionality which is still in development phase. That is why it is in the
+    "whiteboard" section of Forrest. This document will also need to change to
+    keep pace. We are working at the moment on moving this plugin from the
+    whiteboard into the core plugins. See 
+    <a href="ext:forrest/status-themes">Status of Themes: Skins and
+    Dispatcher</a>.</warning>
   </audience>
   <purpose title="Purpose">
-    <p>
-      This document will get you started. We will Dispatcher-enable an existing
-      site and show how to add/remove ready-made contacts. Then we will discuss
-      how add your own new contracts.
-    </p>
-    <p>
-      This document encourages developers to get involved with fine-tuning and
-      testing the dispatcher. Please help to enhance the current core contracts
-      so that people do not need to re-invent the wheel.
-    </p>
+    <p>This document will get you started. We will Dispatcher-enable an
+    existing site and show how to add/remove ready-made contacts. Then we will
+    discuss how add your own new contracts.</p>
+    <p>This document encourages developers to get involved with fine-tuning and
+    testing the dispatcher. Please help to enhance the current core contracts
+    so that people do not need to re-invent the wheel.</p>
   </purpose>
   <prerequisites title="Prerequisites">
     <ul>
-      <li>Using Forrest trunk of SVN (i.e. head of development).
-      </li>
+      <li>Using Forrest trunk of SVN (i.e. head of development).</li>
       <li>Followed the installation instructions below.</li>
-      <li>You have an existing forrest site and want to try the
-        new Dispatcher. Otherwise create a 'forrest seed-sample' site.</li>
+      <li>You have an existing forrest site and want to try the new Dispatcher.
+      Otherwise create a 'forrest seed-sample' site.</li>
     </ul>
   </prerequisites>
   <steps title="Steps">
-    <note>
-      When developing with the dispatcher we assume you are using 'forrest run'
-      and the following workflow "change files -&gt; refresh browser".
-      <br/>
-      Installing a mozilla browser and the
-      <a href="ext:forrestbar">Forrestbar</a> helps a lot with developing, but
-      is not necessary.
-    </note>
+    <note>When developing with the dispatcher we assume you are using 'forrest
+    run' and the following workflow "change files -&gt; refresh browser". 
+    <br />Installing a mozilla browser and the 
+    <a href="ext:forrestbar">Forrestbar</a>helps a lot with developing, but is
+    not necessary.</note>
     <section id="patch">
       <title>Get ready</title>
       <ul>
         <li>Do 'svn update' on forrest/trunk</li>
-        <li>Do the 'cd main; build clean; build' (necessary because the Dispatcher is changing rapidly and uses some Java)</li>
+        <li>Do the 'cd main; build clean; build' (necessary because the
+        Dispatcher is changing rapidly and uses some Java)</li>
       </ul>
     </section>
     <section id="enable">
       <title>Dispatcher-enable the existing site</title>
       <ul>
         <li>Add the new plugins to forrest.properties ...
-        ,org.apache.forrest.plugin.internal.dispatcher,org.apache.forrest.themes.core
-        </li>
+        ,org.apache.forrest.plugin.internal.dispatcher,org.apache.forrest.themes.core</li>
         <li>localhost:8888/index.html ... fantastic. See the pelt view.</li>
       </ul>
     </section>
     <section id="another-theme">
       <title>Use another theme</title>
       <ul>
-        <li>Add <![CDATA[<property name="dispatcher.theme" value="pelt"/>]]> 
-          to your forrest.properties.xml</li>
+        <li>Add 
+<![CDATA[<property name="dispatcher.theme" value="pelt"/>]]>
+to your forrest.properties.xml</li>
         <li>Re-start 'forrest run'</li>
         <li>localhost:8888/index.html ... See the new view.</li>
       </ul>
     </section>
     <section id="our-structurer">
       <title>Create our own structurer by copy-and-customise</title>
-      <p>
-        Copy the default structurer for the pelt theme and make local changes.
-      </p>
-      <note>
-        At this stage of rapid development of the Dispatcher, be sure to keep
-        your copy synchronised. Use 'diff' against the known svn version of the
-        core pelt.fv to track your local changes. Also please consider
-        contributing new contracts and changes to the default structurers to the
-        Forrest projects. That eases your local version management and everyone
-        will benefit.
-      </note>
-      <note>
-        We use <code>${themer.project.dir}</code> for
-        PROJECT_HOME/src/documentation/resources/themes (create the new
-        directory first). You can change this location by adding
+      <p>Copy the default structurer for the pelt theme and make local
+      changes.</p>
+      <note>At this stage of rapid development of the Dispatcher, be sure to
+      keep your copy synchronised. Use 'diff' against the known svn version of
+      the core pelt.fv to track your local changes. Also please consider
+      contributing new contracts and changes to the default structurers to the
+      Forrest projects. That eases your local version management and everyone
+      will benefit.</note>
+      <note>We use 
+      <code>${themer.project.dir}</code>for
+      PROJECT_HOME/src/documentation/resources/themes (create the new directory
+      first). You can change this location by adding 
 <![CDATA[<match pattern="themer.project.dir">
           <location src="{properties:resources}/themes" />
         </match> ]]>
-        to your locationmap and point to another directory.
-      </note>
-      <note>
-      By default THEMER_PLUGIN can be located at FORREST_HOME/whiteboard/plugins/org.apache.forrest.themes.core
-      </note>           
+to your locationmap and point to another directory.</note>
+      <note>By default THEMER_PLUGIN can be located at
+      FORREST_HOME/whiteboard/plugins/org.apache.forrest.themes.core</note>
       <ul>
         <li>Copy THEMER_PLUGIN/themes/pelt.fv into your project at
-          ${themer.project.dir}/pelt.fv
-        </li>
-        <li>Copy THEMER_PLUGIN/themes/pelt/panels/pelt-html.header.panel.xml into your
-          project at ${themer.project.dir}/pelt/panels/pelt-html.header.panel.xml
-        </li>
+        ${themer.project.dir}/pelt.fv</li>
+        <li>Copy THEMER_PLUGIN/themes/pelt/panels/pelt-html.header.panel.xml
+        into your project at
+        ${themer.project.dir}/pelt/panels/pelt-html.header.panel.xml</li>
         <li>Re-start 'forrest run'</li>
-        <li>localhost:8888/index.html ... See the same view, now structured
-          by us.
-        </li>
-        <li>In localhost:8888/resolve.structurer.index you can find a copy of your current structurer. Any change  made to your pelt.fv file will be added here.
-        </li>
+        <li>localhost:8888/index.html ... See the same view, now structured by
+        us.</li>
+        <li>In localhost:8888/resolve.structurer.index you can find a copy of
+        your current structurer. Any change made to your pelt.fv file will be
+        added here.</li>
       </ul>
-      <p>
-        From here on there is no need to re-start 'forrest run'. Just edit the
-        structurer and see the effect.
-      </p>
-      <warning>
-      Right now the dispatcher is heavely cached, so maybe in the current version it should be
-      necessary to reboot the system in order to see the changes. To avoid temporally this problem,
-      turn off the cache system changing:
-      
+      <p>From here on there is no need to re-start 'forrest run'. Just edit the
+      structurer and see the effect.</p>
+      <warning>Right now the dispatcher is heavely cached, so maybe in the
+      current version it should be necessary to reboot the system in order to
+      see the changes. To avoid temporally this problem, turn off the cache
+      system changing: 
 <![CDATA[
-<forrest:views xmlns:forrest="http://apache.org/forrest/templates/1.0"
-	xmlns:jx="http://apache.org/cocoon/templates/jx/1.0"
-	jx:cache-key="#{$cocoon/parameters/getRequest}"
-	jx:cache-validity="${Packages.org.apache.excalibur.source.impl.validity.NOPValidity()}">
+<forrest:structurer xmlns:forrest="http://apache.org/forrest/templates/1.0"
+        xmlns:jx="http://apache.org/cocoon/templates/jx/1.0"
+        jx:cache-key="#{$cocoon/parameters/getRequest}"
+        jx:cache-validity="${Packages.org.apache.excalibur.source.impl.validity.NOPValidity()}">
 ]]>
-      
-      to
-      
+to 
 <![CDATA[
-<forrest:views xmlns:forrest="http://apache.org/forrest/templates/1.0"
-	xmlns:jx="http://apache.org/cocoon/templates/jx/1.0">
+<forrest:structurer xmlns:forrest="http://apache.org/forrest/templates/1.0"
+        xmlns:jx="http://apache.org/cocoon/templates/jx/1.0">
 ]]>
-      
-      in your THEMER_PLUGIN/themes/pelt.fv file.
-      </warning>
+in your THEMER_PLUGIN/themes/pelt.fv file.</warning>
     </section>
     <section id="remove-default-contract">
       <title>Remove a default contract</title>
       <ul>
-        <li>Remove the top breadcrumb trail. Edit your pelt-html.header.panel.xml, find the
-          "branding-breadcrumbs" contract and comment it out.
-        </li>
+        <li>Remove the top breadcrumb trail. Edit your
+        pelt-html.header.panel.xml, find the "branding-breadcrumbs" contract
+        and comment it out.</li>
       </ul>
     </section>
     <section id="add-default-contract">
       <title>Add a default contract</title>
-      <p>
-        Forrest provides many default contracts. If you are using the Forrestbar
-        then choose "dispatcher-devs =&gt; ls.contracts". Otherwise visit
-        localhost:8888/ls.contracts.html
-      </p>
+      <p>Forrest provides many default contracts. If you are using the
+      Forrestbar then choose "dispatcher-devs =&gt; ls.contracts". Otherwise
+      visit localhost:8888/ls.contracts.html</p>
       <ul>
-        <li>
-          See the usage detail for your chosen contract via the above mentioned list.
-          e.g. "siteinfo-current-time"
-        </li>
-        <li>
-          Insert it at the appropriate point in your structurer. Note that it
-          will need to go inside the appropriate CSS hook, e.g.
+        <li>See the usage detail for your chosen contract via the above
+        mentioned list. e.g. "siteinfo-current-time"</li>
+        <li>Insert it at the appropriate point in your structurer. Note that it
+        will need to go inside the appropriate CSS hook, e.g. 
         <source>
-<![CDATA[  ...
+          <![CDATA[  ...
   <forrest:hook name="footer">
     <forrest:contract name="siteinfo-current-time"/>
     ...
 ]]>
-          </source></li>
+</source></li>
       </ul>
-      <p>
-        Notice that you did not need to copy any other code to your project
-        space. Forrest finds the default contract in its core (the themes.core
-        plugin).
-      </p>
-      <p>
-        You will find some commonly used contracts in place but commented out in
-        both the common and the pelt structurer files. Feel free to uncomment
-        them to activate them, move them around into other hooks or create new
-        hooks for them.
-      </p>
-      <note>
-        Work is currently under way for implementing Panels (was tiles).
-        Currently we now have a 'panels' sub-dir for each 'theme'. This panels
-        sub-dir currently contains a main html panel
-        '%themename%-html.panel.xml' and a CSS panel
-        '%themename%-css.panel.xml'. So you can change a collection of HTML and
-        CSS outputs from these two XML files.
-      </note>
+      <p>Notice that you did not need to copy any other code to your project
+      space. Forrest finds the default contract in its core (the themes.core
+      plugin).</p>
+      <p>You will find some commonly used contracts in place but commented out
+      in both the common and the pelt structurer files. Feel free to uncomment
+      them to activate them, move them around into other hooks or create new
+      hooks for them.</p>
+      <note>Work is currently under way for implementing Panels (was tiles).
+      Currently we now have a 'panels' sub-dir for each 'theme'. This panels
+      sub-dir currently contains a main html panel '%themename%-html.panel.xml'
+      and a CSS panel '%themename%-css.panel.xml'. So you can change a
+      collection of HTML and CSS outputs from these two XML files.</note>
     </section>
     <section id="add-project-contract">
       <title>Add a new project contract</title>
-      <warning>
-        Carefully consider the purpose of your contracts. If they are useful in
-        a wider context, then they belong in plugins or the core of Forrest. See
-        below for further discussion on this important topic.
-      </warning>
-      <p>
-        Project-based contracts are defined in theme-specific and
-        output-format-specific directory structure, e.g.
-        ${themer.project.dir}/THEME_NAME/OUTPUT_FORMAT/
-      </p>
-      <p>
-        Project-based contracts common to all themes go in
-        ${themer.project.dir}/common/OUTPUT_FORMAT/
-      </p>
-      <p>
-        To get started quickly (it is not a project-based contract but a demo),
-        copy one of the default contracts. e.g. copy siteinfo-current-time.ft to
-        become siteinfo-doodad.ft ...
-      </p>
+      <warning>Carefully consider the purpose of your contracts. If they are
+      useful in a wider context, then they belong in plugins or the core of
+      Forrest. See below for further discussion on this important
+      topic.</warning>
+      <p>Project-based contracts are defined in theme-specific and
+      output-format-specific directory structure, e.g.
+      ${themer.project.dir}/THEME_NAME/OUTPUT_FORMAT/</p>
+      <p>Project-based contracts common to all themes go in
+      ${themer.project.dir}/common/OUTPUT_FORMAT/</p>
+      <p>To get started quickly (it is not a project-based contract but a
+      demo), copy one of the default contracts. e.g. copy
+      siteinfo-current-time.ft to become siteinfo-doodad.ft ...</p>
       <ul>
-        <li>
-          Copy THEMER_PLUGIN/themes/common/html/siteinfo-current-time.ft
-          into your project at
-          ${themer.project.dir}/common/html/siteinfo-doodad.ft
-          (create the new directory first).
-        </li>
-        <li>
-          Edit it to suit. Replace all occurrences of "siteinfo-current-time" with
-          "siteinfo-doodad" and make your other changes (e.g. the text and the
-          javascript function).
-        </li>
-        <li>
-          Declare your new contract in your structurer as done above for adding a
-          default contract.
-        </li>
+        <li>Copy THEMER_PLUGIN/themes/common/html/siteinfo-current-time.ft into
+        your project at ${themer.project.dir}/common/html/siteinfo-doodad.ft
+        (create the new directory first).</li>
+        <li>Edit it to suit. Replace all occurrences of "siteinfo-current-time"
+        with "siteinfo-doodad" and make your other changes (e.g. the text and
+        the javascript function).</li>
+        <li>Declare your new contract in your structurer as done above for
+        adding a default contract.</li>
       </ul>
-      <p>
-        See a list of your project-based contracts and their usage notes via
-        Forrestbar "dispatcher-devs =&gt; ls.contracts.project". Otherwise visit
-        localhost:8888/ls.contracts.project.html
-      </p>
+      <p>See a list of your project-based contracts and their usage notes via
+      Forrestbar "dispatcher-devs =&gt; ls.contracts.project". Otherwise visit
+      localhost:8888/ls.contracts.project.html</p>
     </section>
-<!--
+    <!--
     <section id="newSection">
       <title>newSection</title>
       <ul>
@@ -258,7 +208,7 @@
       </ul>
     </section>
 -->
-<!--
+    <!--
     <section id="notes">
       <title>Notes</title>
         <source><![CDATA[
@@ -268,56 +218,48 @@
 -->
     <section id="manage">
       <title>Decide how to manage your contracts</title>
-      <p>
-      Depending on the use of a new contract you can place it in different 
-      locations. General use contracts should be placed in the THEME_PLUGIN 
-      directory. Contracts only suitable for one theme should be stored in 
-      the specific theme directory, that is, 
-      <code>THEMER_PLUGIN/resources/themes/THEME_NAME/OUTPUT_FORMAT</code>. 
+      <p>Depending on the use of a new contract you can place it in different
+      locations. General use contracts should be placed in the THEME_PLUGIN
+      directory. Contracts only suitable for one theme should be stored in the
+      specific theme directory, that is, 
+      <code>THEMER_PLUGIN/resources/themes/THEME_NAME/OUTPUT_FORMAT</code>.
       Otherwise, common contracts should be place in the common folder: 
-      <code>THEMER_PLUGIN/resources/themes/common/OUTPUT_FORMAT</code>.
-      </p>
-      <p>
-      If the contract is specific to a particular purpose, that is a 
-      particular plugin, it should be included with the plugin itself. 
-      For example, the "employment history" contract is specific to the 
-      resume plugin so it should be placed there. The correct location for 
-      contrats with a particular purpose is 
-      <code>PLUGIN_NAME/resources/themes/THEME_NAME/OUTPUT_FORMAT</code>.
-      </p>
-      <p>
-      There is another category for contracts, those that are both specific 
-      to a particular purpose and defined for a specific site. For example, 
-      a "process order" contract that integrates with an in-house order 
-      management system. In this case, another location is more suitable. 
+      <code>THEMER_PLUGIN/resources/themes/common/OUTPUT_FORMAT</code>.</p>
+      <p>If the contract is specific to a particular purpose, that is a
+      particular plugin, it should be included with the plugin itself. For
+      example, the "employment history" contract is specific to the resume
+      plugin so it should be placed there. The correct location for contrats
+      with a particular purpose is 
+      <code>PLUGIN_NAME/resources/themes/THEME_NAME/OUTPUT_FORMAT</code>.</p>
+      <p>There is another category for contracts, those that are both specific
+      to a particular purpose and defined for a specific site. For example, a
+      "process order" contract that integrates with an in-house order
+      management system. In this case, another location is more suitable.
       However, before proceed think again about the uniqueness of the contract.
-      Most contracts can be generalised to be useful in more than one 
-      environment and so one of the above locations can be used. If you are 
+      Most contracts can be generalised to be useful in more than one
+      environment and so one of the above locations can be used. If you are
       still sure that this is a site-specific contract then place it in 
-      <code>PROJECT_HOME/src/documentation/resources/themes/common</code>.
-      </p>
-      <p>
-      If you develop a new contract, please provide a patch via our 
-      <a href="ext:issues">issue tracker</a> so that we 
-      can include it in future releases of Forrest.
-      </p>
+      <code>PROJECT_HOME/src/documentation/resources/themes/common</code>.</p>
+      <p>If you develop a new contract, please provide a patch via our 
+      <a href="site:issues">issue tracker</a>so that we can include it in
+      future releases of Forrest.</p>
     </section>
   </steps>
   <extension title="Further Reading">
-    <p>
-      Congratulations you are now able to work with the Dispatcher. From here we
-      recommend to read the following How-Tos:
-    </p>
+    <p>Congratulations you are now able to work with the Dispatcher. From here
+    we recommend to read the following How-Tos:</p>
     <ul>
-      <li><a href="site:dispatcher/structurer">How to use the structurer</a></li>
-      <li><a href="site:dispatcher/contracts">Create your own contract 
-          implementation</a></li>
+      <li>
+        <a href="site:dispatcher/structurer">How to use the structurer</a>
+      </li>
+      <li>
+        <a href="site:dispatcher/contracts">Create your own contract
+        implementation</a>
+      </li>
     </ul>
   </extension>
   <feedback title="Feedback">
-    <p>
-      Please provide feedback about this document via the
-      <a href="ext:mail-lists">mailing lists</a>.
-    </p>
+    <p>Please provide feedback about this document via the 
+    <a href="ext:mail-lists">mailing lists</a>.</p>
   </feedback>
 </howto>

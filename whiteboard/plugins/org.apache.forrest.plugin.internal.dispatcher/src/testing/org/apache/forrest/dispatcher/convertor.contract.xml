@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Licensed to the Apache Software Foundation (ASF) under one or more
+    contributor license agreements. See the NOTICE file distributed with
+    this work for additional information regarding copyright ownership.
+    The ASF licenses this file to You under the Apache License, Version
+    2.0 (the "License"); you may not use this file except in compliance
+    with the License. You may obtain a copy of the License at
+    http://www.apache.org/licenses/LICENSE-2.0 Unless required by
+    applicable law or agreed to in writing, software distributed under
+    the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES
+    OR CONDITIONS OF ANY KIND, either express or implied. See the
+    License for the specific language governing permissions and
+    limitations under the License.
+  -->
+<forrest:contract xmlns:i18n="http://apache.org/cocoon/i18n/2.1"
+xmlns:forrest="http://apache.org/forrest/templates/1.0" name="convertor">
+  <description>
+    <p>This is a test convertor to develop a component that allows user to
+    convert from the former version of the dispatcher to this one.</p>
+  </description>
+  <usage>
+    <![CDATA[<forrest:contract name="convertor"/>]]>
+</usage>
+  <forrest:template name="convertor" inputFormat="xsl">
+    <xsl:stylesheet version="1.0"
+    xmlns:forrest="http://apache.org/forrest/templates/1.0"
+    xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+      <xsl:template match="/">
+        <forrest:content>
+          <forrest:part>
+            <forrest:structurer xmlns:jx="http://apache.org/cocoon/templates/jx/1.0">
+
+              <xsl:apply-templates />
+            </forrest:structurer>
+          </forrest:part>
+        </forrest:content>
+      </xsl:template>
+      <xsl:template match="*[local-name()='view']">
+        <forrest:structure>
+          <xsl:copy-of select="@*" />
+          <xsl:apply-templates />
+        </forrest:structure>
+      </xsl:template>
+      <xsl:template match="*[local-name()='contract']">
+        <forrest:contract>
+          <xsl:copy-of select="@*" />
+          <xsl:apply-templates />
+        </forrest:contract>
+      </xsl:template>
+      <xsl:template match="*[local-name()='property']">
+        <forrest:property>
+          <xsl:copy-of select="@*" />
+          <xsl:apply-templates />
+        </forrest:property>
+      </xsl:template>
+    </xsl:stylesheet>
+  </forrest:template>
+</forrest:contract>

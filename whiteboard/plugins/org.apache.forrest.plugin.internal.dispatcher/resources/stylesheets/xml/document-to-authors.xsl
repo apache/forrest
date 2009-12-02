@@ -20,12 +20,12 @@ This stylesheet contains templates for converting documentv11 to HTML.  See the
 imported document2html.xsl for details.
 -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
-<!--  Templates for "toc" mode.  This will generate a complete
+  <!--  Templates for "toc" mode.  This will generate a complete
         Table of Contents for the document.  This will then be used
         by the site2xhtml to generate a Menu ToC and a Page ToC -->
   <xsl:template match="document">
     <div id="content-authors">
-      <xsl:apply-templates select="header/authors"/>
+      <xsl:apply-templates select="header/authors" />
     </div>
   </xsl:template>
   <xsl:template match="header/authors">
@@ -33,10 +33,10 @@ imported document2html.xsl for details.
       <xsl:for-each select="person">
         <div class="author">
           <div class="name">
-            <xsl:value-of select="@name"/>
+            <xsl:value-of select="@name" />
           </div>
           <div class="email">
-            <xsl:value-of select="@email"/>
+            <xsl:value-of select="@email" />
           </div>
         </div>
       </xsl:for-each>

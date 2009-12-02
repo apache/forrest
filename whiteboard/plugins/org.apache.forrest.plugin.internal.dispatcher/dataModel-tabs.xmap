@@ -20,9 +20,11 @@
     <map:pipes default="caching" />
     <map:generators default="file" />
     <map:transformers default="xslt">
-      <map:transformer name="i18n" src="org.apache.cocoon.transformation.I18nTransformer">
+      <map:transformer name="i18n"
+      src="org.apache.cocoon.transformation.I18nTransformer">
         <catalogues default="tabs">
-          <catalogue id="tabs" name="tabs" location="{lm:project.translations}"/>
+          <catalogue id="tabs" name="tabs"
+          location="{lm:project.translations}" />
         </catalogues>
         <cache-at-startup>true</cache-at-startup>
       </map:transformer>
@@ -30,13 +32,13 @@
     <map:serializers default="xml" />
   </map:components>
   <map:pipelines>
-<!--
+    <!--
       businessHelper for the TABs. It needs to be in a separate sitemap for proper
       i18n - the i18nTransformer can have only one default catalogue, and to avoid
       having to state the catalogue on every key, we utilise a separate sitemap.
     -->
     <map:pipeline>
-<!-- navigation for the current request PART tab-->
+      <!-- navigation for the current request PART tab-->
       <map:match pattern="**.tab.xml">
         <map:select type="exists">
           <map:when test="{properties:content.xdocs}tabs.xml">
@@ -68,7 +70,7 @@
           <map:transform type="linkrewriter" src="cocoon://linkmap-{1}" />
         </map:match>
         <map:transform src="{lm:dataModel-html-tab-to-menu.xsl}">
-<!--<map:transform src="{lm:dataModel-html-tab2menu.xsl}">-->
+          <!--<map:transform src="{lm:dataModel-html-tab2menu.xsl}">-->
           <map:parameter name="path" value="{1}{2}.html" />
         </map:transform>
         <map:serialize />

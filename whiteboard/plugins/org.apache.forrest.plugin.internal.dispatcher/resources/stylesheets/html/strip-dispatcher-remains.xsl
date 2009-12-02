@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <!--
   Licensed to the Apache Software Foundation (ASF) under one or more
   contributor license agreements.  See the NOTICE file distributed with
@@ -15,8 +15,7 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 -->
-<xsl:stylesheet version="1.0"
-  xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
   <xsl:param name="serializer" select="'xhtml'"/>
   <xsl:template match="/">
     <xsl:choose>
@@ -30,8 +29,8 @@
   </xsl:template>
   <xsl:template name="do-xhtml">
     <html xmlns="http://www.w3.org/1999/xhtml">
-      <xsl:copy-of select="html/head"/>
-      <xsl:copy-of select="html/body"/>
+      <xsl:copy-of select="html/head" />
+      <xsl:copy-of select="html/body" />
     </html>
   </xsl:template>
   <xsl:template name="do-html">

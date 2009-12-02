@@ -1,0 +1,190 @@
+<?xml version="1.0"?>
+<!--
+Licensed to the Apache Software Foundation (ASF) under one or more
+contributor license agreements.  See the NOTICE file distributed with
+this work for additional information regarding copyright ownership.
+The ASF licenses this file to You under the Apache License, Version 2.0
+(the "License"); you may not use this file except in compliance with
+the License.  You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+<forrest:contract xmlns:i18n="http://apache.org/cocoon/i18n/2.1"
+xmlns:forrest="http://apache.org/forrest/templates/1.0" name="content-main">
+  <description>content-main will output the main content of the
+  document.</description>
+  <usage>
+    <![CDATA[<forrest:contract name="content-main" dataURI="cocoon://#{$getRequest}.source.rewritten.xml">
+       <forrest:property name="config">
+        <!-- Settings specific to PDF output. -->
+        <!-- 
+        Supported page sizes are a0, a1, a2, a3, a4, a5, executive,
+        folio, legal, ledger, letter, quarto, tabloid (default letter).
+        Supported page orientations are portrait, landscape (default
+        portrait).
+        Supported text alignments are left, right, justify (default left).
+        -->
+        <page text-align="left" background-color="#ffffff"/>
+        
+        <!-- Heading types can be clean|underlined|boxed  -->
+        <headings type="boxed" color="#4a6d8c"/>
+
+        <!--
+        Print the URL text next to all links going outside the file
+        -->
+        <show-external-urls>false</show-external-urls>
+
+        <colors>
+          <color name="code" value="#CFDCED"/>
+          <color name="highlight" value="#ffff00"/>
+          <color name="fixme" value="#cc6600"/>
+          <color name="note" value="#006699"/>
+          <color name="warning" value="#990000"/>
+          <color name="table" value="#7099C5"/>
+          <color name="table-cell" value="#f0f0ff"/>
+          <color name="body" value="#ffffff" link="#0F3660"
+            vlink="#009999" hlink="#000066"/>
+        </colors>
+      </forrest:property>
+    </forrest:contract>]]>
+</usage>
+  <forrest:template xmlns:forrest="http://apache.org/forrest/templates/1.0"
+  name="content-main" inputFormat="xsl">
+    <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+    xmlns:fo="http://www.w3.org/1999/XSL/Format" version="1.0">
+      <xsl:param name="config" />
+      <xsl:param name="requestPath" />
+      <xsl:variable name="path" select="concat($requestPath/@value,'/')" />
+      <xsl:param name="defaultVariables" select="'test.html'" />
+      <!-- left, justify, right -->
+      <xsl:variable name="text-align"
+      select="string($config/page/@text-align)" />
+      <!-- print URL of external links -->
+      <xsl:variable name="show-external-urls"
+      select="$config/show-external-urls" />
+      <xsl:param name="numbersections" select="'true'" />
+      <!-- page breaks after TOC and each page if an aggregate document -->
+      <xsl:variable name="page-break-top-sections" select="'true'" />
+      <!-- prefix which turns relative URLs into absolute ones, empty by default -->
+      <xsl:variable name="url-prefix" select="string($config/url-prefix)" />
+      <!-- print URL of external links -->
+      <xsl:variable name="show-external-urls"
+      select="$config/show-external-urls" />
+      <!-- Section depth at which we stop numbering and just indent -->
+      <xsl:param name="numbering-max-depth" select="'3'" />
+      <!-- Font-family parameters defined here: -->
+      <xsl:param name="serif"
+      select="$defaultVariables/*[@name='output.pdf.fontFamily.serif']/@value" />
+      <xsl:param name="sans-serif"
+      select="$defaultVariables/*[@name='output.pdf.fontFamily.sansSerif']/@value" />
+      <xsl:param name="monospace"
+      select="$defaultVariables/*[@name='output.pdf.fontFamily.monospace']/@value" />
+      <xsl:param name="imagesdir"
+      select="$defaultVariables/*[@name='resources.images']/@value" />
+      <xsl:param name="xmlbasedir"
+      select="$defaultVariables/*[@name='content.xdocs']/@value" />
+      <xsl:param name="sectionTitleFontFamily">
+        <xsl:choose>
+          <xsl:when test="$defaultVariables/*[@name='output.pdf.fontFamily.sectionTitleFontFamily']">
+
+            <xsl:value-of select="$defaultVariables/*[@name='output.pdf.fontFamily.sectionTitleFontFamily']/@value" />
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:value-of select="$sans-serif" />
+          </xsl:otherwise>
+        </xsl:choose>
+      </xsl:param>
+      <xsl:param name="sourceFontFamily">
+        <xsl:choose>
+          <xsl:when test="$defaultVariables/*[@name='output.pdf.fontFamily.sourceFontFamily']">
+
+            <xsl:value-of select="$defaultVariables/*[@name='output.pdf.fontFamily.sourceFontFamily']/@value" />
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:value-of select="$monospace" />
+          </xsl:otherwise>
+        </xsl:choose>
+      </xsl:param>
+      <xsl:param name="codeFontFamily">
+        <xsl:choose>
+          <xsl:when test="$defaultVariables/*[@name='output.pdf.fontFamily.codeFontFamily']">
+
+            <xsl:value-of select="$defaultVariables/*[@name='output.pdf.fontFamily.codeFontFamily']/@value" />
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:value-of select="$monospace" />
+          </xsl:otherwise>
+        </xsl:choose>
+      </xsl:param>
+      <xsl:param name="warningTitleFontFamily">
+        <xsl:choose>
+          <xsl:when test="$defaultVariables/*[@name='output.pdf.fontFamily.warningTitleFontFamily']">
+
+            <xsl:value-of select="$defaultVariables/*[@name='output.pdf.fontFamily.warningTitleFontFamily']/@value" />
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:value-of select="$sans-serif" />
+          </xsl:otherwise>
+        </xsl:choose>
+      </xsl:param>
+      <xsl:param name="noteTitleFontFamily">
+        <xsl:choose>
+          <xsl:when test="$defaultVariables/*[@name='output.pdf.fontFamily.noteTitleFontFamily']">
+
+            <xsl:value-of select="$defaultVariables/*[@name='output.pdf.fontFamily.noteTitleFontFamily']/@value" />
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:value-of select="$sans-serif" />
+          </xsl:otherwise>
+        </xsl:choose>
+      </xsl:param>
+      <xsl:param name="fixmeTitleFontFamily">
+        <xsl:choose>
+          <xsl:when test="$defaultVariables/*[@name='output.pdf.fontFamily.fixmeTitleFontFamily']">
+
+            <xsl:value-of select="$defaultVariables/*[@name='output.pdf.fontFamily.fixmeTitleFontFamily']/@value" />
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:value-of select="$sans-serif" />
+          </xsl:otherwise>
+        </xsl:choose>
+      </xsl:param>
+      <xsl:param name="rootFontFamily">
+        <xsl:choose>
+          <xsl:when test="$defaultVariables/*[@name='output.pdf.fontFamily.rootFontFamily']">
+
+            <xsl:value-of select="$defaultVariables/*[@name='output.pdf.fontFamily.rootFontFamily']/@value" />
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:value-of select="$serif" />
+          </xsl:otherwise>
+        </xsl:choose>
+      </xsl:param>
+      <xsl:variable name="background-color"
+      select="$config/page/@background-color" />
+      <xsl:variable name="heading-color" select="$config/headings/@color" />
+      <xsl:variable name="heading-type" select="$config/headings/@type" />
+      <xsl:include href="lm://pdf.transform.helper.pageBreaks" />
+      <xsl:include href="lm://pdf.transform.helper.commonElements" />
+      <xsl:template match="/">
+        <forrest:content>
+          <forrest:part xpath="/fo">
+            <rootFontFamily value="{$rootFontFamily}" />
+          </forrest:part>
+          <forrest:part xpath="/fo/xsl-region-body/body">
+            <fo:block text-align="{$text-align}" padding-before="18pt"
+            padding-after="18pt">
+              <xsl:apply-templates select="//body/*" />
+            </fo:block>
+          </forrest:part>
+        </forrest:content>
+      </xsl:template>
+    </xsl:stylesheet>
+  </forrest:template>
+</forrest:contract>

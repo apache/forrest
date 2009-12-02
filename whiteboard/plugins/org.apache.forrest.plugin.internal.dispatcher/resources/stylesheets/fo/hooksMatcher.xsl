@@ -15,22 +15,22 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 -->
-<xsl:stylesheet version="1.0" 
-  xmlns:forrest="http://apache.org/forrest/templates/1.0" 
-  xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+<xsl:stylesheet version="1.0"
+xmlns:forrest="http://apache.org/forrest/templates/1.0"
+xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
   <xsl:template match="/">
-    <xsl:apply-templates/>
+    <xsl:apply-templates />
   </xsl:template>
-<!--This template will match the different combinations for hooks-->
+  <!--This template will match the different combinations for hooks-->
   <xsl:template match="hook">
-    <xsl:element name="fo:{@name}" xmlns:fo="http://www.w3.org/1999/XSL/Format">
-      <xsl:apply-templates/>
+    <xsl:element name="fo:{@name}"
+    xmlns:fo="http://www.w3.org/1999/XSL/Format">
+      <xsl:apply-templates />
     </xsl:element>
   </xsl:template>
   <xsl:template match="@*|*|text()|processing-instruction()|comment()">
     <xsl:copy>
-      <xsl:apply-templates 
-        select="@*|*|text()|processing-instruction()|comment()"/>
+      <xsl:apply-templates select="@*|*|text()|processing-instruction()|comment()" />
     </xsl:copy>
   </xsl:template>
 </xsl:stylesheet>

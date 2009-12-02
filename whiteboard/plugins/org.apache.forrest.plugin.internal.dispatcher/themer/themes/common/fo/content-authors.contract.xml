@@ -1,0 +1,64 @@
+<?xml version="1.0"?>
+<!--
+Licensed to the Apache Software Foundation (ASF) under one or more
+contributor license agreements.  See the NOTICE file distributed with
+this work for additional information regarding copyright ownership.
+The ASF licenses this file to You under the Apache License, Version 2.0
+(the "License"); you may not use this file except in compliance with
+the License.  You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+<forrest:contract xmlns:i18n="http://apache.org/cocoon/i18n/2.1"
+xmlns:forrest="http://apache.org/forrest/templates/1.0" name="content-authors">
+  <description>
+    <p>content-authors will output the authors of the document.</p>
+  </description>
+  <usage>
+    <![CDATA[<forrest:contract name="content-authors" 
+          dataURI="cocoon://#{$getRequest}.authors.xml"/>]]>
+</usage>
+  <forrest:template xmlns:forrest="http://apache.org/forrest/templates/1.0"
+  name="content-authors" inputFormat="xsl">
+    <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+    xmlns:fo="http://www.w3.org/1999/XSL/Format" version="1.0">
+      <xsl:param name="defaultVariables" select="'test.html'" />
+      <xsl:param name="sans-serif"
+      select="$defaultVariables/*[@name='output.pdf.fontFamily.sansSerif']/@value" />
+      <xsl:param name="authorsFontFamily">
+        <xsl:choose>
+          <xsl:when test="$defaultVariables/*[@name='output.pdf.fontFamily.authorsFontFamily']">
+
+            <xsl:value-of select="$defaultVariables/*[@name='output.pdf.fontFamily.authorsFontFamily']/@value" />
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:value-of select="$sans-serif" />
+          </xsl:otherwise>
+        </xsl:choose>
+      </xsl:param>
+      <xsl:include href="lm://pdf.transform.helper.pageBreaks" />
+      <xsl:template match="/">
+        <forrest:content>
+          <forrest:part xpath="/fo/xsl-region-body/title">
+            <xsl:if test="//div[@class='author']">
+              <fo:block space-before="2em" font-family="{$authorsFontFamily}"
+              font-weight="bold" font-size="smaller">
+              <xsl:call-template name="insertPageBreaks" />
+              <!-- FIXME - insert i18n stuff here -->by 
+              <xsl:for-each select="//div[@class='author']">
+                <xsl:value-of select="./div[@class='name']/text()" />
+                <xsl:if test="not(position() = last())">,</xsl:if>
+              </xsl:for-each></fo:block>
+            </xsl:if>
+          </forrest:part>
+        </forrest:content>
+      </xsl:template>
+    </xsl:stylesheet>
+  </forrest:template>
+</forrest:contract>

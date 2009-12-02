@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one or more
+  contributor license agreements.  See the NOTICE file distributed with
+  this work for additional information regarding copyright ownership.
+  The ASF licenses this file to You under the Apache License, Version 2.0
+  (the "License"); you may not use this file except in compliance with
+  the License.  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<forrest:template xmlns:forrest="http://apache.org/forrest/templates/1.0"
+xmlns:jx="http://apache.org/cocoon/templates/jx/1.0">
+  <!-- 
+    @type defines this structurer to html.
+    @hooksXpath defines where all hooks will be injected (as prefix).
+  -->
+  <forrest:contract name="branding-css-links">
+    <!-- More information around this contract
+       http://marc.theaimsgroup.com/?l=forrest-dev&m=113473237805195&w=2
+  -->
+    <!--Note: The forrest:properties element does not exit anymore 
+            (in comparison to a previous versions) 
+  -->
+    <forrest:property name="branding-css-links-input">
+      <css url="common.css" media="screen" rel="alternate stylesheet"
+      theme="common" />
+      <css url="leather-dev.css" media="screen" rel="alternate stylesheet"
+      theme="common" />
+      <css url="pelt.screen.css" media="screen" theme="Pelt" />
+      <!-- You can request url specific css as defined above, 
+           but beware that you need to use the *.dispatcher.css extension!!!
+      -->
+      <css prefix="" url="#{$getRequest}.dispatcher.css" media="screen"
+      theme="Pelt" />
+      <css url="pelt.print.css" media="print" />
+      <css>/* Extra css */ p.quote { margin-left: 2em; padding: .5em;
+      background-color: #f0f0f0; font-family: monospace; }</css>
+    </forrest:property>
+  </forrest:contract>
+  <forrest:contract name="siteinfo-meta" dataURI="lm://project.build-info">
+    <forrest:property name="custom">
+      <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    </forrest:property>
+    <forrest:property name="theme" value="pelt" />
+  </forrest:contract>
+  <forrest:contract name="siteinfo-meta-navigation"
+  dataURI="cocoon://#{$getRequest}.navigation.xml" />
+  <forrest:contract name="siteinfo-meta-icon">
+    <forrest:property name="siteinfo-meta-icon">
+      <favicon-url>favicon.ico</favicon-url>
+    </forrest:property>
+  </forrest:contract>
+</forrest:template>

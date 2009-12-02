@@ -38,14 +38,14 @@ which is then merged by site2xhtml.xsl
 
 -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
-  <xsl:import href="../common/xslt/html/tab-to-menu.xsl"/>
+  <xsl:import href="lm://transform.tab.menu" />
   <xsl:template match="tabs">
     <ul id="nav-main">
-      <xsl:call-template name="base-tabs"/>
+      <xsl:call-template name="base-tabs" />
     </ul>
     <xsl:if test="tab[@dir=$longest-dir]/tab">
       <div id="nav-main-sub">
-        <xsl:call-template name="level2tabs"/>
+        <xsl:call-template name="level2tabs" />
       </div>
     </xsl:if>
   </xsl:template>
@@ -53,15 +53,19 @@ which is then merged by site2xhtml.xsl
   <xsl:template name="post-separator"></xsl:template>
   <xsl:template name="separator"></xsl:template>
   <xsl:template name="selected">
-    <li class="current"><xsl:call-template name="base-selected"/></li>
+    <li class="current">
+      <xsl:call-template name="base-selected" />
+    </li>
   </xsl:template>
   <xsl:template name="not-selected">
-    <li><xsl:call-template name="base-not-selected"/></li>
+    <li>
+      <xsl:call-template name="base-not-selected" />
+    </li>
   </xsl:template>
   <xsl:template name="level2-not-selected">
-    <xsl:call-template name="base-not-selected"/>
+    <xsl:call-template name="base-not-selected" />
   </xsl:template>
   <xsl:template name="level2-selected">
-    <xsl:call-template name="base-selected"/>
+    <xsl:call-template name="base-selected" />
   </xsl:template>
 </xsl:stylesheet>

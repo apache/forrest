@@ -16,44 +16,45 @@
   limitations under the License.
 -->
 <xsl:stylesheet version="1.0"
-  xmlns:forrest="http://apache.org/forrest/properties/1.0"
-  xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
-  <xsl:import href="lm://transform.xml.dotdots"/>
-  <xsl:import href="lm://transform.xml.pathutils"/>
-  <xsl:param name="path" select="'test.html'"/>
-  <xsl:param name="theme" select="'notheme'"/>
-<!-- Path (..'s) to the root directory -->
+xmlns:forrest="http://apache.org/forrest/properties/1.0"
+xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+  <xsl:import href="lm://transform.xml.dotdots" />
+  <xsl:import href="lm://transform.xml.pathutils" />
+  <xsl:param name="path" select="'test.html'" />
+  <xsl:param name="theme" select="'notheme'" />
+  <!-- Path (..'s) to the root directory -->
   <xsl:variable name="root">
     <xsl:call-template name="dotdots">
-      <xsl:with-param name="path" select="$path"/>
+      <xsl:with-param name="path" select="$path" />
     </xsl:call-template>
   </xsl:variable>
   <xsl:variable name="filename-noext">
     <xsl:call-template name="filename-noext">
-      <xsl:with-param name="path" select="$path"/>
+      <xsl:with-param name="path" select="$path" />
     </xsl:call-template>
   </xsl:variable>
-<!-- Source filename (eg 'foo.xml') of current page -->
+  <!-- Source filename (eg 'foo.xml') of current page -->
   <xsl:variable name="filename">
     <xsl:call-template name="filename">
-      <xsl:with-param name="path" select="$path"/>
+      <xsl:with-param name="path" select="$path" />
     </xsl:call-template>
   </xsl:variable>
   <xsl:variable name="skin-img-dir"
-    select="concat(string($root), 'themes/images')"/>
-  <xsl:variable name="spacer" select="concat($root, 'themer/images/spacer.gif')"/>
+  select="concat(string($root), 'themes/images')" />
+  <xsl:variable name="spacer"
+  select="concat($root, 'themer/images/spacer.gif')" />
   <xsl:template match="/">
     <properties>
-      <property name="skin-img-dir" value="{$skin-img-dir}"/>
-      <property name="filename" value="{$filename}"/>
-      <property name="filename-noext" value="{$filename-noext}"/>
-      <property name="root" value="{$root}"/>
-      <property name="path" value="{$path}"/>
-      <property name="theme" value="{$theme}"/>
-      <xsl:apply-templates select="forrest:properties/forrest:property"/>
+      <property name="skin-img-dir" value="{$skin-img-dir}" />
+      <property name="filename" value="{$filename}" />
+      <property name="filename-noext" value="{$filename-noext}" />
+      <property name="root" value="{$root}" />
+      <property name="path" value="{$path}" />
+      <property name="theme" value="{$theme}" />
+      <xsl:apply-templates select="forrest:properties/forrest:property" />
     </properties>
   </xsl:template>
   <xsl:template match="forrest:property">
-    <property name="{@name}" value="{@value}"/>
+    <property name="{@name}" value="{@value}" />
   </xsl:template>
 </xsl:stylesheet>

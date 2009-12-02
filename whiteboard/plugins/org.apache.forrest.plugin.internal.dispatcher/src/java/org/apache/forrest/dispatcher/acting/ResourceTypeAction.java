@@ -36,10 +36,15 @@ package org.apache.forrest.dispatcher.acting;
 *     &lt;location src="{uri}" /&gt;<br>
  * &lt;/act&gt;
  */
+import java.io.File;
 import java.io.IOException;
-import java.net.MalformedURLException;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.avalon.framework.parameters.Parameters;
 import org.apache.avalon.framework.service.ServiceException;
@@ -49,10 +54,13 @@ import org.apache.avalon.framework.thread.ThreadSafe;
 import org.apache.cocoon.acting.ServiceableAction;
 import org.apache.cocoon.environment.Redirector;
 import org.apache.excalibur.source.Source;
+import org.apache.excalibur.source.SourceNotFoundException;
 import org.apache.excalibur.source.SourceResolver;
-import org.apache.forrest.dispatcher.DispatcherException;
+import org.apache.forrest.dispatcher.exception.DispatcherException;
+import org.apache.xml.resolver.tools.CatalogResolver;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 
 
 public class ResourceTypeAction extends ServiceableAction
@@ -123,7 +131,7 @@ public class ResourceTypeAction extends ServiceableAction
         try {
           src = resolver.resolveURI(uri);
           if (src.exists()) {
-            Document rawData =  org.apache.forrest.dispatcher.util.SourceUtil.readDOM(
+            Document rawData =  readDOM(
                     uri, resolver);
             NodeList type = rawData.getElementsByTagNameNS(getResourceTypeElementNS(),getResourceTypeElement());
             String typeString = type.item(0).getFirstChild().getNodeValue();
@@ -242,5 +250,51 @@ public class ResourceTypeAction extends ServiceableAction
     public void setResourceTypeElementNS(String resourceTypeElementNS) {
         this.resourceTypeElementNS = resourceTypeElementNS;
     }
+    /**
+     * Reads a DOM from a source.
+     * @param sourceUri The source URI.
+     * @param manager The service manager.
+     * @return A document or <code>null</code> if the source does not exist.
+     * @throws ServiceException if an error occurs.
+     * @throws SourceNotFoundException if an error occurs.
+     * @throws ParserConfigurationException if an error occurs.
+     * @throws SAXException if an error occurs.
+     * @throws IOException if an error occurs.
+     */
+    public static Document readDOM(String sourceUri, SourceResolver resolver)
+            throws ServiceException, SourceNotFoundException, ParserConfigurationException,
+            SAXException, IOException {
+        Source source = null;
+        Document document = null;
+        try {
+            source = resolver.resolveURI(sourceUri);
+            if (source.exists()) {
+                document = readDocument(source.getInputStream());
+            }
+        } finally {
+                if (source != null) {
+                    resolver.release(source);
+                }
+        }
+        return document;
+    }
+    public static Document readDocument(InputStream stream) throws ParserConfigurationException,
+    SAXException, IOException {
+DocumentBuilder builder = createBuilder();
+return builder.parse(stream);
+}
+    /**
+     * Creates a non-validating and namespace-aware DocumentBuilder.
+     * @return A new DocumentBuilder object.
+     * @throws ParserConfigurationException if an error occurs
+     */
+    public static DocumentBuilder createBuilder() throws ParserConfigurationException {
+        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+        factory.setNamespaceAware(true);
+        DocumentBuilder builder = factory.newDocumentBuilder();
 
+        CatalogResolver cr = new CatalogResolver();
+        builder.setEntityResolver(cr);
+        return builder;
+    }
 }

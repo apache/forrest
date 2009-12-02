@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one or more
+  contributor license agreements.  See the NOTICE file distributed with
+  this work for additional information regarding copyright ownership.
+  The ASF licenses this file to You under the Apache License, Version 2.0
+  (the "License"); you may not use this file except in compliance with
+  the License.  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<forrest:template xmlns:forrest="http://apache.org/forrest/templates/1.0"
+xmlns:jx="http://apache.org/cocoon/templates/jx/1.0">
+  <forrest:contract name="branding-breadcrumbs">
+    <forrest:property name="branding-breadcrumbs">
+      <trail>
+        <link1 name="MyGroup" href="http://www.apache.org/" />
+        <link2 name="MyProject" href="http://forrest.apache.org/" />
+      </trail>
+    </forrest:property>
+  </forrest:contract>
+  <forrest:hook name="header">
+    <forrest:contract name="branding-tagline">
+      <forrest:property name="branding-tagline-name">new
+      seed</forrest:property>
+      <forrest:property name="branding-tagline-tagline">powered by the
+      dispatcher</forrest:property>
+    </forrest:contract>
+    <forrest:hook class="logo">
+      <forrest:contract name="branding-logo">
+        <forrest:property name="branding-logo-name">MyGroup</forrest:property>
+        <forrest:property name="branding-logo-description">MyGroup
+        Description</forrest:property>
+        <forrest:property name="branding-logo-url">
+        http://example.org/</forrest:property>
+        <forrest:property name="branding-logo-logo">
+        images/group.png</forrest:property>
+      </forrest:contract>
+    </forrest:hook>
+    <forrest:hook class="logo">
+      <forrest:contract name="branding-logo">
+        <forrest:property name="branding-logo-name">
+        MyProject</forrest:property>
+        <forrest:property name="branding-logo-description">MyProject
+        Description</forrest:property>
+        <forrest:property name="branding-logo-url">
+        http://example.org/myproj/</forrest:property>
+        <forrest:property name="branding-logo-logo">
+        project-logo.png</forrest:property>
+      </forrest:contract>
+    </forrest:hook>
+    <jx:import uri="cocoon://prepare.panels.pelt-html.nav-main" />
+  </forrest:hook>
+</forrest:template>

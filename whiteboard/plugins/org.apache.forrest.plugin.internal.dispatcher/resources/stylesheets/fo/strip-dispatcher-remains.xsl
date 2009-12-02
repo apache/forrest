@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <!--
   Licensed to the Apache Software Foundation (ASF) under one or more
   contributor license agreements.  See the NOTICE file distributed with
@@ -15,40 +15,38 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 -->
-<xsl:stylesheet version="1.0"
-  xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-  xmlns:fo="http://www.w3.org/1999/XSL/Format">
-  <xsl:param name="rootFontFamily" select="//rootFontFamily/@value"/>
-  <xsl:key name="static-content" match="fo:static-content" use="@flow-name"/>
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+xmlns:fo="http://www.w3.org/1999/XSL/Format">
+  <xsl:param name="rootFontFamily" select="//rootFontFamily/@value" />
+  <xsl:key name="static-content" match="fo:static-content" use="@flow-name" />
   <xsl:template match="/">
-    <fo:root
-            xmlns:fo="http://www.w3.org/1999/XSL/Format"
-            font-family="{$rootFontFamily}"
-            font-size="12pt">
+    <fo:root xmlns:fo="http://www.w3.org/1999/XSL/Format"
+    font-family="{$rootFontFamily}" font-size="12pt">
       <fo:layout-master-set>
-        <xsl:copy-of select="/fo/layout-master-set/*"/>
+        <xsl:copy-of select="/fo/layout-master-set/*" />
       </fo:layout-master-set>
       <fo:bookmark-tree>
-        <xsl:copy-of select="/fo/bookmark-tree/*"/>
+        <xsl:copy-of select="/fo/bookmark-tree/*" />
       </fo:bookmark-tree>
       <fo:page-sequence master-reference="book">
         <xsl:for-each select="//fo:static-content[generate-id()=generate-id(key('static-content', @flow-name))]">
-          <xsl:sort select="@flow-name"/>
-          <xsl:variable name="flow-name" select="@flow-name"/>
+
+          <xsl:sort select="@flow-name" />
+          <xsl:variable name="flow-name" select="@flow-name" />
           <fo:static-content flow-name="{@flow-name}">
-            <xsl:copy-of select="//fo:static-content[@flow-name=$flow-name]/*"/>
+            <xsl:copy-of select="//fo:static-content[@flow-name=$flow-name]/*" />
           </fo:static-content>
         </xsl:for-each>
         <fo:flow flow-name="xsl-region-body">
-          <xsl:copy-of select="/fo/xsl-region-body/title/*"/>
-<!-- FIXME : left was {$text-align} -->
+          <xsl:copy-of select="/fo/xsl-region-body/title/*" />
+          <!-- FIXME : left was {$text-align} -->
           <!--<fo:block text-align="left" padding-before="18pt" padding-after="18pt">-->
-            <xsl:copy-of select="/fo/xsl-region-body/body/*"/>
+          <xsl:copy-of select="/fo/xsl-region-body/body/*" />
           <!--</fo:block>-->
           <fo:block id="term" />
         </fo:flow>
       </fo:page-sequence>
     </fo:root>
   </xsl:template>
-  <xsl:template match="//rootFontFamily"/>
+  <xsl:template match="//rootFontFamily" />
 </xsl:stylesheet>

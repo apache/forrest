@@ -21,6 +21,7 @@ import java.net.MalformedURLException;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.avalon.framework.parameters.ParameterException;
 import org.apache.avalon.framework.parameters.Parameters;
 import org.apache.avalon.framework.service.ServiceException;
 import org.apache.avalon.framework.service.ServiceManager;
@@ -30,7 +31,7 @@ import org.apache.cocoon.acting.ServiceableAction;
 import org.apache.cocoon.environment.Redirector;
 import org.apache.excalibur.source.Source;
 import org.apache.excalibur.source.SourceResolver;
-import org.apache.forrest.dispatcher.DispatcherException;
+import org.apache.forrest.dispatcher.exception.DispatcherException;
 
 /**
  * Calculates which location to return for a given directory.
@@ -91,7 +92,7 @@ public class RecursiveDirectoryTraversalAction extends ServiceableAction
             org.apache.cocoon.environment.SourceResolver resolver,
             Map objectModel, String source, Parameters parameters)
             throws Exception {
-        this.prepare(parameters, source);
+        this.prepare(parameters);
         String uri = this.getProjectDir() + this.getRequest()
                 + this.getProjectExtension();
         map = new HashMap();
@@ -112,7 +113,7 @@ public class RecursiveDirectoryTraversalAction extends ServiceableAction
         }
 
         try {
-            this.computeResponseURI(uri, src);
+            this.computeResponseURI(uri,src);
             //src = resolver.resolveURI(uri);
             if (this.map.containsKey("uri")) {
                 return this.map;
@@ -135,23 +136,23 @@ public class RecursiveDirectoryTraversalAction extends ServiceableAction
      *            *viewSelector* project-xdocs will return which view is
      *            responsible for the requested path. If no view
      *            (choice|fallback) could be found the template will return the
-     *            viewFallback (resources/views/default.fv).
+     *            viewFallback (resources/views/default.structurer.xml).
      * 
-     * ex.: 1.request: index First choice: index.fv First/last fallback:
-     * default.fv
+     * ex.: 1.request: index First choice: index.structurer.xml First/last fallback:
+     * default.structurer.xml
      * 
-     * 2.request: sample/index First choice: sample/index.fv First fallback:
-     * sample/default.fv Last fallback: default.fv
+     * 2.request: sample/index First choice: sample/index.structurer.xml First fallback:
+     * sample/default.structurer.xml Last fallback: default.structurer.xml
      * 
-     * 3.request: sample/subdir/index First choice: sample/subdir/index.fv First
-     * fallback: sample/subdir/default.fv Second fallback: sample/default.fv
-     * Last fallback: default.fv
+     * 3.request: sample/subdir/index First choice: sample/subdir/index.structurer.xml First
+     * fallback: sample/subdir/default.structurer.xml Second fallback: sample/default.structurer.xml
+     * Last fallback: default.structurer.xml
      * 
      * ...
      * 
      * des.: The parent view (root-view) inherits to its children until a child
      * is overriding this view. This override can be used for directories
-     * (default.fv) and/or files (*.fv). That means that the root view is the
+     * (default.structurer.xml) and/or files (*.structurer.xml). That means that the root view is the
      * default view as long no other view can be found in the requested child.
      * @throws DispatcherException 
      *  
@@ -195,13 +196,11 @@ public class RecursiveDirectoryTraversalAction extends ServiceableAction
        resolver.release(source);
      }
     }
-    public void prepare(Parameters parameters, String src) {
-        this.setRequest(parameters.getParameter("request", src));
-        this.setProjectFallback(parameters.getParameter("projectFallback",
-                src));
-        this.setProjectExtension(parameters.getParameter("projectExtension",
-                src));
-        this.setProjectDir(parameters.getParameter("projectDir", src));
+    private void prepare(Parameters parameters) throws ParameterException {
+        this.setRequest(parameters.getParameter("request"));
+        this.setProjectFallback(parameters.getParameter("projectFallback"));
+        this.setProjectExtension(parameters.getParameter("projectExtension"));
+        this.setProjectDir(parameters.getParameter("projectDir"));
         this.setRest(this.getRequest());
     }
 

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+Licensed to the Apache Software Foundation (ASF) under one or more
+contributor license agreements.  See the NOTICE file distributed with
+this work for additional information regarding copyright ownership.
+The ASF licenses this file to You under the Apache License, Version 2.0
+(the "License"); you may not use this file except in compliance with
+the License.  You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+<forrest:contract xmlns:forrest="http://apache.org/forrest/templates/1.0"
+name="siteinfo-last-published-net">
+  <description>
+    <p>siteinfo-last-published-net 
+    <br />will output the last published date of the site with the help of a
+    timeserver.</p>
+    <div class="warning">
+      <div class="label">Warning</div>
+      <div class="content">You need to be able to reach
+      http://xobjex.com/service/date.xsl!!! If you are not, it will crash
+      views.</div>
+    </div>
+  </description>
+  <usage>
+    <![CDATA[<forrest:contract name="siteinfo-last-published-net"/>]]>
+</usage>
+  <forrest:template xmlns:i18n="http://apache.org/cocoon/i18n/2.1"
+  xmlns:forrest="http://apache.org/forrest/templates/1.0"
+  name="siteinfo-last-published-net" inputFormat="xsl">
+    <xsl:stylesheet version="1.1"
+    xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+      <xsl:param name="siteinfo-last-published-net-body" />
+      <xsl:template match="/">
+        <forrest:content>
+          <forrest:part>
+          <xsl:variable name="date"
+          select="document('http://xobjex.com/service/date.xsl')/date" />
+          <xsl:variable name="dt" select="$date/utc/@rfc-822" />
+          <i18n:text>Last Published:</i18n:text>&#160; 
+          <xsl:value-of select="$dt" /></forrest:part>
+        </forrest:content>
+      </xsl:template>
+    </xsl:stylesheet>
+  </forrest:template>
+</forrest:contract>

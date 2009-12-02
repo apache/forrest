@@ -20,9 +20,11 @@
     <map:pipes default="caching" />
     <map:generators default="file" />
     <map:transformers default="xslt">
-      <map:transformer name="i18n" src="org.apache.cocoon.transformation.I18nTransformer">
+      <map:transformer name="i18n"
+      src="org.apache.cocoon.transformation.I18nTransformer">
         <catalogues default="menu">
-          <catalogue id="menu" name="menu" location="{lm:project.translations}"/>
+          <catalogue id="menu" name="menu"
+          location="{lm:project.translations}" />
         </catalogues>
         <cache-at-startup>true</cache-at-startup>
       </map:transformer>
@@ -30,17 +32,17 @@
     <map:serializers default="xml" />
   </map:components>
   <map:pipelines>
-<!--
+    <!--
       businessHelper
       This is the model producing factory.
     -->
     <map:pipeline>
-<!-- intermediate format link rewritten-->
+      <!-- intermediate format link rewritten-->
       <map:match pattern="**.source.rewritten.xml">
         <map:generate src="cocoon://{1}.xml" />
         <map:transform type="idgen" />
         <!-- Start fix for FOR-1088 -->
-        <map:transform src="{lm:transform.xml.xml-xpointer-attributes}"/>
+        <map:transform src="{lm:transform.xml.xml-xpointer-attributes}" />
         <!-- End fix for FOR-1088 -->
         <map:transform type="xinclude" />
         <map:match pattern="**/*.source.rewritten.xml">
@@ -49,12 +51,12 @@
         <map:match pattern="*.source.rewritten.xml">
           <map:transform type="linkrewriter" src="cocoon://linkmap-{1}" />
         </map:match>
-        <map:transform src="{lm:transform.html.broken-links}"/>
+        <map:transform src="{lm:transform.html.broken-links}" />
         <map:serialize />
       </map:match>
     </map:pipeline>
     <map:pipeline>
-<!-- HTML rendered from intermediate format -->
+      <!-- HTML rendered from intermediate format -->
       <map:match pattern="**.body.xml">
         <map:generate src="cocoon:/{1}.source.rewritten.xml" />
         <map:transform src="{lm:dataModel-html-document-to-html.xsl}">
@@ -64,7 +66,7 @@
       </map:match>
     </map:pipeline>
     <map:pipeline>
-<!-- TOC from source.rewritten-->
+      <!-- TOC from source.rewritten-->
       <map:match pattern="**.toc.xml">
         <map:generate src="cocoon:/{1}.source.rewritten.xml" />
         <map:transform src="{lm:dataModel-xml-document-to-toc.xsl}" />
@@ -74,16 +76,14 @@
     <map:pipeline>
       <map:match pattern="**.abstract.xml">
         <map:generate src="cocoon://{1}.xml" />
-        <map:transform
-          src="{lm:dataModel-xml-document-to-abstract.xsl}" />
+        <map:transform src="{lm:dataModel-xml-document-to-abstract.xsl}" />
         <map:serialize />
       </map:match>
     </map:pipeline>
     <map:pipeline>
       <map:match pattern="**.notice.xml">
         <map:generate src="cocoon://{1}.xml" />
-        <map:transform
-          src="{lm:dataModel-xml-document-to-notice.xsl}" />
+        <map:transform src="{lm:dataModel-xml-document-to-notice.xsl}" />
         <map:serialize />
       </map:match>
     </map:pipeline>
@@ -102,7 +102,7 @@
       </map:match>
     </map:pipeline>
     <map:pipeline>
-<!-- navigation for the current request -->
+      <!-- navigation for the current request -->
       <map:match pattern="**.navigation.xml">
         <map:aggregate element="navigation">
           <map:part src="cocoon:/{1}.tab.xml" element="tab" />
@@ -128,10 +128,11 @@
       </map:match>
     </map:pipeline>
     <map:pipeline>
-<!-- navigation for the current request PART tab: relegated to a separate
+      <!-- navigation for the current request PART tab: relegated to a separate
            sitemap to allow proper i18n. -->
       <map:match pattern="**.tab.xml">
-        <map:mount uri-prefix="" src="{forrest:forrest.plugins}/org.apache.forrest.plugin.internal.dispatcher/dataModel-tabs.xmap" check-reload="yes" />
+        <map:mount uri-prefix="" src="dataModel-tabs.xmap"
+        check-reload="yes" />
       </map:match>
     </map:pipeline>
     <map:pipeline>
@@ -139,34 +140,32 @@
         <map:match pattern="**/*.book.xml">
           <map:select type="exists">
             <map:when test="{properties:content.xdocs}{1}/book.xml">
-<!-- If a hand-created book.xml exists, use it -->
+              <!-- If a hand-created book.xml exists, use it -->
               <map:parameter name="url"
-                value="{properties:content.xdocs}{1}/book.xml" />
+              value="{properties:content.xdocs}{1}/book.xml" />
               <map:generate src="{properties:content.xdocs}{1}/book.xml" />
             </map:when>
             <map:otherwise>
-<!-- If no book.xml, generate it from the linkmap. -->
+              <!-- If no book.xml, generate it from the linkmap. -->
               <map:generate src="cocoon:/{1}/menulinks-{2}" />
-<!-- The above generates the subset of the linkmap relevant to our directory. -->
-              <map:transform
-                src="{forrest:forrest.stylesheets}/site-to-book.xsl" />
+              <!-- The above generates the subset of the linkmap relevant to our directory. -->
+              <map:transform src="{forrest:forrest.stylesheets}/site-to-book.xsl" />
             </map:otherwise>
           </map:select>
         </map:match>
         <map:match pattern="*.book.xml">
           <map:select type="exists">
             <map:when test="{properties:content.xdocs}/book.xml">
-<!-- If a hand-created book.xml exists, use it -->
+              <!-- If a hand-created book.xml exists, use it -->
               <map:parameter name="url"
-                value="{properties:content.xdocs}/book.xml" />
+              value="{properties:content.xdocs}/book.xml" />
               <map:generate src="{properties:content.xdocs}/book.xml" />
             </map:when>
             <map:otherwise>
-<!-- If no book.xml, generate it from the linkmap. -->
+              <!-- If no book.xml, generate it from the linkmap. -->
               <map:generate src="cocoon:/menulinks-{1}" />
-<!-- The above generates the subset of the linkmap relevant to our directory. -->
-              <map:transform
-                src="{forrest:forrest.stylesheets}/site-to-book.xsl" />
+              <!-- The above generates the subset of the linkmap relevant to our directory. -->
+              <map:transform src="{forrest:forrest.stylesheets}/site-to-book.xsl" />
             </map:otherwise>
           </map:select>
         </map:match>
@@ -176,7 +175,7 @@
             <map:act type="locale">
               <map:transform src="{lm:transform.book.book-i18n}" />
               <map:transform type="i18n">
-<!-- We can use a default locale attribute or Request Parameter
+                <!-- We can use a default locale attribute or Request Parameter
                   <map:parameter name="locale" value="{properties:forrest.locale}"/>
                   <map:parameter name="locale" value="{lang}{country}{variant}"-->
                 <map:parameter name="locale" value="{locale}" />
@@ -189,17 +188,15 @@
       <map:match pattern="**menulinks-*">
         <map:generate src="cocoon://site.navigation.links.xml" />
         <map:transform type="xinclude" />
-        <map:transform
-          src="{forrest:forrest.stylesheets}/absolutize-linkmap.xsl" />
+        <map:transform src="{forrest:forrest.stylesheets}/absolutize-linkmap.xsl" />
         <map:select type="config">
-          <map:parameter name="value" value="{properties:forrest.menu-scheme}" />
+          <map:parameter name="value"
+          value="{properties:forrest.menu-scheme}" />
           <map:when test="tab_attributes">
-            <map:transform
-              src="{forrest:forrest.stylesheets}/site-to-site-normalizetabs.xsl" />
-            <map:transform
-              src="{forrest:forrest.stylesheets}/normalizehrefs.xsl" />
-            <map:transform
-              src="{forrest:forrest.stylesheets}/site-to-site-selectnode.xsl">
+            <map:transform src="{forrest:forrest.stylesheets}/site-to-site-normalizetabs.xsl" />
+            <map:transform src="{forrest:forrest.stylesheets}/normalizehrefs.xsl" />
+            <map:transform src="{forrest:forrest.stylesheets}/site-to-site-selectnode.xsl">
+
               <map:parameter name="path" value="{1}{2}.html" />
             </map:transform>
           </map:when>
@@ -209,8 +206,8 @@
             </map:transform>
           </map:when>
         </map:select>
-        <map:transform
-          src="{forrest:forrest.stylesheets}/relativize-linkmap.xsl">
+        <map:transform src="{forrest:forrest.stylesheets}/relativize-linkmap.xsl">
+
           <map:parameter name="path" value="{1}{2}.html" />
         </map:transform>
         <map:serialize type="xml" />
