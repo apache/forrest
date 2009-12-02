@@ -99,7 +99,7 @@ function searchSiteCommits(engine, searchID)
 function searchIssue(searchID)
 {
   var searchItem = document.getElementById(searchID);
-  navigate('http://issues.apache.org/jira/secure/QuickSearch.jspa?pid=12310000&searchString=' + searchItem.value);
+  navigate('http://issues.apache.org/jira/secure/IssueNavigator.jspa?query=' + searchItem.value + '&summary=true&description=true&reset=true&body=true&pid=12310000');
 }
 
 function searchSite(searchID)
