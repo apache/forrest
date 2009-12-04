@@ -1595,36 +1595,47 @@ project.skinconf=${project.content-dir}/skinconf.xml
 
 &lt;xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"&gt;
 
-  &lt;xsl:import href="../../../common/xslt/html/document-to-html.xsl"/&gt;
+  &lt;xsl:import href="lm://transform.skin.common.html.document-to-html"/&gt;
 
   <strong>... overrides of default templates ...</strong>
  
 &lt;/xsl:stylesheet&gt;
         </pre>
 <p>
-          In order to use this feature in your custom skins you must copy the
-          common skin from the forrest distribution into your custom skins
-          directory (from <span class="codefrag">main/webapp/skins/common</span>). This will
-          protect your skin from changes in the Forrest common skin, but you
-          must remember to update this skin in order to take advantage of new
-          features added over time by the Forrest team.
+          Notice the use of the <em>lm</em> protocol in the import statement.
+          The <em>lm</em> protocol directs Forrest to use the
+          <a href="../docs_0_90/locationmap.html">locationmap</a> to resolve the
+          location of the indicated stylesheet. If you trace this
+          call through the sitemap, you will find the following section of
+          <span class="codefrag">main/webapp/locationmap-transforms.xml</span>:
+        </p>
+<pre class="code">
+
+    &lt;match pattern="transform.skin.*.*.*"&gt;
+      &lt;select&gt;
+        &lt;location src="{properties:skins-dir}/{1}/xslt/{2}/{3}.xsl"/&gt;
+        &lt;location src="{forrest:forrest.context}/skins/{1}/xslt/{2}/{3}.xsl"/&gt;
+      &lt;/select&gt;
+    &lt;/match&gt;
+
+        </pre>
+<p>
+          This means that the locationmap first checks your project space
+          (according to the <span class="codefrag">${project.skins-dir}</span> property of
+          your <span class="codefrag">forrest.properties</span> file) and, if the file is
+          not found there, it then checks in your installation of Forrest.
         </p>
 <div class="note">
 <div class="label">Note</div>
 <div class="content">
-          The above paragraph means that if you do copy an existing skin as this
-          section recomends you will also need to copy the common skin since all
-          existing skins import the common skin.
+          It has been necessary in the past to copy the common skin to
+          your project when creating a custom skin. This is no longer the
+          case.
         </div>
 </div>
-<p>
-          This is particularly relevant for menu rendering (book-to-menu.xsl),
-          where the common stylesheet does the 'logic' of which item is
-          selected, and over-riding stylesheets define the presentation.
-        </p>
 </div>
     
-<a name="N10391"></a><a name="webapp"></a>
+<a name="N103A5"></a><a name="webapp"></a>
 <h2 class="underlined_10">Interactive Forrest: faster turnaround when developing your docs</h2>
 <div class="section">
 <p>
@@ -1637,7 +1648,7 @@ project.skinconf=${project.content-dir}/skinconf.xml
         using a "live" Forrest webapp instance, the Forrest-based documentation
         development can be faster and easier than with comparable tools.
       </p>
-<a name="N103A2"></a><a name="forrest_run"></a>
+<a name="N103B6"></a><a name="forrest_run"></a>
 <h3 class="underlined_5">Running as a webapp</h3>
 <p>
           Type '<span class="codefrag">forrest run</span>' in your project root to start
@@ -1652,7 +1663,7 @@ project.skinconf=${project.content-dir}/skinconf.xml
           servlet container, type <span class="codefrag">forrest webapp</span> to build an open
           webapp in <span class="codefrag">build/webapp/</span>)
         </p>
-<a name="N103BB"></a><a name="using_webapp"></a>
+<a name="N103CF"></a><a name="using_webapp"></a>
 <h4>Using the webapp</h4>
 <p>
             You can now edit the XML content in
@@ -1661,7 +1672,7 @@ project.skinconf=${project.content-dir}/skinconf.xml
           </p>
 </div>
     
-<a name="N103CA"></a><a name="invoking_from_ant"></a>
+<a name="N103DE"></a><a name="invoking_from_ant"></a>
 <h2 class="underlined_10">Invoking Forrest from Ant</h2>
 <div class="section">
 <p>
@@ -1729,7 +1740,7 @@ project.skinconf=${project.content-dir}/skinconf.xml
       </p>
 </div>
   
-<span class="version">SVN: $Revision: 776979 $ $Date: 2009-05-21 16:59:12 +1000 (Thu, 21 May 2009) $</span>
+<span class="version">SVN: $Revision: 887433 $ $Date: 2009-12-04 15:05:40 -0800 (Fri, 04 Dec 2009) $</span>
 </div>
 <!--+
     |end content
