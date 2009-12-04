@@ -1126,30 +1126,41 @@ project.skinconf=${project.content-dir}/skinconf.xml
 <![CDATA[
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
-  <xsl:import href="../../../common/xslt/html/document-to-html.xsl"/>
+  <xsl:import href="lm://transform.skin.common.html.document-to-html"/>
 
   ]]><strong>... overrides of default templates ...</strong>
 <![CDATA[ 
 </xsl:stylesheet>]]>
         </source>
         <p>
-          In order to use this feature in your custom skins you must copy the
-          common skin from the forrest distribution into your custom skins
-          directory (from <code>main/webapp/skins/common</code>). This will
-          protect your skin from changes in the Forrest common skin, but you
-          must remember to update this skin in order to take advantage of new
-          features added over time by the Forrest team.
+          Notice the use of the <em>lm</em> protocol in the import statement.
+          The <em>lm</em> protocol directs Forrest to use the
+          <a href="site:v0.90//locationmap">locationmap</a> to resolve the
+          location of the indicated stylesheet. If you trace this
+          call through the sitemap, you will find the following section of
+          <code>main/webapp/locationmap-transforms.xml</code>:
+        </p>
+        <source>
+<![CDATA[
+    <match pattern="transform.skin.*.*.*">
+      <select>
+        <location src="{properties:skins-dir}/{1}/xslt/{2}/{3}.xsl"/>
+        <location src="{forrest:forrest.context}/skins/{1}/xslt/{2}/{3}.xsl"/>
+      </select>
+    </match>
+]]>
+        </source>
+        <p>
+          This means that the locationmap first checks your project space
+          (according to the <code>${project.skins-dir}</code> property of
+          your <code>forrest.properties</code> file) and, if the file is
+          not found there, it then checks in your installation of Forrest.
         </p>
         <note>
-          The above paragraph means that if you do copy an existing skin as this
-          section recomends you will also need to copy the common skin since all
-          existing skins import the common skin.
+          It has been necessary in the past to copy the common skin to
+          your project when creating a custom skin. This is no longer the
+          case.
         </note>
-        <p>
-          This is particularly relevant for menu rendering (book-to-menu.xsl),
-          where the common stylesheet does the 'logic' of which item is
-          selected, and over-riding stylesheets define the presentation.
-        </p>
       </section>
     </section>
     <section id="webapp">
