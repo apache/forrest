@@ -16,7 +16,7 @@
   limitations under the License.
 -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
-  <xsl:import href="../../common/css/forrest.css.xslt"/>
+  <xsl:import href="lm://transform.skin.common.css.forrest.css"/>
 <!-- xsl:output is not used by Forrest but makes it possible to debug the 
        stylesheet in standalone editors -->
   <xsl:output method = "text"  omit-xml-declaration="yes"  />

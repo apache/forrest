@@ -36,7 +36,7 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns:dyn="http://exslt.org/dynamic"
   extension-element-prefixes="dyn">
-  <xsl:import href="../../../common/xslt/html/site-to-xhtml.xsl"/>
+  <xsl:import href="lm://transform.skin.common.html.site-to-xhtml"/>
   <xsl:variable name="request" select="substring-before($filename,'.html')"/>
   <xsl:include href="cocoon:/prepare.include.dyn:evaluate($request)"/>
   <xsl:include href="cocoon:/prepare.xhtml.dyn:evaluate($request)"/>

@@ -38,7 +38,7 @@ which is then merged by site-to-xhtml.xsl
 
 -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
-  <xsl:import href="../../../common/xslt/html/tab-to-menu.xsl"/>
+  <xsl:import href="lm://transform.skin.common.html.tab-to-menu"/>
   <xsl:template match="tabs">
     <div class="tabs" id="toptabs">
       <table cellpadding="4" cellspacing="0" border="0">

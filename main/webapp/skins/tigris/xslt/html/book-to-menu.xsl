@@ -21,7 +21,7 @@ details.
 
 -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
-  <xsl:import href="../../../common/xslt/html/book-to-menu.xsl"/>
+  <xsl:import href="lm://transform.skin.common.html.book-to-menu"/>
   <xsl:template match="book">
     <div class="menu">
       <div class="body">

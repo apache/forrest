@@ -41,7 +41,7 @@ which is then merged by site2xhtml.xsl
 
 -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
-  <xsl:import href="../../../common/xslt/html/tab-to-menu.xsl"/>
+  <xsl:import href="lm://transform.skin.common.html.tab-to-menu"/>
   <xsl:template match="tabs">
     <table class="tab" cellspacing="0" cellpadding="0" border="0">
       <tr>

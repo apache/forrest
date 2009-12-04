@@ -35,7 +35,7 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
 -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   xmlns:i18n="http://apache.org/cocoon/i18n/2.1" exclude-result-prefixes="i18n">
-  <xsl:import href="../../../common/xslt/html/site-to-xhtml.xsl"/>
+  <xsl:import href="lm://transform.skin.common.html.site-to-xhtml"/>
 <!--+
   |Overall site template
   +-->

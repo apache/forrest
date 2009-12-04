@@ -28,7 +28,7 @@ and tabs (tab2menu.xsl) to generate the final HTML.
 
 -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
-  <xsl:import href="../../../common/xslt/html/document-to-html.xsl"/>
+  <xsl:import href="lm://transform.skin.common.html.document-to-html"/>
   <xsl:template match="document">
     <div class="content">
       <xsl:if test="normalize-space(header/title)!=''">
