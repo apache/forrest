@@ -37,8 +37,7 @@ imported document2html.xsl for details.
   <xsl:template match="section" mode="toc">
     <xsl:param name="level" />
     <tocitem level="{$level}">
-      <xsl:attribute name="href"># 
-      <xsl:call-template name="generate-id" /></xsl:attribute>
+      <xsl:attribute name="href">#<xsl:call-template name="generate-id" /></xsl:attribute>
       <xsl:attribute name="title">
         <xsl:value-of select="title" />
       </xsl:attribute>
