@@ -422,7 +422,7 @@ These options are not effective anymore in dispatcher
           <forrest:properties contract="siteinfo-feedback">
             <forrest:property name="siteinfo-feedback">
               <feedback to="the Webmaster"
-                href="mailto:webmaster@foo.com?subject=Feedback&#160;" >
+                href="mailto:webmaster@example.org?subject=Feedback&#160;" >
                 Send feedback about the website to:
               </feedback>
             </forrest:property>
