@@ -34,12 +34,9 @@
   </xsl:variable>
   <xsl:variable name="smallersize" select="number($isize)-1" />
   <xsl:variable name="biggersize" select="number($isize)+1" />
-  <xsl:variable name="bg">fill:# 
-  <xsl:value-of select="$bg-color-name" />;</xsl:variable>
-  <xsl:variable name="fill">fill:# 
-  <xsl:value-of select="$fg-color-name" />;</xsl:variable>
-  <xsl:variable name="stroke">stroke:# 
-  <xsl:value-of select="$stroke-color-name" />;</xsl:variable>
+  <xsl:variable name="bg">fill:#<xsl:value-of select="$bg-color-name" />;</xsl:variable>
+  <xsl:variable name="fill">fill:#<xsl:value-of select="$fg-color-name" />;</xsl:variable>
+  <xsl:variable name="stroke">stroke:#<xsl:value-of select="$stroke-color-name" />;</xsl:variable>
   <xsl:template match="/">
     <svg width="{$isize}" height="{$isize}">
       <!-- background -->
@@ -61,15 +58,13 @@
       <xsl:variable name="flip-tb-translate">
         <xsl:choose>
           <xsl:when test="$orientation-tb='t'">0</xsl:when>
-          <xsl:otherwise>- 
-          <xsl:value-of select="$isize" /></xsl:otherwise>
+          <xsl:otherwise>-<xsl:value-of select="$isize" /></xsl:otherwise>
         </xsl:choose>
       </xsl:variable>
       <xsl:variable name="flip-lr-translate">
         <xsl:choose>
           <xsl:when test="$orientation-lr='l'">0</xsl:when>
-          <xsl:otherwise>- 
-          <xsl:value-of select="$isize" /></xsl:otherwise>
+          <xsl:otherwise>-<xsl:value-of select="$isize" /></xsl:otherwise>
         </xsl:choose>
       </xsl:variable>
       <!-- flip transform -->
