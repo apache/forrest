@@ -19,6 +19,7 @@
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     version="1.0">
   <xsl:import href="copyover.xsl"/>
+  <xsl:import href="generateId.xsl" />
 <!-- Processing a raw howto without revisions -->
   <xsl:template match="/howto">
     <document>
@@ -63,7 +64,8 @@
         </xsl:otherwise>
       </xsl:choose>
     </xsl:variable>
-    <section id="{$title}">
+    <section>
+      <xsl:attribute name="id"><xsl:call-template name="generate-id" /></xsl:attribute>
       <title><xsl:value-of select="$title"/></title>
       <xsl:apply-templates/>
     </section>
@@ -83,7 +85,8 @@
         </xsl:otherwise>
       </xsl:choose>
     </xsl:variable>
-    <section id="{$title}">
+    <section>
+      <xsl:attribute name="id"><xsl:call-template name="generate-id" /></xsl:attribute>
       <title><xsl:value-of select="$title"/></title>
       <xsl:apply-templates select="faq"/>
       <xsl:apply-templates select="faqsection | part"/>
@@ -100,6 +103,7 @@
     FIXME: maybe an ID should be written out -->
   <xsl:template match="faqsection | part">
     <section>
+      <xsl:attribute name="id"><xsl:call-template name="generate-id" /></xsl:attribute>
       <title><xsl:number count="faqsection | part" level="multiple" format="1.1.1 "/>
         <xsl:value-of select="normalize-space(title)"/></title>
       <xsl:apply-templates select="faq"/>
