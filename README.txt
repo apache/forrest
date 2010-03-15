@@ -13,7 +13,7 @@ Requirements
 Forrest is implemented both as a Java servlet and a Java command line
 application. The following requirements exist for installing it:
 
-  * A Java 1.4 or later compatible virtual machine for your operating system.
+  * A Java 1.5 or later compatible virtual machine for your operating system.
 
 Installation Instructions and Documentation
 -------------------------------------------
