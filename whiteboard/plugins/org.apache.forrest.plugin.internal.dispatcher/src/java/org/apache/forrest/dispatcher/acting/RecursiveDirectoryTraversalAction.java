@@ -21,13 +21,11 @@ import java.net.MalformedURLException;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.avalon.framework.parameters.ParameterException;
 import org.apache.avalon.framework.parameters.Parameters;
 import org.apache.avalon.framework.service.ServiceException;
 import org.apache.avalon.framework.service.ServiceManager;
 import org.apache.avalon.framework.service.Serviceable;
 import org.apache.avalon.framework.thread.ThreadSafe;
-import org.apache.cocoon.acting.ServiceableAction;
 import org.apache.cocoon.environment.Redirector;
 import org.apache.excalibur.source.Source;
 import org.apache.excalibur.source.SourceResolver;
@@ -61,14 +59,11 @@ import org.apache.forrest.dispatcher.exception.DispatcherException;
  *  &lt;/map:act&gt;
  * 
  */
-public class RecursiveDirectoryTraversalAction extends ServiceableAction
+public class RecursiveDirectoryTraversalAction extends AbstractTraversal
         implements ThreadSafe, Serviceable {
 
     SourceResolver resolver = null;
     HashMap map = new HashMap();
-
-    private String request, projectFallback, projectExtension, projectDir,
-            rest;
 
     /**
      * Set the current <code>ComponentManager</code> instance used by this
@@ -78,7 +73,7 @@ public class RecursiveDirectoryTraversalAction extends ServiceableAction
      */
 
     public void service(ServiceManager manager) throws ServiceException {
-        this.resolver = (SourceResolver) manager.lookup(SourceResolver.ROLE);
+        setResolver((SourceResolver) manager.lookup(SourceResolver.ROLE));
     }
 
     /*
@@ -187,110 +182,5 @@ public class RecursiveDirectoryTraversalAction extends ServiceableAction
           release(src);
         }
         
-    }
-    /**
-     * @see org.apache.excalibur.source.SourceFactory#release(org.apache.excalibur.source.Source) 
-     */
-   public void release(Source source) {
-     if(source!=null){
-       resolver.release(source);
-     }
-    }
-    private void prepare(Parameters parameters) throws ParameterException {
-        this.setRequest(parameters.getParameter("request"));
-        this.setProjectFallback(parameters.getParameter("projectFallback"));
-        this.setProjectExtension(parameters.getParameter("projectExtension"));
-        this.setProjectDir(parameters.getParameter("projectDir"));
-        this.setRest(this.getRequest());
-    }
-
-    /**
-     * @return Returns the projectDir.
-     */
-    public String getProjectDir() {
-        return projectDir;
-    }
-
-    /**
-     * @param projectDir
-     *            The projectDir to set.
-     */
-    public void setProjectDir(String projectDir) {
-        this.projectDir = projectDir;
-    }
-
-    /**
-     * @return Returns the projectExtension.
-     */
-    public String getProjectExtension() {
-        return projectExtension;
-    }
-
-    /**
-     * @param projectExtension
-     *            The projectExtension to set.
-     */
-    public void setProjectExtension(String projectExtension) {
-        this.projectExtension = projectExtension;
-    }
-
-    /**
-     * @return Returns the projectFallback.
-     */
-    public String getProjectFallback() {
-        return projectFallback;
-    }
-
-    /**
-     * @param projectFallback
-     *            The projectFallback to set.
-     */
-    public void setProjectFallback(String projectFallback) {
-        this.projectFallback = projectFallback;
-    }
-
-    /**
-     * @return Returns the request.
-     */
-    public String getRequest() {
-        return request;
-    }
-
-    /**
-     * @param request
-     *            The request to set.
-     */
-    public void setRequest(String request) {
-        this.request = request;
-    }
-
-    /**
-     * @return Returns the resolver.
-     */
-    public SourceResolver getResolver() {
-        return resolver;
-    }
-
-    /**
-     * @param resolver
-     *            The resolver to set.
-     */
-    public void setResolver(SourceResolver resolver) {
-        this.resolver = resolver;
-    }
-
-    /**
-     * @return Returns the rest.
-     */
-    public String getRest() {
-        return rest;
-    }
-
-    /**
-     * @param rest
-     *            The rest to set.
-     */
-    public void setRest(String rest) {
-        this.rest = rest;
     }
 }
