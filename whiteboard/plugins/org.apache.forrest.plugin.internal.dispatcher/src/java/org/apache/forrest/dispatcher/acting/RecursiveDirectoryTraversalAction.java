@@ -62,7 +62,6 @@ import org.apache.forrest.dispatcher.exception.DispatcherException;
 public class RecursiveDirectoryTraversalAction extends AbstractTraversal
         implements ThreadSafe, Serviceable {
 
-    SourceResolver resolver = null;
     HashMap map = new HashMap();
 
     /**
