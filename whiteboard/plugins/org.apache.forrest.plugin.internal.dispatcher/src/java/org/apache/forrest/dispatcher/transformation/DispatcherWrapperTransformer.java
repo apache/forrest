@@ -502,7 +502,18 @@ public class DispatcherWrapperTransformer extends AbstractSAXTransformer
         } else {
           File parent = new File(base.substring(5));
           File parent2 = new File(parent.getParentFile(), href);
-          xslSource = m_resolver.resolveURI(parent2.toURL().toExternalForm());
+
+          try {
+            xslSource = m_resolver.resolveURI(parent2.toURI().toURL().toExternalForm());
+          } catch (IllegalArgumentException e1) {
+            getLogger().error(e1.getMessage());
+
+            return null;
+          } catch (java.net.MalformedURLException e2) {
+            getLogger().error(e2.getMessage());
+
+            return null;
+          }
         }
       }
 
