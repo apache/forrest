@@ -374,7 +374,7 @@ public class DispatcherWrapperTransformer extends AbstractSAXTransformer
       }
       // get the result of the structurer as stream
       InputStream result = structurer.execute(new BufferedInputStream(
-          new ByteArrayInputStream(document.getBytes())), requestedFormat);
+          new ByteArrayInputStream(document.getBytes("UTF-8"))), requestedFormat);
       // requesting a parser
       parser = (SAXParser) manager.lookup(SAXParser.ROLE);
       // adding the result to the consumer

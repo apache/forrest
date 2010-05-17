@@ -21,6 +21,8 @@ import java.io.BufferedOutputStream;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
+import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
 import java.util.Map;
 
 import javax.xml.stream.XMLStreamException;
@@ -105,17 +107,23 @@ public class XSLContract extends Loggable implements Contract {
       }
     }
     ByteArrayOutputStream out = new ByteArrayOutputStream();
+    byte[] bytes = null;
+    String utf8 = "";
     // create a StreamResult and use it for the transformation
-    Result streamResult = new StreamResult(new BufferedOutputStream(out));
     try {
-      helper.transform(dataStream,streamResult);
+        OutputStreamWriter writer = new OutputStreamWriter(out,"UTF-8");
+        Result streamResult = new StreamResult(writer);
+        helper.transform(dataStream,streamResult);
+        utf8 = out.toString("UTF-8");
+        log.debug(utf8);
+        bytes = utf8.getBytes("utf-8");
     } catch (Exception e) {
       String message = "Could not invoke the transformation for "
           + "the contract \""+name+"\". "+"\n"+ e;
       throw new ContractException(message);
     }
-    log.debug(out.toString());
-    return new BufferedInputStream(new ByteArrayInputStream(out.toByteArray()));
+    
+    return new BufferedInputStream(new ByteArrayInputStream(bytes));
   }
 
   /* (non-Javadoc)

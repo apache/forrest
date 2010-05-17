@@ -20,6 +20,7 @@ import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.Serializable;
 import java.io.StringReader;
 import java.util.HashMap;
@@ -490,7 +491,7 @@ public class DispatcherTransformer extends AbstractSAXTransformer implements
               throw new SAXException(e);
             }
             if (null != property) {
-              localParams.put(currentProperty, property.getBytes());
+              localParams.put(currentProperty, property.getBytes("UTF-8"));
             }
           }
         }
@@ -695,7 +696,7 @@ public class DispatcherTransformer extends AbstractSAXTransformer implements
         root.serialize(out);
       }
 
-      InputSource is = new InputSource(new StringReader(out.toString()));
+      InputSource is = new InputSource(new StringReader(out.toString("UTF-8")));
       // adding the result to the consumer
       parser.parse(is, super.xmlConsumer);
     } catch (Exception e) {
@@ -1099,8 +1100,9 @@ public class DispatcherTransformer extends AbstractSAXTransformer implements
    */
   private static InputSource getInputSource(final Source source)
       throws IOException, SourceException {
-    final InputSource newObject = new InputSource(source.getInputStream());
-    newObject.setSystemId(source.getURI());
-    return newObject;
+    final InputSource inputSource = new InputSource(new InputStreamReader(source.getInputStream(), "UTF-8"));
+    inputSource.setEncoding("UTF-8");
+    inputSource.setSystemId(source.getURI());
+    return inputSource;
   }
 }

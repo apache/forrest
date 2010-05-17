@@ -22,7 +22,7 @@ xmlns:map="http://apache.org/cocoon/sitemap/1.0">
     <map:pipeline id="lm">
       <map:match pattern="locationmap.xml">
         <map:generate src="locationmap.xml" />
-        <map:serialize type="xml" />
+        <map:serialize/>
       </map:match>
     </map:pipeline>
     <map:pipeline id="dispatcher">
@@ -61,7 +61,7 @@ xmlns:map="http://apache.org/cocoon/sitemap/1.0">
         </map:transform>
         <map:transform src="lm://hooks-to-fo.xsl" />
         <map:transform src="lm://strip-dispatcher-remains-fo.xsl" />
-        <map:serialize type="xml" />
+        <map:serialize/>
       </map:match>
       <map:match pattern="**.prepare.dispatcher.css">
         <map:generate src="lm://resolve.structurer.{1}" type="jx">
@@ -93,11 +93,11 @@ xmlns:map="http://apache.org/cocoon/sitemap/1.0">
       <map:act type="locale">
         <map:match pattern="resolve.structurer.**">
           <map:generate src="lm://resolve.structurer.{1}" />
-          <map:serialize type="xml" />
+          <map:serialize/>
         </map:match>
         <map:match pattern="resolve.contract.*.**">
           <map:generate src="{lm:resolve.contract.{1}.{2}}" />
-          <map:serialize type="xml" />
+          <map:serialize/>
         </map:match>
         <map:match pattern="prepare.contract.*.**">
           <map:generate src="{lm:resolve.contract.{1}.{2}}" />
@@ -105,7 +105,7 @@ xmlns:map="http://apache.org/cocoon/sitemap/1.0">
           <map:transform type="i18n">
             <map:parameter name="locale" value="{../locale}" />
           </map:transform>
-          <map:serialize type="xml" />
+          <map:serialize/>
         </map:match>
       </map:act>
     </map:pipeline>
@@ -116,7 +116,7 @@ xmlns:map="http://apache.org/cocoon/sitemap/1.0">
       <map:match pattern="prepare.panels.**">
         <map:generate src="{lm:resolve.panels.{1}}" />
         <map:transform src="{lm:root-strip.xsl}" />
-        <map:serialize type="xml" />
+        <map:serialize/>
       </map:match>
     </map:pipeline>
     <map:pipeline>
@@ -126,7 +126,7 @@ xmlns:map="http://apache.org/cocoon/sitemap/1.0">
           <map:parameter name="path" value="{1}.html" />
           <map:parameter name="theme" value="{global:dispatcher.theme}" />
         </map:transform>
-        <map:serialize type="xml" />
+        <map:serialize/>
       </map:match>
     </map:pipeline>
     <map:pipeline id="resources">

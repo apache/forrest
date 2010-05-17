@@ -20,6 +20,7 @@ import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.util.Iterator;
 import java.util.Map;
@@ -124,6 +125,7 @@ public class XSLContractHelper extends Loggable {
       SAXException, IOException {
     // prepare transformation
     transformer = transFact.newTransformer(xslSource);
+    transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
     transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
     transformer.setOutputProperty(OutputKeys.INDENT, "yes");
     transformer.setOutputProperty(OutputKeys.METHOD, "xml");
@@ -220,8 +222,8 @@ public class XSLContractHelper extends Loggable {
     }
     // Setting the necessary attributes of the contract 
     // xsl
-    contract.setXslSource(new StreamSource(new ByteArrayInputStream(handler
-        .getBytes())));
+    byte[] bytes = handler.getBytes();
+    contract.setXslSource(new StreamSource(new ByteArrayInputStream(bytes)));
     /* DEBUG_CODE: 
      * The following is useful to see what is going on
      * 
@@ -254,7 +256,9 @@ public class XSLContractHelper extends Loggable {
       throws ContractException {
     //Source dataSource = new StreamSource(dataStream);
     try {
-      SAXSource saxSource = new SAXSource(xmlReader,new InputSource(dataStream));
+      InputSource inputSource = new InputSource(new InputStreamReader(dataStream, "UTF-8"));
+      inputSource.setEncoding("UTF-8");
+      SAXSource saxSource = new SAXSource(xmlReader,inputSource);
       transformer.transform(saxSource, streamResult);
     } catch (Exception e) {
       String message = "The xsl transformation has thrown an exception. for "
