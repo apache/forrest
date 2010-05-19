@@ -1098,11 +1098,9 @@ public class DispatcherTransformer extends AbstractSAXTransformer implements
    * @throws IOException
    *           if I/O error occured.
    */
-  private static InputSource getInputSource(final Source source)
-      throws IOException, SourceException {
-    final InputSource inputSource = new InputSource(new InputStreamReader(source.getInputStream(), "UTF-8"));
-    inputSource.setEncoding("UTF-8");
-    inputSource.setSystemId(source.getURI());
-    return inputSource;
+  private static InputSource getInputSource(final Source source) throws IOException, SourceException {
+      final InputSource newObject = new InputSource(source.getInputStream());
+      newObject.setSystemId(source.getURI());
+      return newObject;
   }
 }
