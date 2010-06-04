@@ -29,7 +29,7 @@
         </subtitle>
       </header>
       <body>
-        <section>
+        <section id="elements-top">
           <title>Top-level element(s)</title>
           <ul>
             <xsl:for-each select="/dtd/contentModel[not(key('contentmodelbychildren', @ename))]">
@@ -38,28 +38,24 @@
             </xsl:for-each>
           </ul>
         </section>
-        <section>
-          <title>List of elements</title>
-          <ul>
-            <xsl:for-each select="contentModel">
-              <xsl:sort select="@ename"/>
-              <li><link href="#{@ename}">
-                <xsl:value-of select="@ename"/></link></li>
-            </xsl:for-each>
-          </ul>
-        </section>
-        <section>
+        <section id="elements">
           <title>Element declarations</title>
-          <xsl:apply-templates select="contentModel"/>
+          <xsl:apply-templates select="contentModel">
+            <xsl:sort select="@ename"/>
+          </xsl:apply-templates>
         </section>
       </body>
     </document>
   </xsl:template>
   <xsl:template match="contentModel">
     <section id="{@ename}">
+      <title>
+        <xsl:value-of select="@ename"/>
+      </title>
       <table class="dtdElement" cellspacing="0" cellpadding="0" border="0">
         <tr>
           <td colspan="3">
+            <b><xsl:text>Element name </xsl:text></b>
             <span class="dtdTag">
               <xsl:value-of select="@ename"/>
             </span>
