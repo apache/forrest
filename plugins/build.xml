@@ -87,8 +87,7 @@
       <fileset dir="${plugin.lib.dir}" includes="*.jar"/>
       <fileset dir="${plugin.lib.dir}" includes="*.zip"/>
     </path>
-    <fileset dir="${plugin.java.dir}" id="java_present" includes="**/*.java"/>
-    <pathconvert property="java_exists" refid="java_present" setonempty="false"/>
+    <available file="${plugin.java.dir}/**/*.java" property="java_exists"/>
   </target>
   <target name="echo-init" depends="init-build-compiler" unless="no.echo.init">
     <buildnumber file="${build.dir}/build.number"/>
