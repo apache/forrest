@@ -139,8 +139,6 @@
 <!-- ================================================================= -->
 <!-- The deploy.svn target                                             -->
 <!-- ================================================================= -->
-  <property name="deploy.svn.user" value=""/>
-  <property name="deploy.svn.password" value=""/>
   <property name="deploy.svn.url" value=""/>
   <property name="deploy.svn.commit-message" value="Publish from forrestbot"/>
   <property name="deploy.svn.svn-dir" location="work/svn-deploy/${ant.project.name}"/>
@@ -158,7 +156,6 @@
       <fileset dir="${build.site-dir}"/>
     </copy>
 <!-- add new files to SVN -->
-<!-- svnadd doesn't work (it doesn't change the working directory properly) -->
     <exec executable="svn" dir="${deploy.svn.svn-dir}" output="${deploy.svn.svn-filestoadd}" failonerror="true">
       <arg value="status"/>
     </exec>
@@ -183,7 +180,7 @@
     <if>
       <equals arg1="${addedFiles}" arg2="true" />
       <then>
-       <echo message="New documents were added." />
+       <echo level="info" message="New documents were added." />
        <exec executable="svn" dir="${deploy.svn.svn-dir}">
         <arg value="add"/>
         <arg value="--targets"/>
@@ -191,7 +188,7 @@
        </exec>
       </then>
       <else>
-       <echo message="No new documents have been added." />
+       <echo level="info" message="No new documents have been added." />
       </else>
     </if>
 <!-- check in to SVN -->
