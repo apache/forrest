@@ -89,11 +89,14 @@
   <property name="build.svn-dir"    location="work/svn"/>
   <target name="getsrc.svn" description="FB: Get source from an SVN repository">
     <echo level="info">svn: ${getsrc.svn.url} -> ${build.svn-dir}/${ant.project.name}</echo>
-    <svncheckout repositoryUrl="${getsrc.svn.url}"
-      destination="${build.svn-dir}/${ant.project.name}"
-      revision="${getsrc.svn.revision}"
-      failonerror="true"
-      recursive="true"/>
+    
+    <exec executable="svn" dir="." failonerror="true">
+      <arg value="co"/>
+      <arg value="${getsrc.svn.url}"/>
+      <arg value="${build.svn-dir}/${ant.project.name}"/>
+      
+    </exec>
+    
     <echo level="info">Loading ${build.svn-dir}/${ant.project.name}/forrest.properties..</echo>
     <loadproperties srcFile="${build.svn-dir}/${ant.project.name}/forrest.properties"/>
     <loadproperties srcFile="${forrest.home}/main/webapp/default-forrest.properties"/>

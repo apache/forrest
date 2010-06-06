@@ -147,13 +147,12 @@
   <property name="deploy.svn.svn-filestoadd" location="work/svn-deploy/${ant.project.name}.toadd"/>
   <target name="deploy.svn" unless="build.failed" description="FB: Deploy by committing to an SVN repository">
 <!-- get current SVN source -->
-    <svncheckout
-        repositoryurl="${deploy.svn.url}"
-        username="${deploy.svn.user}"
-        password="${deploy.svn.password}"
-        destination="${deploy.svn.svn-dir}"
-        failonerror="true"
-    />
+    <exec executable="svn" dir="." failonerror="true">
+      <arg value="co"/>
+      <arg value="${deploy.svn.url}"/>
+      <arg value="${deploy.svn.svn-dir}"/>
+    </exec>
+
 <!-- copy new files into sandbox -->
     <copy todir="${deploy.svn.svn-dir}">
       <fileset dir="${build.site-dir}"/>
@@ -168,21 +167,39 @@
       filenames in the list are new files
     -->
     <replace file="${deploy.svn.svn-filestoadd}" token="?      " value=""/>
-    <replace file="${deploy.svn.svn-filestoadd}" token="M      " value=""/>
+    <replaceregexp file="${deploy.svn.svn-filestoadd}"
+                             match="M       .*\n"
+                             replace=""
+                             byline="false" flags="s"/>
 <!-- don't fail on error here because
       1) the targets file might have 'bad' filenames but we should continue
       2) we would've already failed if the svn executable wasn't found
     -->
-    <exec executable="svn" dir="${deploy.svn.svn-dir}">
-      <arg value="add"/>
-      <arg value="--targets"/>
-      <arg value="${deploy.svn.svn-filestoadd}"/>
-    </exec>
+    
+    <condition property="addedFiles">
+     <length file="${deploy.svn.svn-filestoadd}" when="greater" length="0" />
+    </condition>
+    
+    <if>
+      <equals arg1="${addedFiles}" arg2="true" />
+      <then>
+       <echo message="New documents were added." />
+       <exec executable="svn" dir="${deploy.svn.svn-dir}">
+        <arg value="add"/>
+        <arg value="--targets"/>
+        <arg value="${deploy.svn.svn-filestoadd}"/>
+       </exec>
+      </then>
+      <else>
+       <echo message="No new documents have been added." />
+      </else>
+    </if>
 <!-- check in to SVN -->
-    <svncommit
-        target="${deploy.svn.svn-dir}"
-        repositoryurl="${deploy.svn.url}"
-        commitmessage="${deploy.svn.commit-message}"
-    />
+    <exec executable="svn" dir="." failonerror="true">
+      <arg value="commit"/>
+      <arg value="${deploy.svn.svn-dir}"/>
+      <arg value="-m ${deploy.svn.commit-message}"/>
+     </exec>
+
   </target>
 </project>
