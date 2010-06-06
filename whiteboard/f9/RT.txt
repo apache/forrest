@@ -1,0 +1,47 @@
+This file is just some random notes I'm taking along the way.   
+
+Contents:
+- Ross' thoughts on forrest
+- Assertions
+- Todo
+
+********************
+Ross' Mail:
+http://marc.info/?l=forrest-dev&m=115558559915005&w=2
+
+<from email above>
+What Forrest Does
+=================
+
+Input -> Input Processing -> Internal Format -> Output Processing ->
+Output Format
+
+To do this we need to:
+
+- locate the source document
+- determine the format of the input document
+- decide which input plugin to use
+- generate the internal format using the input plugin
+- decide what output plugin we need
+- generate the output format using the output plugin
+</from email above>
+
+********************
+Assertions/Driving Factors:
+o) Static content should be served statically.  That is, there's really no reason to run 'webapp'
+    mode where the content is re-generated every time.
+o) The "pipeline" is really static (see above), even if each actor might be pluggable/dynamic.
+o) All design decisions should be run through the filter of simplicity and ease of use first.
+ - o) Advanced features shouldn't be allowed to compromise the ease of use of the basic features.
+o) Most users use forrest as a site generation tool - optimize for that even if we allow more
+   sophisticated scenarios.
+o) Software should be testable so we can be confident in changes:)
+o) We should try to follow known idioms: MIME Types, URI's identify resource, Representations/Media Types, etc.
+
+********************   
+Todo:
+ o) Separate Jetty stuff from the task itself.  It should run as an actor that accepts "start"/"stop"
+    messages.  We also need an actor that, when state=running, monitors the source dirs and 
+    periodically rebuilds.
+ o) 
+   
