@@ -140,6 +140,8 @@
 <!-- The deploy.svn target                                             -->
 <!-- ================================================================= -->
   <property name="deploy.svn.url" value=""/>
+<!-- Set the default username, if not already set via deploy.svn.settings -->
+  <property name="deploy.svn.user" value="${env.USER}"/>
   <property name="deploy.svn.commit-message" value="Publish from forrestbot"/>
   <property name="deploy.svn.svn-dir" location="work/svn-deploy/${ant.project.name}"/>
   <property name="deploy.svn.svn-filestoadd" location="work/svn-deploy/${ant.project.name}.toadd"/>
@@ -147,6 +149,8 @@
 <!-- get current SVN source -->
     <exec executable="svn" dir="." failonerror="true">
       <arg value="co"/>
+      <arg value="--username"/>
+      <arg value="${deploy.svn.user}"/>
       <arg value="${deploy.svn.url}"/>
       <arg value="${deploy.svn.svn-dir}"/>
     </exec>
@@ -194,9 +198,10 @@
 <!-- check in to SVN -->
     <exec executable="svn" dir="." failonerror="true">
       <arg value="commit"/>
+      <arg value="--username"/>
+      <arg value="${deploy.svn.user}"/>
       <arg value="${deploy.svn.svn-dir}"/>
       <arg value="-m ${deploy.svn.commit-message}"/>
      </exec>
-
   </target>
 </project>

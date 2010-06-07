@@ -81,11 +81,14 @@
   <property name="getsrc.svn.url" value=""/>
   <property name="getsrc.svn.revision" value="HEAD"/>
   <property name="build.svn-dir"    location="work/svn"/>
+  <property name="deploy.svn.user" value="${env.USER}"/>
   <target name="getsrc.svn" description="FB: Get source from an SVN repository">
     <echo level="info">svn: ${getsrc.svn.url} -> ${build.svn-dir}/${ant.project.name}</echo>
     
     <exec executable="svn" dir="." failonerror="true">
       <arg value="co"/>
+      <arg value="--username"/>
+      <arg value="${deploy.svn.user}"/>
       <arg value="${getsrc.svn.url}"/>
       <arg value="${build.svn-dir}/${ant.project.name}"/>
     </exec>

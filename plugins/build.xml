@@ -52,6 +52,10 @@
   <property name="build.dir"                  location="build"/>
   <property name="build.classes"              location="${build.dir}/classes"/>
   <property name="build.docs"                 location="${build.dir}/site"/>
+<!-- Option to set username via deploy.svn.settings -->
+  <import file="${forrest.home}/deploy.svn.settings" optional="true"/>
+<!-- Set the default username, if not already set via deploy.svn.settings -->
+  <property name="deploy.svn.user" value="${env.USER}"/>
   <taskdef resource="net/sf/antcontrib/antcontrib.properties">
     <classpath>
       <fileset dir="${forrest.ant.lib.dir}" includes="ant-contrib-*.jar" />
@@ -161,6 +165,8 @@
 <!-- check in to SVN -->
     <exec executable="svn" dir="." failonerror="true">
       <arg value="commit"/>
+      <arg value="--username"/>
+      <arg value="${deploy.svn.user}"/>
       <arg value="${deploy.plugins.svn-dir}"/>
       <arg value="-m Deployment plugins descriptor file plugins.xml (deployed by 'deploy-plugins.xml' target of plugin build script)"/>
      </exec>
@@ -245,6 +251,8 @@
 <!-- check in to SVN -->
     <exec executable="svn" dir="." failonerror="true">
       <arg value="commit"/>
+      <arg value="--username"/>
+      <arg value="${deploy.svn.user}"/>
       <arg value="${deploy.docs.svn-dir}/plugins_${docsVersion}"/>
       <arg value="-m Deployment of docs for ${plugin-name} plugin (deployed by 'deploy-docs' target of plugin build script)"/>
      </exec>
@@ -304,6 +312,8 @@ You have just released a plugin. There are other tasks to complete. For example:
 <!-- check in to SVN -->
     <exec executable="svn" dir="." failonerror="true">
       <arg value="commit"/>
+      <arg value="--username"/>
+      <arg value="${deploy.svn.user}"/>
       <arg value="${deploy.plugins.svn-dir}"/>
       <arg value="-m Deployment of ${plugin-name} plugin (deployed by 'deploy' target of plugin build script)"/>
      </exec>
@@ -327,6 +337,8 @@ You have just released a plugin. There are other tasks to complete. For example:
 <!-- get current plugins directory from SVN -->
     <exec executable="svn" dir="." failonerror="true">
       <arg value="co"/>
+      <arg value="--username"/>
+      <arg value="${deploy.svn.user}"/>
       <arg value="${deploy.plugin.docs.svn.url}"/>
       <arg value="${deploy.docs.svn-dir}"/>
     </exec>
@@ -336,6 +348,8 @@ You have just released a plugin. There are other tasks to complete. For example:
 <!-- get current plugins directory from SVN -->
     <exec executable="svn" dir="." failonerror="true">
       <arg value="co"/>
+      <arg value="--username"/>
+      <arg value="${deploy.svn.user}"/>
       <arg value="${deploy.plugins.svn.url}"/>
       <arg value="${deploy.plugins.svn-dir}"/>
     </exec>
