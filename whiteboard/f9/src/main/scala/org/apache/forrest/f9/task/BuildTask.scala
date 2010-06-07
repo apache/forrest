@@ -17,6 +17,7 @@
 package org.apache.forrest.f9.task
 
 import java.io.File
+import org.apache.commons.io.FileUtils
 
 /**
  * Task to actually build the content through the pipeline.
@@ -27,6 +28,10 @@ object BuildTask extends Task("build", false) {
 	def call(state: AppState):Boolean = {
 		println("Incoming state: " + state.projectDir)
 		base = new File(state.projectDir, "sources/docs")
+		val resBase = new File(state.projectDir, "sources/resources")
+		val resOut = new File(state.projectDir, "output/resources")
+		
+		FileUtils.copyDirectory(resBase, resOut)
 		call(base)
 		true
 	}
