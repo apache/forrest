@@ -263,9 +263,6 @@ document.write("Last Published: " + document.lastModified);
 <a href="#follow">Follow along on your local system</a>
 </li>
 <li>
-<a href="#settings">The deploy.svn.settings file</a>
-</li>
-<li>
 <a href="#buildfile">The Forrestbot buildfile</a>
 </li>
 <li>
@@ -369,18 +366,7 @@ document.write("Last Published: " + document.lastModified);
         <a href="http://svn.apache.org/repos/asf/forrest/trunk/etc/publishing_our_site.txt">$FORREST_HOME/etc/publishing_our_site.txt</a>
       
 </p>
-<a name="N10066"></a><a name="settings"></a>
-<h3 class="underlined_5">The deploy.svn.settings file</h3>
-<p>
-        As explained in the above document, each committer needs a
-        <span class="codefrag">deploy.svn.settings</span> file to provide their credentials.
-      </p>
-<pre class="code">&lt;?xml version="1.0"?&gt;
-&lt;project&gt;
-  &lt;property name="deploy.svn.user" value="myApacheUsername"/&gt;
-  &lt;property name="deploy.svn.password" value="mySvnPassword"/&gt;
-&lt;/project&gt;</pre>
-<a name="N10077"></a><a name="buildfile"></a>
+<a name="N10066"></a><a name="buildfile"></a>
 <h3 class="underlined_5">The Forrestbot buildfile</h3>
 <p>
         The Forrestbot buildfile sets some properties and declares the workstages (i.e. Ant targets) that need to be carried out. Of course this is fully explained in the <a href="tools/forrestbot.html">Forrestbot</a>
@@ -395,7 +381,6 @@ document.write("Last Published: " + document.lastModified);
 &lt;project name="forrest-docs" default="main"&gt;
   &lt;property name="getsrc.local.root-dir" location="."/&gt;
   &lt;target name="getsrc" depends="getsrc.clean-workdir, getsrc.local"/&gt;
-  &lt;import file="../deploy.svn.settings" optional="true"/&gt;
   &lt;property name="deploy.svn.url"
     value="https://svn.apache.org/repos/asf/forrest/site"/&gt;
   &lt;target name="deploy" depends="deploy.svn"/&gt;
@@ -410,7 +395,7 @@ document.write("Last Published: " + document.lastModified);
 <p>
         It deploys the generated files directly to the forrest/site SVN repository.
       </p>
-<a name="N10099"></a><a name="build"></a>
+<a name="N10088"></a><a name="build"></a>
 <h3 class="underlined_5">The "build" workstage</h3>
 <p>
         After doing the usual process to edit source documents, review them with
@@ -427,7 +412,7 @@ forrest -f publish.xml build</pre>
 <p>
         To review, see the built docs in <span class="codefrag">build/forrest-docs</span> directory.
       </p>
-<a name="N100B3"></a><a name="deploy"></a>
+<a name="N100A2"></a><a name="deploy"></a>
 <h3 class="underlined_5">The "deploy" workstage</h3>
 <p>
         When satisfied, then deploy the built docs:
@@ -446,7 +431,7 @@ forrest -f publish.xml build</pre>
         The files that are being committed will now be listed. That is it.
         They are now in the "<a href="http://svn.apache.org/repos/asf/forrest/site">forrest/site</a>" SVN repository.
       </p>
-<a name="N100CE"></a><a name="production"></a>
+<a name="N100BD"></a><a name="production"></a>
 <h3 class="underlined_5">Moving the documents into production</h3>
 <p>
         Next a cron job on the server will automatically publish it.
@@ -462,12 +447,12 @@ svn update</pre>
         about how the ASF project websites are managed.
       </p>
 </div>
-<a name="N100E3"></a><a name="faqs"></a>
+<a name="N100D2"></a><a name="faqs"></a>
 <h2 class="underlined_10">Frequently Asked Questions</h2>
 <div class="section">
-<a name="N100E7"></a><a name="faq-general"></a>
+<a name="N100D6"></a><a name="faq-general"></a>
 <h3 class="underlined_5">1 General issues</h3>
-<a name="N100EB"></a><a name="1.1+Why+all+the+svn+warnings+about+%22is+already+under+version+control%22"></a>
+<a name="N100DA"></a><a name="1.1+Why+all+the+svn+warnings+about+%22is+already+under+version+control%22"></a>
 <h4>1.1 Why all the svn warnings about "is already under version control"</h4>
 <p>
             The deploy workstage does 'svn add' for all the generated documents
@@ -476,14 +461,14 @@ svn update</pre>
             changed. So the warning messages are issued for the existing, updated
             documents.
           </p>
-<a name="N100F3"></a><a name="1.2+Why+is+every+PDF+document+being+deployed%2C+even+though+they+have+not+changed."></a>
+<a name="N100E2"></a><a name="1.2+Why+is+every+PDF+document+being+deployed%2C+even+though+they+have+not+changed."></a>
 <h4>1.2 Why is every PDF document being deployed, even though they have not changed.</h4>
 <p>
             The PDF plugins FOP library is automatically adding a datestamp to
             every generated document. We need to find a solution.
           </p>
 </div>
-<a name="N100FB"></a><a name="Further-Reading"></a>
+<a name="N100EA"></a><a name="Further-Reading"></a>
 <h2 class="underlined_10">Further Reading</h2>
 <div class="section">
 <ul>
