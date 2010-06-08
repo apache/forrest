@@ -24,34 +24,75 @@
     <section id="overview">
       <title>Overview</title>
       <p>
-        Produce output in
+        Produce output in Anakia-like "xdoc" format. Enables use of Forrest as
+        a tool for gathering input from various sources, and output a
+        consistent set of xml output documents.
+        The output is similar to
         <a href="http://velocity.apache.org/engine/devel/anakia.html">Apache Velocity Anakia</a>
-        "xdoc" format, for example
-        <a href="site:sample-1">localhost:8888/index.xdoc</a>
-      </p>
-      <p>
-        One use of this plugin is to export a Forrest-based site to Anakia
-        "xdoc".
-      </p>
-      <p>
-        Forrest can then be used as normal, to draw together source content
-        in various formats, and export a set of consistent documents.
+        "xdoc" format.
+        See <a href="site:sample-1">example</a>.
       </p>
     </section>
     <section id="howto">
       <title>Howto</title>
       <p>
-        You need a link from each page to its .xdoc version. The
-        easiest way to do that is with the new whiteboard
-        <a href="http://forrest.apache.org/pluginDocs/dev/org.apache.forrest.plugin.internal.dispatcher/">Dispatcher</a>
-        functionality. Follow the "Quickstart" document. Edit your new structurer panels to add
-        a new contract "content-anakia-link" following the existing "content-pdf-link".
-        A contract is provided in the o.a.f.plugin.output.Anakia plugin at
-        resources/themes/common/html/content-anakia-link.ft to copy to the same place in your project.
+        In your project's <code>forrest.properties</code> file make the
+        following changes ...
+      </p>
+      <ul>
+        <li>
+          Declare the <code>org.apache.forrest.plugin.output.Anakia</code>
+          plugin at the <code>project.required.plugins</code> property
+          (comma-separated list).
+        </li>
+        <li>
+          Uncomment the <code>project.start-uri</code> property and set it to be
+          <code>anakia-start.xml</code>
+        </li>
+      </ul>
+      <p>
+         Now do '<code>forrest</code>' to build your site as normal.
       </p>
       <p>
-        Don't forget to declare the o.a.f.plugin.output.Anakia plugin (and the usual Dispatcher
-        plugins) in your project's forrest.properties file.
+         Alongside each <code>*.html</code> file there will now be a matching
+         <code>*.xdoc</code> file.
+      </p>
+    </section>
+    <section id="explanation">
+      <title>How it works</title>
+      <p>
+        Explanation of how this plugin works
+        and how its output can be enhanced with additional processing.
+      </p>
+      <p>
+        Without touching any of the site source content or navigation system,
+        we need to additionally inject another set of links to be processed.
+        Each html output document will then also have a matching URI with 
+        <code>*.xdoc</code> extension.
+      </p>
+      <p>
+        This is achieved with the <code>input.xmap</code> sitemap. For the
+        requested pipeline <code>anakia-start.xml</code> Forrest will generate
+        the "linkmap" of the site navigation, then apply a transformation
+        to amend each link.
+      </p>
+      <p>
+        This automatically enables the crawler to gather this set of links.
+      </p>
+      <p>
+        The <code>output.xmap</code> sitemap then handles each xdoc URI to
+        transform the internal content structure. This plugin provides one
+        stylesheet <code>document-to-xdoc.xsl</code> then applies a core
+        transformation to make the xml output a bit more pretty.
+      </p>
+      <p>
+        To enhance the output, either amend the <code>document-to-xdoc.xsl</code>
+        stylesheet (and please send changes) or insert another transformation
+        of your own. In the <code>output.xmap</code> after the abovementioned
+        transformation, add the line
+        <code>&lt;map:transform src="{lm:anakia.transform.xdoc.mine}"/></code>
+        and add your stylesheet (following the locationmap naming convention) at
+        <code>resources/stylesheets/xdoc-to-mine.xsl</code>
       </p>
     </section>
   </body>

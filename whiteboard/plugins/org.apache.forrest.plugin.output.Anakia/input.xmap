@@ -17,20 +17,10 @@
 -->
 <map:sitemap xmlns:map="http://apache.org/cocoon/sitemap/1.0">
   <map:pipelines>
-    <map:pipeline internal="true">
-      <map:match type="regexp" pattern="^(.*?)([^/]*).xdoc$">
-        <map:aggregate element="site">
-          <map:part src="cocoon://skinconf.xml"/>
-          <map:part src="cocoon://{1}{2}.xml"/>
-        </map:aggregate>
-        <map:transform type="idgen"/>
-        <map:transform type="xinclude"/>
-        <map:transform type="linkrewriter" src="cocoon://{1}linkmap-{2}.xdoc"/>
-        <map:transform src="{lm:transform.html.broken-links}"/>
-        <map:transform src="{lm:anakia.transform.document.xdoc}"/>
-        <map:transform src="{lm:transform.xml.pretty}"/>
-<!-- FIXME: Why does the xinclude namespace need to be stripped? -->
-        <map:transform src="{lm:transform.xml.xml-namespace-stripped}"/>
+    <map:pipeline>
+      <map:match pattern="anakia-start.xml">
+        <map:generate src="cocoon://linkmap.html"/>
+        <map:transform src="{lm:anakia.transform.linkmap.anakiamap}"/>
         <map:serialize type="xml"/>
       </map:match>
     </map:pipeline>
