@@ -10,7 +10,7 @@ import java.io.FileWriter
 class HtmlFileSink(base: String) extends Filter {
   private val xmldecl = "<?xml version='1.0' encoding='UTF-8'?>\n"
   private val extension = ".xhtml"
-  private val pinst = "<?xml-stylesheet type=\"text/xsl\" href=\"/resources/site.xsl\"?>\n"
+  private val pinst = "<?xml-stylesheet type=\"text/xsl\" href=\"/resources/f9/site.xsl\"?>\n"
   
   def process(model: Map[String, Any]) = {
     println("Processing HtmlFileSink: " + model("requestUri"))	

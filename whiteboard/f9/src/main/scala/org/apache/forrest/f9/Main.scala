@@ -31,7 +31,6 @@ object Main {
 	  // we have to always init first, so ignore CL args
 	  var state = "init"
 	  var next = ""
-	  val currDir = new File(".")
 	  
 	  while(true) {
 	   state match {
