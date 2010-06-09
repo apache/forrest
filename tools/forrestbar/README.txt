@@ -22,6 +22,10 @@ Point your browser to:
 file:///%FORREST_HOME%/tools/forrestbar/build/forrestbar.xpi
 Follow instructions and restart the browser.
 
+Notes to committers:
+When you change it, please follow the publish process:
+http://forrest.apache.org/procedures/How_to_publish_docs.html
+
 
 References
 ==========
