@@ -102,6 +102,12 @@ function searchIssue(searchID)
   navigate('http://issues.apache.org/jira/secure/IssueNavigator.jspa?query=' + searchItem.value + '&summary=true&description=true&reset=true&body=true&pid=12310000');
 }
 
+function searchMidGmane(searchID)
+{
+  var searchItem = document.getElementById(searchID);
+  navigate('http://mid.gmane.org/' + searchItem.value);
+}
+
 function searchSite(searchID)
 {
   var searchItem = document.getElementById(searchID);
