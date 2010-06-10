@@ -123,6 +123,10 @@
             that are not to be modified by Forrest.</td>
         </tr>
         <tr>
+          <th>plugins.xmap</th>
+          <td>Provides access to the plugins descriptor files.</td>
+        </tr>
+        <tr>
           <th>aggregate.xmap</th>
           <td>Generates a single page (HTML or PDF) containing all the content
             for the site.</td>
@@ -265,32 +269,27 @@ FORMATS    doc-v11  doc-v13  doc-v20 ... Docbook  FAQ  Howto  Wiki  RSS  ??
         </p>
         <source>
 <![CDATA[
-      <!-- Body content -->
+<!-- Body content -->
       <map:match pattern="**.xml">
-        <map:match pattern="changes.xml">
-          <map:mount uri-prefix="" src="status.xmap" check-reload="yes" />
+        <map:match pattern="locationmap.xml">
+          <map:generate src="{forrest:forrest.locationmap}" />
+          <map:serialize type="xml"/>
         </map:match>
-
-        <map:match pattern="todo.xml">
-          <map:mount uri-prefix="" src="status.xmap" check-reload="yes" />
+        <map:match pattern="plugins.xml">
+          <map:mount uri-prefix="" src="plugins.xmap" check-reload="yes" />
         </map:match>
-
-        <map:match pattern="**dtdx.xml">
-          <map:mount uri-prefix="" src="dtd.xmap" check-reload="yes" />
+        <map:match pattern="pluginDocs/plugins_(.*)/index(|\.source).xml" type="regexp">
+          <map:mount uri-prefix="" src="plugins.xmap" check-reload="yes" />
         </map:match>
-
-        <map:match pattern="forrest-issues.xml">
-          <map:mount uri-prefix="" src="issues.xmap" check-reload="yes" />
+        <map:match pattern="linkmap.*">
+          <map:mount uri-prefix="" src="linkmap.xmap" check-reload="yes" />
         </map:match>
-
         <map:match pattern="**faq.xml">
           <map:mount uri-prefix="" src="faq.xmap" check-reload="yes" />
         </map:match>
-
-        <map:match pattern="site.xml">
-          <map:mount uri-prefix="" src="aggregate.xmap" check-reload="yes" />
-        </map:match>
-        ....
+        <map:match pattern="community/**index.xml">
+          <map:mount uri-prefix="" src="forrest.xmap" check-reload="yes" />
+        </map:match>        ....
         ....]]>
         </source>
         <section id="late_binding_pipelines">
