@@ -20,6 +20,8 @@ import java.io.File
 import org.apache.forrest.f9.filters._
 
 object Pipeline {
+	  var started = false
+	  
 	  val pipeline:List[Filter] = List(
 	 		  new SourceLocatorFilter(new File(".")),
 	 		  new SourceTypeFilter(),
@@ -28,10 +30,12 @@ object Pipeline {
 	 		  
 	def init() {
       pipeline.foreach(p => p.start)
+      started = true
 	}
 	  
 	def exit() {
-	  pipeline.foreach(p => p ! "exit_now")
+	  if(started == true) 
+	    pipeline.foreach(p => p ! "exit_now")
 	}
 	
 	def pump(r: Map[String,Any]) {

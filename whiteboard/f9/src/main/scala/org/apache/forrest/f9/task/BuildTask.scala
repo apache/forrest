@@ -22,7 +22,7 @@ import org.apache.commons.io.FileUtils
 /**
  * Task to actually build the content through the pipeline.
  */
-object BuildTask extends Task("build", false) {
+object BuildTask extends Task("site", false) {
 	var base: File = null
 		
 	def call(state: AppState):Boolean = {

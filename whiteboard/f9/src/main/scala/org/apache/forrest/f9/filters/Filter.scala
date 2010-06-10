@@ -23,6 +23,7 @@ import scala.xml.Elem
 trait Filter extends Actor {
     
 	def act() {
+	  init_hook()
 	  loop {
 	   react {
 	     case (model: Map[String, Any], p: List[Filter]) if p.length == 0 =>
@@ -45,4 +46,5 @@ trait Filter extends Actor {
 	}
 	def process(model: Map[String, Any]): Map[String, Any] 
 	def exit_hook() {}
+	def init_hook() {}
 }

@@ -20,7 +20,6 @@ package org.apache.forrest.f9.filters
 class OutputTypeFilter(base: String) extends Filter {
 	val supportedTypes = Map("application/xhtml+xml"->new HtmlFileSink(base))
 
-	supportedTypes.values.foreach(t => t.start)
 	
  	def process(model: Map[String, Any]) = {
  		println("Attempting output for: " + model("resourceUri"))
@@ -40,5 +39,8 @@ class OutputTypeFilter(base: String) extends Filter {
 	
 	override def exit_hook() {
 		supportedTypes.values.foreach(t => t ! "exit_now")
+	}
+	override def init_hook() {
+		supportedTypes.values.foreach(t => t.start)
 	}
 }

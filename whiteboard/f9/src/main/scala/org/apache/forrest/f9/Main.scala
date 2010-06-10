@@ -54,7 +54,7 @@ object Main {
 	 	 	state = retState
 	 	  case "exit" =>
 	 	 	Pipeline.exit
-	 	    return
+	 	 	return 	    
 	 	  case _ =>
 	 	    println("unknown(" + state + ").")
 	 	    state = retState

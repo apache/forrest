@@ -51,6 +51,7 @@ object InitTask extends Task("init", true) {
 			case _ =>
 			  println("ok(valid).")
 		}
+
 		Pipeline.init
 		state.state += ("initialized"->true)
 		return true
