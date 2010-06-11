@@ -535,6 +535,13 @@ document.write("Last Published: " + document.lastModified);
         
 <tr>
           
+<th colspan="1" rowspan="1">plugins.xmap</th>
+          <td colspan="1" rowspan="1">Provides access to the plugins descriptor files.</td>
+        
+</tr>
+        
+<tr>
+          
 <th colspan="1" rowspan="1">aggregate.xmap</th>
           <td colspan="1" rowspan="1">Generates a single page (HTML or PDF) containing all the content
             for the site.</td>
@@ -611,7 +618,7 @@ document.write("Last Published: " + document.lastModified);
     </section>
     -->
     
-<a name="N10132"></a><a name="source_pipelines"></a>
+<a name="N1013F"></a><a name="source_pipelines"></a>
 <h2 class="underlined_10">Source pipelines (**.xml)</h2>
 <div class="section">
 <p>
@@ -650,7 +657,7 @@ FORMATS    doc-v11  doc-v13  doc-v20 ... Docbook  FAQ  Howto  Wiki  RSS  ??
 (*.xml)
                         (in forrest.xmap, faq.xmap, etc)
       </pre>
-<a name="N1015D"></a><a name="forrest_xmap"></a>
+<a name="N1016A"></a><a name="forrest_xmap"></a>
 <h3 class="underlined_5">forrest.xmap</h3>
 <p>
           Most of the usual Source pipelines are defined in
@@ -678,7 +685,7 @@ FORMATS    doc-v11  doc-v13  doc-v20 ... Docbook  FAQ  Howto  Wiki  RSS  ??
           &lt;/map:when&gt;
           
         </pre>
-<a name="N10185"></a><a name="other_source"></a>
+<a name="N10192"></a><a name="other_source"></a>
 <h3 class="underlined_5">Other source pipelines</h3>
 <p>
           As mentioned above, all non-core Source pipelines are distributed in
@@ -688,35 +695,30 @@ FORMATS    doc-v11  doc-v13  doc-v20 ... Docbook  FAQ  Howto  Wiki  RSS  ??
         </p>
 <pre class="code">
 
-      &lt;!-- Body content --&gt;
+&lt;!-- Body content --&gt;
       &lt;map:match pattern="**.xml"&gt;
-        &lt;map:match pattern="changes.xml"&gt;
-          &lt;map:mount uri-prefix="" src="status.xmap" check-reload="yes" /&gt;
+        &lt;map:match pattern="locationmap.xml"&gt;
+          &lt;map:generate src="{forrest:forrest.locationmap}" /&gt;
+          &lt;map:serialize type="xml"/&gt;
         &lt;/map:match&gt;
-
-        &lt;map:match pattern="todo.xml"&gt;
-          &lt;map:mount uri-prefix="" src="status.xmap" check-reload="yes" /&gt;
+        &lt;map:match pattern="plugins.xml"&gt;
+          &lt;map:mount uri-prefix="" src="plugins.xmap" check-reload="yes" /&gt;
         &lt;/map:match&gt;
-
-        &lt;map:match pattern="**dtdx.xml"&gt;
-          &lt;map:mount uri-prefix="" src="dtd.xmap" check-reload="yes" /&gt;
+        &lt;map:match pattern="pluginDocs/plugins_(.*)/index(|\.source).xml" type="regexp"&gt;
+          &lt;map:mount uri-prefix="" src="plugins.xmap" check-reload="yes" /&gt;
         &lt;/map:match&gt;
-
-        &lt;map:match pattern="forrest-issues.xml"&gt;
-          &lt;map:mount uri-prefix="" src="issues.xmap" check-reload="yes" /&gt;
+        &lt;map:match pattern="linkmap.*"&gt;
+          &lt;map:mount uri-prefix="" src="linkmap.xmap" check-reload="yes" /&gt;
         &lt;/map:match&gt;
-
         &lt;map:match pattern="**faq.xml"&gt;
           &lt;map:mount uri-prefix="" src="faq.xmap" check-reload="yes" /&gt;
         &lt;/map:match&gt;
-
-        &lt;map:match pattern="site.xml"&gt;
-          &lt;map:mount uri-prefix="" src="aggregate.xmap" check-reload="yes" /&gt;
-        &lt;/map:match&gt;
-        ....
+        &lt;map:match pattern="community/**index.xml"&gt;
+          &lt;map:mount uri-prefix="" src="forrest.xmap" check-reload="yes" /&gt;
+        &lt;/map:match&gt;        ....
         ....
         </pre>
-<a name="N10198"></a><a name="late_binding_pipelines"></a>
+<a name="N101A5"></a><a name="late_binding_pipelines"></a>
 <h4>Late-binding pipelines</h4>
 <p>
             One point of interest here is that the sub-sitemap is often not
@@ -745,7 +747,7 @@ FORMATS    doc-v11  doc-v13  doc-v20 ... Docbook  FAQ  Howto  Wiki  RSS  ??
           </pre>
 </div>
     
-<a name="N101C3"></a><a name="output_pipelines"></a>
+<a name="N101D0"></a><a name="output_pipelines"></a>
 <h2 class="underlined_10">Output pipelines</h2>
 <div class="section">
 <p>
@@ -757,7 +759,7 @@ FORMATS    doc-v11  doc-v13  doc-v20 ... Docbook  FAQ  Howto  Wiki  RSS  ??
         We now wish to render the XML from these pipelines to output formats
         like HTML and PDF.
       </p>
-<a name="N101D2"></a><a name="pdf"></a>
+<a name="N101DF"></a><a name="pdf"></a>
 <h3 class="underlined_5">PDF output</h3>
 <div class="note">
 <div class="label">Note</div>
@@ -807,7 +809,7 @@ FORMATS    doc-v11  doc-v13  doc-v20 ... Docbook  FAQ  Howto  Wiki  RSS  ??
 <p>
           Lastly, we generate a PDF using the fo2pdf serializer.
         </p>
-<a name="N1020F"></a><a name="html"></a>
+<a name="N1021C"></a><a name="html"></a>
 <h3 class="underlined_5">HTML output</h3>
 <p>
           Generating HTML pages is more complicated, because we have to merge
@@ -855,10 +857,10 @@ FORMATS    doc-v11  doc-v13  doc-v20 ... Docbook  FAQ  Howto  Wiki  RSS  ??
         </pre>
 </div>
     
-<a name="N10259"></a><a name="intermediate_pipelines"></a>
+<a name="N10266"></a><a name="intermediate_pipelines"></a>
 <h2 class="underlined_10">Intermediate pipelines</h2>
 <div class="section">
-<a name="N1025F"></a><a name="body_pipeline"></a>
+<a name="N1026C"></a><a name="body_pipeline"></a>
 <h3 class="underlined_5">Page body</h3>
 <p>
           Here is the matcher which generates the page body:
@@ -927,7 +929,7 @@ FORMATS    doc-v11  doc-v13  doc-v20 ... Docbook  FAQ  Howto  Wiki  RSS  ??
             &lt;html&gt; and &lt;body&gt;) suitable for merging with the menu and tabs.</li>
         
 </ol>
-<a name="N102A2"></a><a name="menu_pipeline"></a>
+<a name="N102AF"></a><a name="menu_pipeline"></a>
 <h3 class="underlined_5">Page menu</h3>
 <p>
           In the <span class="codefrag">sitemap.xmap</span> file, the matcher generating HTML for
@@ -955,7 +957,7 @@ FORMATS    doc-v11  doc-v13  doc-v20 ... Docbook  FAQ  Howto  Wiki  RSS  ??
           sufficiently complex to require a
           <a href="#menu_generation_impl">section of its own</a>.
         </p>
-<a name="N102C8"></a><a name="tab_pipeline"></a>
+<a name="N102D5"></a><a name="tab_pipeline"></a>
 <h3 class="underlined_5">Page tabs</h3>
 <p>
           Tab generation is quite tame compared to menus:
@@ -980,7 +982,7 @@ FORMATS    doc-v11  doc-v13  doc-v20 ... Docbook  FAQ  Howto  Wiki  RSS  ??
         </p>
 </div>
     
-<a name="N102E4"></a><a name="resolvingResources"></a>
+<a name="N102F1"></a><a name="resolvingResources"></a>
 <h2 class="underlined_10">Resolving Resources</h2>
 <div class="section">
 <p>
@@ -993,7 +995,7 @@ FORMATS    doc-v11  doc-v13  doc-v20 ... Docbook  FAQ  Howto  Wiki  RSS  ??
       </p>
 </div>
     
-<a name="N102F2"></a><a name="menu_generation_impl"></a>
+<a name="N102FF"></a><a name="menu_generation_impl"></a>
 <h2 class="underlined_10">Menu XML generation</h2>
 <div class="section">
 <p>
@@ -1104,7 +1106,7 @@ FORMATS    doc-v11  doc-v13  doc-v20 ... Docbook  FAQ  Howto  Wiki  RSS  ??
 </ol>
 </div>
     
-<a name="N10373"></a><a name="linkrewriting_impl"></a>
+<a name="N10380"></a><a name="linkrewriting_impl"></a>
 <h2 class="underlined_10">Link rewriting</h2>
 <div class="section">
 <p>
@@ -1119,7 +1121,7 @@ FORMATS    doc-v11  doc-v13  doc-v20 ... Docbook  FAQ  Howto  Wiki  RSS  ??
         is provided in <a href="../docs_0_90/linking.html">Menus and Linking</a>. Here
         we describe the implementation of linking.
       </p>
-<a name="N1038A"></a><a name="input_modules"></a>
+<a name="N10397"></a><a name="input_modules"></a>
 <h3 class="underlined_5">Cocoon foundations: Input Modules</h3>
 <p>
           The implementation of <span class="codefrag">site:</span> linking is heavily based on
@@ -1150,13 +1152,13 @@ FORMATS    doc-v11  doc-v13  doc-v20 ... Docbook  FAQ  Howto  Wiki  RSS  ??
           currently distributed as a "block" in Cocoon 2.1
           (see <a href="http://cocoon.apache.org/2.1/apidocs/org/apache/cocoon/transformation/LinkRewriterTransformer.html">API docs</a>).
         </p>
-<a name="N103C2"></a><a name="implement_rewriting"></a>
+<a name="N103CF"></a><a name="implement_rewriting"></a>
 <h3 class="underlined_5">Implementing "site:" rewriting</h3>
 <p>
           Using the above components, "<span class="codefrag">site:</span>" URI rewriting is
           accomplished as follows.
         </p>
-<a name="N103D1"></a><a name="cocoon_xconf"></a>
+<a name="N103DE"></a><a name="cocoon_xconf"></a>
 <h4>cocoon.xconf</h4>
 <p>
             First, we declare all the input modules we will be needing:
@@ -1204,7 +1206,7 @@ FORMATS    doc-v11  doc-v13  doc-v20 ... Docbook  FAQ  Howto  Wiki  RSS  ??
             will be configured in <span class="codefrag">sitemap.xmap</span> as described in the
             next section.
           </p>
-<a name="N1040D"></a><a name="sitemap"></a>
+<a name="N1041A"></a><a name="sitemap"></a>
 <h4>sitemap.xmap</h4>
 <p>
             Now in the sitemap, we define the LinkRewriterTransformer, and
@@ -1318,7 +1320,7 @@ FORMATS    doc-v11  doc-v13  doc-v20 ... Docbook  FAQ  Howto  Wiki  RSS  ??
             <span class="codefrag">cocoon:/community/linkmap-index.html</span>
           
 </p>
-<a name="N1047A"></a><a name="dynamic_linkmap"></a>
+<a name="N10487"></a><a name="dynamic_linkmap"></a>
 <h4>Dynamically generating a linkmap</h4>
 <p>
             Why do we need this "linkmap" pipeline generating dynamic XML from
