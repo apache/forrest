@@ -183,6 +183,16 @@
             <xsl:value-of select="@author" />
           </td>
         </tr>
+        <xsl:choose>
+          <xsl:when test="@publish and @publish='false'">
+        <tr>
+          <th width="25%">Not yet published</th>
+          <td>
+            This plugin has not yet been deployed. Only available in the development SVN repository.
+          </td>
+        </tr>
+          </xsl:when>
+          <xsl:otherwise>
         <tr>
           <th width="25%">Website</th>
           <td><a>
@@ -201,6 +211,8 @@
             <xsl:value-of select="@url" /></a>
           </td>
         </tr>
+          </xsl:otherwise>
+        </xsl:choose>
         <tr>
           <th width="25%">Latest Plugin version</th>
           <td>
