@@ -52,6 +52,9 @@
   <property name="build.dir"                  location="build"/>
   <property name="build.classes"              location="${build.dir}/classes"/>
   <property name="build.docs"                 location="${build.dir}/site"/>
+  <condition property="publish.true">
+    <istrue value="${publish}"/>
+  </condition>
 <!-- Option to set username via deploy.svn.settings -->
   <import file="${forrest.home}/deploy.svn.settings" optional="true"/>
 <!-- Set the default username, if not already set via deploy.svn.settings -->
@@ -173,7 +176,7 @@
   </target>
   <target name="deploy-docs"
 		  description="Deploy the plugin documentation"
-		  depends="clean, dist, docs, checkout-deployed-docs, deploy-plugins.xml">
+		  depends="deploy-ready, clean, dist, docs, checkout-deployed-docs, deploy-plugins.xml">
     <echo level="info">Deploying plugin documentation to the web server</echo>
 	<if>
         <contains string="${forrest.version}" substring="0.7"/>
@@ -259,7 +262,7 @@
   </target>
   <target name="release"
           description="Release the versioned plugin to the website SVN to make it available for download"
-          depends="clean, deploy-plugins.xml, deploy-docs, dist, checkout-deployed-plugins">
+          depends="deploy-ready, clean, deploy-plugins.xml, deploy-docs, dist, checkout-deployed-plugins">
     <echo level="info">Releasing versioned plugin ${plugin-name} to the download server</echo>
 <!-- Put versioned plugin in the ${forrest.version} directory -->
     <copy todir="${deploy.plugins.svn-dir}/${forrest.version}" 
@@ -321,9 +324,15 @@ You have just released a plugin. There are other tasks to complete. For example:
       <arg value="-m Deployment of ${plugin-name} plugin (deployed by 'deploy' target of plugin build script)"/>
      </exec>
   </target>
+  <target name="deploy-ready" depends="init">
+    <fail unless="publish.true">
+      The value of the "publish" property in this plugin's build.xml file must be set to "true".
+    </fail>
+  </target>
   <target name="deploy"
           description="Deploy the unversioned plugin to the website SVN to make it available for download"
-          depends="clean, deploy-plugins.xml, deploy-docs, dist, checkout-deployed-plugins">
+          depends="deploy-ready, clean, deploy-plugins.xml, deploy-docs, dist, checkout-deployed-plugins"
+          if="publish.true">
     <echo level="info">Deploying unversioned plugin ${plugin-name} to the download server</echo>
 <!-- Put unversioned plugin in the ${forrest.version} directory -->
     <copy tofile="${deploy.plugins.svn-dir}/${forrest.version}/${plugin-name}.zip" 
