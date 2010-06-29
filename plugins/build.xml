@@ -265,6 +265,9 @@
     <copy todir="${deploy.plugins.svn-dir}/${forrest.version}" 
           overwrite="true" 
           file="${forrest.plugins.dist.dir}/${forrest.version}/${plugin-name}-${plugin-version}.zip"/>
+    <copy todir="${deploy.plugins.svn-dir}/${forrest.version}" 
+          overwrite="true" 
+          file="${forrest.plugins.dist.dir}/${forrest.version}/${plugin-name}-${plugin-version}.zip.md5"/>
     <antcall target="updateSVN"/>
     <echo level="info">
 You have just released a plugin. There are other tasks to complete. For example:
@@ -324,12 +327,18 @@ You have just released a plugin. There are other tasks to complete. For example:
     <echo level="info">Deploying unversioned plugin ${plugin-name} to the download server</echo>
 <!-- Put unversioned plugin in the ${forrest.version} directory -->
     <copy tofile="${deploy.plugins.svn-dir}/${forrest.version}/${plugin-name}.zip" 
-            overwrite="true" 
-            file="${forrest.plugins.dist.dir}/${forrest.version}/${plugin-name}-${plugin-version}.zip"/>
+          overwrite="true" 
+          file="${forrest.plugins.dist.dir}/${forrest.version}/${plugin-name}-${plugin-version}.zip"/>
+    <copy tofile="${deploy.plugins.svn-dir}/${forrest.version}/${plugin-name}.zip.md5" 
+          overwrite="true" 
+          file="${forrest.plugins.dist.dir}/${forrest.version}/${plugin-name}-${plugin-version}.zip.md5"/>
 <!-- Put unversioned plugin in the top-level directory -->
     <copy tofile="${deploy.plugins.svn-dir}/${plugin-name}.zip" 
           overwrite="true" 
           file="${forrest.plugins.dist.dir}/${forrest.version}/${plugin-name}-${plugin-version}.zip"/>
+    <copy tofile="${deploy.plugins.svn-dir}/${plugin-name}.zip.md5" 
+          overwrite="true" 
+          file="${forrest.plugins.dist.dir}/${forrest.version}/${plugin-name}-${plugin-version}.zip.md5"/>
     <antcall target="updateSVN"/>
   </target>
   <target name="checkout-deployed-docs" 
@@ -373,6 +382,9 @@ You have just released a plugin. There are other tasks to complete. For example:
         <include name="${plugin-name}.jar"/>
       </zipfileset>
     </zip>
+    <checksum file="${forrest.plugins.dist.dir}/${forrest.version}/${plugin-name}-${plugin-version}.zip"
+      algorithm="md5" forceOverwrite="true"
+    />
   </target>
   <target name="seedPlugin"
     description="Create a new plugin directory in the current working directory and seed it with initial set of files">
