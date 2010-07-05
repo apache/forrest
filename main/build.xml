@@ -333,6 +333,8 @@ Remove any build directories in a tree before running.
   <target name="test" 
           depends="validate-config, testseed, testPlugins" 
           description="Test that the features are okay before committing."/>
+  <target name="test-basic" 
+          depends="validate-config, testseedBasic"/>
   <target name="testPlugins"
           depends="cleanPlugins"
           description="Test each type of the plugin">
@@ -376,8 +378,26 @@ Remove any build directories in a tree before running.
       </sequential>
     </for>
   </target>
+  <target name="testseedBasic" depends="init, cleanPlugins">
+    <for list="skinned,dispatcher" param="type">
+      <sequential>
+        <antcall target="testSiteBasicType">
+          <param name="test.site.type" value="@{type}"/>
+        </antcall>
+      </sequential>
+    </for>
+  </target>
   <target name="testSiteType"
 	  depends="testSeedSiteType,testReplacePluginsList"
+          if="test.site.type"
+	  description="Called by test target - Seeds, replaces list of required plugins and generates a new site for testing">
+    <ant antfile="${forrest.core}/forrest.build.xml" target="site">
+      <property name="forrest.home" value="${forrest.home}"/>
+      <property name="project.home" value="${test.dir}"/>
+    </ant>
+  </target>
+  <target name="testSiteBasicType"
+	  depends="testSeedSiteBasicType,testReplacePluginsList"
           if="test.site.type"
 	  description="Called by test target - Seeds, replaces list of required plugins and generates a new site for testing">
     <ant antfile="${forrest.core}/forrest.build.xml" target="site">
@@ -397,6 +417,26 @@ Remove any build directories in a tree before running.
     <delete dir="${test.dir}"/>
     <mkdir dir="${test.dir}"/>
     <ant antfile="${forrest.core}/forrest.build.xml" target="seed">
+      <property name="forrest.home" value="${forrest.home}"/>
+      <property name="project.home" value="${test.dir}"/>
+    </ant>
+<!-- reading the value of project.required.plugins property if defined in forrest.properties.${test.site.type}.properties -->
+    <property file="${test.dir}/forrest.properties.${test.site.type}.properties"/>
+    <delete file="${test.dir}/forrest.properties.*.properties" failonerror="false">
+      <fileset dir="${test.dir}" includes="forrest.properties.*.properties"/>
+    </delete>
+  </target>
+  <target name="testSeedSiteBasicType">
+    <echo level="info">
+      -------------------------------------
+      Testing seeded basic ${test.site.type} site ...
+      -------------------------------------
+    </echo>
+    <echo/>
+    <property name="test.dir" value="${build.dir}/test_${test.site.type}_site"/>
+    <delete dir="${test.dir}"/>
+    <mkdir dir="${test.dir}"/>
+    <ant antfile="${forrest.core}/forrest.build.xml" target="seed-basic">
       <property name="forrest.home" value="${forrest.home}"/>
       <property name="project.home" value="${test.dir}"/>
     </ant>
