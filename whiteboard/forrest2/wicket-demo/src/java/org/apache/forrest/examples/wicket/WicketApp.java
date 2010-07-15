@@ -26,7 +26,6 @@ import wicket.authorization.IAuthorizationStrategy;
 import wicket.protocol.http.WebApplication;
 
 /**
- * @author Ross Gardler
  */
 public class WicketApp extends WebApplication {
 	public WicketApp() {
