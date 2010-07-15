@@ -47,7 +47,6 @@ import org.apache.forrest.dispatcher.impl.helper.StAX;
 import org.apache.forrest.dispatcher.impl.helper.StreamHelper;
 
 /**
- * @author thorsten
  * @version 1.0
  */
 public class XMLStructurer extends AbstractXmlStructurer {

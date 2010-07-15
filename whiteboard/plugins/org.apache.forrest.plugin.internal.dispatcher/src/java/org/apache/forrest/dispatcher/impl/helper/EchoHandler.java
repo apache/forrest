@@ -29,7 +29,6 @@ import org.xml.sax.helpers.DefaultHandler;
  * Manejador que escribe los eventos SAX a un <code>StringBuffer</code> para
  * posteriormente guardarlo en un <code>InputStream</code>.
  * 
- * @author thorsten
  * @version 1.0
  */
 public class EchoHandler extends DefaultHandler {
