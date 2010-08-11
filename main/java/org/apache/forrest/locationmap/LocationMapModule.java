@@ -35,7 +35,6 @@ import org.apache.avalon.framework.service.ServiceException;
 import org.apache.avalon.framework.service.ServiceManager;
 import org.apache.avalon.framework.service.Serviceable;
 import org.apache.avalon.framework.thread.ThreadSafe;
-import org.apache.cocoon.components.CocoonComponentManager;
 import org.apache.cocoon.components.modules.input.InputModule;
 import org.apache.excalibur.source.Source;
 import org.apache.excalibur.source.SourceResolver;
