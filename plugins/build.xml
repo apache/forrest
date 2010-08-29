@@ -55,6 +55,9 @@
   <condition property="publish.true">
     <istrue value="${publish}"/>
   </condition>
+  <condition property="java_exists">
+    <istrue value="${requires-java}" />
+  </condition>
 <!-- Option to set username via deploy.svn.settings -->
   <import file="${forrest.home}/deploy.svn.settings" optional="true"/>
 <!-- Set the default username, if not already set via deploy.svn.settings -->
@@ -87,7 +90,6 @@
       <fileset dir="${plugin.lib.dir}" includes="*.jar"/>
       <fileset dir="${plugin.lib.dir}" includes="*.zip"/>
     </path>
-    <available file="${plugin.java.dir}/**/*.java" property="java_exists"/>
   </target>
   <target name="echo-init" depends="init-build-compiler" unless="no.echo.init">
     <buildnumber file="${build.dir}/build.number"/>
