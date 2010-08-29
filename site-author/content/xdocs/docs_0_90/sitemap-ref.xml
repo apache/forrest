@@ -346,18 +346,18 @@ FORMATS    doc-v11  doc-v13  doc-v20 ... Docbook  FAQ  Howto  Wiki  RSS  ??
           <code>output.xmap</code> from the pdf plugin ...
         </p>
         <source>
-<![CDATA[
-1   <map:match type="regexp" pattern="^(.*?)([^/]*).pdf$">
-2     <map:generate src="cocoon:/{1}{2}.xml"/>
-3     <map:transform type="xinclude"/>
-4     <map:transform type="]]>&linkrewriter;<![CDATA[" src="cocoon://{1}linkmap-{2}.pdf"/>
-5     <map:transform src="skins/{forrest:forrest.skin}/xslt/fo/document-to-fo.xsl">
-6       <map:parameter name="ctxbasedir" value="{realpath:.}/"/>
-7       <map:parameter name="xmlbasedir" value="content/xdocs/{1}"/>
-8     </map:transform>
-9     <map:serialize type="fo2pdf"/>
-10  </map:match>
-        ]]>
+          <![CDATA[
+          1   <map:match type="regexp" pattern="^(.*?)([^/]*).pdf$">
+          2     <map:generate src="cocoon:/{1}{2}.xml"/>
+          3     <map:transform type="xinclude"/>
+          4     <map:transform type="]]>&linkrewriter;<![CDATA[" src="cocoon://{1}linkmap-{2}.pdf"/>
+          5     <map:transform src="skins/{forrest:forrest.skin}/xslt/fo/document-to-fo.xsl">
+          6       <map:parameter name="ctxbasedir" value="{realpath:.}/"/>
+          7       <map:parameter name="xmlbasedir" value="content/xdocs/{1}"/>
+          8     </map:transform>
+          9     <map:serialize type="fo2pdf"/>
+          10  </map:match>
+          ]]>
         </source>
         <ol>
           <li>The first line uses a matching regexp to break the URL into
@@ -383,45 +383,69 @@ FORMATS    doc-v11  doc-v13  doc-v20 ... Docbook  FAQ  Howto  Wiki  RSS  ??
           ...
         </p>
         <source>
-          &lt;map:match pattern="*.html"&gt;
-            &lt;map:aggregate element="site"&gt;
-            &lt;map:part src="<link href="#tab_pipeline">cocoon:/tab-{0}</link>"/&gt;
-            &lt;map:part src="<link href="#menu_pipeline">cocoon:/menu-{0}</link>"/&gt;
-            &lt;map:part src="<link href="#body_pipeline">cocoon:/body-{0}</link>"/&gt;
-            &lt;/map:aggregate&gt;
-            &lt;map:call resource="skinit"&gt;
-              &lt;map:parameter name="type" value="site2xhtml"/&gt;
-              &lt;map:parameter name="path" value="{0}"/&gt;
-            &lt;/map:call&gt;
-          &lt;/map:match&gt;
+          <![CDATA[
+          1   <map:match pattern="*.html">
+          2     <map:aggregate element="site">
+          3       <map:part src="cocoon:/skinconf.xml"/>
+          4       <map:part src="cocoon:/build-info"/>
+          5       <map:part src="cocoon:/tab-{0}"/>
+          6       <map:part src="cocoon:/menu-{0}"/>
+          7       <map:part src="cocoon:/body-{0}"/>
+          8     </map:aggregate>
+          9     <map:call resource="skinit">
+          10      <map:parameter name="type" value="transform.site.xhtml"/>
+          11      <map:parameter name="path" value="{0}"/>
+          12    </map:call>
+          13  </map:match>
+          ]]>
         </source>
         <p>
-          So <link href="index.html">index.html</link> is formed from
-          aggregating <link href="body-index.html">body-index.html</link> and
-          <link href="menu-index.html">menu-index.html</link> and
-          <link href="tab-index.html">tab-index.html</link> and then applying
-          the <code>site-to-xhtml.xsl</code> stylesheet to the result.
+          So <link href="index.html">index.html</link> is formed by
+          aggregating <link href="/skinconf.xml">skinconf.xml</link>,
+          <link href="/build-info">build-info</link>, <link
+          href="body-index.html">body-index.html</link> and <link
+          href="menu-index.html">menu-index.html</link> and <link
+          href="tab-index.html">tab-index.html</link> and then
+          applying the <code>site-to-xhtml.xsl</code> stylesheet to
+          the result.
         </p>
+        <p>
+          The conversion from <code>transform.site.xhtml</code> to
+          <code>site-to-xhtml.xsl</code> (line 10 above) is handled by
+          the locationmap in this fragment from
+          <code>locationmap-transforms.xml</code>:
+        </p>
+        <source>
+          <![CDATA[
+          <match pattern="transform.*.*">
+            <select>
+              <location src="{properties:skins-dir}{forrest:forrest.skin}/xslt/html/{1}-to-{2}.xsl" />
+              <location src="{forrest:forrest.context}/skins/{forrest:forrest.skin}/xslt/html/{1}-to-{2}.xsl"/>
+              <location src="{forrest:forrest.context}/skins/common/xslt/html/{1}-to-{2}.xsl"/>
+              <location src="{forrest:forrest.stylesheets}/{1}-to-{2}.xsl"/>
+            </select>
+          </match>
+          ]]>
+        </source>
         <p>
           There is a nearly identical matcher for HTML files in subdirectories:
         </p>
         <source>
-          &lt;map:match pattern="**/*.html"&gt;
-            &lt;map:aggregate element="site"&gt;
-            &lt;map:part src="<link
-              href="#tab_pipeline">cocoon:/{1}/tab-{2}.html</link>"/&gt;
-            &lt;map:part src="<link
-              href="#menu_pipeline">cocoon:/{1}/menu-{2}.html</link>"/&gt;
-            &lt;map:part src="<link
-              href="#body_pipeline">cocoon:/{1}/body-{2}.html</link>"/&gt;
-            &lt;/map:aggregate&gt;
-            &lt;map:call resource="skinit"&gt;
-              &lt;map:parameter name="type"
-                value="site2xhtml"/&gt;
-              &lt;map:parameter name="path"
-                value="{0}"/&gt;
-            &lt;/map:call&gt;
-          &lt;/map:match&gt;
+          <![CDATA[
+          <map:match pattern="**/*.html">
+            <map:aggregate element="site">
+              <map:part src="cocoon:/skinconf.xml"/>
+              <map:part src="cocoon:/build-info"/>
+              <map:part src="cocoon:/{1}/tab-{2}.html"/>
+              <map:part src="cocoon:/{1}/menu-{2}.html"/>
+              <map:part src="cocoon:/{1}/body-{2}.html"/>
+            </map:aggregate>
+            <map:call resource="skinit">
+              <map:parameter name="type" value="transform.site.xhtml"/>
+              <map:parameter name="path" value="{0}"/>
+            </map:call>
+          </map:match>
+          ]]>
         </source>
       </section>
     </section>
@@ -433,18 +457,20 @@ FORMATS    doc-v11  doc-v13  doc-v20 ... Docbook  FAQ  Howto  Wiki  RSS  ??
           Here is the matcher which generates the page body:
         </p>
         <source>
-<![CDATA[
-1   <map:match pattern="**body-*.html">
-2     <map:generate src="cocoon:/{1}{2}.xml"/>
-3     <map:transform type="idgen"/>
-4     <map:transform type="xinclude"/>
-5     <map:transform type="]]>&linkrewriter;<![CDATA[" src="cocoon:/{1}linkmap-{2}.html"/>
-6     <map:call resource="skinit">
-7       <map:parameter name="type" value="document2html"/>
-8       <map:parameter name="path" value="{1}{2}.html"/>
-9       <map:parameter name="notoc" value="false"/>
-10    </map:call>
-11  </map:match>
+          <![CDATA[
+          1   <map:match pattern="**body-*.html">
+          2     <map:generate src="cocoon:/{1}{2}.xml"/>
+          3     <map:transform type="idgen"/>
+          4     <map:transform src="{lm:transform.xml.xml-xpointer-attributes}"/>
+          5     <map:transform type="xinclude"/>
+          6     <map:transform type="]]>&linkrewriter;<![CDATA[" src="cocoon:/{1}linkmap-{2}.html"/>
+          7     <map:transform src="{lm:transform.html.broken-links}" />
+          8     <map:call resource="skinit">
+          9       <map:parameter name="type" value="transform.xdoc.html"/>
+          10      <map:parameter name="path" value="{1}{2}.html"/>
+          11      <map:parameter name="notoc" value="false"/>
+          12    </map:call>
+          13  </map:match>
           ]]>
         </source>
         <ol>
@@ -472,11 +498,15 @@ FORMATS    doc-v11  doc-v13  doc-v20 ... Docbook  FAQ  Howto  Wiki  RSS  ??
               ...
             </source>
             <p>
-              Later, the <code>document-to-html.xsl</code> stylesheet will
-              create an &lt;a name> element for every section, allowing this
-              section to be referred to as
-              <code>index.html#How+to+boil+eggs</code>.
-            </p></li>
+              Later, the <code>document-to-html.xsl</code> stylesheet
+              will create an &lt;a name> element for every section,
+              allowing this section to be referred to as
+              <code>index.html#How+to+boil+eggs</code>. <code>document-to-html.xsl</code>
+              is looked up by the key <code>transform.xdoc.html</code>
+              in the locationmap in line 9 above. See
+              <code>locationmap-transforms.xml</code> for this match.
+            </p>
+          </li>
           <li>We then expand XInclude elements.</li>
           <li>and <link href="#linkrewriting_impl">rewrite links</link>..</li>
           <li>and then finally apply the stylesheet that generates a fragment of
@@ -491,16 +521,18 @@ FORMATS    doc-v11  doc-v13  doc-v20 ... Docbook  FAQ  Howto  Wiki  RSS  ??
           the menu is:
         </p>
         <source>
-<![CDATA[
-      <map:match pattern="**menu-*.html">
-        <map:generate src="cocoon:/{1}book-{2}.html"/>
-        <map:transform type="]]>&linkrewriter;<![CDATA[" src="cocoon:/{1}linkmap-{2}.html"/>
-        <map:call resource="skinit">
-          <map:parameter name="type" value="book2menu"/>
-          <map:parameter name="path" value="{1}{2}.html"/>
-        </map:call>
-      </map:match>
-      ]]>
+          <![CDATA[
+          1   <map:match pattern="**menu-*.html">
+          2     <map:generate src="cocoon:/{1}book-{2}.html"/>
+          3     <map:transform type="]]>&linkrewriter;<![CDATA[" src="cocoon:/{1}linkmap-{2}.html"/>
+          4     <map:transform src="{lm:transform.html.broken-links}" />
+          5     <map:call resource="skinit">
+          6       <map:parameter name="type" value="transform.book.menu"/>
+          7       <map:parameter name="path" value="{1}{2}.html"/>
+          8     </map:call>
+          9     <map:serialize type="xml"/>
+          10  </map:match>
+          ]]>
         </source>
         <p>
           We get XML from a "book" pipeline,
@@ -515,26 +547,47 @@ FORMATS    doc-v11  doc-v13  doc-v20 ... Docbook  FAQ  Howto  Wiki  RSS  ??
       </section>
       <section id="tab_pipeline">
         <title>Page tabs</title>
-        <p>
-          Tab generation is quite tame compared to menus:
-        </p>
         <source>
-<![CDATA[
-     <map:match pattern="**tab-*.html">
-       <map:generate src="content/xdocs/tabs.xml" />
-       <map:transform type="]]>&linkrewriter;<![CDATA[" src="cocoon:/{1}linkmap-{2}.html"/>
-       <map:call resource="skinit">
-         <map:parameter name="type" value="tab2menu"/>
-         <map:parameter name="path" value="{1}{2}.html"/>
-       </map:call>
-     </map:match>
-           ]]>
+          <![CDATA[
+          <map:match pattern="**tab-*.html">
+            <map:mount uri-prefix="" src="tabs.xmap" check-reload="yes" />
+          </map:match>
+          ]]>
         </source>
         <p>
-          All the smarts are in the <code>tab-to-menu.xsl</code> stylesheet,
-          which needs to choose the correct tab based on the current path.
-          Currently, a "longest matching path" algorithm is implemented. See the
-          <code>tab-to-menu.xsl</code> stylesheet for details.
+          And the match from <code>tabs.xmap</code>:
+        </p>
+        <source>
+          <![CDATA[
+          1   <map:match pattern="**tab-*.html">
+          2     <map:generate src="{lm:project.tabs.xml}"/>
+          3     <map:transform type="xinclude"/>
+          4     <map:select type="config">
+          5       <map:parameter name="value" value="{properties:forrest.i18n}"/>
+          6       <map:when test="true">
+          7         <map:act type="locale">
+          8           <map:transform src="{lm:transform.book.book-i18n}"/>
+          9           <map:transform type="i18n">
+          10            <map:parameter name="locale" value="{locale}"/>
+          11          </map:transform>
+          12        </map:act>
+          13      </map:when>
+          14    </map:select>
+          15    <map:transform type="]]>&linkrewriter;<![CDATA[" src="cocoon:/{1}linkmap-{2}.html"/>
+          16    <map:call resource="skinit">
+          17      <map:parameter name="type" value="transform.tab.menu"/>
+          18      <map:parameter name="path" value="{1}{2}.html"/>
+          19    </map:call>
+          20  </map:match>
+          ]]>
+        </source>
+        <p>
+          All the smarts are in the <code>tab-to-menu.xsl</code>
+          stylesheet (resolved by the locationmap in line 17), which
+          needs to choose the correct tab based on the current path.
+          Currently, a "longest matching path" algorithm is
+          implemented. See the <code>tab-to-menu.xsl</code> stylesheet
+          for details.
         </p>
       </section>
     </section>
@@ -552,10 +605,10 @@ FORMATS    doc-v11  doc-v13  doc-v20 ... Docbook  FAQ  Howto  Wiki  RSS  ??
     <section id="menu_generation_impl">
       <title>Menu XML generation</title>
       <p>
-        The "book" pipeline is defined in <code>sitemap.xmap</code>as:
+        The "book" pipeline is defined in <code>sitemap.xmap</code> as:
       </p>
       <source>
-<![CDATA[
+        <![CDATA[
         <map:match pattern="**book-*.html">
           <map:mount uri-prefix="" src="menu.xmap" check-reload="yes" />
         </map:match>
@@ -598,12 +651,12 @@ FORMATS    doc-v11  doc-v13  doc-v20 ... Docbook  FAQ  Howto  Wiki  RSS  ??
                 reveal this complexity:
               </p>
               <source>
-<![CDATA[
-<map:transform src="resources/stylesheets/site-to-site-normalizetabs.xsl" />
-<map:transform src="resources/stylesheets/site-to-site-selectnode.xsl">
-  <map:parameter name="path" value="{1}{2}"/>
-</map:transform>
-                ]]>
+    <![CDATA[
+    <map:transform src="resources/stylesheets/site-to-site-normalizetabs.xsl" />
+    <map:transform src="resources/stylesheets/site-to-site-selectnode.xsl">
+      <map:parameter name="path" value="{1}{2}"/>
+    </map:transform>
+    ]]>
               </source></li>
             <li><p>
                 For "directory" menu generation, we simply use an
