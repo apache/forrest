@@ -342,36 +342,100 @@ FORMATS    doc-v11  doc-v13  doc-v20 ... Docbook  FAQ  Howto  Wiki  RSS  ??
         <p>
           Easiest case first; PDFs don't require menus or headers, so we can
           simply transform our intermediate format into XSL:FO, and from there
-          to PDF. This is done by the following matcher in
+          to PDF. This is done by the following matches in
           <code>output.xmap</code> from the pdf plugin ...
         </p>
         <source>
-          <![CDATA[
-          1   <map:match type="regexp" pattern="^(.*?)([^/]*).pdf$">
-          2     <map:generate src="cocoon:/{1}{2}.xml"/>
-          3     <map:transform type="xinclude"/>
-          4     <map:transform type="]]>&linkrewriter;<![CDATA[" src="cocoon://{1}linkmap-{2}.pdf"/>
-          5     <map:transform src="skins/{forrest:forrest.skin}/xslt/fo/document-to-fo.xsl">
-          6       <map:parameter name="ctxbasedir" value="{realpath:.}/"/>
-          7       <map:parameter name="xmlbasedir" value="content/xdocs/{1}"/>
-          8     </map:transform>
-          9     <map:serialize type="fo2pdf"/>
-          10  </map:match>
-          ]]>
+<![CDATA[
+        <!-- Match requests for XSL:FO documents -->
+        <map:match type="regexp" pattern="^(.*?)([^/]*).fo$">
+            <map:select type="exists">
+                <map:when test="{lm:project.{1}{2}.fo}">
+                    <map:generate src="{lm:project.{1}{2}.fo}"/>
+                </map:when>
+                <map:otherwise>
+                    <map:aggregate element="site">
+                        <map:part src="cocoon://module.properties.properties"/>
+                        <map:part src="cocoon://skinconf.xml"/>
+                        <map:part src="cocoon://{1}{2}.xml"/>
+                    </map:aggregate>
+                    <map:transform type="xinclude"/>
+                    <map:transform type="]]>&linkrewriter;<![CDATA[" src="cocoon://{1}linkmap-{2}.fo"/>
+                    <map:transform src="{lm:pdf.transform.document.fo}">
+                        <map:parameter name="imagesdir"  value="{properties:resources.images}/"/>
+                        <map:parameter name="xmlbasedir" value="{properties:content.xdocs}{1}"/>
+                        <map:parameter name="path"       value="{1}"/>
+                    </map:transform>
+                </map:otherwise>
+            </map:select>
+            <map:serialize type="xml"/>
+        </map:match>
+]]>
         </source>
-        <ol>
-          <li>The first line uses a matching regexp to break the URL into
-            directory <code>(.*?)</code> and filename
-            <code>([^/]*)</code> parts.</li>
-          <li>We then generate XML from a <link href="#source_pipelines">Source
-              pipeline</link>, with the URL <code>cocoon:/{1}{2}.xml</code></li>
-          <li>We then expand any XInclude statements..</li>
-          <li>and <link href="#linkrewriting_impl">rewrite links</link>..</li>
-          <li>and finally apply the document-to-fo.xsl stylesheet, to generate
-            XSL:FO XML.</li>
-        </ol>
         <p>
-          Lastly, we generate a PDF using the fo2pdf serializer.
+          This section of the pipeline matches requests for XSL:FO
+          documents by using a regular expression match to break the
+          request into directory (.*?) and filename ([^/]*) parts. If
+          the XSL:FO document exists in the project (the
+          <code>exists</code> selector), it is used; otherwise, the
+          XSL:FO is generated:
+        </p>
+        <ol>
+          <li>
+            The properties input module, skinconf and the <link
+            href="#source_pipelines">source document</link> are
+            combined into an aggregate
+          </li>
+          <li>
+            XInclude elements are processed
+          </li>
+          <li>
+            Links are rewritten
+          </li>
+          <li>
+            The source as generated from the preceding steps is
+            transformed by the stylesheet with the locationmap hint
+            <code>pdf.transform.document.fo</code> and serialized as
+            the final XSL:FO document
+          </li>
+        </ol>
+        <source>
+<![CDATA[
+        <!-- Match requests for PDF documents -->
+        <map:match type="regexp" pattern="^(.*?)([^/]*).pdf$">
+            <map:select type="exists">
+                <map:when test="{lm:project.{1}{2}.pdf}">
+                    <map:read src="{lm:project.{1}{2}.pdf}"/>
+                </map:when>
+                <map:when test="{lm:project.{1}{2}.fo}">
+                    <map:generate src="{lm:project.{1}{2}.fo}"/>
+                    <map:transform type="i18n">
+                      <map:parameter name="locale" value="{../locale}"/>
+                    </map:transform>
+                    <map:serialize type="fo2pdf"/>
+                </map:when>
+                <map:otherwise>
+                    <map:generate src="cocoon://{1}{2}.fo"/>
+                    <map:transform type="i18n">
+                      <map:parameter name="locale" value="{../locale}"/>
+                    </map:transform>
+                    <map:serialize type="fo2pdf"/>
+                </map:otherwise>
+            </map:select>
+        </map:match>
+]]>
+        </source>
+        <p>
+          This next section of the pipeline matches requests for PDF
+          documents in a manner similar to the previous match for
+          XSL:FO documents. If the PDF document exists in the project,
+          it is passed directly to the client. If the XSL:FO document
+          exists for the requested PDF, the XSL:FO is serialized by
+          the fo2pdf serializer and passed to the client as PDF (after
+          i18n is handled by the i18n transformer). When neither PDF
+          nor XSL:FO exists, XSL:FO is generated by the match
+          described above, i18n elements are processed for the current
+          locale, and the result is serialized as PDF.
         </p>
       </section>
       <section id="html">
