@@ -767,45 +767,106 @@ FORMATS    doc-v11  doc-v13  doc-v20 ... Docbook  FAQ  Howto  Wiki  RSS  ??
 <p>
           Easiest case first; PDFs don't require menus or headers, so we can
           simply transform our intermediate format into XSL:FO, and from there
-          to PDF. This is done by the following matcher in
+          to PDF. This is done by the following matches in
           <span class="codefrag">output.xmap</span> from the pdf plugin ...
         </p>
 <pre class="code">
 
-1   &lt;map:match type="regexp" pattern="^(.*?)([^/]*).pdf$"&gt;
-2     &lt;map:generate src="cocoon:/{1}{2}.xml"/&gt;
-3     &lt;map:transform type="xinclude"/&gt;
-4     &lt;map:transform type="<a href="#linkrewriting_impl">linkrewriter</a>" src="cocoon://{1}linkmap-{2}.pdf"/&gt;
-5     &lt;map:transform src="skins/{forrest:forrest.skin}/xslt/fo/document-to-fo.xsl"&gt;
-6       &lt;map:parameter name="ctxbasedir" value="{realpath:.}/"/&gt;
-7       &lt;map:parameter name="xmlbasedir" value="content/xdocs/{1}"/&gt;
-8     &lt;/map:transform&gt;
-9     &lt;map:serialize type="fo2pdf"/&gt;
-10  &lt;/map:match&gt;
-        
+        &lt;!-- Match requests for XSL:FO documents --&gt;
+        &lt;map:match type="regexp" pattern="^(.*?)([^/]*).fo$"&gt;
+            &lt;map:select type="exists"&gt;
+                &lt;map:when test="{lm:project.{1}{2}.fo}"&gt;
+                    &lt;map:generate src="{lm:project.{1}{2}.fo}"/&gt;
+                &lt;/map:when&gt;
+                &lt;map:otherwise&gt;
+                    &lt;map:aggregate element="site"&gt;
+                        &lt;map:part src="cocoon://module.properties.properties"/&gt;
+                        &lt;map:part src="cocoon://skinconf.xml"/&gt;
+                        &lt;map:part src="cocoon://{1}{2}.xml"/&gt;
+                    &lt;/map:aggregate&gt;
+                    &lt;map:transform type="xinclude"/&gt;
+                    &lt;map:transform type="<a href="#linkrewriting_impl">linkrewriter</a>" src="cocoon://{1}linkmap-{2}.fo"/&gt;
+                    &lt;map:transform src="{lm:pdf.transform.document.fo}"&gt;
+                        &lt;map:parameter name="imagesdir"  value="{properties:resources.images}/"/&gt;
+                        &lt;map:parameter name="xmlbasedir" value="{properties:content.xdocs}{1}"/&gt;
+                        &lt;map:parameter name="path"       value="{1}"/&gt;
+                    &lt;/map:transform&gt;
+                &lt;/map:otherwise&gt;
+            &lt;/map:select&gt;
+            &lt;map:serialize type="xml"/&gt;
+        &lt;/map:match&gt;
+
         </pre>
+<p>
+          This section of the pipeline matches requests for XSL:FO
+          documents by using a regular expression match to break the
+          request into directory (.*?) and filename ([^/]*) parts. If
+          the XSL:FO document exists in the project (the
+          <span class="codefrag">exists</span> selector), it is used; otherwise, the
+          XSL:FO is generated:
+        </p>
 <ol>
           
-<li>The first line uses a matching regexp to break the URL into
-            directory <span class="codefrag">(.*?)</span> and filename
-            <span class="codefrag">([^/]*)</span> parts.</li>
+<li>
+            The properties input module, skinconf and the <a href="#source_pipelines">source document</a> are
+            combined into an aggregate
+          </li>
           
-<li>We then generate XML from a <a href="#source_pipelines">Source
-              pipeline</a>, with the URL <span class="codefrag">cocoon:/{1}{2}.xml</span>
-</li>
+<li>
+            XInclude elements are processed
+          </li>
           
-<li>We then expand any XInclude statements..</li>
+<li>
+            Links are rewritten
+          </li>
           
-<li>and <a href="#linkrewriting_impl">rewrite links</a>..</li>
-          
-<li>and finally apply the document-to-fo.xsl stylesheet, to generate
-            XSL:FO XML.</li>
+<li>
+            The source as generated from the preceding steps is
+            transformed by the stylesheet with the locationmap hint
+            <span class="codefrag">pdf.transform.document.fo</span> and serialized as
+            the final XSL:FO document
+          </li>
         
 </ol>
+<pre class="code">
+
+        &lt;!-- Match requests for PDF documents --&gt;
+        &lt;map:match type="regexp" pattern="^(.*?)([^/]*).pdf$"&gt;
+            &lt;map:select type="exists"&gt;
+                &lt;map:when test="{lm:project.{1}{2}.pdf}"&gt;
+                    &lt;map:read src="{lm:project.{1}{2}.pdf}"/&gt;
+                &lt;/map:when&gt;
+                &lt;map:when test="{lm:project.{1}{2}.fo}"&gt;
+                    &lt;map:generate src="{lm:project.{1}{2}.fo}"/&gt;
+                    &lt;map:transform type="i18n"&gt;
+                      &lt;map:parameter name="locale" value="{../locale}"/&gt;
+                    &lt;/map:transform&gt;
+                    &lt;map:serialize type="fo2pdf"/&gt;
+                &lt;/map:when&gt;
+                &lt;map:otherwise&gt;
+                    &lt;map:generate src="cocoon://{1}{2}.fo"/&gt;
+                    &lt;map:transform type="i18n"&gt;
+                      &lt;map:parameter name="locale" value="{../locale}"/&gt;
+                    &lt;/map:transform&gt;
+                    &lt;map:serialize type="fo2pdf"/&gt;
+                &lt;/map:otherwise&gt;
+            &lt;/map:select&gt;
+        &lt;/map:match&gt;
+
+        </pre>
 <p>
-          Lastly, we generate a PDF using the fo2pdf serializer.
+          This next section of the pipeline matches requests for PDF
+          documents in a manner similar to the previous match for
+          XSL:FO documents. If the PDF document exists in the project,
+          it is passed directly to the client. If the XSL:FO document
+          exists for the requested PDF, the XSL:FO is serialized by
+          the fo2pdf serializer and passed to the client as PDF (after
+          i18n is handled by the i18n transformer). When neither PDF
+          nor XSL:FO exists, XSL:FO is generated by the match
+          described above, i18n elements are processed for the current
+          locale, and the result is serialized as PDF.
         </p>
-<a name="N1021C"></a><a name="html"></a>
+<a name="N1021A"></a><a name="html"></a>
 <h3 class="underlined_5">HTML output</h3>
 <p>
           Generating HTML pages is more complicated, because we have to merge
@@ -814,66 +875,92 @@ FORMATS    doc-v11  doc-v13  doc-v20 ... Docbook  FAQ  Howto  Wiki  RSS  ??
           ...
         </p>
 <pre class="code">
-          &lt;map:match pattern="*.html"&gt;
-            &lt;map:aggregate element="site"&gt;
-            &lt;map:part src="<a href="#tab_pipeline">cocoon:/tab-{0}</a>"/&gt;
-            &lt;map:part src="<a href="#menu_pipeline">cocoon:/menu-{0}</a>"/&gt;
-            &lt;map:part src="<a href="#body_pipeline">cocoon:/body-{0}</a>"/&gt;
-            &lt;/map:aggregate&gt;
-            &lt;map:call resource="skinit"&gt;
-              &lt;map:parameter name="type" value="site2xhtml"/&gt;
-              &lt;map:parameter name="path" value="{0}"/&gt;
-            &lt;/map:call&gt;
-          &lt;/map:match&gt;
+          
+          1   &lt;map:match pattern="*.html"&gt;
+          2     &lt;map:aggregate element="site"&gt;
+          3       &lt;map:part src="cocoon:/skinconf.xml"/&gt;
+          4       &lt;map:part src="cocoon:/build-info"/&gt;
+          5       &lt;map:part src="<a href="#tab_pipeline">cocoon:/tab-{0}</a>"/&gt;
+          6       &lt;map:part src="<a href="#menu_pipeline">cocoon:/menu-{0}</a>"/&gt;
+          7       &lt;map:part src="<a href="#body_pipeline">cocoon:/body-{0}</a>"/&gt;
+          8     &lt;/map:aggregate&gt;
+          9     &lt;map:call resource="skinit"&gt;
+          10      &lt;map:parameter name="type" value="transform.site.xhtml"/&gt;
+          11      &lt;map:parameter name="path" value="{0}"/&gt;
+          12    &lt;/map:call&gt;
+          13  &lt;/map:match&gt;
+          
         </pre>
 <p>
-          So <a href="index.html">index.html</a> is formed from
-          aggregating <a href="body-index.html">body-index.html</a> and
-          <a href="menu-index.html">menu-index.html</a> and
-          <a href="tab-index.html">tab-index.html</a> and then applying
-          the <span class="codefrag">site-to-xhtml.xsl</span> stylesheet to the result.
+          So <a href="index.html">index.html</a> is formed by
+          aggregating <span class="codefrag">skinconf.xml</span>&gt;,
+          <span class="codefrag">build-info</span>, <a href="body-index.html">body-index.html</a> and <a href="menu-index.html">menu-index.html</a> and <a href="tab-index.html">tab-index.html</a> and then
+          applying the <span class="codefrag">site-to-xhtml.xsl</span> stylesheet to
+          the result.
         </p>
+<p>
+          The conversion from <span class="codefrag">transform.site.xhtml</span> to
+          <span class="codefrag">site-to-xhtml.xsl</span> (line 10 above) is handled by
+          the locationmap in this fragment from
+          <span class="codefrag">locationmap-transforms.xml</span>:
+        </p>
+<pre class="code">
+          
+          &lt;match pattern="transform.*.*"&gt;
+            &lt;select&gt;
+              &lt;location src="{properties:skins-dir}{forrest:forrest.skin}/xslt/html/{1}-to-{2}.xsl" /&gt;
+              &lt;location src="{forrest:forrest.context}/skins/{forrest:forrest.skin}/xslt/html/{1}-to-{2}.xsl"/&gt;
+              &lt;location src="{forrest:forrest.context}/skins/common/xslt/html/{1}-to-{2}.xsl"/&gt;
+              &lt;location src="{forrest:forrest.stylesheets}/{1}-to-{2}.xsl"/&gt;
+            &lt;/select&gt;
+          &lt;/match&gt;
+          
+        </pre>
 <p>
           There is a nearly identical matcher for HTML files in subdirectories:
         </p>
 <pre class="code">
+          
           &lt;map:match pattern="**/*.html"&gt;
             &lt;map:aggregate element="site"&gt;
-            &lt;map:part src="<a href="#tab_pipeline">cocoon:/{1}/tab-{2}.html</a>"/&gt;
-            &lt;map:part src="<a href="#menu_pipeline">cocoon:/{1}/menu-{2}.html</a>"/&gt;
-            &lt;map:part src="<a href="#body_pipeline">cocoon:/{1}/body-{2}.html</a>"/&gt;
+              &lt;map:part src="cocoon:/skinconf.xml"/&gt;
+              &lt;map:part src="cocoon:/build-info"/&gt;
+              &lt;map:part src="<a href="#tab_pipeline">cocoon:/{1}/tab-{2}.html</a>"/&gt;
+              &lt;map:part src="<a href="#menu_pipeline">cocoon:/{1}/menu-{2}.html</a>"/&gt;
+              &lt;map:part src="<a href="#body_pipeline">cocoon:/{1}/body-{2}.html</a>"/&gt;
             &lt;/map:aggregate&gt;
             &lt;map:call resource="skinit"&gt;
-              &lt;map:parameter name="type"
-                value="site2xhtml"/&gt;
-              &lt;map:parameter name="path"
-                value="{0}"/&gt;
+              &lt;map:parameter name="type" value="transform.site.xhtml"/&gt;
+              &lt;map:parameter name="path" value="{0}"/&gt;
             &lt;/map:call&gt;
           &lt;/map:match&gt;
+          
         </pre>
 </div>
     
-<a name="N10266"></a><a name="intermediate_pipelines"></a>
+<a name="N1027A"></a><a name="intermediate_pipelines"></a>
 <h2 class="underlined_10">Intermediate pipelines</h2>
 <div class="section">
-<a name="N1026C"></a><a name="body_pipeline"></a>
+<a name="N10280"></a><a name="body_pipeline"></a>
 <h3 class="underlined_5">Page body</h3>
 <p>
           Here is the matcher which generates the page body:
         </p>
 <pre class="code">
-
-1   &lt;map:match pattern="**body-*.html"&gt;
-2     &lt;map:generate src="cocoon:/{1}{2}.xml"/&gt;
-3     &lt;map:transform type="idgen"/&gt;
-4     &lt;map:transform type="xinclude"/&gt;
-5     &lt;map:transform type="<a href="#linkrewriting_impl">linkrewriter</a>" src="cocoon:/{1}linkmap-{2}.html"/&gt;
-6     &lt;map:call resource="skinit"&gt;
-7       &lt;map:parameter name="type" value="document2html"/&gt;
-8       &lt;map:parameter name="path" value="{1}{2}.html"/&gt;
-9       &lt;map:parameter name="notoc" value="false"/&gt;
-10    &lt;/map:call&gt;
-11  &lt;/map:match&gt;
+          
+          1   &lt;map:match pattern="**body-*.html"&gt;
+          2     &lt;map:generate src="cocoon:/{1}{2}.xml"/&gt;
+          3     &lt;map:transform type="idgen"/&gt;
+          4     &lt;map:transform src="{lm:transform.xml.xml-xpointer-attributes}"/&gt;
+          5     &lt;map:transform type="xinclude"/&gt;
+          6     &lt;map:transform type="<a href="#linkrewriting_impl">linkrewriter</a>" src="cocoon:/{1}linkmap-{2}.html"/&gt;
+          7     &lt;map:transform src="{lm:transform.html.broken-links}" /&gt;
+          8     &lt;map:call resource="skinit"&gt;
+          9       &lt;map:parameter name="type" value="transform.xdoc.html"/&gt;
+          10      &lt;map:parameter name="path" value="{1}{2}.html"/&gt;
+          11      &lt;map:parameter name="notoc" value="false"/&gt;
+          12    &lt;/map:call&gt;
+          13  &lt;/map:match&gt;
           
         </pre>
 <ol>
@@ -909,11 +996,15 @@ FORMATS    doc-v11  doc-v13  doc-v20 ... Docbook  FAQ  Howto  Wiki  RSS  ??
             </pre>
             
 <p>
-              Later, the <span class="codefrag">document-to-html.xsl</span> stylesheet will
-              create an &lt;a name&gt; element for every section, allowing this
-              section to be referred to as
-              <span class="codefrag">index.html#How+to+boil+eggs</span>.
+              Later, the <span class="codefrag">document-to-html.xsl</span> stylesheet
+              will create an &lt;a name&gt; element for every section,
+              allowing this section to be referred to as
+              <span class="codefrag">index.html#How+to+boil+eggs</span>. <span class="codefrag">document-to-html.xsl</span>
+              is looked up by the key <span class="codefrag">transform.xdoc.html</span>
+              in the locationmap in line 9 above. See
+              <span class="codefrag">locationmap-transforms.xml</span> for this match.
             </p>
+          
 </li>
           
 <li>We then expand XInclude elements.</li>
@@ -925,23 +1016,25 @@ FORMATS    doc-v11  doc-v13  doc-v20 ... Docbook  FAQ  Howto  Wiki  RSS  ??
             &lt;html&gt; and &lt;body&gt;) suitable for merging with the menu and tabs.</li>
         
 </ol>
-<a name="N102AF"></a><a name="menu_pipeline"></a>
+<a name="N102CD"></a><a name="menu_pipeline"></a>
 <h3 class="underlined_5">Page menu</h3>
 <p>
           In the <span class="codefrag">sitemap.xmap</span> file, the matcher generating HTML for
           the menu is:
         </p>
 <pre class="code">
-
-      &lt;map:match pattern="**menu-*.html"&gt;
-        &lt;map:generate src="cocoon:/{1}book-{2}.html"/&gt;
-        &lt;map:transform type="<a href="#linkrewriting_impl">linkrewriter</a>" src="cocoon:/{1}linkmap-{2}.html"/&gt;
-        &lt;map:call resource="skinit"&gt;
-          &lt;map:parameter name="type" value="book2menu"/&gt;
-          &lt;map:parameter name="path" value="{1}{2}.html"/&gt;
-        &lt;/map:call&gt;
-      &lt;/map:match&gt;
-      
+          
+          1   &lt;map:match pattern="**menu-*.html"&gt;
+          2     &lt;map:generate src="cocoon:/{1}book-{2}.html"/&gt;
+          3     &lt;map:transform type="<a href="#linkrewriting_impl">linkrewriter</a>" src="cocoon:/{1}linkmap-{2}.html"/&gt;
+          4     &lt;map:transform src="{lm:transform.html.broken-links}" /&gt;
+          5     &lt;map:call resource="skinit"&gt;
+          6       &lt;map:parameter name="type" value="transform.book.menu"/&gt;
+          7       &lt;map:parameter name="path" value="{1}{2}.html"/&gt;
+          8     &lt;/map:call&gt;
+          9     &lt;map:serialize type="xml"/&gt;
+          10  &lt;/map:match&gt;
+          
         </pre>
 <p>
           We get XML from a "book" pipeline,
@@ -953,32 +1046,53 @@ FORMATS    doc-v11  doc-v13  doc-v20 ... Docbook  FAQ  Howto  Wiki  RSS  ??
           sufficiently complex to require a
           <a href="#menu_generation_impl">section of its own</a>.
         </p>
-<a name="N102D5"></a><a name="tab_pipeline"></a>
+<a name="N102F3"></a><a name="tab_pipeline"></a>
 <h3 class="underlined_5">Page tabs</h3>
-<p>
-          Tab generation is quite tame compared to menus:
-        </p>
 <pre class="code">
-
-     &lt;map:match pattern="**tab-*.html"&gt;
-       &lt;map:generate src="content/xdocs/tabs.xml" /&gt;
-       &lt;map:transform type="<a href="#linkrewriting_impl">linkrewriter</a>" src="cocoon:/{1}linkmap-{2}.html"/&gt;
-       &lt;map:call resource="skinit"&gt;
-         &lt;map:parameter name="type" value="tab2menu"/&gt;
-         &lt;map:parameter name="path" value="{1}{2}.html"/&gt;
-       &lt;/map:call&gt;
-     &lt;/map:match&gt;
-           
+          
+          &lt;map:match pattern="**tab-*.html"&gt;
+            &lt;map:mount uri-prefix="" src="tabs.xmap" check-reload="yes" /&gt;
+          &lt;/map:match&gt;
+          
         </pre>
 <p>
-          All the smarts are in the <span class="codefrag">tab-to-menu.xsl</span> stylesheet,
-          which needs to choose the correct tab based on the current path.
-          Currently, a "longest matching path" algorithm is implemented. See the
-          <span class="codefrag">tab-to-menu.xsl</span> stylesheet for details.
+          And the match from <span class="codefrag">tabs.xmap</span>:
+        </p>
+<pre class="code">
+          
+          1   &lt;map:match pattern="**tab-*.html"&gt;
+          2     &lt;map:generate src="{lm:project.tabs.xml}"/&gt;
+          3     &lt;map:transform type="xinclude"/&gt;
+          4     &lt;map:select type="config"&gt;
+          5       &lt;map:parameter name="value" value="{properties:forrest.i18n}"/&gt;
+          6       &lt;map:when test="true"&gt;
+          7         &lt;map:act type="locale"&gt;
+          8           &lt;map:transform src="{lm:transform.book.book-i18n}"/&gt;
+          9           &lt;map:transform type="i18n"&gt;
+          10            &lt;map:parameter name="locale" value="{locale}"/&gt;
+          11          &lt;/map:transform&gt;
+          12        &lt;/map:act&gt;
+          13      &lt;/map:when&gt;
+          14    &lt;/map:select&gt;
+          15    &lt;map:transform type="<a href="#linkrewriting_impl">linkrewriter</a>" src="cocoon:/{1}linkmap-{2}.html"/&gt;
+          16    &lt;map:call resource="skinit"&gt;
+          17      &lt;map:parameter name="type" value="transform.tab.menu"/&gt;
+          18      &lt;map:parameter name="path" value="{1}{2}.html"/&gt;
+          19    &lt;/map:call&gt;
+          20  &lt;/map:match&gt;
+          
+        </pre>
+<p>
+          All the smarts are in the <span class="codefrag">tab-to-menu.xsl</span>
+          stylesheet (resolved by the locationmap in line 17), which
+          needs to choose the correct tab based on the current path.
+          Currently, a "longest matching path" algorithm is
+          implemented. See the <span class="codefrag">tab-to-menu.xsl</span> stylesheet
+          for details.
         </p>
 </div>
     
-<a name="N102F1"></a><a name="resolvingResources"></a>
+<a name="N10316"></a><a name="resolvingResources"></a>
 <h2 class="underlined_10">Resolving Resources</h2>
 <div class="section">
 <p>
@@ -991,14 +1105,14 @@ FORMATS    doc-v11  doc-v13  doc-v20 ... Docbook  FAQ  Howto  Wiki  RSS  ??
       </p>
 </div>
     
-<a name="N102FF"></a><a name="menu_generation_impl"></a>
+<a name="N10324"></a><a name="menu_generation_impl"></a>
 <h2 class="underlined_10">Menu XML generation</h2>
 <div class="section">
 <p>
-        The "book" pipeline is defined in <span class="codefrag">sitemap.xmap</span>as:
+        The "book" pipeline is defined in <span class="codefrag">sitemap.xmap</span> as:
       </p>
 <pre class="code">
-
+        
         &lt;map:match pattern="**book-*.html"&gt;
           &lt;map:mount uri-prefix="" src="menu.xmap" check-reload="yes" /&gt;
         &lt;/map:match&gt;
@@ -1050,12 +1164,12 @@ FORMATS    doc-v11  doc-v13  doc-v20 ... Docbook  FAQ  Howto  Wiki  RSS  ??
               </p>
               
 <pre class="code">
-
-&lt;map:transform src="resources/stylesheets/site-to-site-normalizetabs.xsl" /&gt;
-&lt;map:transform src="resources/stylesheets/site-to-site-selectnode.xsl"&gt;
-  &lt;map:parameter name="path" value="{1}{2}"/&gt;
-&lt;/map:transform&gt;
-                
+    
+    &lt;map:transform src="resources/stylesheets/site-to-site-normalizetabs.xsl" /&gt;
+    &lt;map:transform src="resources/stylesheets/site-to-site-selectnode.xsl"&gt;
+      &lt;map:parameter name="path" value="{1}{2}"/&gt;
+    &lt;/map:transform&gt;
+    
               </pre>
 </li>
             
@@ -1102,7 +1216,7 @@ FORMATS    doc-v11  doc-v13  doc-v20 ... Docbook  FAQ  Howto  Wiki  RSS  ??
 </ol>
 </div>
     
-<a name="N10380"></a><a name="linkrewriting_impl"></a>
+<a name="N103A5"></a><a name="linkrewriting_impl"></a>
 <h2 class="underlined_10">Link rewriting</h2>
 <div class="section">
 <p>
@@ -1117,7 +1231,7 @@ FORMATS    doc-v11  doc-v13  doc-v20 ... Docbook  FAQ  Howto  Wiki  RSS  ??
         is provided in <a href="../docs_0_90/linking.html">Menus and Linking</a>. Here
         we describe the implementation of linking.
       </p>
-<a name="N10397"></a><a name="input_modules"></a>
+<a name="N103BC"></a><a name="input_modules"></a>
 <h3 class="underlined_5">Cocoon foundations: Input Modules</h3>
 <p>
           The implementation of <span class="codefrag">site:</span> linking is heavily based on
@@ -1148,13 +1262,13 @@ FORMATS    doc-v11  doc-v13  doc-v20 ... Docbook  FAQ  Howto  Wiki  RSS  ??
           currently distributed as a "block" in Cocoon 2.1
           (see <a href="http://cocoon.apache.org/2.1/apidocs/org/apache/cocoon/transformation/LinkRewriterTransformer.html">API docs</a>).
         </p>
-<a name="N103CF"></a><a name="implement_rewriting"></a>
+<a name="N103F4"></a><a name="implement_rewriting"></a>
 <h3 class="underlined_5">Implementing "site:" rewriting</h3>
 <p>
           Using the above components, "<span class="codefrag">site:</span>" URI rewriting is
           accomplished as follows.
         </p>
-<a name="N103DE"></a><a name="cocoon_xconf"></a>
+<a name="N10403"></a><a name="cocoon_xconf"></a>
 <h4>cocoon.xconf</h4>
 <p>
             First, we declare all the input modules we will be needing:
@@ -1202,7 +1316,7 @@ FORMATS    doc-v11  doc-v13  doc-v20 ... Docbook  FAQ  Howto  Wiki  RSS  ??
             will be configured in <span class="codefrag">sitemap.xmap</span> as described in the
             next section.
           </p>
-<a name="N1041A"></a><a name="sitemap"></a>
+<a name="N1043F"></a><a name="sitemap"></a>
 <h4>sitemap.xmap</h4>
 <p>
             Now in the sitemap, we define the LinkRewriterTransformer, and
@@ -1316,7 +1430,7 @@ FORMATS    doc-v11  doc-v13  doc-v20 ... Docbook  FAQ  Howto  Wiki  RSS  ??
             <span class="codefrag">cocoon:/community/linkmap-index.html</span>
           
 </p>
-<a name="N10487"></a><a name="dynamic_linkmap"></a>
+<a name="N104AC"></a><a name="dynamic_linkmap"></a>
 <h4>Dynamically generating a linkmap</h4>
 <p>
             Why do we need this "linkmap" pipeline generating dynamic XML from
