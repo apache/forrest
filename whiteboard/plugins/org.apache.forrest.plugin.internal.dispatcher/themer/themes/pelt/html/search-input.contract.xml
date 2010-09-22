@@ -72,31 +72,25 @@ in your view!!! If you are not, the contract will not work correctly.</div>
                     <!-- Form action -->
                     <xsl:variable name="search-action">
                       <xsl:choose>
-                        <xsl:when test="$search-input/search/@provider = 'lucene'">
-
-                          <xsl:value-of select="$root" />
-                          <xsl:value-of select="$search-lucene" />
-                        </xsl:when>
-                        <xsl:otherwise>
-                        http://www.google.com/search</xsl:otherwise>
+                        <xsl:when test="$search-input/search/@provider = 'lucene'"><xsl:value-of select="concat($root,$search-lucene)" /></xsl:when>
+                        <xsl:otherwise>http://www.google.com/search</xsl:otherwise>
                       </xsl:choose>
                     </xsl:variable>
                     <!-- Form query field -->
                     <xsl:variable name="search-query">
                       <xsl:choose>
-                        <xsl:when test="$search-input/search/@provider = 'lucene'">
-                        queryString</xsl:when>
+                        <xsl:when test="$search-input/search/@provider = 'lucene'">queryString</xsl:when>
                         <xsl:otherwise>q</xsl:otherwise>
                       </xsl:choose>
                     </xsl:variable>
                     <!-- Search form generation -->
-                    <form method="get" action="{$search-action}">
+                    <form method="get" action="{normalize-space($search-action)}">
                       <div class="search-hidden">
                         <input type="hidden" name="sitesearch"
                         value="{$search-input/search/@domain}" />
                       </div>
                       <div class="search-field">
-                        <input type="text" name="{$search-query}"
+                        <input type="text" name="{normalize-space($search-query)}"
                         size="{$input-size}"
                         value="{normalize-space($search-prompt)}"
                         onfocus="getBlank(this, '{normalize-space($search-prompt)}');"
