@@ -101,7 +101,6 @@ xmlns:forrest="http://apache.org/forrest/templates/1.0">
         <xsl:variable name="tagid">
           <xsl:choose>
             <xsl:when test="descendant-or-self::node()/li/div/@class='current'">
-
               <xsl:value-of select="concat('menu_selected_',$id)" />
             </xsl:when>
             <xsl:otherwise>
@@ -112,10 +111,7 @@ xmlns:forrest="http://apache.org/forrest/templates/1.0">
         <xsl:variable name="selected">
           <xsl:choose>
             <xsl:when test="descendant-or-self::node()/li/div/@class='current'">
-
-              <xsl:text>
-selected
-</xsl:text>
+              <xsl:text>selected</xsl:text>
             </xsl:when>
             <xsl:otherwise></xsl:otherwise>
           </xsl:choose>
@@ -123,8 +119,8 @@ selected
         <li class="pagegroup{normalize-space($selected)}" id="{$tagid}Title">
           <span>
             <xsl:if test="$expanding = 'true'">
-              <xsl:attribute name="onclick">SwitchMenu(' 
-              <xsl:value-of select="normalize-space($tagid)" />')</xsl:attribute>
+              <!-- it is very important to not have a line break here since it will break the resulting code -->
+              <xsl:attribute name="onclick">SwitchMenu('<xsl:value-of select="normalize-space($tagid)" />')</xsl:attribute>
             </xsl:if>
             <xsl:value-of select="h1" />
           </span>
@@ -151,7 +147,6 @@ selected
                             <div class="menupageitem">
                               <xsl:choose>
                                 <xsl:when test="string-length(normalize-space(@title))&gt;15">
-
                                   <a href="{@href}"
                                   title="{normalize-space(@title)}">
                                   <xsl:value-of select="substring(@title,0,20)" />...</a>
