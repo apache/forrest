@@ -16,7 +16,7 @@
   limitations under the License.
 -->
 <forrest:contract xmlns:i18n="http://apache.org/cocoon/i18n/2.1"
-xmlns:forrest="http://apache.org/forrest/templates/1.0" name="google-analytics">
+xmlns:forrest="http://apache.org/forrest/templates/1.0" name="facebook-like">
   <description>
     <p>Note: This contract assumes that you have following properties set</p>
     <ul>
@@ -25,42 +25,32 @@ xmlns:forrest="http://apache.org/forrest/templates/1.0" name="google-analytics">
     </ul>
     <p>If you do not have this properties you need to use the traditional way to 
     retrieve the properties via <![CDATA[<xsl:param name="defaultVariables" select="'test.html'"/>]]>.</p>
-    <p>This is the Google Analytics tracking contract. Google Analytics lets you measure
-      your advertising ROI as well as track your Flash, video, and social networking sites and
-      applications.</p>
-    <p>If you use the domain parameter all subdomains as well will be tracked.</p>
+    <p>This is the facebook-like contract, it will output the Facebook Like button, which
+      enables users to post pages from your site back to their Fthe Like button, which enables
+      users to post pages from your site back to their Facebook profile with one click.</p>
   </description>
   <usage>
-    <![CDATA[<forrest:contract name="google-analytics">
-  <forrest:property name="google-analytics-account" value="${google-analytics-account}" />
-  [<forrest:property name="google-analytics-domain" value="${google-analytics-domain}" />]
+    <![CDATA[<forrest:contract name="facebook-like">
+  <forrest:property name="facebook-like-url" value="${urlToLike}" />
+  <forrest:property name="facebook-like-width" value="${facebook-like-width}" />
+  <forrest:property name="facebook-like-height" value="${facebook-like-height}" />
 </forrest:contract>]]>
 </usage>
   <forrest:template xmlns:forrest="http://apache.org/forrest/templates/1.0"
-  name="google-analytics" inputFormat="xsl">
+  name="facebook-like" inputFormat="xsl">
     <xsl:stylesheet version="1.1"
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
-      <xsl:param name="google-analytics-account" select="'none'"/>
-      <xsl:param name="google-analytics-domain" select="'none'"/>
+      <xsl:param name="facebook-like-url" select="'http://www.codebusters.es/'"/>
+      <xsl:param name="facebook-like-width" select="'450px'"/>
+      <xsl:param name="facebook-like-height" select="'80px'"/>
       <xsl:template match="/">
         <forrest:content>
-          <forrest:part xpath="/html/head">
-            <script type="text/javascript">
-  var _gaq = _gaq || [];
-  _gaq.push(['_setAccount', '<xsl:value-of select="$google-analytics-account"/>']);
-  <xsl:if test="not($google-analytics-domain='none')">
-    _gaq.push(['_setDomainName', '<xsl:value-of select="$google-analytics-domain"/>']);
-  </xsl:if>
-  _gaq.push(['_trackPageview']);
-
-  (function() {
-    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-  })();
-
-</script>
-</forrest:part>
+          <forrest:part>
+            <iframe
+              src="http://www.facebook.com/widgets/like.php?href={$facebook-like-url}"
+              scrolling="no" frameborder="0"
+              style="border:none; width:{$facebook-like-width}; height:{$facebook-like-height}">&#160;</iframe>
+          </forrest:part>
         </forrest:content>
       </xsl:template>
     </xsl:stylesheet>

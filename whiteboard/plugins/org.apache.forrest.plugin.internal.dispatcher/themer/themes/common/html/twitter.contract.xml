@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one or more
+  contributor license agreements.  See the NOTICE file distributed with
+  this work for additional information regarding copyright ownership.
+  The ASF licenses this file to You under the Apache License, Version 2.0
+  (the "License"); you may not use this file except in compliance with
+  the License.  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<forrest:contract xmlns:i18n="http://apache.org/cocoon/i18n/2.1"
+xmlns:forrest="http://apache.org/forrest/templates/1.0" name="twitter">
+  <description>
+    <p>Note: This contract assumes that you have following properties set</p>
+    <ul>
+      <li>dispatcher.allowXmlProperties=false</li>
+      <li>dispatcher.shrink=true</li>
+    </ul>
+    <p>If you do not have this properties you need to use the traditional way to 
+    retrieve the properties via <![CDATA[<xsl:param name="defaultVariables" select="'test.html'"/>]]>.</p>
+    <p>This is just a twitter contract, it will output something but *nothing*
+    in special. It should just serve to explain a wee bit contracts and what
+    you can do with them.</p>
+  </description>
+  <usage>
+    <![CDATA[<forrest:contract name="twitter">
+  <forrest:property name="twitter-feed-features-user" value="'cazacodigos'"/>
+  <forrest:property name="twitter-feed-features-behavior" value="'all'"/>
+  <forrest:property name="twitter-feed-features-avatars" value="'false'"/>
+  <forrest:property name="twitter-feed-features-timestamp" value="'true'"/>
+  <forrest:property name="twitter-feed-features-hashtags" value="'true'"/>
+  <forrest:property name="twitter-feed-features-live" value="'false'"/>
+  <forrest:property name="twitter-feed-features-loop" value="'false'"/>
+  <forrest:property name="twitter-feed-features-scrollbar" value="'false'"/>
+  <forrest:property name="twitter-feed-tweets-color" value="'#000000'"/>
+  <forrest:property name="twitter-feed-tweets-background" value="'#ffffff'"/>
+  <forrest:property name="twitter-feed-tweets-links" value="'#cc3553'"/>
+  <forrest:property name="twitter-feed-shell-background" value="'#e6dae6'"/>
+  <forrest:property name="twitter-feed-shell-color" value="'#000000'"/>
+  <forrest:property name="twitter-feed-height" value="'300'"/>
+  <forrest:property name="twitter-feed-width" value="'150'"/>
+  <forrest:property name="twitter-feed-interval" value="'6000'"/>  
+  <forrest:property name="twitter-feed-rpp" value="'4'"/>
+</forrest:contract>]]>
+</usage>
+  <forrest:template xmlns:forrest="http://apache.org/forrest/templates/1.0"
+  name="twitter" inputFormat="xsl">
+    <xsl:stylesheet version="1.1"
+    xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+      <xsl:param name="twitter-feed-features-user" select="'cazacodigos'"/>
+      <xsl:param name="twitter-feed-features-behavior" select="'all'"/>
+      <xsl:param name="twitter-feed-features-avatars" select="'false'"/>
+      <xsl:param name="twitter-feed-features-timestamp" select="'true'"/>
+      <xsl:param name="twitter-feed-features-hashtags" select="'true'"/>
+      <xsl:param name="twitter-feed-features-live" select="'false'"/>
+      <xsl:param name="twitter-feed-features-loop" select="'false'"/>
+      <xsl:param name="twitter-feed-features-scrollbar" select="'false'"/>
+      <xsl:param name="twitter-feed-tweets-color" select="'#000000'"/>
+      <xsl:param name="twitter-feed-tweets-background" select="'#ffffff'"/>
+      <xsl:param name="twitter-feed-tweets-links" select="'#cc3553'"/>
+      <xsl:param name="twitter-feed-shell-background" select="'#e6dae6'"/>
+      <xsl:param name="twitter-feed-shell-color" select="'#000000'"/>
+      <xsl:param name="twitter-feed-height" select="'300'"/>
+      <xsl:param name="twitter-feed-width" select="'150'"/>
+      <xsl:param name="twitter-feed-interval" select="'6000'"/>  
+      <xsl:param name="twitter-feed-rpp" select="'4'"/>
+      <xsl:template match="/">
+        <forrest:content>
+          <forrest:part>
+            <script src="http://widgets.twimg.com/j/2/widget.js">&#160;</script>
+<script>
+new TWTR.Widget({
+  version: 2,
+  type: 'profile',
+  rpp: <xsl:value-of select="$twitter-feed-rpp"/>,
+  interval: <xsl:value-of select="$twitter-feed-interval"/>,
+  width: <xsl:value-of select="$twitter-feed-width"/>,
+  height: <xsl:value-of select="$twitter-feed-height"/>,
+  theme: {
+    shell: {
+      background: '<xsl:value-of select="$twitter-feed-shell-background"/>',
+      color: '<xsl:value-of select="$twitter-feed-shell-color"/>'
+    },
+    tweets: {
+      background: '<xsl:value-of select="$twitter-feed-tweets-background"/>',
+      color: '<xsl:value-of select="$twitter-feed-tweets-color"/>',
+      links: '<xsl:value-of select="$twitter-feed-tweets-links"/>'
+    }
+  },
+  features: {
+    scrollbar: <xsl:value-of select="$twitter-feed-features-scrollbar"/>,
+    loop: <xsl:value-of select="$twitter-feed-features-loop"/>,
+    live: <xsl:value-of select="$twitter-feed-features-live"/>,
+    hashtags: <xsl:value-of select="$twitter-feed-features-hashtags"/>,
+    timestamp: <xsl:value-of select="$twitter-feed-features-timestamp"/>,
+    avatars: <xsl:value-of select="$twitter-feed-features-avatars"/>,
+    behavior: '<xsl:value-of select="$twitter-feed-features-behavior"/>'
+  }
+}).render().setUser('<xsl:value-of select="$twitter-feed-features-user"/>').start();
+</script>
+          </forrest:part>
+        </forrest:content>
+      </xsl:template>
+    </xsl:stylesheet>
+  </forrest:template>
+</forrest:contract>
