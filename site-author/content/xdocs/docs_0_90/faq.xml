@@ -183,6 +183,33 @@ forrest -Dproject.start-uri=live-sites.html
         </p>
       </answer>
     </faq>
+    <faq id="oldjing">
+      <question>On Java 6 fails validate-sitemap task. Missing the RELAX NG datatype library.</question>
+      <answer>
+        <source>
+<![CDATA[validate-sitemap:
+apache-forrest-0.8/main/webapp/resources/schema/relaxng/sitemap-v06.rng:72:31:
+error: datatype library "http://www.w3.org/2001/XMLSchema-datatypes" not recognized
+]]></source>
+        <p>
+          The version of Jing needs to be updated. 
+        </p>
+        <p>
+          This is fixed in Forrest-0.9-dev version.
+          See <link href="http://issues.apache.org/jira/browse/FOR-984">FOR-984</link>.
+        </p>
+        <p>
+          One workaround is to update your copy of the
+          <link href="http://code.google.com/p/jing-trang/">Jing</link> jar at
+          <code>$FORREST_HOME/lib/core/</code>
+        </p>
+        <p>
+          Another workaround is to edit the forrest.properties configuration file
+          to expose the "forrest.validate.sitemap" property and set it to "false".
+          Might need to do the same for the "forrest.validate.stylesheets" property.
+        </p>
+      </answer>
+    </faq>
     <faq id="winjava">
       <question>Windows gets confused about which Java version to use.</question>
       <answer>
