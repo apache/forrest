@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one or more
+  contributor license agreements.  See the NOTICE file distributed with
+  this work for additional information regarding copyright ownership.
+  The ASF licenses this file to You under the Apache License, Version 2.0
+  (the "License"); you may not use this file except in compliance with
+  the License.  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<!DOCTYPE document PUBLIC "-//APACHE//DTD Documentation V2.0//EN" "http://forrest.apache.org/dtd/document-v20.dtd">
+<document>
+  <header>
+    <title>Welcome to the org.apache.forrest.plugin.output.Markdown Plugin</title>
+  </header>
+  <body>
+    <section id="overview">
+      <title>Overview</title>
+      <p>
+        Produce output in 
+        <a href="http://daringfireball.net/projects/markdown/">Markdown</a>
+        "mdtext" format. This enables use of Forrest as
+        a tool for gathering input from various sources, and generate a
+        consistent set of output documents.
+        See <a href="site:sample-1">example</a>.
+      </p>
+    </section>
+    <section id="howto">
+      <title>Howto</title>
+      <p>
+        In your project's <code>forrest.properties</code> file make the
+        following changes ...
+      </p>
+      <ul>
+        <li>
+          Declare the <code>org.apache.forrest.plugin.output.Markdown</code>
+          plugin at the <code>project.required.plugins</code> property
+          (comma-separated list).
+        </li>
+        <li>
+          Uncomment the <code>project.start-uri</code> property and set it to be
+          <code>markdown-start.xml</code>
+        </li>
+      </ul>
+      <p>
+         Now do '<code>forrest</code>' to build your site as normal.
+      </p>
+      <p>
+         Alongside each <code>*.html</code> file there will now be a matching
+         <code>*.mdtext</code> file.
+      </p>
+      <p>
+         Of course you can also do '<code>forrest run</code>' and request
+         individual <code>*.mdtext</code> files.
+      </p>
+    </section>
+<!--
+    <section id="tips">
+      <title>Tips</title>
+      <p>
+      </p>
+    </section>
+-->
+    <section id="notes">
+      <title>Notes</title>
+      <p>
+        This first version of the plugin might not convert all complex content.
+      </p>
+      <p>
+        May need a combination of editing output, editing input and running
+        again, or tweaking transformations to do special things.
+      </p>
+      <p>
+        See the two transformations mentioned below. We can adjust to treat
+        certain input differently.
+      </p>
+      <p>
+        The initial anakia-to-markdown.xsl referred to below was from
+        <a href="http://svn.apache.org/repos/infra/infrastructure/trunk/projects/cms/prototype/conversion-utilities/anakia2markdown.xslt"><code>http://svn.apache.org/repos/infra/infrastructure/trunk/projects/cms/prototype/conversion-utilities/anakia2markdown.xslt</code></a> (r777924 2010-09-24). Monitor/integrate changes.
+      </p>
+      <p>
+        See some other notes here:
+          <a href="http://svn.apache.org/repos/infra/infrastructure/trunk/projects/cms/prototype/Markdown-limitations.mdtext"><code>http://svn.apache.org/repos/infra/infrastructure/trunk/projects/cms/prototype/Markdown-limitations.mdtext</code></a>
+      </p>
+      <p>
+        See some notes in this mail thread on the "site-dev" mail list:
+        "[CMS] handling tables and other complex html" 2010-10-16.
+      </p>
+    </section>
+    <section id="explanation">
+      <title>How it works</title>
+      <p>
+        Explanation of how this plugin works
+        and how its output can be enhanced with additional processing.
+      </p>
+      <p>
+        Without touching any of the site source content or navigation system,
+        we need to additionally inject another set of links to be processed.
+        Each html output document will then also have a matching URI with 
+        <code>*.mdtext</code> extension.
+      </p>
+      <p>
+        This is achieved with the <code>input.xmap</code> sitemap. For the
+        requested <code>markdown-start.xml</code> pipeline, Forrest will generate
+        the "linkmap" of the site navigation, then apply a transformation
+        to amend each link.
+      </p>
+      <p>
+        This automatically enables the crawler to gather this set of links.
+      </p>
+      <p>
+        The <code>output.xmap</code> sitemap then handles each mdtext URI to
+        transform the internal XML content structure. This plugin provides a
+        stylesheet <code>document-to-anakia.xsl</code> to transform the
+        internal XML to something close to Anakia-like XML
+        The following transformation <code>anakia-to-markdown.xsl</code> (see
+        above) transforms that XML to Markdown text.
+      </p>
+      <p>
+        To enhance the output, either amend the <code>document-to-anakia.xsl</code>
+        stylesheet or the <code>anakia-to-markdown.xsl</code> stylesheet
+        (and please send changes), or insert another output transformation.
+      </p>
+    </section>
+    <section id="links">
+      <title>Links</title>
+      <ul>
+        <li>
+          <a href="http://daringfireball.net/projects/markdown/">Markdown</a>
+        </li>
+        <li>
+          <a href="http://www.freewisdom.org/projects/python-markdown/">Markdown in Python: Features</a>
+        </li>
+        <li>
+          <a href="http://velocity.apache.org/engine/devel/anakia.html">Apache Velocity Anakia</a>).
+        </li>
+      </ul>
+    </section>
+  </body>
+</document>
