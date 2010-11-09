@@ -58,9 +58,13 @@ handled by uncommenting the relevant section.
   <xsl:template match="menu-item[starts-with(@href, 'http:')]"/>
 <!-- Ignore absolute http urls -->
   <xsl:template match="menu-item[starts-with(@href, 'https:')]"/>
+<!-- Ignore externals -->
+  <xsl:template match="menu-item[starts-with(@href, 'ext:')]"/>
+<!-- Ignore site protocol -->
+  <xsl:template match="menu-item[starts-with(@href, 'site:')]"/>  
 <!-- Ignore absolute https urls -->
 <!-- For entries whose @href ends in "/", refer to @href/index.lucene -->
-  <xsl:template match="menu-item[substring(@href, string-length(@href) - string-length('/') + 1) = '/']">
+  <xsl:template match="menu-item[substring(@href, string-length(@href) - string-length('/') + 1) = '/']" priority="-1">
     <cinclude:include>
       <xsl:attribute name="src">
 <xsl:text>cocoon://</xsl:text>
