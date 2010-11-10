@@ -781,16 +781,19 @@ $ svn merge -r 303:302
           Perhaps the easiest way to "debug" Forrest is to be aware of all the
           processing steps between taking in the source and outputting the end
           result. When you know these you can do 'forrest run' and request the
-          intermediate documents, such as "http://localhost:8888/body-index.xml"
-          which will return the intermediate processing of the body of the
-          document.
+          intermediate documents, such as
+           "<span class="codefrag">http://localhost:8888/body-index.html</span>"
+          which will return the intermediate processing of the body part of the
+          document, and
+           "<span class="codefrag">http://localhost:8888/index.xml</span>"
+          which will return the intermediate xml.
         </p>
 <p>
           The techniques described below help you to be aware of the
           intermediate processing steps.
           The <a href="tools/forrestbar.html">ForrestBar</a> also provides access.
         </p>
-<a name="N101C4"></a><a name="debug-cocoon-profiler"></a>
+<a name="N101CA"></a><a name="debug-cocoon-profiler"></a>
 <h4>Using Cocoon sitemap profiler</h4>
 <p>
           Cocoon provides a simple profiler to analyse itself. This enables us
@@ -820,7 +823,7 @@ $ svn merge -r 303:302
           NOTE: Do not forget to turn off the profiler in
           <span class="codefrag">main/webapp/sitemap.xmap</span> when finished.
         </p>
-<a name="N101E0"></a><a name="debug-sitemap-exec"></a>
+<a name="N101E6"></a><a name="debug-sitemap-exec"></a>
 <h4>Using Cocoon sitemap execution logger</h4>
 <p>
           In main/webapp/WEB-INF/cocoon.xconf search for "sitemap
@@ -833,7 +836,7 @@ $ svn merge -r 303:302
         See <a href="https://issues.apache.org/jira/browse/FOR-1109">FOR-1109</a> - Not available in Cocoon-2.1
         </div>
 </div>
-<a name="N101F2"></a><a name="debug-logtransformer"></a>
+<a name="N101F8"></a><a name="debug-logtransformer"></a>
 <h4>Using Cocoon LogTransformer</h4>
 <p>
           LogTransformers can be inserted in the sitemaps. This will write the
@@ -868,7 +871,7 @@ $ svn merge -r 303:302
           being taken through the sitemap. Add various LogTransformers with
           different filenames and see which one gets triggered.
         </p>
-<a name="N10209"></a><a name="debug-validation"></a>
+<a name="N1020F"></a><a name="debug-validation"></a>
 <h4>Using Cocoon Validation Transformers</h4>
 <p>
           Validating Transformers can be inserted in the sitemaps to validate
@@ -901,7 +904,7 @@ $ svn merge -r 303:302
           See <a href="http://cocoon.zones.apache.org/demos/21branch/samples/blocks/validation/welcome">Validation Block Samples</a> demos at the Cocoon zone.
           See <a href="http://cocoon.apache.org/2.1/apidocs/org/apache/cocoon/components/validation/Validator.html">API</a> docs.
         </p>
-<a name="N1023A"></a><a name="validate-intermediate"></a>
+<a name="N10240"></a><a name="validate-intermediate"></a>
 <h4>Validate all intermediate xml content</h4>
 <p>
           Add a text file at <span class="codefrag">src/documentation/conf/uris.txt</span>
@@ -918,7 +921,7 @@ $ svn merge -r 303:302
           see the document <span class="codefrag">build/tmp/validation-reports.html</span>
         
 </p>
-<a name="N1025C"></a><a name="debug-java"></a>
+<a name="N10262"></a><a name="debug-java"></a>
 <h4>Java code</h4>
 <p>
           There are two ways to debug your java code. The first is through
@@ -937,7 +940,7 @@ $ svn merge -r 303:302
           in debug mode on a specific port. For example:
         </p>
 <pre class="code">forrest.jvmargs=-Xdebug -Xrunjdwp:transport=dt_socket,address=8000,server=y,suspend=n</pre>
-<a name="N10279"></a><a name="debug-links"></a>
+<a name="N1027F"></a><a name="debug-links"></a>
 <h4>Finding broken internal links</h4>
 <p>
           Do 'forrest site' to produce the whole documentation set. Cocoon will
@@ -958,7 +961,7 @@ $ svn merge -r 303:302
           the correct name for the "site:..." value. Use the "localhost:8888/abs-menulinks"
           resource or via <a href="tools/forrestbar.html">ForrestBar</a>.
         </p>
-<a name="N10291"></a><a name="tips-debug"></a>
+<a name="N10297"></a><a name="tips-debug"></a>
 <h4>Tips</h4>
 <ul>
           
@@ -977,7 +980,7 @@ $ svn merge -r 303:302
         provide a documentation patch.
       </div>
 </div>
-<a name="N102A1"></a><a name="profile-yourkit"></a>
+<a name="N102A7"></a><a name="profile-yourkit"></a>
 <h4>Profiling Forrest with YourKit</h4>
 <p>
           Assuming you have the YourKit software installed you simply need to do
@@ -995,7 +998,7 @@ $ svn merge -r 303:302
           current filters - YourKit seems to filter out org.apache.* namespaces
           by default.
         </p>
-<a name="N102B2"></a><a name="profile-netbeans"></a>
+<a name="N102B8"></a><a name="profile-netbeans"></a>
 <h4>Profiling Forrest with Netbeans</h4>
 <p>
           Assuming you have the Netbeans IDE installed, you simply need to do a
@@ -1013,13 +1016,13 @@ profilerinterface.dll=\C:\\*NetbeansHome*\\profiler1\\lib\\,5140</pre>
           Netbeans IDE with your Forrest project. Click Profile-&gt;Attach Profiler
           and make selections appropriate to what you are trying to achieve.
         </p>
-<a name="N102C4"></a><a name="find"></a>
+<a name="N102CA"></a><a name="find"></a>
 <h3 class="underlined_5">Finding the relevant sources</h3>
 <p>
         You will need to be able to find which sources, sitemaps, stylesheets
         are responsible for certain processing.
       </p>
-<a name="N102CD"></a><a name="find-scenario-1"></a>
+<a name="N102D3"></a><a name="find-scenario-1"></a>
 <h4>Scenario: How does i18n work</h4>
 <p>
           We will do a search for "i18n" to start with, then refine that after
@@ -1062,7 +1065,7 @@ grep i18n *.*</pre>
           declared to use i18n, then further down the page the "skinit" pipeline
           uses the i18n transformer only if i18n is switched on.
         </p>
-<a name="N102EF"></a><a name="tips-find"></a>
+<a name="N102F5"></a><a name="tips-find"></a>
 <h4>Tips</h4>
 <ul>
           
@@ -1072,32 +1075,32 @@ grep i18n *.*</pre>
         
 </ul>
 </div>
-<a name="N102FF"></a><a name="faqs"></a>
+<a name="N10305"></a><a name="faqs"></a>
 <h2 class="underlined_10">Frequently Asked Questions</h2>
 <div class="section">
-<a name="N10303"></a><a name="faq-general"></a>
+<a name="N10309"></a><a name="faq-general"></a>
 <h3 class="underlined_5">1 General issues</h3>
-<a name="N10307"></a><a name="1.1+FAQ+1"></a>
+<a name="N1030D"></a><a name="1.1+FAQ+1"></a>
 <h4>1.1 FAQ 1</h4>
 <p>
             ####
           </p>
-<a name="N1030F"></a><a name="faq-other"></a>
+<a name="N10315"></a><a name="faq-other"></a>
 <h3 class="underlined_5">2 Other issues</h3>
-<a name="N10313"></a><a name="2.1+FAQ+2.1"></a>
+<a name="N10319"></a><a name="2.1+FAQ+2.1"></a>
 <h4>2.1 FAQ 2.1</h4>
 <p>
             ###
           </p>
 </div>
-<a name="N1031B"></a><a name="Tips"></a>
+<a name="N10321"></a><a name="Tips"></a>
 <h2 class="underlined_10">Tips</h2>
 <div class="section">
 <p>
       This is a collection of general tips that do not fit in the sections
       above.
     </p>
-<a name="N10323"></a><a name="tip-howto"></a>
+<a name="N10329"></a><a name="tip-howto"></a>
 <h3 class="underlined_5">Explanations about howto topics on the mailing lists</h3>
 <p>
         Often there are useful discussions on the mailing lists which explain
@@ -1106,7 +1109,7 @@ grep i18n *.*</pre>
         links to the email discussion. Later someone else can summarise.
       </p>
 </div>
-<a name="N1032D"></a><a name="References"></a>
+<a name="N10333"></a><a name="References"></a>
 <h2 class="underlined_10">References</h2>
 <div class="section">
 <p>
