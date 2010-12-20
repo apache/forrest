@@ -58,7 +58,8 @@
           <ul>
             <li><b>id:</b> [unixname]</li>
             <li><b>url:</b> [secondleveldomain]</li>
-            <li><b>logo:</b> [apache | apache-jakarta | apache-resource | apache-httpd]</li>
+            <li><b>logo:</b> [apache | apache-jakarta | apache-resource | apache-httpd |
+              apache-asf | apache-thanks]</li>
             <li><b>color:</b> [fontcolor]</li>
             <li><b>bgcolor:</b> [backgroundcolor | $forrest | $maven]</li>
             <li><b>scale:</b> [small | normal | big]</li>
