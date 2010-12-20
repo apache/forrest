@@ -91,6 +91,12 @@ apache-jakarta - 350,68
           <xsl:when test="@logo='apachecon-wide'">
             <xsl:value-of select="234*number($scale)" />
           </xsl:when>
+          <xsl:when test="@logo='apache-asf'">
+            <xsl:value-of select="125*number($scale)" />
+          </xsl:when>
+          <xsl:when test="@logo='apache-thanks'">
+            <xsl:value-of select="88*number($scale)" />
+          </xsl:when>
           <xsl:otherwise>
             <xsl:value-of select="(450+(string-length(@name)*13))*number($scale)" />
           </xsl:otherwise>
@@ -109,6 +115,12 @@ apache-jakarta - 350,68
           </xsl:when>
           <xsl:when test="@logo='apachecon-wide'">
             <xsl:value-of select="60*number($scale)" />
+          </xsl:when>
+          <xsl:when test="@logo='apache-asf'">
+            <xsl:value-of select="125*number($scale)" />
+          </xsl:when>
+          <xsl:when test="@logo='apache-thanks'">
+            <xsl:value-of select="31*number($scale)" />
           </xsl:when>
           <xsl:otherwise>
             <xsl:value-of select="51*number($scale)" />
