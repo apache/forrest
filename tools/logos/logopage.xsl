@@ -32,10 +32,8 @@
           <a href="#moreinfo">[more info]</a>
         </p>
         <p>
-          Note that if you are not using these logos for an Apache project then
-          be aware about using
-          <a href="http://www.apache.org/foundation/licence-FAQ.html#Marks">
-          trade marks</a>.
+          Note: Please be aware of the ASF
+          <a href="http://www.apache.org/foundation/marks/">Apache Trademark Policy</a>.
         </p>
         <h2>Projects</h2>
         <ul>
@@ -60,10 +58,10 @@
           <ul>
             <li><b>id:</b> [unixname]</li>
             <li><b>url:</b> [secondleveldomain]</li>
-            <li><b>logo:</b> [apache|apache-jakarta|apache-resource|apache-httpd]</li>
+            <li><b>logo:</b> [apache | apache-jakarta | apache-resource | apache-httpd]</li>
             <li><b>color:</b> [fontcolor]</li>
-            <li><b>bgcolor:</b> [backgroundcolor|$forrest|$maven]</li>
-            <li><b>scale:</b> [small|normal|big]</li>
+            <li><b>bgcolor:</b> [backgroundcolor | $forrest | $maven]</li>
+            <li><b>scale:</b> [small | normal | big]</li>
           </ul>
           The above example is like this in projects.xml:
           <pre>
@@ -81,12 +79,12 @@
         </p>
         <p>
           If you need a different logo type, you can add the xsl template to the
-          'logo-templates' dir and reference it by filename (minus the
+          'templates' dir and reference it by filename (minus the
           extension).
         </p>
         <p>
-          In alternative, ask someone that knows how to do it (ATM
-          nicola@apache.org) and send the SVG version of a logo template.
+          In alternative, ask someone that knows how to do it
+          and send the SVG version of a logo template.
         </p>
       </body>
     </html>
