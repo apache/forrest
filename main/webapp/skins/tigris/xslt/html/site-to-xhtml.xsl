@@ -41,18 +41,18 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
         <xsl:call-template name="html-meta"/>
         <xsl:call-template name="meta-data"/>
         <style type="text/css">
-          /* <![CDATA[ */
-          @import "]]>
+          <xsl:text>@import "</xsl:text>
           <xsl:value-of select="$root"/>
-<![CDATA[skin/tigris.css";
-          @import "]]>
+          <xsl:text>skin/tigris.css";</xsl:text>
+          <xsl:text>@import "</xsl:text>
           <xsl:value-of select="$root"/>
-<![CDATA[skin/quirks.css";
-          @import "]]>
+          <xsl:text>skin/quirks.css";</xsl:text>
+          <xsl:text>@import "</xsl:text>
           <xsl:value-of select="$root"/>
-<![CDATA[skin/inst.css";
-         /*  ]]> */
-        </style><link rel="stylesheet" type="text/css" href="{$root}skin/print.css" media="print" /><link rel="stylesheet" type="text/css" href="{$root}skin/forrest.css" />
+          <xsl:text>skin/inst.css";</xsl:text>
+        </style>
+        <link rel="stylesheet" type="text/css" href="{$root}skin/print.css" media="print" />
+        <link rel="stylesheet" type="text/css" href="{$root}skin/forrest.css" />
         <xsl:if test="$config/favicon-url"><link rel="shortcut icon">
           <xsl:attribute name="href">
             <xsl:value-of select="concat($root,$config/favicon-url)"/>
