@@ -178,11 +178,11 @@
      </exec>
   </target>
   <target name="deploy-docs"
-		  description="Deploy the plugin documentation"
-		  depends="deploy-ready, clean, dist, docs, checkout-deployed-docs, deploy-plugins.xml">
+    description="Deploy the plugin documentation"
+    depends="deploy-ready, clean, dist, docs, checkout-deployed-docs, deploy-plugins.xml">
     <echo level="info">Deploying plugin documentation to the web server</echo>
-	<if>
-        <contains string="${forrest.version}" substring="0.7"/>
+    <if>
+      <contains string="${forrest.version}" substring="0.7"/>
       <then>
         <property name="docsVersion" value="0_70"/>
       </then>
@@ -209,8 +209,7 @@
   </else>
 </if>
 <!-- Copy plugin docs into sandbox -->
-    <copy todir="${deploy.docs.sandbox.dir}/plugins_${docsVersion}/${plugin-name}" 
-  	      overwrite="true">
+    <copy todir="${deploy.docs.sandbox.dir}/plugins_${docsVersion}/${plugin-name}" overwrite="true">
       <fileset dir="${build.docs}"/>
     </copy>
 <!-- Fix inconsitent line endings -->
@@ -354,7 +353,7 @@ You have just released a plugin. There are other tasks to complete. For example:
     <antcall target="updateSVN"/>
   </target>
   <target name="checkout-deployed-docs" 
-	      description="Retrieve the currently deployed plugin files">
+    description="Retrieve the currently deployed plugin files">
 <!-- get current plugins directory from SVN -->
     <exec executable="svn" dir="." failonerror="true">
       <arg value="co"/>
@@ -365,7 +364,7 @@ You have just released a plugin. There are other tasks to complete. For example:
     </exec>
   </target>
   <target name="checkout-deployed-plugins" 
-	      description="Retrieve the currently deployed plugin files">
+    description="Retrieve the currently deployed plugin files">
 <!-- get current plugins directory from SVN -->
     <exec executable="svn" dir="." failonerror="true">
       <arg value="co"/>
@@ -453,8 +452,7 @@ You have just released a plugin. There are other tasks to complete. For example:
 <!-- Jar Cocoon classes                                                  -->
 <!-- =================================================================== -->
   <target name="jar" depends="init, compile" if="java_exists">
-    <jar destfile="${build.dir}/${plugin-name}.jar"
-	     basedir="${build.classes}">
+    <jar destfile="${build.dir}/${plugin-name}.jar" basedir="${build.classes}">
       <manifest>
         <section name="org/apache/forrest/">
           <attribute name="Comment" value="Support classes for Apache Forrest"/>
