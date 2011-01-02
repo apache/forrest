@@ -308,6 +308,12 @@
       <action context="code" type="update" dev="DC">
         Forrestbot deploy.scp workstage now reports which files were transferred.
       </action>
+      <action context="build" type="update" dev="DC" due-to="Thomas Emmel" fixes-bug="FOR-1131,FOR-1020">
+        The preparation of the set of xmlcatalogs is better done in our "validation-props" ant target.
+      </action>
+      <action context="build" type="update" dev="DC">
+        A better way to report the set of xmlcatalog files being used.
+      </action>
       <action context="code" type="update" dev="DC" fixes-bug="FOR-984" importance="high">
         Updated to Jing-20081028 release (from
         <link href="http://code.google.com/p/jing-trang/">http://code.google.com/p/jing-trang/</link>).
@@ -318,6 +324,9 @@
       <action context="code" type="update" dev="DC" importance="high">
         Updated to Apache-Ant-1.7.1 release.
         Also jsch-0.1.28 to jsch-0.1.39 release.
+      </action>
+      <action context="code" type="update" dev="DC">
+        Added a 'forrest diagnostics' target which reports our Ant's diagnostics.
       </action>
 <!-- 2008-09 -->
       <action context="docs" type="add" dev="DC" importance="high">
@@ -344,6 +353,9 @@
         prevent plugins dependencies since the code has attracted different use cases
         solved in plugins to move it into core.
       </action>
+      <action context="code" type="update" dev="JM">
+        Upgraded Apache FOP to version 0.95
+      </action>
 <!-- 2008-08 -->
       <action context="docs" type="add" dev="DC" fixes-bug="FOR-814" due-to="Carlos Tejo">
         Added example of using XInclude to the 'forrest seed-sample' site.
@@ -366,6 +378,10 @@
         Only affected users of the 'seed-basic' template site.
         See notes in <link href="site:upgrading_09">upgrading to v0.9</link>
       </action>
+      <action context="code" type="add" dev="GM" due-to="Sina K. Heshmati" fixes-bug="FOR-1038">
+        Added initial whiteboard input plugin "baetle".
+        Handle Baetle, the RDF vocabulary to describe the content of bug databases. 
+      </action>
 <!-- 2008-02 -->
       <action context="code" type="update" dev="TS" fixes-bug="FOR-635"
         importance="high"> Images had not been reliably reproduced in PDFs (fop version
@@ -386,6 +402,9 @@
       <action context="code" type="update" dev="TS" fixes-bug="FOR-733">
         The "wholesite" html/pdf ability was broken with the locationmap.
       </action>
+      <action context="code" type="fix" dev="RGD" fixes-bug="FOR-905" due-to="Mark Eggers">
+        Fixed the "forrest" command to cope with recent Cygwin changes with expanding pathnames.
+      </action>
 <!-- 2007-12 -->
       <action context="code" type="update" dev="GM" fixes-bug="FOR-940">
         Re-configured Forrest Zone to use SMF.
@@ -394,9 +413,43 @@
       <action context="code" type="update" dev="RDG" due-to="Uwe Kreibaum" fixes-bug="FOR-640">
          Fix unkown font error in FO generation.
       </action>
+      <action context="code" type="fix" dev="TS">
+        The "faq" documents were missing generated Table-of-Contents.
+      </action>
+      <action context="code" type="fix" dev="TS" fixes-bug="FOR-1049">
+        Fixed bug regarding logging and Servlet Container when using Forrest as a WAR archive.
+        In web.xml use context parameters instead of init-param.
+      </action>
+      <action context="docs" type="add" dev="GM" due-to="Steven Coco" fixes-bug="FOR-1047">
+        Added documentation about using the "Debian update-alternatives system".
+      </action>
 <!-- 2007-09 -->
+      <action context="code" type="add" dev="RDG">
+        Added input plugin "uk.ac.osswatch.forrest.input.sourceforge".
+        Extracts data from sourceforge.net
+      </action>
 <!-- 2007-08 -->
+      <action context="code" type="add" dev="RDG">
+        Added input plugin "uk.ac.osswatch.forrest.input.ohloh".
+        Extracts data from OhLoh.net using their API.
+      </action>
+      <action context="code" type="add" dev="RDG">
+        Added input plugin "uk.ac.osswatch.forrest.input.features".
+        Allow project features to be recorded and rendered as part of a content object.
+        This plugin is particularly useful when used in conjunction with the DOAP plugin.
+      </action>
+      <action context="code" type="add" dev="GM" due-to="Oshani Senevira" fixes-bug="FOR-1039">
+        Added initial whiteboard input plugin "doac".
+        Handle Description-Of-A-Career (DOAC) data in forrest content objects.
+      </action>
 <!-- 2007-07 -->
+      <action context="code" type="update" dev="DC">
+        Utilise the source document/header/link if available.
+        Suggested by Oshani Seneviratne and various previous people.
+      </action>
+      <action context="code" type="update" dev="DC" due-to="Sina K. Heshmati" fixes-bug="FOR-1018">
+        In SourceTypeAction, RDF files need to check the namespace of more than just the root element.
+      </action>
 <!-- 2007-06 -->
       <action context="code" type="update" dev="BMD" due-to="Patrick Ohly" fixes-bug="FOR-1013">
         Added method to make URLs absolute in PDF via skinconf.xml.
@@ -420,6 +473,10 @@
       <action dev="CD" type="update" context="docs">
         Add explanation of <link href="site:forrestbar">ForrestBar</link> menu items.
       </action>
+      <action context="code" type="add" dev="RDG">
+        Added output plugin "uk.ac.osswatch.forrest.themes".
+        A theme used by the Simal project.
+      </action>
       <action context="code" type="add" dev="RDG" due-to="Sina K. Heshmati" fixes-bug="FOR-1004">
         Added initial whiteboard input plugin "skos". Handles input documents
         as Simple Knowledge Organisation Systems (<link href="http://www.w3.org/2004/02/skos/">SKOS</link>),
@@ -438,6 +495,18 @@
       <action dev="DC" type="add" context="code">
         Enable PHP by default. See the <link href="site:faq/php">FAQ</link>.
         Thanks to Cyriaque Dupoirieux for the suggestion.
+      </action>
+      <action context="docs" type="fix" dev="TS" due-to="Bart Molenkamp">
+        Fix some menu items, links and version labels.
+      </action>
+      <action context="docs" type="update" dev="DC">
+        Add more entries to <link href="site:glossary">glossary</link> to explain
+        some Apache Cocoon terminology and link to relevant docs.
+        Also add some more Forrest terminology.
+      </action>
+      <action context="docs" type="add" dev="DC" due-to="Ron Blaschke">
+        Added FAQ for "Windows gets confused about which Java version to use".
+        Thanks to Ron Blaschke and Ross Gardler.
       </action>
       <action dev="DC" type="fix" context="build" due-to="Ron Blaschke">
         Explicitly set the javac target@ to our defined base version.
