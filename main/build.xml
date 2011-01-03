@@ -127,6 +127,8 @@
         <include name="**/forrest"/>
       </tarfileset>
     </tar>
+    <checksum file="${dist.dir}/${release-name-bin}.tar.gz" algorithm="md5" forceOverwrite="true" />
+    <checksum file="${dist.dir}/${release-name-bin}.tar.gz" algorithm="sha1" forceOverwrite="true" />
 <!-- Prepare *.zip for "crlf" eol-style systems -->
 <!-- FIXME: 2007-04-11
      Leaving this alone. fixcrlf seems to mess with some images and jar files.
@@ -139,6 +141,8 @@
       file="${dist.dir}/${release-name-bin}.zip" >
       <zipfileset dir="${dist-shbat.dir}" prefix="${release-name-bin}"/>
     </zip>
+    <checksum file="${dist.dir}/${release-name-bin}.zip" algorithm="md5" forceOverwrite="true" />
+    <checksum file="${dist.dir}/${release-name-bin}.zip" algorithm="sha1" forceOverwrite="true" />
   </target>
 <!-- =================================================================== -->
 <!-- Make all known distributions                                        -->
@@ -259,6 +263,7 @@ Remove any build directories in a tree before running.
         <exclude name="whiteboard/**"/>
         <exclude name="plugins/**"/>
 <!-- exclude some tools that are not yet ready to be bundled -->
+        <exclude name="examples/**"/>
         <exclude name="tools/eclipse/**"/>
         <exclude name="tools/logos/**"/>
 <!-- testing removal of tools/anttasks FOR-911 -->
