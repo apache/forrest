@@ -20,7 +20,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Properties;
@@ -79,15 +78,17 @@ public class AntProperties extends Properties
         //if the property is already there don't overwrite, as in Ant
         //properties defined first take precedence
         if (!super.containsKey(name)) {
-            Enumeration names = super.propertyNames();
-            while (names.hasMoreElements()) {
-                String currentName = (String) names.nextElement();
+          String[] names = StringUtils.substringsBetween(value.toString(), "${", "}");
+          if ( names != null ){
+            for ( int i = 0; i < names.length; i++ ) {
+                String currentName = names[i];
                 String valueToSearchFor = "${" + currentName + "}";
                 String valueToReplaceWith = (String) super.get(currentName);
                 value = StringUtils.replace(value.toString(), valueToSearchFor,
                                 valueToReplaceWith);
             }
-            return super.put(name, value);
+          }
+          return super.put(name, value);
         }
 
         return null;
