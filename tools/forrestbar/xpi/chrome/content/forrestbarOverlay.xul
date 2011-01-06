@@ -24,9 +24,9 @@
   <toolbox id="navigator-toolbox">
     <toolbar id="forrestbar" toolbarname="Forrest Toolbar" persist="collapsed,hidden" class="chromeclass-toolbar" context="toolbar-context-menu" hidden="false" grippytooltiptext="Forrestbar" >
 
-      <toolbarbutton class="forrestbar" id="forrestbar-local-forrest" label="Forrest" hidden="false" type="menu">
+      <toolbarbutton class="forrestbar" id="forrestbar-local-forrest" label="Forrest" hidden="false" type="menu" tooltiptext="Apache Forrest resources">
         <menupopup>
-          <menuitem label="Forrest Home" onclick="navigate('http://forrest.apache.org/');" />
+          <menuitem label="Apache Forrest Home" onclick="navigate('http://forrest.apache.org/');" />
           <menuitem label="Browse SVN" onclick="navigate('http://svn.apache.org/viewcvs.cgi/forrest/');" />
           <menuitem label="Issues" onclick="navigate('http://forrest.apache.org/issues.html');" />
           <menuitem label="Mail Lists" onclick="navigate('http://forrest.apache.org/mail-lists.html');" />
@@ -39,44 +39,43 @@
         </menupopup>
       </toolbarbutton>
 
-      <toolbarbutton class="forrestbar" label="Apache" type="menu" id="forrestbar-community" hidden="false">
+      <toolbarbutton class="forrestbar" label="Apache" type="menu" id="forrestbar-community" hidden="false" tooltiptext="Apache Software Foundation resources">
         <menupopup>
-          <menuitem label="Apache Home" onclick="navigate('http://www.apache.org/');" />
+          <menuitem label="ASF Home" onclick="navigate('http://www.apache.org/');" />
           <menuitem label="News" onclick="navigate('http://www.apache.org/foundation/news.html');" />
           <menuitem label="Conferences" onclick="navigate('http://www.apache.org/foundation/conferences.html');" />
           <menuitem label="Foundation" onclick="navigate('http://www.apache.org/foundation/');" />
           <menuitem label="Incubator" onclick="navigate('http://incubator.apache.org/');" />
           <menuitem label="PlanetApache Blogs" onclick="navigate('http://planetapache.org/');" />
-          <menuitem label="Projects" onclick="navigate('http://www.apache.org/foundation/projects.html');" />
+          <menuitem label="People" onclick="navigate('http://people.apache.org/');" />
+          <menuitem label="Projects" onclick="navigate('http://projects.apache.org/');" />
           <menuseparator/>
-          <menuitem label="Dev Resources" onclick="navigate('http://www.apache.org/dev/');" />
+          <menuitem label="Developer Resources" onclick="navigate('http://www.apache.org/dev/');" />
           <menuitem label="Issues" onclick="navigate('http://issues.apache.org/');" />
-          <menuitem label="Mail Lists" onclick="navigate('http://www.apache.org/foundation/mailinglists.html');" />
+          <menuitem label="Mail Lists" onclick="navigate('http://www.apache.org/dev/#mail');" />
           <menuitem label="Search Apache" onclick="navigate('http://search.apache.org/');" />
           <menuitem label="Server Status" onclick="navigate('http://www.apache.org/dev/#status');" />
         </menupopup>
       </toolbarbutton>
 
-      <toolbarbutton class="forrestbar" label="References" id="forrestbar-tools" hidden="false" type="menu">
+      <toolbarbutton class="forrestbar" label="Ref" id="forrestbar-tools" hidden="false" type="menu" tooltiptext="Other reference resources">
         <menupopup>
-          <menuitem label="Ant manual" onclick="navigate('http://ant.apache.org/manual/index.html');" />
+          <menuitem label="Ant Manual" onclick="navigate('http://ant.apache.org/manual/index.html');" />
+          <menuitem label="SVN Book" onclick="navigate('http://svnbook.red-bean.com/');" />
           <menuitem label="Cocoon 2.1 user docs" onclick="navigate('http://cocoon.apache.org/2.1/userdocs/');" />
           <menuitem label="Cocoon 2.1 developer docs" onclick="navigate('http://cocoon.apache.org/2.1/developing/');" />
-          <menuitem label="SVN Book" onclick="navigate('http://svnbook.red-bean.com/');" />
+          <menuitem label="Forrest docs for development version" onclick="navigate('http://forrest.apache.org/docs/dev/');" />
         </menupopup>
       </toolbarbutton>
 
-      <toolbarbutton class="forrestbar" label="Devs." id="forrestbar-devs" hidden="false" type="menu">
+      <toolbarbutton class="forrestbar" label="Dev" id="forrestbar-devs" hidden="false" type="menu" tooltiptext="Show internal Forrest data (needs localhost 'forrest run')">
         <menupopup>
           <menuitem label="View *.xml" onclick="viewXML('.xml');" />
           <menuitem label="View *.fo" onclick="viewXML('.fo');" />
           <menuitem label="abs-menulinks" onclick="navigate('http://localhost:8888/abs-menulinks');" />
           <menuseparator/>
-          <menuitem label="Cocoon Profiler howto" onclick="navigate('http://forrest.apache.org/docs/dev/howto/howto-dev.html#debug');" />
+          <menuitem label="Cocoon Profiler howto" onclick="navigate('http://forrest.apache.org/howto-dev.html#debug');" />
           <menuitem label="Cocoon Profiler access" onclick="navigate('http://localhost:8888/cprofile.html');" />
-          <menuseparator/>
-          <menuitem label="Docs for development version" onclick="navigate('http://forrest.apache.org/docs/dev/');" />
-         
         </menupopup>
       </toolbarbutton>
         <!-- Following is dispatcher trunk specific 
@@ -84,7 +83,7 @@
           START
           -->
       <toolbarseparator/>
-      <toolbarbutton class="forrestbar" label="dispatcher-dev " id="forrestbar-dispatcher-dev" hidden="false" type="menu">
+      <toolbarbutton class="forrestbar" label="Dispatcher Dev " id="forrestbar-dispatcher-dev" hidden="false" type="menu" tooltiptext="Show internal Forrest data (needs localhost 'forrest run' and Dispatcher-enabled)">
         <menupopup>
           <menuitem label="Properties" onclick="viewXML('.props');" />
           <menuitem label="Intermediate format" onclick="viewXML('.source.rewritten.xml');" />
@@ -109,7 +108,7 @@
       <toolbaritem class="forrestbar" id="forrestbar-search">
         <label value="Search:"/>
         <textbox id="forrestbar-input" onkeydown="if (event.which == 13) {searchDev('marc', 'forrestbar-input');}" hidden="false"/>
-        <toolbarbutton label="Search" hidden="false" type="menu">
+         <toolbarbutton label="Archives" hidden="false" type="menu" tooltiptext="Choose the archive to be searched">
           <menupopup>
             <menuitem label="Dev (MARC)" onclick="searchDev('marc', 'forrestbar-input');" hidden="false"/>
             <menuitem label="Dev (Gmane)" onclick="searchDev('gmane', 'forrestbar-input');" hidden="false"/>
@@ -133,7 +132,7 @@
           Comment for 0.7 builds
           START
           -->
-        <toolbarbutton label="contracts-dev " hidden="false" type="menu">
+        <toolbarbutton label="Dispatcher" hidden="false" type="menu" tooltiptext="Choose the Dispatcher Contracts to be searched (needs localhost 'forrest run' and Dispatcher-enabled)">
           <menupopup>
              <menuitem label="resolve-contract-html" onclick="contract('resolve.contract.html.','forrestbar-input');"/>
              <menuitem label="prepare-contract-html" onclick="contract('prepare.contract.html.','forrestbar-input');"/>
