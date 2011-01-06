@@ -57,6 +57,10 @@ function searchDev(engine, searchID)
     navigate('http://marc.info/?l=forrest-dev&w=2&r=1&q=b&s=' + searchItem.value);
   } else if (engine == 'gmane') {
     navigate('http://search.gmane.org/?group=gmane.text.xml.forrest.devel&sort=date&query=' + searchItem.value);
+  } else if (engine == 'gt') {
+    navigate('http://www.gossamer-threads.com/lists/engine?list=forrest&do=search_results&search_forum=forum_2&search_string=' + searchItem.value);
+  } else if (engine == 'mm') {
+    navigate('http://forrest.markmail.org/search/?q=list:org.apache.forrest.dev+' + searchItem.value);
   } else {
     navigate('http://www.mail-archive.com/search?l=dev@forrest.apache.org&q=' + searchItem.value);
   }
@@ -69,6 +73,10 @@ function searchUser(engine, searchID)
     navigate('http://marc.info/?l=forrest-user&r=1&w=2&q=b&s=' + searchItem.value);
   } else if (engine == 'gmane') {
     navigate('http://search.gmane.org/?group=gmane.text.xml.forrest.user&sort=date&query=' + searchItem.value);
+  } else if (engine == 'gt') {
+    navigate('http://www.gossamer-threads.com/lists/engine?list=forrest&do=search_results&search_forum=forum_1&search_string=' + searchItem.value);
+  } else if (engine == 'mm') {
+    navigate('http://forrest.markmail.org/search/?q=list:org.apache.forrest.user+' + searchItem.value);
   } else {
     navigate('http://www.mail-archive.com/search?l=user@forrest.apache.org&q=' + searchItem.value);
   }
@@ -81,6 +89,10 @@ function searchCommits(engine, searchID)
     navigate('http://marc.info/?l=forrest-svn&r=1&w=2&q=b&s=' + searchItem.value);
   } else if (engine == 'gmane') {
     navigate('http://search.gmane.org/?group=gmane.text.xml.forrest.cvs&sort=date&query=' + searchItem.value);
+  } else if (engine == 'gt') {
+    navigate('http://www.gossamer-threads.com/lists/engine?list=forrest&do=search_results&search_forum=forum_3&search_string=' + searchItem.value);
+  } else if (engine == 'mm') {
+    navigate('http://forrest.markmail.org/search/?q=list:org.apache.forrest.svn+' + searchItem.value);
   } else {
     navigate('http://www.mail-archive.com/search?l=svn@forrest.apache.org&q=' + searchItem.value);
   }
@@ -91,6 +103,10 @@ function searchSiteCommits(engine, searchID)
   var searchItem = document.getElementById(searchID);
   if(engine == 'marc') {
   navigate('http://marc.info/?l=forrest-site-svn&r=1&w=2&q=b&s=' + searchItem.value);
+  } else if (engine == 'gt') {
+    navigate('http://www.gossamer-threads.com/lists/engine?list=forrest&do=search_results&search_forum=forum_4&search_string=' + searchItem.value);
+  } else if (engine == 'mm') {
+    navigate('http://forrest.markmail.org/search/?q=list:org.apache.forrest.site-svn+' + searchItem.value);
   } else {
   navigate('http://www.mail-archive.com/search?l=site-svn@forrest.apache.org&q=' + searchItem.value);
   }
