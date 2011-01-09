@@ -49,10 +49,10 @@
     +-->
 <ul id="tabs">
 <li>
-<a class="unselected" href="http://forrest.apache.org/pluginDocs">Forrest Plugins</a>
+<a class="unselected" href="http://forrest.apache.org/pluginDocs/">Forrest Plugins</a>
 </li>
 <li class="current">
-<a class="selected" href="index.html">Home</a>
+<a class="selected" href="index.html">Plugin Home</a>
 </li>
 </ul>
 <!--+
@@ -92,9 +92,6 @@ document.write("Last Published: " + document.lastModified);
 <div class="menuitem">
 <a href="index.html" title="Welcome to org.apache.forrest.plugin.output.pdf">Index</a>
 </div>
-<div class="menuitem">
-<a href="http://forrest.apache.org/docs/plugins" title="Index of Forrest Plugins">Plugins Index</a>
-</div>
 <div class="menupage">
 <div class="menupagetitle">Changes</div>
 </div>
@@ -117,22 +114,30 @@ document.write("Last Published: " + document.lastModified);
     |start content
     +-->
 <div id="content">
+<div title="Portable Document Format" class="pdflink">
+<a class="dida" href="changes.pdf"><img alt="PDF -icon" src="skin/images/pdfdoc.gif" class="skin"><br>
+        PDF</a>
+</div>
 <div class="trail">Font size: 
 	          &nbsp;<input value="Reset" class="resetfont" title="Reset text" onclick="ndeSetTextSize('reset'); return false;" type="button">      
 	          &nbsp;<input value="-a" class="smallerfont" title="Shrink text" onclick="ndeSetTextSize('decr'); return false;" type="button">
 	          &nbsp;<input value="+a" class="biggerfont" title="Enlarge text" onclick="ndeSetTextSize('incr'); return false;" type="button">
 </div>
 <h1>History of Changes </h1>
+<div id="front-matter">
 <div id="minitoc-area">
 <ul class="minitoc">
 <li>
 <a href="#introduction">Introduction and explanation of symbols</a>
 </li>
 <li>
-<a href="#version_0.2-dev">Version 0.2-dev (not-released)</a>
+<a href="#version_0.3-dev">Version 0.3-dev (not-released)</a>
 <ul class="minitoc">
 <li>
 <a href="#Changes+to+the+Code+Base">Changes to the Code Base</a>
+</li>
+<li>
+<a href="#Changes+to+Documentation">Changes to Documentation</a>
 </li>
 <li>
 <a href="#Contributors+to+this+release">Contributors to this release</a>
@@ -140,62 +145,142 @@ document.write("Last Published: " + document.lastModified);
 </ul>
 </li>
 <li>
-<a href="#version_0.1">Version 0.1 (not-released)</a>
+<a href="#version_0.2">Version 0.2 (2007-04-11)</a>
+<ul class="minitoc">
+<li>
+<a href="#Changes+to+the+Code+Base-N10077">Changes to the Code Base</a>
+</li>
+<li>
+<a href="#Contributors+to+this+release-N10081">Contributors to this release</a>
+</li>
+</ul>
+</li>
+<li>
+<a href="#version_0.1">Version 0.1 (2004-11-17)</a>
 <ul class="minitoc">
 <li>
 <a href="#Changes+to+Project+Administration">Changes to Project Administration</a>
 </li>
 <li>
-<a href="#Contributors+to+this+release-N1003F">Contributors to this release</a>
+<a href="#Contributors+to+this+release-N1009A">Contributors to this release</a>
 </li>
 </ul>
 </li>
+<li>
+<a href="#all-committers">All Committers</a>
+</li>
 </ul>
+</div>
 </div>
 <p>
 <a href="changes.rss"><img alt="RSS" src="images/rss.png"></a>
 </p>
-<a name="N1000D"></a><a name="introduction"></a>
+<a name="N1000E"></a><a name="introduction"></a>
 <h2 class="underlined_10">Introduction and explanation of symbols</h2>
 <div class="section">
-<p>Changes are sorted by "type" and then chronologically with the most recent at the top. These symbols denote the various action types:<img class="icon" alt="add" src="images/add.jpg">=add</p>
+<p>Changes are sorted by "type" and then chronologically with the most recent at the top. These symbols denote the various action types:<img class="icon" alt="add" src="images/add.jpg">=add, <img class="icon" alt="update" src="images/update.jpg">=update</p>
 </div>
     
-<a name="N10018"></a><a name="version_0.2-dev"></a>
-<h2 class="underlined_10">Version 0.2-dev (not-released)</h2>
+<a name="N1001D"></a><a name="version_0.3-dev"></a>
+<h2 class="underlined_10">Version 0.3-dev (not-released)</h2>
 <div class="section">
-<a name="N1001C"></a><a name="Changes+to+the+Code+Base"></a>
+<a name="N10021"></a><a name="Changes+to+the+Code+Base"></a>
 <h3 class="underlined_5">Changes to the Code Base</h3>
 <ul>
 <li>
-<img class="icon" alt="add" src="images/add.jpg">
-        Use locationmap for resolution of resources and files. Resources are exposed via
-        {lm:pdf.*}
-       Committed by RDG.</li>
+<img class="icon" alt="update" src="images/update.jpg">
+        Upgraded Apache FOP to version 0.95 and XML Graphics Commons to 1.3.1
+       Committed by JM.</li>
+<li>
+<img class="icon" alt="update" src="images/update.jpg">Made font family specifications available for
+                user changes without changing the plugin code. Committed by SNM.</li>
+<li>
+<img class="icon" alt="update" src="images/update.jpg">Added support for "sub" and "sup"
+                tags. Committed by JM. See Issue <a href="http://issues.apache.org/jira/browse/FOR-1087">FOR-1087</a>.</li>
+<li>
+<img class="icon" alt="update" src="images/update.jpg">Various bugfixes and improvements for the fo
+                stylesheets. See notes in FOR-1072. Committed by DC. Thanks to Jeremias Maerki. See Issue <a href="http://issues.apache.org/jira/browse/FOR-1072">FOR-1072</a>.</li>
+<li>
+<img class="icon" alt="update" src="images/update.jpg">Encapsulated the xsl methods in different
+                helper stylesheet which we can import from the different
+                plugins.  Committed by TS.</li>
+<li>
+<img class="icon" alt="update" src="images/update.jpg">Moved all libraries and components used by
+                pdf-generation from core into this plugin.  Committed by FSO.</li>
+<li>
+<img class="icon" alt="update" src="images/update.jpg"> Updating the fop-library to fop 0.94 and
+                upgrading the stylesheets to work properly with the new and more
+                precise fo-interpeter.  Committed by FSO.</li>
+<li>
+<img class="icon" alt="update" src="images/update.jpg">
+        Replaced Cocoon FOP Block with special Forrest edition
+        "cocoon-fop-ng-impl-special" compiled by jeremias. The sources are in
+        the jar. See r603892 and the thread
+        <a href="http://mail-archives.apache.org/mod_mbox/forrest-dev/200712.mbox/%3C476AA40C.8050108@apache.org%3E">Re: Plans for integrating FOP .94</a>
+       Committed by FSO.</li>
 </ul>
-<a name="N10026"></a><a name="Contributors+to+this+release"></a>
+<a name="N1005A"></a><a name="Changes+to+Documentation"></a>
+<h3 class="underlined_5">Changes to Documentation</h3>
+<ul>
+<li>
+<img class="icon" alt="update" src="images/update.jpg">Updated plugin documentation to cover the new
+                properties settable by the user,and how to actually set
+                them. Committed by SNM.</li>
+</ul>
+<a name="N10064"></a><a name="Contributors+to+this+release"></a>
 <h3 class="underlined_5">Contributors to this release</h3>
 <p>We thank the following people for their contributions to this release.</p>
-<p>This is a list of all people who participated as committers:<br> (RDG).</p>
+<p>This is a list of all people who participated as committers:<br>David Crossley (DC), Ferdinand Soethe (FSO), Jeremias M&auml;rki (JM), Sjur N&oslash;rsteb&oslash; Moshagen (SNM), Thorsten Scherler (TS).</p>
+<p>This is a list of other contributors:<br>Jeremias Maerki.</p>
 </div>
     
-<a name="N10031"></a><a name="version_0.1"></a>
-<h2 class="underlined_10">Version 0.1 (not-released)</h2>
+<a name="N10073"></a><a name="version_0.2"></a>
+<h2 class="underlined_10">Version 0.2 (2007-04-11)</h2>
 <div class="section">
-<a name="N10035"></a><a name="Changes+to+Project+Administration"></a>
+<a name="N10077"></a><a name="Changes+to+the+Code+Base-N10077"></a>
+<h3 class="underlined_5">Changes to the Code Base</h3>
+<ul>
+<li>
+<img class="icon" alt="add" src="images/add.jpg"> Use locationmap for resolution of resources
+                and files. Resources are exposed via {lm:pdf.*}  Committed by RDG.</li>
+</ul>
+<a name="N10081"></a><a name="Contributors+to+this+release-N10081"></a>
+<h3 class="underlined_5">Contributors to this release</h3>
+<p>We thank the following people for their contributions to this release.</p>
+<p>This is a list of all people who participated as committers:<br>Ross Gardler (RDG).</p>
+</div>
+    
+<a name="N1008C"></a><a name="version_0.1"></a>
+<h2 class="underlined_10">Version 0.1 (2004-11-17)</h2>
+<div class="section">
+<a name="N10090"></a><a name="Changes+to+Project+Administration"></a>
 <h3 class="underlined_5">Changes to Project Administration</h3>
 <ul>
 <li>
-<img class="icon" alt="add" src="images/add.jpg">
-        Extracted code from core of Forrest and placed in a plugin
-       Committed by RDG.</li>
+<img class="icon" alt="add" src="images/add.jpg"> Extracted code from core of Forrest and placed
+                in a plugin  Committed by RDG.</li>
 </ul>
-<a name="N1003F"></a><a name="Contributors+to+this+release-N1003F"></a>
+<a name="N1009A"></a><a name="Contributors+to+this+release-N1009A"></a>
 <h3 class="underlined_5">Contributors to this release</h3>
 <p>We thank the following people for their contributions to this release.</p>
-<p>This is a list of all people who participated as committers:<br> (RDG).</p>
+<p>This is a list of all people who participated as committers:<br>Ross Gardler (RDG).</p>
 </div>
   
+<a name="N100A5"></a><a name="all-committers"></a>
+<h2 class="underlined_10">All Committers</h2>
+<div class="section">
+<p>This is a list of all people who have ever participated
+           as committers on this project.</p>
+<ul>
+<li>Sjur N&oslash;rsteb&oslash; Moshagen (SNM)</li>
+<li>Ross Gardler (RDG)</li>
+<li>Thorsten Scherler (TS)</li>
+<li>Ferdinand Soethe (FSO)</li>
+<li>David Crossley (DC)</li>
+<li>Jeremias M&auml;rki (JM)</li>
+<li>Volunteer needed (open)</li>
+</ul>
+</div>
 </div>
 <!--+
     |end content
@@ -213,7 +298,10 @@ document.write("Last Published: " + document.lastModified);
 </div>
 <div class="copyright">
         Copyright &copy;
-         2004-2007 <a href="http://www.apache.org/licenses/">The Apache Software Foundation.</a>
+         2004-2011 <a href="http://www.apache.org/licenses/">The Apache Software Foundation.</a>
+<br>
+  Apache, Apache Forrest, the Apache feather logo, and the Apache Forrest
+  logos are trademarks of The Apache Software Foundation.
 </div>
 <!--+
     |end bottomstrip
