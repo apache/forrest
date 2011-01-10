@@ -19,7 +19,7 @@
 <howto>
   <header>
     <title>How to Build a Plugin</title>
-    <version>0.3.0</version>
+    <version>0.4.0</version>
     <abstract>
       This How-To describes the steps necessary to build a plugin for Forrest.
       Forrest uses plugins to add new input formats, output formats and to
@@ -29,7 +29,7 @@
       creating a plugin and then works through some examples of plugin creation
       in order to illustrate the materials.
     </abstract>
-    <last-modified-content-date date="2006-04-23" />
+    <last-modified-content-date date="2011-01-10" />
   </header>
   <audience title="Intended Audience">
     <p>
@@ -361,6 +361,52 @@
         </p>
       </section>
     </section>
+    <section id="descriptor">
+      <title>Managing the plugins descriptors</title>
+      <p>
+        The files plugins/plugins.xml and
+        whiteboard/plugins/whiteboard-plugins.xml are the "Plugins Descriptor"
+        files. Each plugin is described with its name, purpose, location, and
+        version information. These descriptors are deployed to the forrest
+        website.
+      </p>
+      <p>
+        Each plugin has a build.xml file which defines its version
+        information. Please keep that synchronised with the plugins.xml files.
+        Later
+        <a href="http://issues.apache.org/jira/browse/FOR-533">FOR-533</a>
+        will generate this from the various build.xml files.
+      </p>
+      <p>
+        The Apache Forrest committers manage these files in SVN and publish
+        them as needed. Here are some notes.
+      </p>
+      <p>
+        When a plugin gains new functionality, then it will be dependent on a
+        more recent version of Forrest. Deploy the plugin one final time
+        before implementing the new work. For example, if current release is
+        0.7 then ...
+      </p>
+      <ul>
+        <li>Review the docs and ensure any version numbers in text are "0.7"</li>
+        <li>Edit the plugin's descriptors to ensure that the "forrestVersion" is 0.7 and that the "version" is appropriate. </li>
+        <li>Ensure that the "website" parameter includes "pluginDocs/plugins_0_70"</li>
+        <li>Edit status.xml to set the release date. Ensure that the changes notes are complete.</li>
+      </ul>
+      <p>
+        Now the plugin gains functionality that binds it to 0.8-dev (e.g.
+        converted to use locationmap) so ...
+      </p>
+      <ul>
+        <li>Review the docs and ensure any version numbers in text are
+           "0.8"</li>
+        <li>Edit the plugin's descriptors to ensure that the "forrestVersion" is
+           0.8 and that the "version" is incremented. </li>
+        <li>Ensure that the "website" parameter includes "pluginDocs/plugins_0_80"</li>
+        <li>Edit status.xml to add a new section and set the release date.
+           Start adding changes notes.</li>
+      </ul>
+    </section>
     <section id="release">
       <title>Releasing a Plugin</title>
       <section id="register">
@@ -401,52 +447,6 @@
           you only deploy working plugins. This adds a little time to the deploy
           cycle, but we feel the peace of mind is worth it.
         </warning>
-      </section>
-      <section id="descriptor">
-        <title>Managing the plugins descriptors</title>
-        <p>
-          The files plugins/plugins.xml and
-          whiteboard/plugins/whiteboard-plugins.xml are the "Plugins Descriptor"
-          files. Each plugin is described with its name, purpose, location, and
-          version information. These descriptors are deployed to the forrest
-          website.
-        </p>
-        <p>
-          Each plugin has a build.xml file which defines its version
-          information. Please keep that synchronised with the plugins.xml files.
-          Later
-          <a href="http://issues.apache.org/jira/browse/FOR-533">FOR-533</a>
-          will generate this from the various build.xml files.
-        </p>
-        <p>
-          The Apache Forrest committers manage these files in SVN and publish
-          them as needed. Here are some notes.
-        </p>
-        <p>
-          When a plugin gains new functionality, then it will be dependent on a
-          more recent version of Forrest. Deploy the plugin one final time
-          before implementing the new work. For example, if current release is
-          0.7 then ...
-        </p>
-        <ul>
-          <li>Review the docs and ensure any version numbers in text are "0.7"</li>
-          <li>Edit the plugin's descriptors to ensure that the "forrestVersion" is 0.7 and that the "version" is appropriate. </li>
-          <li>Ensure that the "website" parameter includes "pluginDocs/plugins_0_70"</li>
-          <li>Edit status.xml to set the release date. Ensure that the changes notes are complete.</li>
-        </ul>
-        <p>
-          Now the plugin gains functionality that binds it to 0.8-dev (e.g.
-          converted to use locationmap) so ...
-        </p>
-        <ul>
-          <li>Review the docs and ensure any version numbers in text are
-             "0.8"</li>
-          <li>Edit the plugin's descriptors to ensure that the "forrestVersion" is
-             0.8 and that the "version" is incremented. </li>
-          <li>Ensure that the "website" parameter includes "pluginDocs/plugins_0_80"</li>
-          <li>Edit status.xml to add a new section and set the release date.
-             Start adding changes notes.</li>
-        </ul>
       </section>
     </section>
     <section id="experimental">
