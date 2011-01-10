@@ -382,16 +382,24 @@ document.write("Last Published: " + document.lastModified);
 </ul>
 </li>
 <li>
-<a href="#release">Releasing a Plugin</a>
+<a href="#descriptor">Managing the plugins descriptors</a>
 <ul class="minitoc">
+<li>
+<a href="#explain-descriptor">Explanation</a>
+</li>
 <li>
 <a href="#register">Register the Plugin with Apache Forrest</a>
 </li>
-<li>
-<a href="#deploy">Deploying the Plugin</a>
+</ul>
 </li>
 <li>
-<a href="#descriptor">Managing the plugins descriptors</a>
+<a href="#release">Deploying and Releasing a Plugin</a>
+<ul class="minitoc">
+<li>
+<a href="#explain-deploy">Explanation</a>
+</li>
+<li>
+<a href="#deploy">Deploying the Plugin</a>
 </li>
 </ul>
 </li>
@@ -781,56 +789,10 @@ document.write("Last Published: " + document.lastModified);
           files in the <span class="codefrag">conf</span> directory you will, most likely, have
           to restart Forrest to see these changes.
         </p>
-<a name="N101C7"></a><a name="release"></a>
-<h3 class="underlined_5">Releasing a Plugin</h3>
-<a name="N101CD"></a><a name="register"></a>
-<h4>Register the Plugin with Apache Forrest</h4>
-<div class="fixme">
-<div class="label">Fixme (open)</div>
-<div class="content">
-          Describe making a request of Forrest devs for inclusion
-        </div>
-</div>
-<a name="N101D8"></a><a name="deploy"></a>
-<h4>Deploying the Plugin</h4>
-<p>
-          To deploy the plugin so that others can use it, it must be made
-          available as a zip from the URL indicated in the
-          <span class="codefrag">plugins.xml</span> file. The plugins build file provides targets
-          to assist with this task.
-        </p>
-<p class="instruction">
-          To deploy a plugin simply run the command <span class="codefrag">ant deploy</span> from
-          within the plugin directory.
-        </p>
-<p>
-          This command will, by default, deploy to the Apache Forrest web site.
-          In order to do this you need commit access to Forrest. If you want to
-          deploy your plugin to a different location you can build the zip of
-          your plugin with <span class="codefrag">ant dist</span> and then copy the zip file from
-          <span class="codefrag">build/dist</span> to wherever you intend to host the plugin.
-        </p>
-<div class="note">
-<div class="label">Note</div>
-<div class="content">
-          Running this command on any plugin will also deploy any changes to the
-          <span class="codefrag">plugins.xml</span> file. If you are deploying to your own
-          website you will have to request changes to the
-          <span class="codefrag">plugins.xml</span> and ask the Forrest committers to publish the
-          new document.
-        </div>
-</div>
-<div class="warning">
-<div class="label">Warning</div>
-<div class="content">
-          Running the <span class="codefrag">deploy</span> or <span class="codefrag">dist</span> targets will
-          always run the <span class="codefrag">test</span> target first. This is to ensure that
-          you only deploy working plugins. This adds a little time to the deploy
-          cycle, but we feel the peace of mind is worth it.
-        </div>
-</div>
-<a name="N1020A"></a><a name="descriptor"></a>
-<h4>Managing the plugins descriptors</h4>
+<a name="N101C7"></a><a name="descriptor"></a>
+<h3 class="underlined_5">Managing the plugins descriptors</h3>
+<a name="N101CD"></a><a name="explain-descriptor"></a>
+<h4>Explanation</h4>
 <p>
           The files plugins/plugins.xml and
           whiteboard/plugins/whiteboard-plugins.xml are the "Plugins Descriptor"
@@ -884,7 +846,76 @@ document.write("Last Published: " + document.lastModified);
              Start adding changes notes.</li>
         
 </ul>
-<a name="N10243"></a><a name="experimental"></a>
+<a name="N10205"></a><a name="register"></a>
+<h4>Register the Plugin with Apache Forrest</h4>
+<div class="fixme">
+<div class="label">Fixme (open)</div>
+<div class="content">
+          Describe making a request of Forrest devs for inclusion.
+          In the meantime just ask on the dev mail list.
+        </div>
+</div>
+<a name="N10211"></a><a name="release"></a>
+<h3 class="underlined_5">Deploying and Releasing a Plugin</h3>
+<a name="N10217"></a><a name="explain-deploy"></a>
+<h4>Explanation</h4>
+<div class="fixme">
+<div class="label">Fixme (open)</div>
+<div class="content">
+          Describe "deploy" and "release" and when/how to use each.
+          In the meantime, there are some other useful mail threads and notes:
+        </div>
+</div>
+<ul>
+          
+<li>
+            
+<a href="http://s.apache.org/ou">Re: plugins deployment problem</a>
+            which has a good description of how the system works.
+          </li>
+          
+<li>a text document at $FORREST_HOME/plugins/RELEASE_PROCESS.txt</li>
+        
+</ul>
+<a name="N1022F"></a><a name="deploy"></a>
+<h4>Deploying the Plugin</h4>
+<p>
+          To deploy the plugin so that others can use it, it must be made
+          available as a zip from the URL indicated in the
+          <span class="codefrag">plugins.xml</span> file. The plugins build file provides targets
+          to assist with this task.
+        </p>
+<p class="instruction">
+          To deploy a plugin simply run the command <span class="codefrag">ant deploy</span> from
+          within the plugin directory.
+        </p>
+<p>
+          This command will, by default, deploy to the Apache Forrest web site.
+          In order to do this you need commit access to Forrest. If you want to
+          deploy your plugin to a different location you can build the zip of
+          your plugin with <span class="codefrag">ant dist</span> and then copy the zip file from
+          <span class="codefrag">build/dist</span> to wherever you intend to host the plugin.
+        </p>
+<div class="note">
+<div class="label">Note</div>
+<div class="content">
+          Running this command on any plugin will also deploy any changes to the
+          <span class="codefrag">plugins.xml</span> file. If you are deploying to your own
+          website you will have to request changes to the
+          <span class="codefrag">plugins.xml</span> and ask the Forrest committers to publish the
+          new document.
+        </div>
+</div>
+<div class="warning">
+<div class="label">Warning</div>
+<div class="content">
+          Running the <span class="codefrag">deploy</span> or <span class="codefrag">dist</span> targets will
+          always run the <span class="codefrag">test</span> target first. This is to ensure that
+          you only deploy working plugins. This adds a little time to the deploy
+          cycle, but we feel the peace of mind is worth it.
+        </div>
+</div>
+<a name="N10262"></a><a name="experimental"></a>
 <h3 class="underlined_5">Experimental Functionality</h3>
 <div class="warning">
 <div class="label">Warning</div>
@@ -903,7 +934,7 @@ document.write("Last Published: " + document.lastModified);
         <span class="codefrag">org.apache.forrest.internal.NoteTaking</span> plugin.
       </div>
 </div>
-<a name="N10252"></a><a name="Locationmap"></a>
+<a name="N10271"></a><a name="Locationmap"></a>
 <h4>Locationmap</h4>
 <p>
           Plugins can use the Forrest locationmap to expose resources to your
@@ -915,7 +946,7 @@ document.write("Last Published: " + document.lastModified);
           <a href="http://issues.apache.org/jira/browse/FOR-200">issue</a> for
           the status of locationmap development.
         </p>
-<a name="N10266"></a><a name="Dispatcher"></a>
+<a name="N10285"></a><a name="Dispatcher"></a>
 <h4>Dispatcher</h4>
 <p>
           Dispatcher (previous codename Forrest Views) is the collective name
@@ -962,7 +993,7 @@ document.write("Last Published: " + document.lastModified);
           locationmap which is generated when you seed a new plugin, but for now
           it must be done manually.
         </p>
-<a name="N10286"></a><a name="Plugin+Properties"></a>
+<a name="N102A5"></a><a name="Plugin+Properties"></a>
 <h4>Plugin Properties</h4>
 <p>
           Plugins can define properties that each project can over-ride. For
@@ -973,13 +1004,13 @@ document.write("Last Published: " + document.lastModified);
           <a href="http://issues.apache.org/jira/browse/FOR-588">issue</a> for
           the status of this new configuration system.
         </p>
-<a name="N10298"></a><a name="examples"></a>
+<a name="N102B7"></a><a name="examples"></a>
 <h3 class="underlined_5">Examples</h3>
 <p>
         This section will provide some example plugins to help illustrate the
         steps discussed above.
       </p>
-<a name="N102A1"></a><a name="input"></a>
+<a name="N102C0"></a><a name="input"></a>
 <h4>Input Plugin</h4>
 <div class="fixme">
 <div class="label">Fixme (open)</div>
@@ -987,7 +1018,7 @@ document.write("Last Published: " + document.lastModified);
           Discuss a simple example of an "input" plugin here.
         </div>
 </div>
-<a name="N102AC"></a><a name="output"></a>
+<a name="N102CB"></a><a name="output"></a>
 <h4>Output Plugin</h4>
 <div class="fixme">
 <div class="label">Fixme (open)</div>
@@ -995,7 +1026,7 @@ document.write("Last Published: " + document.lastModified);
           Discuss a simple example of an "output" plugin here.
         </div>
 </div>
-<a name="N102B7"></a><a name="internal"></a>
+<a name="N102D6"></a><a name="internal"></a>
 <h4>Internal Plugin</h4>
 <div class="fixme">
 <div class="label">Fixme (open)</div>
@@ -1003,7 +1034,7 @@ document.write("Last Published: " + document.lastModified);
           Discuss a simple example of an "internal" plugin here.
         </div>
 </div>
-<a name="N102C3"></a><a name="extension"></a>
+<a name="N102E2"></a><a name="extension"></a>
 <h3 class="underlined_5">Further Reading</h3>
 <ul>
         
@@ -1014,7 +1045,7 @@ document.write("Last Published: " + document.lastModified);
 <a href="../../pluginDocs/plugins_0_90/">Plugins Documentation</a> for users</li>
       
 </ul>
-<a name="N102D9"></a><a name="summarise"></a>
+<a name="N102F8"></a><a name="summarise"></a>
 <h3 class="underlined_5">Summarise the Entire Process</h3>
 <div class="fixme">
 <div class="label">Fixme (open)</div>
@@ -1024,7 +1055,7 @@ document.write("Last Published: " + document.lastModified);
       </div>
 </div>
 </div>
-<span class="version">0.3.0</span>
+<span class="version">0.4.0</span>
 </div>
 <!--+
     |end content
