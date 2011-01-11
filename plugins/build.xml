@@ -273,7 +273,9 @@
     <copy todir="${deploy.plugins.svn-dir}/${forrest.version}" 
           overwrite="true" 
           file="${forrest.plugins.dist.dir}/${forrest.version}/${plugin-name}-${plugin-version}.zip.md5"/>
-    <antcall target="updateSVN"/>
+    <antcall target="updateSVN">
+      <param name="deployTarget" value="release"/>
+    </antcall>
     <echo level="info">
 You have just released a plugin. There are other tasks to complete. For example:
 - release emails
@@ -323,7 +325,7 @@ You have just released a plugin. There are other tasks to complete. For example:
       <arg value="--username"/>
       <arg value="${deploy.svn.user}"/>
       <arg value="${deploy.plugins.svn-dir}"/>
-      <arg value="-m Deployment of ${plugin-name} plugin (deployed by 'deploy' target of plugin build script)"/>
+      <arg value="-m Deployment of ${plugin-name} plugin (deployed by '${deployTarget}' target of plugin build script)"/>
      </exec>
   </target>
   <target name="deploy-ready" depends="init">
@@ -350,7 +352,9 @@ You have just released a plugin. There are other tasks to complete. For example:
     <copy tofile="${deploy.plugins.svn-dir}/${plugin-name}.zip.md5" 
           overwrite="true" 
           file="${forrest.plugins.dist.dir}/${forrest.version}/${plugin-name}-${plugin-version}.zip.md5"/>
-    <antcall target="updateSVN"/>
+    <antcall target="updateSVN">
+      <param name="deployTarget" value="deploy"/>
+    </antcall>
   </target>
   <target name="checkout-deployed-docs" 
     description="Retrieve the currently deployed plugin files">
