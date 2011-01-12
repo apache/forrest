@@ -89,6 +89,10 @@ public class ForrestConfUtils
         return contextHome;
     }
 
+    public static String getProjectWebappHome() {
+      return getSystemProperty("project.webapp");
+    }
+
     /**
      * For backwards compatibility, alias old skin names to new ones. This must
      * be kept in sync with aliasing in forrest.build.xml/init-props
