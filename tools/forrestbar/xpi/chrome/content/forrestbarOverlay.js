@@ -152,10 +152,21 @@ function navProject(searchID) {
 
 function viewXML(xmltype)
 {
+  // View an aspect of the internal data of the current page.
   var href = gBrowser.currentURI.spec;
   if( isLocalUrlOrWarnMe() )
   {
     (dispatcherCall)?navigate(getLocalWebServerUrl()+xmltype+href.substring(getLocalWebServerUrl().length, href.lastIndexOf('.') )):navigate(href.substring(0, href.lastIndexOf('.') ) + xmltype);
+  }
+}
+
+function getXML(xmltype)
+{
+  // Get an aspect of the internal data.
+  var href = gBrowser.currentURI.spec;
+  if( isLocalUrlOrWarnMe() )
+  {
+    navigate(getLocalWebServerUrl()+xmltype);
   }
 }
 
