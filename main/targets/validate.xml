@@ -141,6 +141,13 @@ then generate your site with 'forrest', then do 'forrest validate-site'.
     </xmlvalidate>
     <echo level="info" message="...validated xdocs"/>
   </target>
+  <target name="validate-status" depends="init" description="Validate the project status changes file">
+    <xmlvalidate file="${project.status}" failonerror="yes" lenient="no" warn="yes" classpathref="forrest.cp" classname="org.apache.xerces.parsers.SAXParser">
+      <attribute name="http://apache.org/xml/features/validation/dynamic" value="true"/>
+      <xmlcatalog refid="fcatalog"/>
+    </xmlvalidate>
+    <echo level="info" message="...validated ${project.status}"/>
+  </target>
   <target name="validate-skinconf" depends="validation-props"
           if="validate.skinconf" description="Validate skinconf">
     <xmlvalidate failonerror="${forrest.validate.skinconf.failonerror}" 
