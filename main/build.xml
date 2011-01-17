@@ -340,6 +340,12 @@ Remove any build directories in a tree before running.
           description="Test that the features are okay before committing."/>
   <target name="test-basic" 
           depends="validate-config, testseedBasic"/>
+  <target name="test-sample" depends="validate-config"
+          description="Does 'seed-sample' and generates the 'skinned' site">
+    <antcall target="testSiteType">
+      <param name="test.site.type" value="skinned"/>
+    </antcall>
+  </target>
   <target name="testPlugins"
           depends="cleanPlugins"
           description="Test each type of the plugin">
@@ -374,7 +380,7 @@ Remove any build directories in a tree before running.
   </target>
   <target name="testseed"
 	  depends="init, cleanPlugins"
-          description="Called by test target - Seeds and generates the different types of sites (skinned, dispatcher...)">
+          description="Called by test target - Does 'seed-sample' and generates the different types of sites (skinned, dispatcher...)">
     <for list="skinned,dispatcher" param="type">
       <sequential>
         <antcall target="testSiteType">
@@ -383,7 +389,9 @@ Remove any build directories in a tree before running.
       </sequential>
     </for>
   </target>
-  <target name="testseedBasic" depends="init, cleanPlugins">
+  <target name="testseedBasic"
+          depends="init, cleanPlugins"
+          description="Called by test target - Does 'seed-basic' and generates the different types of sites (skinned, dispatcher...)">
     <for list="skinned,dispatcher" param="type">
       <sequential>
         <antcall target="testSiteBasicType">
