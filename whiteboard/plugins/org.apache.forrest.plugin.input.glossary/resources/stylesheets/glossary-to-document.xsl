@@ -42,6 +42,9 @@
       </body>
     </document>
   </xsl:template>
+  <xsl:template match="introduction">
+    <xsl:apply-templates />
+  </xsl:template>
   <xsl:template match="part">
     <section>
       <xsl:attribute name="id">
