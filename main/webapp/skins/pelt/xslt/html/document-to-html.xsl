@@ -92,7 +92,7 @@ imported document-to-html.xsl for details.
   <xsl:template match="@id">
     <xsl:apply-imports/>
   </xsl:template>
-  <xsl:template match="section"><a name="{generate-id()}"/>
+  <xsl:template match="section">
     <xsl:apply-templates select="@id"/>
     <xsl:variable name = "level" select = "count(ancestor::section)+1" />
     <xsl:choose>

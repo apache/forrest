@@ -91,8 +91,14 @@ Section handling
   </xsl:template>
 <!-- Generate a <a name="..."> tag for an @id -->
   <xsl:template match="@id">
-    <xsl:if test="normalize-space(.)!=''"><a name="{.}"/>
-    </xsl:if>
+    <xsl:choose>
+      <xsl:when test="normalize-space(.) != ''">
+        <a name="{.}"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <a name="{generate-id()}"/>
+      </xsl:otherwise>
+    </xsl:choose>
   </xsl:template>
   <xsl:template match="section">
 <!-- count the number of section in the ancestor-or-self axis to compute
