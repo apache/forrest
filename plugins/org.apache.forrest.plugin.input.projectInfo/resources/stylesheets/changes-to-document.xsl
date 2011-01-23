@@ -166,6 +166,9 @@
         <xsl:choose>
           <xsl:when test="$title != ''">
             <section>
+              <xsl:attribute name="id">
+                <xsl:value-of select="concat(@context, '_', ../@version)" />
+              </xsl:attribute>
               <title><xsl:value-of select="$title"/></title>
               <ul>
                 <xsl:choose>
@@ -199,6 +202,9 @@
       </xsl:for-each>
       <xsl:if test="$projectInfo.changes.includeContributorList = 'true'">
         <section>
+          <xsl:attribute name="id">
+            <xsl:value-of select="concat('contributors', '_', @version)" />
+          </xsl:attribute>
           <title><i18n:text i18n:key="release_committers">Contributors to this release</i18n:text></title>
           <p>
             <i18n:text i18n:key="release_committers_s1">We thank the following people for their contributions to this release.</i18n:text>
