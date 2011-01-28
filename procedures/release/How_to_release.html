@@ -879,10 +879,10 @@ document.write("Last Published: " + document.lastModified);
           
 <ol>
             
-<li>Add section &lt;v0.10&gt; with minimal content above the &lt;v0.90&gt; section.</li>
+<li>Add section &lt;v0.100&gt; with minimal content above the &lt;v0.90&gt; section.</li>
             
 <li>Edit the label@ and description@ attributes for each of the three sections.
-              &lt;v0.10&gt; and &lt;v0.90&gt; and &lt;v0.80&gt;</li>
+              &lt;v0.100&gt; and &lt;v0.90&gt; and &lt;v0.80&gt;</li>
             
 <li>Remove the label@ attribute for the &lt;v0.80&gt; section. This prevents
               it from appearing in the <a href="../../linkmap.html">linkmap ToC</a>.</li>
@@ -1223,6 +1223,29 @@ svn status --no-ignore</pre>
 </ul>
 </li>
         
+<li>
+          
+<p>Tag SVN trunk for the release candidate:</p>
+          
+<pre class="code">svn copy -m "Create tag forrest_###xy###_rc# from trunk" \
+  https://svn.apache.org/repos/asf/forrest/trunk \
+  https://svn.apache.org/repos/asf/forrest/tags/forrest_###xy###_rc#</pre>
+          
+<p>
+            where '###xy###' is a compact (without the dots) form of the version
+            number (e.g. 04, 041, 05).
+            <br>
+            where 'rc#' is the release candidate number (e.g. rc1, rc2).
+          </p>
+          
+<p>
+            See
+            <a href="http://svn.apache.org/repos/asf/forrest/tags/">http://svn.apache.org/repos/asf/forrest/tags/</a>
+            for examples of past tags.
+          </p>
+        
+</li>
+        
 <li>Unpack and test the relevant archive in a fresh new directory.
                   No point getting people to test if it is broken. You need this for your own testing and vote anyway.
                   Be sure to set FORREST_HOME and PATH properly for this release candidate location
@@ -1482,7 +1505,7 @@ svn copy pluginDocs/plugins_0_90 plugins_0_100</pre>
 </li>
         
 <li>Edit site.xml and add a copy of the most current versioned section (e.g. &lt;v0.90&gt;) above it.
-            Increment the first decimal of the section's name to reflect the next planned release (e.g. &lt;v0.10&gt;).
+            Increment the first decimal of the section's name to reflect the next planned release (e.g. &lt;v0.100&gt;).
             </li>
         
 <li>
