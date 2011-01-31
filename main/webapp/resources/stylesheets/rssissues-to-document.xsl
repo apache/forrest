@@ -16,6 +16,21 @@
   limitations under the License.
 -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+
+  <!-- Handle JIRA system maintenance note when provided in HTML format -->
+  <xsl:template match="html">
+    <document>
+      <header>
+        <title>Open issues for the next release</title>
+      </header>
+      <body>
+        <note>
+          <xsl:copy-of select="body/*" />
+        </note>
+      </body>
+    </document>
+  </xsl:template>
+
   <xsl:template match="rss">
     <document>
       <header>
