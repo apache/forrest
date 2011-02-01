@@ -20,7 +20,7 @@
 <!-- The minimum version of Forrest a plugin is known to work -->
 <!-- This should be overridden in the plugin build file when necessary
        i.e. when the plugin is being developed for a different Forrest version -->
-  <property name="forrest.version" value="0.9"/>
+  <property name="forrest.version" value="0.10"/>
   <property name="forrest.home"                       location="${env.FORREST_HOME}"/>
   <property name="forrest.core"                       location="${env.FORREST_HOME}/main" />
   <property name="forrest.ant.lib.dir"                location="${forrest.home}/tools/ant/lib"/>
@@ -181,6 +181,7 @@
     description="Deploy the plugin documentation"
     depends="deploy-ready, clean, dist, docs, checkout-deployed-docs, deploy-plugins.xml">
     <echo level="info">Deploying plugin documentation to the web server</echo>
+<!-- FIXME: Surely this can be improved. -->
     <if>
       <contains string="${forrest.version}" substring="0.7"/>
       <then>
