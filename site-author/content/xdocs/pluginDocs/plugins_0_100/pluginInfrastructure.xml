@@ -64,14 +64,6 @@
                    input plugin            output plugin
                      (**.xml)         (**.html, **.pdf etc.) 
 </source>
-        <p>
-          The name of the sitemap will reflect the type of plugin in use. That
-          is, an internal plugin will have a sitemap called
-          <code>internal.xmap</code>, an output plugin has
-          <code>output.xmap</code> and an input plugin has
-          <code>input.xmap</code>. In addition, an input plugin can optionally
-          provide a <code>resources.xmap</code>.
-        </p>
         <section id="inputPlugins">
           <title>Input Plugins</title>
           <p>
@@ -192,7 +184,11 @@
       <source>
 [plugin_name]
   |
-  |-- config files (xmap, skinconf etc.)
+  |-- plugin control files (xmap etc.)
+  |
+  |-- conf
+  |   |
+  |   `-- cocoon and component config files (e.g. *.xconf, jtidy)
   |
   |-- resources
       |
@@ -200,9 +196,9 @@
       |   |
       |   |-- catalog.xcat
       |   |
-      |   |-- dtd (DTDs etc.)
+      |   `-- dtd (DTDs etc.)
       |
-      |-- stylesheets (XSLs etc.)
+      `-- stylesheets (XSLs etc.)
 </source>
       <section>
         <title>The IMS Manifest Plugin</title>
@@ -213,7 +209,7 @@
         <source>
 org.apache.forrest.plugin.internal.IMSManifest
   |
-  |-- internal.xmap
+  |-- sitemap.xmap
   |
   |-- resources
       |
@@ -225,7 +221,7 @@ org.apache.forrest.plugin.internal.IMSManifest
                     |- repositoryUtils.xsl
 </source>
         <p>
-          The internal.xmap file will override the default behaviour for the
+          The sitemap.xmap file will override the default behaviour for the
           navigation generation matchers in Forrest, for example, it contains a
           matcher as follows:
         </p>
@@ -263,18 +259,22 @@ org.apache.forrest.plugin.internal.IMSManifest
     <section>
       <title>How does Installation work?</title>
       <p>
+        See the <a href="site:plugins/using">Using Plugins</a> for an overview
+        of how the plugin installation system works and the places and order
+        that will be searched.
+      </p>
+      <p>
         When Forrest installs a plugin it downloads a zip of the plugin code and
         extracts it into the <code>plugins</code> directory of Forrest and an
-        entry is made in <code>src/plugins/[input|internal|output].xmap</code>
-        (recall the actual sitemap name is dependant on the type of plugin it
-        belongs to. For example, installing the IMSManifest plugin described
-        above will result in the following entry being added to the plugin
-        sitemap:
+        entry is made in a temporary sitemap that manages plugins for your
+        content object. For example, installing the IMSManifest plugin described
+        above will result in the following entry being added to the this
+        temporary sitemap:
       </p>
       <source>
 <![CDATA[
 <map:select type="exists">
-  <map:when test="input.xmap">
+  <map:when test="output.xmap">
     <map:mount uri-prefix="" 
       src="sitemap.xmap" 
       check-reload="yes" 
@@ -284,30 +284,17 @@ org.apache.forrest.plugin.internal.IMSManifest
   ]]>
       </source>
       <p>
-        Installed plugins are managed by the
-        FORREST_INSTALL_DIR/build/plugins/sitemap.xmap file. This file is
-        mounted by the main Forrest sitemap with the following code:
+        To be more accurate, the entries are made in one of three temporary
+        sitemaps, input.xmap, output.xmap and resources.xmap. These temporary
+        sitemaps are rebuilt each time the content object is built or run, thus
+        we are always guarenteed of having the right plugins installed.
       </p>
-      <source>
-<![CDATA[
-        <map:pipeline internal-only="false">
-           <map:mount uri-prefix=""
-                      src="{forrest:forrest.plugins}/sitemap.xmap"
-                      check-reload="yes"
-                      pass-through="true"/>
-        </map:pipeline>
-  ]]>
-      </source>
-      <note>
-        The above plugin sitemap.xmap file is automatically managed by Forrest,
-        the end user need never edit this file.
-      </note>
     </section>
     <section>
       <title>Further Reading</title>
       <p>
         If you want to build a plugin you might like to start with our
-        <a href="site:v0.70//buildPlugin">HowTo on Building Plugins</a>.
+        <a href="site:buildPlugin">HowTo on Building Plugins</a>.
       </p>
     </section>
   </body>

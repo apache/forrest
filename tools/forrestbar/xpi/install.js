@@ -16,7 +16,7 @@
 */
 
 // Initialize Install
-var err = initInstall("ForrestBar", "forrestbar", "0.8");
+var err = initInstall("ForrestBar", "forrestbar", "0.9");
 
 // Get the JAR
 addFile("forrestbar", "chrome/forrestbar.jar", getFolder("chrome"),"");

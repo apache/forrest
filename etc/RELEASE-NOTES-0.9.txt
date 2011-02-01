@@ -1,0 +1,195 @@
+                Release Notes for Apache Forrest 0.9
+
+Apache Forrest is pleased to release the new version: apache-forrest-0.9
+========================================================================
+
+  It can be downloaded from one of the Apache Software Foundation mirror 
+  sites [Link: http://forrest.apache.org/mirrors.cgi]. 
+
+  Apache Forrest™ software is a publishing framework that transforms 
+  input from various sources into a unified presentation in one or more 
+  output formats. The modular and extensible plug-in architecture of 
+  Apache Forrest is based on Apache Cocoon and the relevant industry 
+  standards that separate presentation from content. Forrest can generate 
+  static documents, or be used as a dynamic server, or be deployed by its 
+  automated facility. 
+
+Requirements
+============
+
+  A Java Runtime Environment (1.5 or higher) installed. 
+
+  To build from source requires a Java Development Kit (1.5 or higher) 
+
+  Apache Ant is not required: Forrest uses its own packaged version of 
+  Ant in tools/ant/ 
+
+  Apache Cocoon is not required: Forrest uses its own packaged version. 
+
+Installing Apache Forrest
+=========================
+
+  The distribution contains all Forrest resources (skins, XSLTs, images, 
+  schemas), source code, and Forrest's own website documentation. 
+
+  Copy somewhere permanent, like /usr/local/forrest or c:\forrest 
+  (Support for installation on Windows systems into directories 
+  containing spaces is very new, please report back on your success or 
+  failure.) 
+
+  Set FORREST_HOME environment variable to point to that top-level 
+  directory. 
+
+  Add to the system PATH environment variable, i.e. $FORREST_HOME/bin 
+  (Unix) or %FORREST_HOME%\bin (Windows) 
+
+Getting Started
+===============
+
+  See the file index.html for the quick start tips. 
+
+Issue tracking
+==============
+
+  If you notice what appears to be a bug or wish to make a contribution, 
+  please report it via the Forrest issue tracker
+  [Link: http://forrest.apache.org/issues.html]. 
+
+Feedback
+========
+
+  Feedback, feature suggestions, contributions, bugs, and any other 
+  issues can be discussed on our mailing lists
+  [Link: http://forrest.apache.org/mail-lists.html]. 
+
+Major Changes in Version 0.9
+============================
+
+                                  ** Note **
+  This is not a complete list of changes, just some of the more important 
+  ones. A full list of changes in this release is available
+  [Link: http://forrest.apache.org/changes.html]. 
+  --------------------------------------------------------------------------
+
+  Changes to Build
+  ----------------
+
+    * [Icon: update] Forrest minimum Java version is now Java 1.5 required 
+      [Link: http://forrest.apache.org/faq.html#requirements]
+      starting with Forrest-0.9-dev Committed by GM.
+
+  Changes to the Code Base
+  ------------------------
+
+    * [Icon: fix] Suppress extra generated id when converting xdoc sections 
+      to html. See upgrading notes
+      [Link: http://forrest.apache.org/upgrading_09.html]. 
+      Committed by BMD.
+    * [Icon: update] Replaced the custom caching implementation with EHCache 
+      in the LocationMap feature. Given how integral the LM has become, this 
+      gives us much better overall performance, concurrent behavior, and 
+      cache configuration options. Added a default cache config file to 
+      main/webapp/WEB-INF/ehcache.xml Committed by TWW. See Issue FOR-1031 
+      [Link: http://issues.apache.org/jira/browse/FOR-1031].
+    * [Icon: add] Enabled use of EXSLT extensions via exslt.org stylesheets. 
+      See example "EXSLT" in the 'forrest seed-sample' site. Committed by DC. 
+      See Issue FOR-1176
+      [Link: http://issues.apache.org/jira/browse/FOR-1176].
+    * [Icon: add] Enabled the filtering of output messages from Ant (see FAQ 
+      [Link: http://forrest.apache.org/faq.html#verbose-ant])
+      and explained how to enable coloured output (see FAQ
+      [Link: http://forrest.apache.org/faq.html#coloured-ant]). 
+      Committed by DC. See Issue FOR-1178
+      [Link: http://issues.apache.org/jira/browse/FOR-1178].
+    * [Icon: add] Added a demonstration of using xml source documents without 
+      declaring a DTD. See example "no-dtd" in the 'forrest seed-sample' 
+      site. Committed by DC. See Issue FOR-1173
+      [Link: http://issues.apache.org/jira/browse/FOR-1173].
+    * [Icon: add] Added the ability to use RELAXNG to validate intermediate 
+      xml. Do 'localhost:8888/index.validation.xml' for example to validate 
+      the "index" page. Also see how to validate intermediate
+      content for the whole site. 
+      [Link: http://forrest.apache.org/howto-dev.html#validate-intermediate]
+      Committed by DC. See Issue FOR-1172
+      [Link: http://issues.apache.org/jira/browse/FOR-1172].
+    * [Icon: add] Added the ability for a "trademark statement" at bottom of 
+      all pages. For configuration details, see skinconf.xml from a new 
+      "seed" site. Committed by DC. See Issue FOR-1170
+      [Link: http://issues.apache.org/jira/browse/FOR-1170].
+    * [Icon: fix] There was a problem with plugins libs not being copied. 
+      Using the war task from ant fixes this issue. Committed by TS. See 
+      Issue FOR-1074
+      [Link: http://issues.apache.org/jira/browse/FOR-1074].
+    * [Icon: fix] Enabled the output html serializer to be configurable to 
+      either xhtml or html. Committed by DC. See Issue FOR-1156
+      [Link: http://issues.apache.org/jira/browse/FOR-1156].
+    * [Icon: update] Updated to Jing release
+      [Link: http://code.google.com/p/jing-trang/]).
+      As well as providing us with a 
+      reliable RELAX NG tool, this upgrade fixes an issue on some Java 6 with 
+      missing datatype library. Committed by DC. See Issue FOR-984
+      [Link: http://issues.apache.org/jira/browse/FOR-984].
+    * [Icon: update] Updated to Apache-Ant-1.7.1 release. Also jsch-0.1.28 to 
+      jsch-0.1.39 release. Committed by DC.
+    * [Icon: update] Our packaged version of Apache Cocoon has been upgraded 
+      to use the latest version of their stable 2.1 branch. This is a major 
+      step forward for Forrest. It enables us to use a reliable and 
+      up-to-date Cocoon. Forrest developers can again participate at Cocoon 
+      to fix issues or develop new blocks. A number of major performance 
+      issues are already fixed in this version. Also upgraded various other 
+      important supporting products such as Apache Xerces and Apache Xalan, 
+      etc. See upgrading notes
+      [Link: http://forrest.apache.org/upgrading_09.html#cocoon]. 
+      Committed by TS. Thanks to Thorsten Scherler, David Crossley. See Issue 
+      FOR-955 [Link: http://issues.apache.org/jira/browse/FOR-955], FOR-1017 
+      [Link: http://issues.apache.org/jira/browse/FOR-1017].
+    * [Icon: update] Promoting the output.inputModule plugin to core. Main 
+      reason for the move is to prevent plugins dependencies since the code 
+      has attracted different use cases solved in plugins to move it into 
+      core. Committed by TS. See Issue FOR-1103
+      [Link: http://issues.apache.org/jira/browse/FOR-1103].
+    * [Icon: add] Enable configuration of some Cocoon sitemap components, 
+      e.g. output html encoding and document type declaration for html and 
+      xhtml serializers, JTidy properties file location for html generator. 
+      See FAQ
+      [Link: http://forrest.apache.org/faq.html#sitemap-entities]
+      Committed by DC. 
+      See Issue FOR-1071
+      [Link: http://issues.apache.org/jira/browse/FOR-1071].
+    * [Icon: fix] There was a partially implemented xml catalog with missing 
+      project symbols file. Only affected users of the 'seed-basic' template 
+      site. See notes in upgrading to v0.9
+      [Link: http://forrest.apache.org/upgrading_09.html]
+      Committed by DC. See Issue FOR-1075
+      [Link: http://issues.apache.org/jira/browse/FOR-1075].
+    * [Icon: update] Images had not been reliably reproduced in PDFs (fop 
+      version prior to 0.94). The old way always expected a physical URI 
+      (file or http) the new fop URIResolver in the FOP-NG block delegates to 
+      Cocoon's SourceResolver framework, meaning images can be the result of 
+      a pipeline. Committed by TS. See Issue FOR-635
+      [Link: http://issues.apache.org/jira/browse/FOR-635].
+
+  Changes to Documentation
+  ------------------------
+
+    * [Icon: add] Added document to facilitate upgrading to v0.9
+      [Link: http://forrest.apache.org/upgrading_09.html] Committed by DC.
+    * [Icon: update] Improved the FAQ about "version and properties" and 
+      linked to the documentation of the new Properties
+      [Link: http://forrest.apache.org/docs/properties.html] system.
+      Committed by DC.
+    * [Icon: add] Added an FAQ
+      [Link: http://forrest.apache.org/faq.html#oldjing]
+      to try to 
+      explain that Forrest does not require Java 6. Committed by DC. See 
+      Issue FOR-984 [Link: http://issues.apache.org/jira/browse/FOR-984].
+    * [Icon: add] Added new documents: How to deploy documentation with the 
+      Forrestbot "svn" workstage
+      [Link: http://forrest.apache.org/howto-forrestbot-svn.html]
+      which explains how the Apache Forrest project manages their project 
+      documentation, and How to deploy documentation with the Forrestbot 
+      "scp" workstage
+      [Link: http://forrest.apache.org/howto-forrestbot-scp.html]
+      which explains how to 
+      manage a personal or company website using Secure Shell SCP to deploy 
+      the generated documents. Committed by DC.
