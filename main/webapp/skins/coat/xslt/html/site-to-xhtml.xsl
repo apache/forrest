@@ -57,7 +57,7 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
   |title
   +-->
         <title><xsl:value-of select="div[@id='content']/h1"/>
-          <xsl:if test="$config/motd">
+          <xsl:if test="count($config/motd/motd-option) &gt; 0">
             <xsl:for-each select="$config/motd/motd-option">
               <xsl:choose>
                 <xsl:when test="@starts-with='true'">
@@ -468,7 +468,7 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
           </xsl:for-each>
         </xsl:if>
 <!-- Message of the day -->
-        <xsl:if test="$config/motd">
+        <xsl:if test="count($config/motd/motd-option) &gt; 0">
           <xsl:for-each select="$config/motd/motd-option">
             <xsl:choose>
               <xsl:when test="@starts-with='true'">
