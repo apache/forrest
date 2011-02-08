@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one or more
+  contributor license agreements.  See the NOTICE file distributed with
+  this work for additional information regarding copyright ownership.
+  The ASF licenses this file to You under the Apache License, Version 2.0
+  (the "License"); you may not use this file except in compliance with
+  the License.  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<!DOCTYPE document PUBLIC "-//APACHE//DTD Documentation V2.0//EN" "http://forrest.apache.org/dtd/document-v20.dtd">
+<document>
+  <header>
+    <title>Properties</title>
+  </header>
+  <body>
+    <section id="overview">
+      <title>Properties</title>
+      <p>
+        There are various ways to configure forrest with your custom properties.
+        Since version 0.9 the preferred method is the forrest.properties.xml file.
+      </p>
+      <p>
+        We need to prevent having references from the core to any plugin. This
+        can be done with the new properties system. You can override any of the
+        following values (example based on pdf plugin) or add as much new once
+        via a <code>forrest.properties.xml</code> in your project.
+      </p> 
+      <source>
+<![CDATA[  <property name="output.pdf.fontFamily.serif"     value="serif"/>
+  <property name="output.pdf.fontFamily.sansSerif" value="sans-serif"/>
+  <property name="output.pdf.fontFamily.monospace" value="monospace"/>]]>
+      </source>
+      <p>
+        Implementing this properties in your project allows you to change the 
+        font style of the pdf plugin.
+      </p>
+    </section>
+    <fixme author="">
+       The properties system needs more documentation. There is discussion in the
+       mail archives.
+       Also <a href="https://issues.apache.org/jira/browse/FOR-734">FOR-734</a>
+       and <a href="https://issues.apache.org/jira/browse/FOR-588">FOR-588</a>
+       etc.
+    </fixme>
+    <fixme author="forrest-dev">
+       There have been a proposal about the naming convention about the properties
+       system. Add the outcome to this document.
+    </fixme>
+    <section id="module">
+      <title>ModuleGenerator</title>
+      <p>
+        Produces properties from an input-module. This is been managed by the
+        the ModuleGenerator. The generator contacts the input module and gets
+        an iterator of all attribute names. This iterator will be then used to
+        receive the values of the key. Till now we only use a Object to String
+        cast but an input module does not have to return a simple String but 
+        can return any object. This may cause ClassCastExceptions for the values.
+      </p>
+      <ul>
+        <li><code>http://localhost:8888/module.properties.properties</code> - Properties of the project input 
+          module - used in the sitemap like 
+          {properties:content.xdocs}</li>
+        <li><code>http://localhost:8888/module.date.properties</code> - Properties of the date input 
+          module - we cast an object to a string, but the module returns 
+          java.util.Date. This causes a ClassCastException.</li>
+      </ul>
+    </section>
+  </body>
+</document>
