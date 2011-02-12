@@ -409,7 +409,7 @@ The skin that most likely resembles these ones is called 'pelt'.
       </echo>
       </then>
     </if>
-    <java classname="org.mortbay.jetty.Server"
+    <java classname="org.mortbay.xml.XmlConfiguration"
           dir="${forrest.core.webapp}"
           fork="yes"
           maxmemory="${forrest.maxmemory}"
@@ -420,7 +420,7 @@ The skin that most likely resembles these ones is called 'pelt'.
       <jvmarg line="${forrest.jvmargs}"/>
       <jvmarg
          value="-Djava.endorsed.dirs=${java.endorsed.dirs}${path.separator}${forrest.endorsed.lib-dir}"/>
-      <arg line="${content-dir}/jettyconf.xml" />
+      <arg value="${content-dir}/jettyconf.xml" />
       <syspropertyset>
         <propertyref prefix="forrest."/>
         <propertyref prefix="project."/>
@@ -443,7 +443,29 @@ The skin that most likely resembles these ones is called 'pelt'.
       </echo>
       </then>
     </if>
-    <java classname="org.mortbay.jetty.Server"
+    <!-- There are issues using the jetty task:
+           - getting everything we need on the classpath
+           - JNDI and Jetty Plus seem to be required
+           - system properties must be passed individually
+    -->
+    <!--
+    <jetty tempDirectory="tmpjetty">
+      <connectors>
+        <selectChannelConnector port="8888" />
+      </connectors>
+      <systemProperties>
+        <systemProperty name="java.naming.factory.initial" value="org.mortbay.naming.InitialContextFactory" />
+        <systemProperty name="java.naming.factory.url.pkgs" value="org.mortbay.naming" />
+        <systemProperty name="forrest.core.webapp" value="${forrest.core.webapp}" />
+        <systemProperty name="project.home" value="${project.home}" />
+        <systemProperty name="project.content-dir" value="${project.content-dir}" />
+      </systemProperties>
+      <webApp name="forrest" warfile="${forrest.core.webapp}" contextpath="/" scanIntervalSeconds="5">
+        <lib dir="${forrest.core.lib-dir}" includes="*.jar" />
+      </webApp>
+    </jetty>
+    -->
+    <java classname="org.mortbay.xml.XmlConfiguration"
           dir="${forrest.core.webapp}"
           fork="yes"
           maxmemory="${forrest.maxmemory}"
