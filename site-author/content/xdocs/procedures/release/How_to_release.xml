@@ -21,20 +21,24 @@
 <!ENTITY cd 'docs_0_80'>
 <!ENTITY cp 'plugins_0_80'>
 <!ENTITY cs '0.80'>
+<!ENTITY cb '08'>
 <!ENTITY d '0.9'>
 <!ENTITY dd 'docs_0_90'>
 <!ENTITY dp 'plugins_0_90'>
 <!ENTITY ds '0.90'>
+<!ENTITY db '09'>
 <!ENTITY dt '0.9-dev'>
 <!ENTITY n '0.10'>
 <!ENTITY nd 'docs_0_100'>
 <!ENTITY np 'plugins_0_100'>
 <!ENTITY ns '0.100'>
+<!ENTITY nb '010'>
 <!ENTITY nt '0.10-dev'>
 <!ENTITY p '0.7'>
 <!ENTITY pd 'docs_0_70'>
 <!ENTITY ps '0.70'>
-<!ENTITY rdate '2007-08-18'>
+<!ENTITY pb '07'>
+<!ENTITY rdate '2011-02-07'>
 ]>
 <!-- The entities above are for the current state,
   i.e. preparing for the upcoming release (using 0.8 as the example):
@@ -42,19 +46,23 @@
   &cd; = current release version docs, e.g. docs_0_70
   &cp; = current release version plugin docs, e.g. plugins_0_70
   &cs; = current release version site URI, e.g. 0.70 (as in site:v0.70)
+  &cb; = current release version brief, e.g. 07 (as in forrest_07_branch)
   &d;  = development version, e.g. 0.8
   &dd; = development version docs, e.g. docs_0_80
   &dp; = development version plugin docs, e.g. plugins_0_80
   &ds; = development version site URI, e.g. 0.80 (as in site:v0.80)
+  &db; = development version brief, e.g. 08 (as in forrest_08_branch)
   &dt; = development version with -dev, e.g. 0.8-dev
   &n;  = next version, e.g. 0.9
   &nd; = next version docs, e.g. docs_0_90
   &np; = next version plugin docs, e.g. plugins_0_90
   &ns; = next version site URI, e.g. 0.90 (as in site:v0.90)
+  &nb; = next version brief, e.g. 09
   &nt; = next version with -dev, e.g. 0.9-dev
   &p;  = previous version, e.g. 0.6
-  &ps; = previous version site URI, e.g. 0.60 (as in site:v0.60)
   &pd; = previous version docs, e.g. docs_0_60
+  &ps; = previous version site URI, e.g. 0.60 (as in site:v0.60)
+  &pb; = previous version brief, e.g. 06
   &rdate; = anticipated release date
 -->
 <document>
@@ -496,7 +504,11 @@
     &lt;v&n; label="&nt;" href="site:index"/>
     &lt;v&d; label="&d; (current)" href="site:v&ds;//index"/>
     &lt;v&c; label="&c;" href="site:v&cs;//index"/>
-  &lt;versions></source></li>
+  &lt;versions></source>
+              <p>
+                Similarly for <code>&lt;pluginVersions</code>
+              </p>
+            </li>
           </ol></li>
         <li>Similarly edit tabs.xml</li>
         <li><p>
@@ -513,11 +525,16 @@
           </ol></li>
         <li>Edit version numbers in xdocs/versions/index.xml</li>
         <li>Edit version numbers in xdocs/pluginDocs/index.xml</li>
+        <li>Edit version numbers in tools/forrestbar/</li>
         <li>Edit version numbers in MOTD section of site-author/skinconf.xml</li>
         <li>Edit version numbers in main/fresh-site/..../site.xml and tabs.xml</li>
         <li><p>
-            Remove the past versions (&p;) docs directory by doing 'svn rm
-            site-author/content/xdocs/&pd;
+            Copy the past "Upgrading" notes from the past version.
+            Do: <code>svn cp site-author/content/xdocs/&pd;/upgrading_&pb;.xml site-author/content/xdocs/trash/</code>
+          </p></li>
+        <li><p>
+            Remove the past versions (&p;) docs directory. Do:
+            <code>svn rm site-author/content/xdocs/&pd;</code>
           </p></li>
         <li><p>
             Edit site-author/conf/cli.xconf where it excludes old docs from
@@ -544,10 +561,14 @@
           <source>
 svn mkdir &nd;
 svn copy &dd;/index.xml &nd;
-svn copy &dd;/upgrading.xml &nd;
+svn copy &dd;/upgrading_&db;.xml &nd;/upgrading_&nb;.xml
 ... edit those docs to suit. Emphasise developers and encourage svn.</source>
         </li>
-        <li>Temporarily remove the "dev" note from upgrading_xy.xml</li>
+        <li>
+          Start the next set of development pluginDocs. Do:
+          <code>svn cp pluginDocs/&dp; pluginDocs/&np;</code>
+        </li>
+        <li>Remove the "dev" note from <code>&dd;/index.xml</code> and <code>&dd;/upgrading_&db;.xml</code></li>
         <li><p>
             Edit the Forrest home page in the "News and events" section and add
             a text like:
@@ -556,7 +577,10 @@ svn copy &dd;/upgrading.xml &nd;
  Apache Forrest &d; was released on ## YYYY-MM-DD ##.
  [### Add some important new features ###]</source></li>
         <li>
-          In the top-level quickstart <code>$FORREST_HOME/index.html</code>
+          Edit version numbers in the top-level quickstart <code>$FORREST_HOME/index.html</code>
+        </li>
+        <li>
+          Undo the exclusions of &cd; etc. in <code>site-author/conf/cli.xconf</code>
         </li>
         <li>Ensure that the documentation is building properly, do 'cd site-author; forrest'.
           Fix any linking errors. Review changes.html to ensure section numbering.</li>
@@ -569,13 +593,23 @@ svn copy &dd;/upgrading.xml &nd;
             In the "Verify" section near the end, add the name of the Release Manager
             and the PGP key Id used to sign the release.
           </p></li>
+        <li>
+          Check that the download page looks correct. Can get an idea with
+          <code>localhost:8888/mirrors.html</code>
+        </li>
         <li>Search (e.g. with find and grep) to ensure that no version numbers
           have been missed. Sometimes people add more hard-coded version numbers
           since the last release. If you find any, then add them to the list
           above (or better still, automate them).
         </li>
+        <li>
+          Edit <code>site-author/conf/cli.xconf</code>
+          to ensure that only the old &cd; are excluded.
+        </li>
         <li>Commit all of the above changes after the code-freeze has started
-                  in the next section.</li>
+                  in the next section.
+           However do not build-and-deploy until after the release.
+        </li>
       </ol>
       <fixme author="">
         Not sure what will happen with the forrestbot on our zone during this
@@ -602,6 +636,7 @@ svn copy &dd;/upgrading.xml &nd;
                 </li>
         <li><p>
             Update your SVN working copy to include any last minute changes.
+            Keep an eye on the svn@ mail list.
           </p></li>
         <li>Do any final work, such as license header checks and xml code cleanup.
                 </li>
@@ -690,7 +725,7 @@ to:
         <li>
                   Edit 3 files in tools/forrestbar to update the version number to match the new release:
                   <source>
-xpi/install.rdf, line 24: &lt;em:version>&d;&lt;em:version>
+xpi/install.rdf, line 23: &lt;em:version>&d;&lt;em:version>
 
 xpi/install.js, line 19: var err = initInstall("ForrestBar", "forrestbar", "&d;");
 
@@ -703,6 +738,7 @@ xpi/chrome/content/contents.rdf, line 25: chrome:displayName="ForrestBar &d;"/>
                   Update the etc/RELEASE-NOTES-&d;.txt as described above.
                 </li>
         <li>Commit all of the above changes.</li>
+        <li>Do 'svn up'</li>
         <li><p>
             Take note of the SVN revision number of your trunk by running
             <code>svn info</code> from the command line in the Release
@@ -730,13 +766,10 @@ svn status --no-ignore</source>
           </ul></li>
         <li>
           <p>Tag SVN trunk for the release candidate:</p>
-          <source>svn copy -m "Create tag forrest_###xy###_rc# from trunk" \
+          <source>svn copy -r ####### -m "Create tag forrest_&db;_rc# from trunk r#######" \
   https://svn.apache.org/repos/asf/forrest/trunk \
-  https://svn.apache.org/repos/asf/forrest/tags/forrest_###xy###_rc#</source>
+  https://svn.apache.org/repos/asf/forrest/tags/forrest_&db;_rc#</source>
           <p>
-            where '###xy###' is a compact (without the dots) form of the version
-            number (e.g. 04, 041, 05).
-            <br/>
             where 'rc#' is the release candidate number (e.g. rc1, rc2).
           </p>
           <p>
@@ -782,10 +815,9 @@ md5sum apache-forrest-&d;.tar.gz</source>
           <source>
 svn copy -r ##### -m "Create the &d; release branch from r#####" \
     https://svn.apache.org/repos/asf/forrest/trunk \
-    https://svn.apache.org/repos/asf/forrest/branches/forrest_#xy#_branch
+    https://svn.apache.org/repos/asf/forrest/branches/forrest_&db;_branch
 
 where
-  '#xy#' is a compact form of the version (e.g. 04, 041, 05).
   '#####' is the SVN revision number that the branch was created from,
   which was the revision that the release candidate packages were generated from.
   (Remember that you recorded this number earlier.)
@@ -793,7 +825,7 @@ where
           <p>
             See
             <a href="http://svn.apache.org/repos/asf/forrest/branches/">http://svn.apache.org/repos/asf/forrest/branches/</a>
-            for examples of past branches, e.g. forrest_07_branch
+            for examples of past branches, e.g. forrest_&cb;_branch
           </p></li>
       </ol>
     </section>
@@ -841,7 +873,7 @@ where
       </ol>
       <note>
         It is vitally important that people review and vote against the actual
-        final release candidate source packages (and not just against their SVN working copy).
+        final source release candidate source packages (and not just against their SVN working copy).
       </note>
     </section>
     <section id="FinalRel">
@@ -874,17 +906,13 @@ where
         <li><p>
             Tag SVN by doing:
           </p>
-          <source>svn copy -m "Create tag forrest_###xy###_release from release branch" \
-  https://svn.apache.org/repos/asf/forrest/branches/forrest_###xy###_branch \
-  https://svn.apache.org/repos/asf/forrest/tags/forrest_###xy###_release</source>
-          <p>
-            where '###xy###' is a compact (without the dots) form of the version
-            number (e.g. 04, 041, 05).
-          </p>
+          <source>svn copy -m "Create tag forrest_&db;_release from release branch" \
+  https://svn.apache.org/repos/asf/forrest/branches/forrest_&db;_branch \
+  https://svn.apache.org/repos/asf/forrest/tags/forrest_&db;_release</source>
           <p>
             See
             <a href="http://svn.apache.org/repos/asf/forrest/tags/">http://svn.apache.org/repos/asf/forrest/tags/</a>
-            for examples of past tags, e.g. forrest_08_release
+            for examples of past tags, e.g. forrest_&cb;_release
           </p>
           <fixme author="fso">
             If we change procedure to create an rc-branch this will become a
@@ -894,13 +922,10 @@ where
         <li><p>
             Tag the "site" SVN by doing:
           </p>
-          <source>svn copy -m "Create tag forrest_###xy###_release_site from site" \
+          <source>svn copy -m "Create tag forrest_&db;_release_site from site" \
   https://svn.apache.org/repos/asf/forrest/site \
-  https://svn.apache.org/repos/asf/forrest/tags/forrest_###xy###_release_site</source>
-          <p>
-            where '###xy###' is a compact (without the dots) form of the version
-            number (e.g. 04, 041, 05).
-          </p></li>
+  https://svn.apache.org/repos/asf/forrest/tags/forrest_&db;_release_site</source>
+          </li>
         <li><p>
             Announce the end of the code-freeze by sending the email-template
             <a
@@ -922,11 +947,13 @@ where
         <li>Create a copy of current dev-docs in trunk for the next development phase ...
            <source>
 cd site-author/content/xdocs
-svn copy &dd; &nd;
+svn rm &nd;/index.xml
+svn copy &dd;/* &nd;
 svn copy pluginDocs/&dp; &np;</source>
                 </li>
         <li>Edit site.xml and add a copy of the most current versioned section (e.g. &lt;v&ds;&gt;) above it.
             Increment the first decimal of the section's name to reflect the next planned release (e.g. &lt;v&ns;&gt;).
+            Note that some of this was already done above.
             </li>
         <li><p>Edit site-author/status.xml to add a new <code>
 <![CDATA[<release>]]>
@@ -942,7 +969,8 @@ svn copy pluginDocs/&dp; &np;</source>
   &lt;release version="&d;" date="&rdate;">
     &lt;action
     ...</source></li>
-        <li>Return the "dev" note to upgrading_xy.xml and add some of the orginal
+        <li>Return the "dev" note to &nd;/index.xml and to &nd;/upgrading_&nb;.xml
+          and add some of the orginal
           general points that still apply.</li>
         <li>Edit site-author/conf/cli.xconf to exclude the old docs again.</li>
         <li>Add new plugins directories to the "forrest/site" SVN ...
@@ -951,10 +979,10 @@ svn mkdir pluginDocs/&np;
 svn mkdir plugins/&n;</source></li>
         <li><p>
             Edit main/build.xml, increment the version and add a -dev tag:
-            around line 45: &lt;property name="version" value="&nt;"/>
+            around line 48: &lt;property name="version" value="&nt;"/>
           </p></li>
         <li><p>
-            Edit main/forrest.build.xml and update the version: around line 32:
+            Edit main/forrest.build.xml and update the version: around line 28:
           </p>
           <source>&lt;property name="version" value="&nt;"/></source></li>
         <li>Edit version numbers in plugins/build.xml</li>
@@ -976,13 +1004,12 @@ svn mkdir plugins/&n;</source></li>
           Note that we have copies <a href="https://issues.apache.org/jira/browse/FOR-1210">FOR-1210</a>.
         </li>
         <li>
-          Commit all of the above changes. Either wait for the cronjob,
-          or ssh in and do 'svn up'
+          Commit all of the above changes.
         </li>
-        <li>Remember that there is then a one hour rsync delay.</li>
+        <li>Remember do not publish the website yet.</li>
         <li>Send email to the dev list to remind people about the new docs set &nd;
         and that we don't update &pd; set. Also remind about the new release branch
-        of svn. See example email from the 0.8 release.</li>
+        of svn. See example email from the previous release.</li>
       </ul>
     </section>
     <section id="UploadAndAnnounce">
@@ -1039,6 +1066,13 @@ svn mkdir plugins/&n;</source></li>
             all automatically updated from the SVN:forrest/dist/ repository
             (<a href="#PrepDistSvn">explained</a> above).
           </note></li>
+        <li>
+            Wait for the various mirrors to pick up the new files.
+        </li>
+        <li>
+           Now that the propagation is underway, return to the previous
+           <a href="#prepSite">section</a> to continue with documentation preparation.
+        </li>
         <li><p>
             Wait for the various mirrors to pick up the new files.
           </p>
@@ -1072,9 +1106,15 @@ svn mkdir plugins/&n;</source></li>
             sure to use the new version of trunk for building the docs. Refer to
             <a href="site:howToPublishDocs">Publishing Forrest Documentation</a>
             for details. Beware, there is a forrestbot bug whereby with a brand new
-            forrest installation, the first deploy only does the added files. So deploy again. 
+            forrest installation, the first deploy only does the added files.
+            So do the "build and deploy" again. 
           </p></li>
-        <li>Test the new Forrest <a href="http://forrest.apache.org/">website</a>
+        <li>
+          Use the proxy trick to do a quick review before the publishing rsync
+          happens (see <a href="http://apache.org/dev/project-site.html">infra notes</a>).
+          There might still be a chance to re-deploy.
+        </li>
+        <li>After rsync, test the new Forrest <a href="http://forrest.apache.org/">website</a>
           and the redirects
           <a href="http://forrest.apache.org/docs/">f.a.o/docs/</a> and
           <a href="http://forrest.apache.org/docs/dev/">f.a.o/docs/dev/</a> and the
@@ -1129,9 +1169,12 @@ svn mkdir plugins/&n;</source></li>
                   which removes them from the website.
                 </li>
         <li><p>
-            Remove old dist files from the /www/www.apache.org/dist/forrest/
+            One day later, remove old dist files from the /www/www.apache.org/dist/forrest/
             directory. They have already been automatically archived at
             archive.apache.org/dist/forrest/
+          </p>
+          <p>
+            Tidy the archive area, being very careful.
           </p>
           <p>
             See Henk's cleanup
@@ -1164,6 +1207,10 @@ svn mkdir plugins/&n;</source></li>
           </ol></li>
         <li>Deploy the Forrest site again. It will automatically rebuild the
             <a href="site:forrest-issues">Open Issues</a> page.
+        </li>
+        <li>
+          Review Henk's 
+          <a href="http://people.apache.org/~henkp/">pgp checks and md5 checks</a>.
         </li>
       </ol>
     </section>
