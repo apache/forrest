@@ -140,7 +140,7 @@
   </xsl:template>
   <xsl:template match="resume:header">
     <header>
-      <title>CV for <xsl:value-of select="resume:name/resume:title"/>
+      <title><xsl:value-of select="resume:name/resume:title"/>
         <xsl:value-of select="resume:name/resume:firstname"/>
 <xsl:text> </xsl:text>
         <xsl:value-of select="resume:name/resume:surname"/></title>
