@@ -323,11 +323,10 @@
     </div>
   </xsl:template>
   <xsl:template match="resume:skill">
-    <div class="resume-skill">
-      <li><strong>
-        <xsl:value-of select="."/></strong>
-        <xsl:if test="@level"> (<xsl:value-of select="@level"/>)</xsl:if></li>
-    </div>
+    <li class="resume-skill">
+      <xsl:value-of select="."/>
+      <xsl:if test="@level"> (<xsl:value-of select="@level"/>)</xsl:if>
+    </li>
   </xsl:template>
   <xsl:template match="resume:para">
     <p>
