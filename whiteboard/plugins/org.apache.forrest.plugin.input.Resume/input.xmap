@@ -38,18 +38,18 @@
     <map:resource name="source-file-resolver">
       <map:select type="exists">
 <!-- FIXME: need to peek inside document to ensure it is the correct type -->
-        <map:when test="{properties:content.xdocs}{uri}.sxw">
-          <map:generate type="sxw" src="{properties:content.xdocs}{uri}.sxw"/>
-          <map:transform src="resources/stylesheets/ooToResume.xsl"/>
+        <map:when test="{lm:project.{uri}.sxw}">
+          <map:generate type="sxw" src="{lm:project.{uri}.sxw}"/>
+          <map:transform src="{lm:Resume.transform.oo.resume}"/>
           <map:serialize type="xml"/>
         </map:when>
         <map:when test="{lm:{uri}.xml}">
-          <map:generate src="{properties:content.xdocs}{uri}.xml"/>
+          <map:generate src="{lm:project.{uri}.xml}"/>
           <map:transform type="xinclude"/>
           <map:serialize type="xml"/>
         </map:when>
-        <map:when test="{properties:content.xdocs}{uri}.xml">
-          <map:generate src="{properties:content.xdocs}{uri}.xml"/>
+        <map:when test="{lm:project.{uri}.xml}">
+          <map:generate src="{lm:project.{uri}.xml}"/>
           <map:transform type="xinclude"/>
           <map:serialize type="xml"/>
         </map:when>
@@ -60,9 +60,9 @@
         <map:select type="parameter">
           <map:parameter name="parameter-selector-test" value="{sourcetype}" />
           <map:when test="resume-v1.5.1">
-            <map:generate src="{properties:content.xdocs}{../../1}.xml"/>
-            <map:transform src="resources/stylesheets/resume2xdoc.xsl" />
-            <map:serialize type="xml"/>
+            <map:generate src="{lm:project.{../../1}.xml}"/>
+            <map:transform src="{lm:Resume.transform.resume.document}" />
+            <map:serialize type="xml-document"/>
           </map:when>
         </map:select>
       </map:act>
@@ -72,7 +72,7 @@
     <map:pipeline>
       <map:match pattern="**.xml">
         <map:call resource="transform-to-document">
-          <map:parameter name="src" value="{properties:content.xdocs}{1}.xml" />
+          <map:parameter name="src" value="{lm:project.{1}.xml}" />
         </map:call>
       </map:match>
       <map:match pattern="**.source.xml">
@@ -81,16 +81,16 @@
         </map:call>
       </map:match>
       <map:match pattern="team/all.source.xml">
-        <map:generate type="directory" src="{properties:content.xdocs}/team/resume">
+        <map:generate type="directory" src="{lm:project.team/resume}">
           <map:parameter name="include" value=".*.xml$"/>
         </map:generate>
-        <map:transform src="resources/stylesheets/directory2resumes.xsl"/>
+        <map:transform src="{lm:Resume.transform.directory.resumes}"/>
         <map:transform type="cinclude"/>
         <map:serialize type="xml"/>
       </map:match>
       <map:match pattern="resume.site.snippet.xml">
         <map:generate src="cocoon:/team/all.source.xml"/>
-        <map:transform src="resources/stylesheets/resumes2resumeSiteSnippet.xsl"/>
+        <map:transform src="{lm:Resume.transform.resumes.resumeSiteSnippet}"/>
         <map:serialize type="xml"/>
       </map:match>
     </map:pipeline>
@@ -102,27 +102,27 @@
       </map:match>
       <map:match pattern="team/allBySkill.xml">
         <map:generate src="cocoon:/team/all.source.xml"/>
-        <map:transform src="resources/stylesheets/resumes2skillxdoc.xsl"/>
+        <map:transform src="{lm:Resume.transform.resumes.skillDocument}"/>
         <map:serialize type="xml"/>
       </map:match>
       <map:match pattern="team/all.xml">
         <map:generate src="cocoon:/team/all.source.xml"/>
-        <map:transform src="resources/stylesheets/resumes2xdoc.xsl">
+        <map:transform src="{lm:Resume.transform.resumes.document}">
           <map:parameter name="candidateSkill" value="{request:candidateSkill}"/>
         </map:transform>
-        <map:serialize type="xml"/>
+        <map:serialize type="xml-document"/>
       </map:match>
       <map:match pattern="team/allWithSkill/*.xml">
         <map:generate src="cocoon:/team/all.source.xml"/>
-        <map:transform src="resources/stylesheets/resumes2xdoc.xsl">
+        <map:transform src="{lm:Resume.transform.resumes.document}">
           <map:parameter name="candidateSkill" value="{1}"/>
         </map:transform>
-        <map:serialize type="xml"/>
+        <map:serialize type="xml-document"/>
       </map:match>
       <map:match pattern="team/skill/**.xml">
         <map:generate src="cocoon://team/all.xml"/>
-        <map:transform src="resources/stylesheets/resume2xdoc.xsl" />
-        <map:serialize type="xml"/>
+        <map:transform src="{lm:Resume.transform.resume.document}"/>
+        <map:serialize type="xml-document"/>
       </map:match>
     </map:pipeline>
   </map:pipelines>

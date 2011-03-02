@@ -20,7 +20,7 @@
     xmlns:tag="http://forrest.apache.org/TagExpansion/0.1"
     xmlns:resume="http://xmlresume.sourceforge.net/resume/0.0"
     version="1.0">
-  <xsl:import href="resume2xdoc.xsl"/>
+  <xsl:import href="lm://Resume.transform.resume.document"/>
   <xsl:param name="candidateSkill"/>
   <xsl:template match="/">
     <xsl:apply-templates select="resumes"/>
