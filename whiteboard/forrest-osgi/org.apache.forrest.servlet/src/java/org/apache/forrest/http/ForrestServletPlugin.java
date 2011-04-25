@@ -33,7 +33,7 @@ public class ForrestServletPlugin implements BundleActivator {
   private ServiceTracker mHttpTracker;
   private ForrestServlet mServlet;
 
-  @Override
+  // @Override
   public void start(final BundleContext context) throws Exception {
     LogPlugin.getDefault().getLogService().log(LogService.LOG_DEBUG, "http activator");
 
@@ -69,7 +69,7 @@ public class ForrestServletPlugin implements BundleActivator {
     }
   }
 
-  @Override
+  // @Override
   public void stop(BundleContext context) throws Exception {
     mHttpTracker.close();
   }

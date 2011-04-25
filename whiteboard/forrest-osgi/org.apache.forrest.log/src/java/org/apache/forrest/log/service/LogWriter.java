@@ -29,7 +29,7 @@ public class LogWriter implements LogListener {
 
   private static final Logger sLogger = LoggerFactory.getLogger(LogWriter.class);
 
-  @Override
+  // @Override
   public void logged(LogEntry entry) {
     int level = entry.getLevel();
 

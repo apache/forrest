@@ -31,12 +31,12 @@ public class ForrestStreamSource implements ForrestSource {
     mRawInputStream = input;
   }
 
-  @Override
+  // @Override
   public InputStream getInputStream() {
     return mRawInputStream;
   }
 
-  @Override
+  // @Override
   public String getSourceAsString() {
     if (null != mRawInputStream) {
       StringBuilder inputString = new StringBuilder();
@@ -59,7 +59,7 @@ public class ForrestStreamSource implements ForrestSource {
     return new String();
   }
 
-  @Override
+  // @Override
   public String getInternalRepresentationAsString() {
     if (null != mInternalString) {
       return mInternalString;
@@ -68,7 +68,7 @@ public class ForrestStreamSource implements ForrestSource {
     return new String();
   }
 
-  @Override
+  // @Override
   public void setInternalRepresentation(String internal) {
     mInternalString = internal;
   }

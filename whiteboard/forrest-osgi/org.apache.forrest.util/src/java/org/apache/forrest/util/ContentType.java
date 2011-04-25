@@ -25,7 +25,7 @@ public class ContentType {
   private static final Map<String, String> sContentTypeMap;
 
   public static String getExtensionByName(String name) {
-    if (null == name || name.isEmpty()) {
+    if (null == name || name.length() == 0) {
       throw new IllegalArgumentException("Argument must not be null or empty");
     }
 
@@ -39,7 +39,7 @@ public class ContentType {
   }
 
   public static String getContentTypeByName(String path) {
-    if (null == path || path.isEmpty()) {
+    if (null == path || path.length() == 0) {
       throw new IllegalArgumentException("Argument must not be null or empty");
     }
 
@@ -47,7 +47,7 @@ public class ContentType {
   }
 
   public static String getContentTypeByName(File file) {
-    if (null == file || file.getName().isEmpty()) {
+    if (null == file || file.getName().length() == 0) {
       throw new IllegalArgumentException("Argument must not be null or empty");
     }
 
