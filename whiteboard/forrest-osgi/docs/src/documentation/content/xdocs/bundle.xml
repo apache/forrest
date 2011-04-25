@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one or more
+  contributor license agreements.  See the NOTICE file distributed with
+  this work for additional information regarding copyright ownership.
+  The ASF licenses this file to You under the Apache License, Version 2.0
+  (the "License"); you may not use this file except in compliance with
+  the License.  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<!DOCTYPE document PUBLIC "-//APACHE//DTD Documentation V2.0//EN" "http://forrest.apache.org/dtd/document-v20.dtd">
+<document>
+  <header>
+    <title>Forrest Bundles</title>
+  </header>
+  <body>
+    <section id="overview">
+      <title>Anatomy of a Forrest bundle</title>
+      <p>
+        A forrest-osgi plugin is nothing more than a bundle, and a
+        bundle is simply a JAR file with OSGi metadata added to the
+        manifest. Forrest bundles are assembled from JAR files using
+        the bnd Ant task. See the <a href="ext:bnd">bnd tool</a> for
+        more information. The bndwrap task is also available as an
+        option, but bnd seems to be less lenient and leads to fast
+        discovery of build problems.
+      </p>
+      <p>
+        The bnd task is given the name of a file,
+        <code>log4j.bnd</code> for example, which controls how bnd
+        operates. There are also options given directly as attributes
+        to the bnd task within the Ant file.
+      </p>
+      <p>
+        The assembled bundles are gathered together in the
+        <code>bundle</code> directory, from which the launcher
+        installs them in the framework and starts them.
+      </p>
+      <p>
+        Some dependencies of forrest-osgi come in the form of bundles,
+        ready for OSGi. These are found in <code>lib/bundle</code>,
+        which are copied to <code>bundle</code> as part of the build
+        process.
+      </p>
+    </section>
+    <section id="implementation">
+      <title>Implementation choices</title>
+      <p>
+        There are several implementation choices available for an
+        OSGi-driven Forrest given the way the framework handles
+        bundles. Forrest plugins can be discovered by the use of
+        custom manifest headers; they can announce their presence by
+        publishing a service; they can bind to a published service and
+        register their existence through that service. There are many
+        choices available.
+      </p>
+    </section>
+  </body>
+</document>
