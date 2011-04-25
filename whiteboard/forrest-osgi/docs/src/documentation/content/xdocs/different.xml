@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one or more
+  contributor license agreements.  See the NOTICE file distributed with
+  this work for additional information regarding copyright ownership.
+  The ASF licenses this file to You under the Apache License, Version 2.0
+  (the "License"); you may not use this file except in compliance with
+  the License.  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<!DOCTYPE document PUBLIC "-//APACHE//DTD Documentation V2.0//EN" "http://forrest.apache.org/dtd/document-v20.dtd">
+<document>
+  <header>
+    <title>Differences in forrest-osgi</title>
+  </header>
+  <body>
+    <section id="overview">
+      <title>Overview</title>
+      <p>
+        The build process and invocation methods are similar, but not
+        the same. Building is done with Apache Ant&#153; and a shell
+        script is used to invoke the application.
+      </p>
+    </section>
+    <section id="build">
+      <title>Building forrest-osgi</title>
+      <p>
+        The build process involves a pair of Ant scripts at the top
+        level and another script for each plugin. The main process is
+        defined in <code>build.xml</code> and plugin bundles inherit
+        from <code>master.xml</code>. <code>$FORREST_HOME</code>
+        should point to the top of this whiteboard experiment,
+        <code>.../whiteboard/forrest-osgi</code>. The
+        default Ant target in <code>build.xml</code> will build the
+        launcher as well as all plugin bundles. The Ant script assumes
+        you have changed the environment variable
+        <code>$FORREST_HOME</code> as described.
+      </p>
+    </section>
+    <section id="run">
+      <title>Running forrest-osgi</title>
+      <p>
+        You may run forrest-osgi on an existing content object in
+        dynamic mode, but there is no method yet to provision a
+        content object (no <code>forrest seed</code>).
+      </p>
+      <p>
+        To run, modify <code>$FORREST_HOME</code> as described above
+        and invoke <code>$FORREST_HOME/bin/forrest</code>. The HTTP
+        Service will bind to port <code>8080</code> by default. The
+        controlling property is set in
+        <code>conf/config.properties</code>. There is an issue which
+        needs to be investigated and that is that not all of the
+        bundles shut down cleanly, and it prevents the JVM from
+        exiting without being explicitly killed.
+      </p>
+      <p>
+        Because forrest-osgi is not based on Cocoon, the method by
+        which it becomes a web application differs. Being web aware or
+        capable is no longer an inherited trait. Instead, forrest-osgi
+        is responsible for implementing and publishing its own
+        servlet. It does this by registering its servlet with the
+        Apache Felix&#153; implementation of the OSGi HTTP Service,
+        which uses Jetty behind the scenes.
+      </p>
+    </section>
+    <section id="plugins">
+      <title>Plugins in forrest-osgi</title>
+      <p>
+        There are differences in the plugin architecture that stem
+        simply from the fact that forrest-osgi is not based on Apache
+        Cocoon&#153;. The mechanism to resolve plugins is based on the
+        extension of the source document for a given request. This
+        mechanism needs improvement.
+      </p>
+      <p>
+        For the request <code>http://localhost:8080/index.html</code>,
+        the HTML output plugin is selected based on the request
+        itself. The local content object is searched for
+        <code>index.*</code> and the input plugin is chosen based on
+        the search results. Notice the port number in the example
+        request. The default port for forrest-osgi is unchanged from
+        the Apache Felix HTTP Service implementation
+        (<code>8080</code>), allowing forrest-osgi and other versions
+        of Forrest to run concurrently with default settings.
+      </p>
+      <p>
+        Skins and dispatcher themes can be encapsulated completely in
+        plugins and decoupled from core functionality. The locationmap
+        can also be encapsulated in this way. Implementation of these
+        rendering options has not yet started.
+      </p>
+    </section>
+    <section id="content">
+      <title>Content and transformation</title>
+      <p>
+        The experimental implementation uses bundle fragments to house
+        the resources and stylesheets needed by the input and output
+        plugins. Bundle fragments allow the resources to be versioned
+        separately from the code, and a change in one does not
+        necessarily trigger a build in the other. Bundle fragments
+        attach to their host bundle in the OSGi framework and their
+        classpaths combine in useful ways.
+      </p>
+    </section>
+    <section id="convention">
+      <title>Conventions used and abused in forrest-osgi</title>
+      <p>
+        A mix of conventions has been borrowed into the small code
+        base from several sources. This is to document what has been
+        done so far, not to prevent change.
+      </p>
+      <p>
+        <code>BundleActivator</code> classes have assumed the form
+        <code>FooBarPlugin</code>. <em>Plugin</em> at the end being
+        the marker of an activator. The activator is at the root of
+        the bundle's package space and must be exported.
+      </p>
+      <p>
+        Service implementation packages have assumed the form
+        <code>org.foo.bar.service</code>, and this implementation
+        package is generally <em>not</em> exported.
+      </p>
+      <p>
+        Plugin resource bundle fragments have assumed the form
+        <code>org.foo.plugin.x.y.res</code>, and their host
+        <code>org.foo.plugin.x.y</code>, where <code>x</code> is the
+        type of plugin and <code>y</code> is a short descriptor of the
+        content supported by the plugin. The main difference here from
+        standard Forrest is the resource bundle.
+      </p>
+    </section>
+  </body>
+</document>

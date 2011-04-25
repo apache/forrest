@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one or more
+  contributor license agreements.  See the NOTICE file distributed with
+  this work for additional information regarding copyright ownership.
+  The ASF licenses this file to You under the Apache License, Version 2.0
+  (the "License"); you may not use this file except in compliance with
+  the License.  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<!DOCTYPE document PUBLIC "-//APACHE//DTD Documentation V2.0//EN" "http://forrest.apache.org/dtd/document-v20.dtd">
+<document>
+  <header>
+    <title>Similarities in forrest-osgi</title>
+  </header>
+  <body>
+    <section id="overview">
+      <title>Overview</title>
+      <p>
+        The build process and invocation methods are similar, but not
+        the same. Building is done with Apache Ant&#153; and a shell
+        script is used to invoke the application. See the <a
+        href="site:more/different">differences</a>.
+      </p>
+    </section>
+    <section id="plugins">
+      <title>Plugins in forrest-osgi</title>
+      <p>
+        forrest-osgi maintains the concept of plugins. Plugins map
+        nicely to the OSGi&#153; concept of bundles, which embody the
+        missing modularity of the Java&#153; platform.
+      </p>
+      <p>
+        However, not every bundle in the system maps conceptually to a
+        Forrest 0.9 plugin. Some bundles provide system dependencies,
+        some even provide core functionality. A bundle is an excellent
+        candidate as a container for a Forrest plugin, but it is not
+        limited to this use.
+      </p>
+    </section>
+    <section id="content">
+      <title>Content and transformation</title>
+      <p>
+        As with Forrest plugins, forrest-osgi plugins exist to support
+        the gathering of content in various input formats and to
+        supply that content in various output formats.
+      </p>
+      <p>
+        In the current experimental implementation, the input plugin
+        has the burden of reading the source and transforming it into
+        an internal format. The output plugin operates on the internal
+        format supplied by the input plugin, and converts the content
+        into the desired output format. The workflow here is the same
+        as in Forrest 0.9.
+      </p>
+      <p>
+        At the moment, source content is assumed to be a local file on
+        disk in Document V2.0 format.
+      </p>
+    </section>
+  </body>
+</document>

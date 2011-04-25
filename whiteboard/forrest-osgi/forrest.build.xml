@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one or more
+  contributor license agreements.  See the NOTICE file distributed with
+  this work for additional information regarding copyright ownership.
+  The ASF licenses this file to You under the Apache License, Version 2.0
+  (the "License"); you may not use this file except in compliance with
+  the License.  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<project name="Apache Forrest" default="site">
+
+  <!-- 
+    Basedir is set to $PROJECT_HOME by `forrest' command,
+    which is the working directory from which `forrest' is called
+    regardless of any basedir setting in this file.
+  -->
+
+  <property environment="env" />
+
+  <property name="forrest.home" location="${env.FORREST_HOME}" />
+  <property name="forrest.bin.dir" location="${forrest.home}/bin" />
+  <property name="forrest.lib.dir" location="${forrest.home}/lib" />
+
+  <property name="tools.dir" location="${forrest.home}/tools" />
+  <property name="ant.dir" location="${tools.dir}/ant" />
+  <property name="bnd.dir" location="${tools.dir}/bnd" />
+  <property name="bnd.jar.file" location="${bnd.dir}/lib/bnd-0.0.384.jar" />
+
+  <property name="forrest.bundle.dir" location="${forrest.home}/bundle" />
+  <property name="forrest.bundle-cache.dir" location="${forrest.home}/felix-cache" />
+  <property name="forrest.osgi.conf.file"
+            location="${forrest.home}/conf/config.properties" />
+
+  <property name="project.home" location="." />
+  <property file="${project.home}/forrest.properties" />
+  <property file="${forrest.home}/conf/default-forrest.properties" />
+
+  <target name="init">
+  </target>
+
+  <target name="site" depends="init" description="* Generate static documentation">
+    <java classname="org.apache.forrest.Forrest"
+          fork="yes">
+      <jvmarg line="${forrest.jvmargs}" />
+      <classpath>
+        <fileset dir="${forrest.lib.dir}" includes="*.jar" />
+        <pathelement location="${forrest.home}/main/build/classes" />
+      </classpath>
+      <syspropertyset>
+        <propertyref prefix="forrest." />
+        <propertyref prefix="project." />
+      </syspropertyset>
+    </java>
+  </target>
+
+  <target name="run" depends="init" description="Run Apache Forrest in dynamic mode">
+  </target>
+
+</project>

@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one or more
+  contributor license agreements.  See the NOTICE file distributed with
+  this work for additional information regarding copyright ownership.
+  The ASF licenses this file to You under the Apache License, Version 2.0
+  (the "License"); you may not use this file except in compliance with
+  the License.  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<project name="Apache Forrest" default="compile-all">
+
+  <property environment="env" />
+
+  <property name="forrest.home" location="${env.FORREST_HOME}" />
+  <property name="forrest.bin.dir" location="${forrest.home}/bin" />
+  <property name="forrest.lib.dir" location="${forrest.home}/lib" />
+
+  <property name="tools.dir" location="${forrest.home}/tools" />
+  <property name="ant.dir" location="${tools.dir}/ant" />
+  <property name="bnd.dir" location="${tools.dir}/bnd" />
+  <property name="bnd.jar.file" location="${bnd.dir}/lib/bnd-0.0.384.jar" />
+
+  <!--
+    Keep these in sync with framework launch code
+    and framework config properties
+  -->
+  <property name="bundle.deploy.dir" location="${forrest.home}/bundle" />
+  <property name="osgi.cache.dir" location="${forrest.home}/felix-cache" />
+
+  <target name="init">
+    <mkdir dir="${bundle.deploy.dir}" />
+
+    <copy todir="${bundle.deploy.dir}">
+      <fileset dir="${forrest.lib.dir}/bundle" includes="*.jar" />
+    </copy>
+
+    <path id="classpath">
+      <fileset dir="${forrest.lib.dir}" includes="*.jar" />
+      <fileset dir="${bundle.deploy.dir}" includes="*.jar" />
+    </path>
+  </target>
+
+  <target name="compile-main" description="Build Apache Forrest launcher">
+    <ant dir="main" />
+  </target>
+
+  <target name="all-bundles" description="* Build all bundles">
+    <ant dir="org.apache.forrest.util" />
+
+    <ant dir="org.apache.forrest.log" />
+
+    <ant dir="org.apache.forrest.log4j.conf" />
+
+    <ant dir="org.apache.forrest.plugin.api" />
+
+    <ant dir="org.apache.forrest.servlet" />
+
+    <ant dir="org.apache.forrest.plugin.input.xdoc" />
+
+    <ant dir="org.apache.forrest.plugin.input.xdoc.res" />
+
+    <ant dir="org.apache.forrest.plugin.output.html" />
+
+    <ant dir="org.apache.forrest.plugin.output.html.res" />
+
+    <ant dir="org.apache.forrest.plugin.output.pdf" />
+
+    <ant dir="org.apache.forrest.plugin.output.pdf.res" />
+  </target>
+
+  <target name="compile-all"
+          description="* Compile everything"
+          depends="init,compile-main,all-bundles">
+  </target>
+
+  <target name="clean-all">
+    <ant dir="main" target="clean" />
+
+    <ant dir="org.apache.forrest.util" target="clean" />
+
+    <ant dir="org.apache.forrest.log" target="clean" />
+
+    <ant dir="org.apache.forrest.log4j.conf" target="clean" />
+
+    <ant dir="org.apache.forrest.plugin.api" target="clean" />
+
+    <ant dir="org.apache.forrest.servlet" target="clean" />
+
+    <ant dir="org.apache.forrest.plugin.input.xdoc" target="clean" />
+
+    <ant dir="org.apache.forrest.plugin.input.xdoc.res" target="clean" />
+
+    <ant dir="org.apache.forrest.plugin.output.html" target="clean" />
+
+    <ant dir="org.apache.forrest.plugin.output.html.res" target="clean" />
+  </target>
+
+  <target name="clean-bundle-dir">
+    <delete dir="${bundle.deploy.dir}" />
+  </target>
+
+  <target name="clean-cache">
+    <delete dir="${osgi.cache.dir}" />
+  </target>
+
+  <target name="clean" depends="clean-all,clean-bundle-dir,clean-cache" />
+
+</project>
