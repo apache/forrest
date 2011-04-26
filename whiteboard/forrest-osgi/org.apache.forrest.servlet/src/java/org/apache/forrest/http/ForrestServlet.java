@@ -57,33 +57,33 @@ public class ForrestServlet extends HttpServlet {
   public ForrestServlet(final BundleContext context) {
     mBundleContext = context;
 
-    Filter filter;
-
-    // track input plugins
     try {
-      filter = context.createFilter("(&("
-                                    + Constants.OBJECTCLASS
-                                    + "=" + ForrestPlugin.class.getName() + ")"
-                                    + "(pluginType=" + ForrestPlugin.TYPE_INPUT + ")"
-                                    + ")");
-      mInputPluginTracker = new ServiceTracker(context, filter, null);
+      // track input plugins
+      mInputPluginTracker = buildPluginTracker(ForrestPlugin.TYPE_INPUT);
       mInputPluginTracker.open();
-    } catch (InvalidSyntaxException ise) {
-      // TODO: log failure
-    }
 
-    // track output plugins
-    try {
-      filter = context.createFilter("(&("
-                                    + Constants.OBJECTCLASS
-                                    + "=" + ForrestPlugin.class.getName() + ")"
-                                    + "(pluginType=" + ForrestPlugin.TYPE_OUTPUT + ")"
-                                    + ")");
-      mOutputPluginTracker = new ServiceTracker(context, filter, null);
+      // track output plugins
+      mOutputPluginTracker = buildPluginTracker(ForrestPlugin.TYPE_OUTPUT);
       mOutputPluginTracker.open();
     } catch (InvalidSyntaxException ise) {
-      // TODO: log failure
+      // TODO handle failure with grace
+      LOG.debug("Failed to track plugins: " + ise);
     }
+  }
+
+  private ServiceTracker buildPluginTracker(String type) throws InvalidSyntaxException {
+    String filterFormat = new StringBuilder()
+      .append("(&(")
+      .append(Constants.OBJECTCLASS)
+      .append("=").append(ForrestPlugin.class.getName()).append(")")
+      .append("(pluginType=%s))").toString();
+
+    String filterString = String.format(filterFormat, type);
+    LOG.debug("Building service tracker with LDAP filter: " + filterString);
+
+    Filter filter = mBundleContext.createFilter(filterString);
+
+    return new  ServiceTracker(mBundleContext, filter, null);
   }
 
   @Override
@@ -91,10 +91,10 @@ public class ForrestServlet extends HttpServlet {
     throws ServletException, IOException {
 
     String pathInfo = req.getPathInfo();
-    LogPlugin.getDefault().getLogService().log(LogService.LOG_DEBUG, "doGet: " + pathInfo);
+    LOG.debug("doGet: " + pathInfo);
     File rootPath = new File(System.getProperty("project.home"),
                              System.getProperty("project.xdocs-dir"));
-    LogPlugin.getDefault().getLogService().log(LogService.LOG_DEBUG, "project.xdocs-dir: " + rootPath.getAbsolutePath());
+    LOG.debug("project.xdocs-dir: " + rootPath.getAbsolutePath());
 
     if (!rootPath.canRead()) {
       // not much to do if the source area is not readable
@@ -103,19 +103,19 @@ public class ForrestServlet extends HttpServlet {
       return;
     }
 
-    LogPlugin.getDefault().getLogService().log(LogService.LOG_DEBUG, "Can read " + rootPath.getAbsolutePath());
+    LOG.debug("Can read " + rootPath.getAbsolutePath());
     File source = new File(rootPath, pathInfo);
 
     if (source.canRead()) {
       // source exists on disk and is readable
-      LogPlugin.getDefault().getLogService().log(LogService.LOG_DEBUG, "Can read " + source.getAbsolutePath());
+      LOG.debug("Can read " + source.getAbsolutePath());
       doFileResponse(req, resp, source);
 
       return;
     }
 
     // source does not exist on disk or is not readable
-    LogPlugin.getDefault().getLogService().log(LogService.LOG_DEBUG, "Cannot read " + source.getAbsolutePath());
+    LOG.debug("Cannot read " + source.getAbsolutePath());
 
     File[] files = source.getParentFile().listFiles();
     Arrays.sort(files);
@@ -141,10 +141,9 @@ public class ForrestServlet extends HttpServlet {
 
         if (extension > 0) {
           String base = name.substring(0, extension);
-          LogPlugin.getDefault().getLogService().log(LogService.LOG_DEBUG, name + " --> " + base);
+          LOG.debug(name + " --> " + base);
 
           if (base.equals(sourceBasename)) {
-            LogPlugin.getDefault().getLogService().log(LogService.LOG_DEBUG, "Found something, right here");
             foundMatch = true;
             sourceUri = files[i].toURI();
             break;
@@ -158,7 +157,7 @@ public class ForrestServlet extends HttpServlet {
       String sourceFormat = name;
       String logMsg = "transform input " + sourceFormat + " into output " + requestUri;
 
-      LogPlugin.getDefault().getLogService().log(LogService.LOG_DEBUG, logMsg);
+      LOG.debug(logMsg);
 
       String pluginType;
 
@@ -172,21 +171,21 @@ public class ForrestServlet extends HttpServlet {
           for (int i = 0; i < outRefs.length; i++) {
             // XXX use property name, something like PROP_CONTENT_TYPE
             pluginType = (String) outRefs[i].getProperty("contentType");
-            LogPlugin.getDefault().getLogService().log(LogService.LOG_DEBUG, "Found an output plugin for format: " + pluginType);
+            LOG.debug("Found an output plugin for format: " + pluginType);
 
             if (null != pluginType
                 && pluginType.equals
                 (ContentType.getContentTypeByName(requestUri))) {
-              LogPlugin.getDefault().getLogService().log(LogService.LOG_DEBUG, "It's a match. Transform it.");
+              LOG.debug("It's a match. Transform it.");
 
               outputPlugin = (ForrestPlugin) mOutputPluginTracker.getService(outRefs[i]);
               break;
             } else {
-              LogPlugin.getDefault().getLogService().log(LogService.LOG_DEBUG, "Skipping " + pluginType + " format for " + ContentType.getContentTypeByName(requestUri));
+              LOG.debug("Skipping " + pluginType + " format for " + ContentType.getContentTypeByName(requestUri));
             }
           }
         } else {
-          LogPlugin.getDefault().getLogService().log(LogService.LOG_DEBUG, "List of output plugins is null");
+          LOG.debug("List of output plugins is null");
         }
       }
 
@@ -200,24 +199,22 @@ public class ForrestServlet extends HttpServlet {
           for (int i = 0; i < inRefs.length; i++) {
             // XXX use property, something like PROP_CONTENT_TYPE
             pluginType = (String) inRefs[i].getProperty("contentType");
-            LogPlugin.getDefault().getLogService().log(LogService.LOG_DEBUG, "Found an input plugin for format: " + pluginType);
+            LOG.debug("Found an input plugin for format: " + pluginType);
 
             if (null != pluginType
                 && pluginType.equals
                 (ContentType.getContentTypeByName(sourceFormat))) {
-              LogPlugin.getDefault().getLogService().log(LogService.LOG_DEBUG, "It's a match. Transform it.");
+              LOG.debug("It's a match. Transform it.");
 
               inputPlugin = (ForrestPlugin) mInputPluginTracker.getService(inRefs[i]);
               break;
             } else {
-              LogPlugin.getDefault().getLogService().log
-                (LogService.LOG_DEBUG,
-                 "Skipping " + pluginType + " format for "
-                 + ContentType.getContentTypeByName(sourceFormat));
+              LOG.debug("Skipping " + pluginType + " format for "
+                        + ContentType.getContentTypeByName(sourceFormat));
             }
           }
         } else {
-          LogPlugin.getDefault().getLogService().log(LogService.LOG_DEBUG, "List of input plugins is null");
+          LOG.debug("List of input plugins is null");
         }
       }
 
@@ -283,6 +280,21 @@ public class ForrestServlet extends HttpServlet {
 
   private String redirectTo(String path, String index) {
     return path + (path.endsWith("/") ? "" : "/") + index;
+  }
+
+  /*
+   * Convenience wrapper to allow typing LOG.debug(msg)
+   */
+  static class LOG {
+
+    static void debug(String msg) {
+      LogService service = LogPlugin.getDefault().getLogService();
+
+      if (null != service) {
+        service.log(LogService.LOG_DEBUG, msg);
+      }
+    }
+
   }
 
 }
