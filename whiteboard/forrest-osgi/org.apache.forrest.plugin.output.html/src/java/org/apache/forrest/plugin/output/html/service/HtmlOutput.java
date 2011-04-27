@@ -36,7 +36,7 @@ import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.log.LogService;
 
-import org.apache.forrest.log.LogPlugin;
+import org.apache.forrest.log.LogPlugin.LOG;
 import org.apache.forrest.plugin.api.BaseOutputPlugin;
 import org.apache.forrest.plugin.api.ForrestResult;
 import org.apache.forrest.plugin.api.ForrestSource;
@@ -56,12 +56,11 @@ public class HtmlOutput extends BaseOutputPlugin {
       throw new IllegalArgumentException("I told you, null won't work");
     }
 
-    LogPlugin.getDefault().getLogService().log
-      (LogService.LOG_DEBUG,
-       "Hello, this is the html output plugin handling transform(" + source + ")");
+    LOG.debug("Hello, this is the html output plugin handling transform(" + source + ")");
 
     try {
-      ServiceReference[] refs = getBundleContext().getServiceReferences(TransformerFactory.class.getName(), null);
+      ServiceReference[] refs = getBundleContext().getServiceReferences
+        (TransformerFactory.class.getName(), null);
       TransformerFactory factory = null;
 
       if (null != refs) {
@@ -70,46 +69,27 @@ public class HtmlOutput extends BaseOutputPlugin {
           Object obj = getBundleContext().getService(refs[i]);
 
           if (null != obj && obj instanceof TransformerFactory) {
-            LogPlugin.getDefault().getLogService().log
-              (LogService.LOG_DEBUG,
-               "Found the right class: " + obj.getClass().getName());
             factory = (TransformerFactory) obj;
             break;
           } else {
             if (null != obj) {
-              LogPlugin.getDefault().getLogService().log
-                (LogService.LOG_DEBUG,
-                 "Found the wrong class: " + obj.getClass().getName());
+              LOG.debug("Found the wrong class: " + obj.getClass().getName());
             } else {
-              LogPlugin.getDefault().getLogService().log
-                (LogService.LOG_DEBUG,
-                 "Null service");
+              LOG.debug("Could not find TransformerFactory through service registry");
             }
           }
         }
       }
 
       if (null != factory) {
-        LogPlugin.getDefault().getLogService().log
-          (LogService.LOG_DEBUG,
-           "factory " + factory.getClass().getName());
-
         InputStream in = HtmlOutput.class.getClassLoader().getResourceAsStream
           ("resources/stylesheets/internal-to-html.xsl");
 
         if (null != in) {
-          LogPlugin.getDefault().getLogService().log
-            (LogService.LOG_DEBUG,
-             "Found the output stylesheet");
+          LOG.debug("Found the output stylesheet");
 
           Transformer transformer = factory.newTransformer
             (new StreamSource(in));
-
-          if (null != transformer) {
-            LogPlugin.getDefault().getLogService().log
-              (LogService.LOG_DEBUG,
-               "transformer " + transformer.getClass().getName());
-          }
 
           ByteArrayOutputStream bytes = new ByteArrayOutputStream();
           StreamResult internalStream = new StreamResult(bytes);
@@ -155,31 +135,17 @@ public class HtmlOutput extends BaseOutputPlugin {
 
           return forrestResult;
         } else {
-          LogPlugin.getDefault().getLogService().log
-            (LogService.LOG_DEBUG,
-             "Didn't find the stylesheet");
+          LOG.debug("Didn't find the stylesheet");
         }
       }
     } catch (InvalidSyntaxException ise) {
-      LogPlugin.getDefault().getLogService().log
-        (LogService.LOG_DEBUG,
-         "Check your filter string",
-         ise);
+      LOG.debug("Check your filter string", ise);
     } catch (TransformerFactoryConfigurationError tfce) {
-      LogPlugin.getDefault().getLogService().log
-        (LogService.LOG_DEBUG,
-         "There is a problem at the factory",
-         tfce);
+      LOG.debug("There is a problem at the factory", tfce);
     } catch (TransformerConfigurationException tce) {
-      LogPlugin.getDefault().getLogService().log
-        (LogService.LOG_DEBUG,
-         "The transformer could not be configured",
-         tce);
+      LOG.debug("The transformer could not be configured", tce);
     } catch (TransformerException te) {
-      LogPlugin.getDefault().getLogService().log
-        (LogService.LOG_DEBUG,
-         "The transformation broke",
-         te);
+      LOG.debug("The transformation broke", te);
     }
 
     return null;

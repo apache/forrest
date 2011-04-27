@@ -41,7 +41,7 @@ import org.osgi.framework.ServiceReference;
 import org.osgi.service.log.LogService;
 import org.osgi.util.tracker.ServiceTracker;
 
-import org.apache.forrest.log.LogPlugin;
+import org.apache.forrest.log.LogPlugin.LOG;
 import org.apache.forrest.plugin.api.ForrestPlugin;
 import org.apache.forrest.plugin.api.ForrestResult;
 import org.apache.forrest.util.ContentType;
@@ -280,21 +280,6 @@ public class ForrestServlet extends HttpServlet {
 
   private String redirectTo(String path, String index) {
     return path + (path.endsWith("/") ? "" : "/") + index;
-  }
-
-  /*
-   * Convenience wrapper to allow typing LOG.debug(msg)
-   */
-  static class LOG {
-
-    static void debug(String msg) {
-      LogService service = LogPlugin.getDefault().getLogService();
-
-      if (null != service) {
-        service.log(LogService.LOG_DEBUG, msg);
-      }
-    }
-
   }
 
 }

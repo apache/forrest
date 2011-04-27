@@ -20,7 +20,7 @@ import java.net.URI;
 import org.osgi.framework.BundleContext;
 import org.osgi.service.log.LogService;
 
-import org.apache.forrest.log.LogPlugin;
+import org.apache.forrest.log.LogPlugin.LOG;
 import org.apache.forrest.plugin.api.ForrestResult;
 import org.apache.forrest.plugin.api.ForrestSource;
 
@@ -31,15 +31,13 @@ public class BaseOutputPlugin extends AbstractPlugin {
   }
 
   public ForrestSource getSource(URI uri) {
-    LogPlugin.getDefault().getLogService().log
-      (LogService.LOG_DEBUG, "getSource() called on an output plugin, ignoring");
+    LOG.debug("getSource() called on an output plugin, ignoring");
 
     return null;
   }
 
   public ForrestResult transform(ForrestSource source) {
-    LogPlugin.getDefault().getLogService().log
-      (LogService.LOG_DEBUG, "BaseOutputPlugin.transform() must be implemented by a plugin, ignoring");
+    LOG.debug("BaseOutputPlugin.transform() must be implemented by a plugin, ignoring");
 
     return null;
   }

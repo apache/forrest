@@ -44,7 +44,7 @@ public class LogPlugin implements BundleActivator {
       System.out.println("Registering LogWriter");
       LogReaderService readerService = (LogReaderService) context.getService(readerRef);
       readerService.addLogListener(new LogWriter());
-      getDefault().getLogService().log(LogService.LOG_DEBUG, "Log bundle starting (and self-hosting)");
+      LOG.debug("Log bundle starting (and self-hosting)");
     } else {
       System.out.println("Could not add log listener (LogReaderService is unavailable)");
     }
@@ -56,14 +56,30 @@ public class LogPlugin implements BundleActivator {
     System.out.println("Log bundle stopping");
   }
 
-  public static LogPlugin getDefault() {
-    return sInstance;
+  public LogService getLogService() {
+    LogService service = (LogService) mLogTracker.getService();
+
+    return service;
   }
 
-  public LogService getLogService() {
-    LogService theServ = (LogService) mLogTracker.getService();
+  /*
+   * Convenience wrapper to allow typing LOG.debug(msg)
+   * FIXME: this is probably a terrible idea
+   */
+  public static class LOG {
 
-    return theServ;
+    public static void debug(String msg) {
+      LogService service = sInstance.getLogService();
+
+      if (null != service) {
+        service.log(LogService.LOG_DEBUG, msg);
+      }
+    }
+
+    public static void debug(String msg, Throwable t) {
+      debug(msg + ": " + t.getMessage());
+    }
+
   }
 
 }

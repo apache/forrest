@@ -35,7 +35,7 @@ import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.log.LogService;
 
-import org.apache.forrest.log.LogPlugin;
+import org.apache.forrest.log.LogPlugin.LOG;
 import org.apache.forrest.plugin.api.BaseInputPlugin;
 import org.apache.forrest.plugin.api.ForrestResult;
 import org.apache.forrest.plugin.api.ForrestSource;
@@ -55,12 +55,11 @@ public class XDocInput extends BaseInputPlugin {
       throw new IllegalArgumentException("I told you, null won't work");
     }
 
-    LogPlugin.getDefault().getLogService().log
-      (LogService.LOG_DEBUG,
-       "Hello, this is the xdoc input plugin handling getSource(" + uri + ")");
+    LOG.debug("Hello, this is the xdoc input plugin handling getSource(" + uri + ")");
 
     try {
-      ServiceReference[] refs = getBundleContext().getServiceReferences(TransformerFactory.class.getName(), null);
+      ServiceReference[] refs = getBundleContext().getServiceReferences
+        (TransformerFactory.class.getName(), null);
       TransformerFactory factory = null;
 
       if (null != refs) {
@@ -69,46 +68,29 @@ public class XDocInput extends BaseInputPlugin {
           Object obj = getBundleContext().getService(refs[i]);
 
           if (null != obj && obj instanceof TransformerFactory) {
-            LogPlugin.getDefault().getLogService().log
-              (LogService.LOG_DEBUG,
-               "Found the right class: " + obj.getClass().getName());
             factory = (TransformerFactory) obj;
             break;
           } else {
             if (null != obj) {
-              LogPlugin.getDefault().getLogService().log
-                (LogService.LOG_DEBUG,
-                 "Found the wrong class: " + obj.getClass().getName());
+              LOG.debug("Found the wrong class: " + obj.getClass().getName());
             } else {
-              LogPlugin.getDefault().getLogService().log
-                (LogService.LOG_DEBUG,
-                 "Null service");
+              LOG.debug("Could not find TransformerFactory through service registry");
             }
           }
         }
       }
 
       if (null != factory) {
-        LogPlugin.getDefault().getLogService().log
-          (LogService.LOG_DEBUG,
-           "factory " + factory.getClass().getName());
+        LOG.debug("factory " + factory.getClass().getName());
 
         InputStream in = XDocInput.class.getClassLoader().getResourceAsStream
           ("resources/stylesheets/documentv20-to-internal.xsl");
 
         if (null != in) {
-          LogPlugin.getDefault().getLogService().log
-            (LogService.LOG_DEBUG,
-             "Found the input stylesheet");
+          LOG.debug("Found the input stylesheet");
 
           Transformer transformer = factory.newTransformer
             (new StreamSource(in));
-
-          if (null != transformer) {
-            LogPlugin.getDefault().getLogService().log
-              (LogService.LOG_DEBUG,
-               "transformer " + transformer.getClass().getName());
-          }
 
           ByteArrayOutputStream bytes = new ByteArrayOutputStream();
           StreamResult internalStream = new StreamResult(bytes);
@@ -132,41 +114,21 @@ public class XDocInput extends BaseInputPlugin {
 
           return forrestSource;
         } else {
-          LogPlugin.getDefault().getLogService().log
-            (LogService.LOG_DEBUG,
-             "Didn't find the stylesheet");
+          LOG.debug("Didn't find the stylesheet");
         }
       }
     } catch (InvalidSyntaxException ise) {
-      LogPlugin.getDefault().getLogService().log
-        (LogService.LOG_DEBUG,
-         "Check your filter string",
-         ise);
+      LOG.debug("Check your filter string", ise);
     } catch (TransformerFactoryConfigurationError tfce) {
-      LogPlugin.getDefault().getLogService().log
-        (LogService.LOG_DEBUG,
-         "There is a problem at the factory",
-         tfce);
+      LOG.debug("There is a problem at the factory", tfce);
     } catch (TransformerConfigurationException tce) {
-      LogPlugin.getDefault().getLogService().log
-        (LogService.LOG_DEBUG,
-         "The transformer could not be configured",
-         tce);
+      LOG.debug("The transformer could not be configured", tce);
     } catch (TransformerException te) {
-      LogPlugin.getDefault().getLogService().log
-        (LogService.LOG_DEBUG,
-         "The transformation broke",
-         te);
+      LOG.debug("The transformation broke", te);
     } catch (MalformedURLException mue) {
-      LogPlugin.getDefault().getLogService().log
-        (LogService.LOG_DEBUG,
-         "The given URL is invalid",
-         mue);
+      LOG.debug("The given URL is invalid", mue);
     } catch (IOException ioe) {
-      LogPlugin.getDefault().getLogService().log
-        (LogService.LOG_DEBUG,
-         "There is a problem reading the resource",
-         ioe);
+      LOG.debug("There is a problem reading the resource", ioe);
     }
 
     return null;

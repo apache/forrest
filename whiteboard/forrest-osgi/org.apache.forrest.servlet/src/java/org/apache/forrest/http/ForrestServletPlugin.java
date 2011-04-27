@@ -26,7 +26,7 @@ import org.osgi.service.http.NamespaceException;
 import org.osgi.service.log.LogService;
 import org.osgi.util.tracker.ServiceTracker;
 
-import org.apache.forrest.log.LogPlugin;
+import org.apache.forrest.log.LogPlugin.LOG;
 
 public class ForrestServletPlugin implements BundleActivator {
 
@@ -35,7 +35,7 @@ public class ForrestServletPlugin implements BundleActivator {
 
   // @Override
   public void start(final BundleContext context) throws Exception {
-    LogPlugin.getDefault().getLogService().log(LogService.LOG_DEBUG, "http activator");
+    LOG.debug("Servlet plugin starting");
 
     // track OSGi HTTP service
     mHttpTracker = new ServiceTracker(context, HttpService.class.getName(), null);
@@ -71,6 +71,7 @@ public class ForrestServletPlugin implements BundleActivator {
 
   // @Override
   public void stop(BundleContext context) throws Exception {
+    LOG.debug("Servlet plugin stopping");
     mHttpTracker.close();
   }
 
