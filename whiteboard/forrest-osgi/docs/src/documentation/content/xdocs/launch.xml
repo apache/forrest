@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one or more
+  contributor license agreements.  See the NOTICE file distributed with
+  this work for additional information regarding copyright ownership.
+  The ASF licenses this file to You under the Apache License, Version 2.0
+  (the "License"); you may not use this file except in compliance with
+  the License.  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<!DOCTYPE document PUBLIC "-//APACHE//DTD Documentation V2.0//EN" "http://forrest.apache.org/dtd/document-v20.dtd">
+<document>
+  <header>
+    <title>Launching forrest-osgi</title>
+  </header>
+  <body>
+    <section id="overview">
+      <title>Overview</title>
+      <p>
+        Launching forrest-osgi is very similar to launching the
+        released version, except that static site generation is not
+        yet implemented. Because of the presence of bundle
+        <code>org.apache.forrest.servlet</code>, and the absence of
+        any static implementation, the default <code>site</code>
+        target actually launches dynamic mode, analogous to
+        <code>forrest run</code> in the released version.
+      </p>
+      <p>
+        Files involved: <code>forrest.build.xml</code>,
+        <code>bin/forrest</code>
+      </p>
+    </section>
+    <section id="launcher">
+      <title>Launcher</title>
+      <p>
+        There is a custom launcher started in <a
+        href="ext:asfSvn/forrest/customLauncher">main/src/java/org/apache/forrest/Forrest.java</a>. Custom
+        launcher meaning a way to start an OSGi framework
+        instance. Once a framework implementation is found and
+        started, the launcher enumerates the contents of
+        <code>bundle</code> directory and installs all the bundles it
+        finds. It then starts all non-fragment bundles. Instead of
+        explicitly starting a fragment, which would throw an
+        exception, the fragment is bound to its host bundle by the
+        framework.
+      </p>
+      <p>
+        To accomplish the steps above, it is not necessary to have a
+        custom launcher. There are standard ways to launch the
+        framework which would result in the above. The idea behind a
+        custom launcher is to provide hooks into the launch
+        sequence. For example, the launcher can read
+        <code>forrest.properties</code> and load only the bundles
+        required by the calling project, rather than all bundles. The
+        launcher could also configure itself based on static or
+        dynamic mode.
+      </p>
+    </section>
+    <section id="running">
+      <title>After launch</title>
+      <p>
+        When the launcher is finished starting bundles, the OSGi
+        framework is in control. <code>BundleActivator</code> classes
+        are executed for bundles that declare one. These are generally
+        used to publish a service or bind to a published service. The
+        bundle <code>org.apache.forrest.log</code> discovers any
+        registered implementations of the service <a
+        href="site:osgi/javadoc/v42/LogService">LogService</a> and
+        adds a <a
+        href="site:osgi/javadoc/v42/LogListener">listener</a>
+        implementation to provide access to Log4j, by way of
+        SLF4J. The bundle <code>org.apache.forrest.servlet</code>
+        discovers <a
+        href="site:osgi/javadoc/v42/HttpService">HttpService</a> and
+        registers a servlet to enable dynamic mode operation.
+      </p>
+      <p>
+        Now, the framework and bundles continue to run without
+        intervention. It is possible to dynamically install, remove or
+        update bundles, all without restarting the framework. It is
+        also possible to run multiple versions of a bundle
+        simultaneously. This is the beauty of OSGi. The current
+        implementation of forrest-osgi <em>does not</em> check for
+        bundles installed, removed or changed on the fly, but the
+        infrastructure to handle it is already present in the
+        framework. It is just a matter of taking the time to implement
+        it.
+      </p>
+    </section>
+  </body>
+</document>
