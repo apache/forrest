@@ -30,6 +30,8 @@ import org.apache.forrest.log.LogPlugin.LOG;
 
 public class ForrestServletPlugin implements BundleActivator {
 
+  private static final String SERVLET_ALIAS = "/";
+
   private ServiceTracker mHttpTracker;
   private ForrestServlet mServlet;
 
@@ -57,7 +59,7 @@ public class ForrestServletPlugin implements BundleActivator {
 
       if (null != service) {
         try {
-          service.registerServlet("/", mServlet, null, null);
+          service.registerServlet(SERVLET_ALIAS, mServlet, null, null);
         } catch (ServletException e) {
           e.printStackTrace();
         } catch (NamespaceException e) {
@@ -72,6 +74,19 @@ public class ForrestServletPlugin implements BundleActivator {
   // @Override
   public void stop(BundleContext context) throws Exception {
     LOG.debug("Servlet plugin stopping");
+
+    /*
+     * Clean up our servlet registration
+     * Without this, the framework would still unregister for us
+     * but this is the only way to have destroy() called on our
+     * servlet
+     */
+    HttpService service = (HttpService) mHttpTracker.getService();
+
+    if (null != service) {
+      service.unregister(SERVLET_ALIAS);
+    }
+
     mHttpTracker.close();
   }
 

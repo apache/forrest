@@ -282,4 +282,11 @@ public class ForrestServlet extends HttpServlet {
     return path + (path.endsWith("/") ? "" : "/") + index;
   }
 
+  @Override
+  public void destroy() {
+    mInputPluginTracker.close();
+    mOutputPluginTracker.close();
+    mBundleContext = null;
+  }
+
 }
