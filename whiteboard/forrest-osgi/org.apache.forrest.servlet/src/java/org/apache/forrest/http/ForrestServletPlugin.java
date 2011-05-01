@@ -28,13 +28,36 @@ import org.osgi.util.tracker.ServiceTracker;
 
 import org.apache.forrest.log.LogPlugin.LOG;
 
+/**
+ * Registers a servlet with the OSGi HTTP Service with alias
+ * <code>ForrestServletPlugin.SERVLET_ALIAS</code>.
+ */
 public class ForrestServletPlugin implements BundleActivator {
 
+  /**
+   * Alias with which to register servlet.
+   * <p>
+   * A servlet alias of <code>/foo</code> will be accessible as
+   * <code>http://localhost:8080/foo</code>.
+   * @see HttpService#registerServlet(String, Servlet, Dictionary, HttpContext)
+   */
   private static final String SERVLET_ALIAS = "/";
 
+  /**
+   * {@link ServiceTracker} to track the {@link HttpService}.
+   */
   private ServiceTracker mHttpTracker;
+
+  /**
+   * Main servlet instance.
+   */
   private ForrestServlet mServlet;
 
+  /**
+   * Starts tracking the {@link HttpService} and registers the servlet
+   * instance.
+   * @param context this bundle's context within the framework
+   */
   // @Override
   public void start(final BundleContext context) throws Exception {
     LOG.debug("Servlet plugin starting");
@@ -71,6 +94,16 @@ public class ForrestServletPlugin implements BundleActivator {
     }
   }
 
+  /**
+   * Unregisters the servlet so that destroy is called on it. The
+   * framework would still unregister the servlet without this call,
+   * but then destroy would not be called on it.
+   *
+   * @param context this bundle's context within the framework
+   *
+   * @see HttpService#unregister(String)
+   * @see javax.servlet.Servlet#destroy()
+   */
   // @Override
   public void stop(BundleContext context) throws Exception {
     LOG.debug("Servlet plugin stopping");

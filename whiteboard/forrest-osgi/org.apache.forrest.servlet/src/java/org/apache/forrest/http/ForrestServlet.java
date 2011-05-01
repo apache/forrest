@@ -46,14 +46,38 @@ import org.apache.forrest.plugin.api.ForrestPlugin;
 import org.apache.forrest.plugin.api.ForrestResult;
 import org.apache.forrest.util.ContentType;
 
+/**
+ * Implements the main Forrest servlet.
+ */
 public class ForrestServlet extends HttpServlet {
 
   private static final long serialVersionUID = 3575916939233594893L;
 
+  /**
+   * Stores reference to {@link BundleContext} to enable communication
+   * with the framework. Needed to create local {@link ServiceTracker}s
+   * and {@link Filter}s.
+   */
   private BundleContext mBundleContext;
+
+  /**
+   * Tracks registered input plugins.
+   */
   private ServiceTracker mInputPluginTracker;
+
+  /**
+   * Tracks registered output plugins.
+   */
   private ServiceTracker mOutputPluginTracker;
 
+  /**
+   * Constructs a servlet with the given context.
+   *
+   * @param context this bundle's context within the framework
+   *
+   * @see ServiceTracker#ServiceTracker(BundleContext, Filter, ServiceTrackerCustomizer)
+   * @see BundleContext#createFilter(String)
+   */
   public ForrestServlet(final BundleContext context) {
     mBundleContext = context;
 
