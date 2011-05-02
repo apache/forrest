@@ -22,10 +22,13 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.URI;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Enumeration;
 import java.util.Hashtable;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -47,8 +50,6 @@ import org.osgi.service.log.LogService;
 import org.osgi.util.tracker.ServiceTracker;
 
 import org.apache.forrest.log.LogPlugin.LOG;
-import org.apache.forrest.plugin.api.ForrestPlugin;
-import org.apache.forrest.plugin.api.ForrestResult;
 import org.apache.forrest.util.ContentType;
 
 public class LogServlet extends HttpServlet {
@@ -56,14 +57,9 @@ public class LogServlet extends HttpServlet {
   private static final long serialVersionUID = 3575916939233594893L;
 
   private BundleContext mBundleContext;
-  private ServiceTracker mTracker;
 
   public LogServlet(final BundleContext context) {
     mBundleContext = context;
-    mTracker = new ServiceTracker(mBundleContext,
-                                  LogReaderService.class.getName(),
-                                  null);
-    mTracker.open();
   }
 
   @Override
@@ -78,56 +74,19 @@ public class LogServlet extends HttpServlet {
       throw new IllegalArgumentException("null writer in printLatestEntries()");
     }
 
-    LogReaderService service = (LogReaderService) mTracker.getService();
+    if (!LogBuffer.sLogBuffer.isEmpty()) {
+      Iterator<String> iterator = LogBuffer.sLogBuffer.iterator();
 
-    if (null != service) {
-      Enumeration<?> logEntries = service.getLog();
-
-      if (null != logEntries) {
-        while (logEntries.hasMoreElements()) {
-          LogEntry entry = (LogEntry) logEntries.nextElement();
-          Bundle bundle = entry.getBundle();
-          String symName = "";
-          String version = "";
-
-          if (null != bundle) {
-            symName = bundle.getSymbolicName();
-            version = bundle.getVersion().toString();
-          }
-
-          StringBuilder msg = new StringBuilder();
-          msg.append(logLevelToString(entry.getLevel()))
-            .append(": ")
-            .append(symName)
-            .append(" (")
-            .append(version)
-            .append(") ")
-            .append(entry.getMessage());
-
-          writer.println(msg.toString());
-        }
+      while (iterator.hasNext()) {
+        writer.println(iterator.next());
       }
-    }
-  }
-
-  private String logLevelToString(int level) {
-    switch (level) {
-    case LogService.LOG_ERROR:
-      return "ERROR";
-    case LogService.LOG_WARNING:
-      return "WARN";
-    case LogService.LOG_INFO:
-      return "INFO";
-    case LogService.LOG_DEBUG:
-      return "DEBUG";
-    default:
-      return "UNKNOWN";
+    } else {
+      writer.println("no log entries");
     }
   }
 
   @Override
   public void destroy() {
-    mTracker.close();
     mBundleContext = null;
   }
 

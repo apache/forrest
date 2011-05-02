@@ -14,24 +14,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.forrest.log.service;
+package org.apache.forrest.log.servlet.service;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Vector;
 
 import org.osgi.framework.Bundle;
 import org.osgi.service.log.LogEntry;
 import org.osgi.service.log.LogListener;
 import org.osgi.service.log.LogService;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+public class LogBuffer implements LogListener {
 
-public class LogWriter implements LogListener {
+  private static final int MAX_LOG_ENTRIES = 1024;
 
-  private static final String[] LEVEL_STRING = { "", "ERROR", "WARNING", "INFO", "DEBUG" };
-
-  private static final Logger sLogger = LoggerFactory.getLogger(LogWriter.class);
+  static Vector<String> sLogBuffer = new Vector<String>(MAX_LOG_ENTRIES);
 
   // @Override
   public void logged(LogEntry entry) {
@@ -53,32 +51,15 @@ public class LogWriter implements LogListener {
     StringBuilder msg = new StringBuilder();
     msg.append(dateFormat.format(entryTimeStamp))
       .append(" ")
-      // .append(logLevelToString(entry.getLevel()))
-      // .append(" ")
+      .append(logLevelToString(entry.getLevel()))
+      .append(" ")
       .append(symName)
       .append(" (")
       .append(version)
       .append(") ")
       .append(entry.getMessage());
 
-    if (level > -1 && level < LEVEL_STRING.length) {
-      switch (level) {
-      case LogService.LOG_ERROR:
-        sLogger.error(msg.toString());
-        break;
-      case LogService.LOG_WARNING:
-        sLogger.warn(msg.toString());
-        break;
-      case LogService.LOG_INFO:
-        sLogger.info(msg.toString());
-        break;
-      case LogService.LOG_DEBUG:
-        sLogger.debug(msg.toString());
-        break;
-      default:
-        sLogger.warn("LogEntry with unknown log level: " + level);
-      }
-    }
+    sLogBuffer.add(msg.toString());
   }
 
   private String logLevelToString(int level) {

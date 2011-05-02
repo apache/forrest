@@ -21,12 +21,15 @@ import javax.servlet.ServletException;
 
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
+import org.osgi.framework.ServiceReference;
 import org.osgi.service.http.HttpService;
 import org.osgi.service.http.NamespaceException;
+import org.osgi.service.log.LogReaderService;
 import org.osgi.service.log.LogService;
 import org.osgi.util.tracker.ServiceTracker;
 
 import org.apache.forrest.log.LogPlugin.LOG;
+import org.apache.forrest.log.servlet.service.LogBuffer;
 import org.apache.forrest.log.servlet.service.LogServlet;
 
 public class LogServletPlugin implements BundleActivator {
@@ -38,6 +41,19 @@ public class LogServletPlugin implements BundleActivator {
 
   public void start(final BundleContext context) throws Exception {
     LOG.debug("Log Servlet plugin starting");
+
+    // register LogListener implemented by LogBuffer
+    ServiceReference readerRef = context.getServiceReference
+      (LogReaderService.class.getName());
+
+    if (null != readerRef) {
+      System.out.println("Registering LogBuffer");
+      LogReaderService readerService = (LogReaderService) context.getService(readerRef);
+      readerService.addLogListener(new LogBuffer());
+      // LOG.debug("Log bundle starting (and self-hosting)");
+    } else {
+      System.out.println("Could not add log listener (LogReaderService is unavailable)");
+    }
 
     // track OSGi HTTP service
     mHttpTracker = new ServiceTracker(context, HttpService.class.getName(), null);
