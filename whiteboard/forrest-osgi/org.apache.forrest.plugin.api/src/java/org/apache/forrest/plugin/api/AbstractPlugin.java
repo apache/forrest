@@ -25,6 +25,17 @@ import org.apache.forrest.plugin.api.ForrestPlugin;
 import org.apache.forrest.plugin.api.ForrestResult;
 import org.apache.forrest.plugin.api.ForrestSource;
 
+/**
+ * An abstract base class for plugins.
+ * <p>
+ * This class stores the {@link BundleContext} as a convenience to
+ * subclasses.
+ *
+ * @see #getBundleContext()
+ * @see ForrestPlugin
+ * @see BaseInputPlugin
+ * @see BaseOutputPlugin
+ */
 public abstract class AbstractPlugin implements ForrestPlugin {
 
   private BundleContext mContext;

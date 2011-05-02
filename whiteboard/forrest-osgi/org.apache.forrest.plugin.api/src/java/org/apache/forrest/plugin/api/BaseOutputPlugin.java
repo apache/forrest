@@ -24,18 +24,46 @@ import org.apache.forrest.log.LogPlugin.LOG;
 import org.apache.forrest.plugin.api.ForrestResult;
 import org.apache.forrest.plugin.api.ForrestSource;
 
+/**
+ * Base implementation for output plugins. Output plugins override
+ * {@link #transform(ForrestSource)}.
+ */
 public class BaseOutputPlugin extends AbstractPlugin {
 
+  /**
+   * Constructs a <code>BaseInputPlugin</code>
+   * with the given {@link BundleContext}.
+   *
+   * @param context this bundle's context within the framework
+   */
   public BaseOutputPlugin(final BundleContext context) {
     super(context);
   }
 
-  public ForrestSource getSource(URI uri) {
+  /**
+   * Output plugins do not implement this method. The base
+   * implementation returns null.
+   *
+   * @param uri the source <code>URI</code>
+   * @return null
+   */
+  public final ForrestSource getSource(URI uri) {
     LOG.debug("getSource() called on an output plugin, ignoring");
 
     return null;
   }
 
+  /**
+   * Returns a <code>ForrestResult</code> object to access
+   * the result of the transformation.
+   * <p>
+   * Output plugins must override this method.
+   * <p>
+   * The base implementation returns null.
+   *
+   * @param source the <code>ForrestSource</code> internal format
+   * @return the <code>ForrestResult</code> transformation result
+   */
   public ForrestResult transform(ForrestSource source) {
     LOG.debug("BaseOutputPlugin.transform() must be implemented by a plugin, ignoring");
 
