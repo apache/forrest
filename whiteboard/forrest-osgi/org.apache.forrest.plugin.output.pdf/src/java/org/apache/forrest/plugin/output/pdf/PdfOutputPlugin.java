@@ -18,11 +18,10 @@ package org.apache.forrest.plugin.output.pdf;
 
 import java.util.Properties;
 
-import org.osgi.framework.BundleActivator;
-import org.osgi.framework.BundleContext;
-
 import org.apache.forrest.plugin.api.ForrestPlugin;
 import org.apache.forrest.plugin.output.pdf.service.PdfOutput;
+import org.osgi.framework.BundleActivator;
+import org.osgi.framework.BundleContext;
 
 public class PdfOutputPlugin implements BundleActivator {
 

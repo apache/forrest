@@ -17,11 +17,11 @@
 package org.apache.forrest.plugin.input.xdoc.service;
 
 import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URI;
-import java.net.URL;
+
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
@@ -30,16 +30,13 @@ import javax.xml.transform.TransformerFactoryConfigurationError;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 
+import org.apache.forrest.log.LogPlugin.LOG;
+import org.apache.forrest.plugin.api.BaseInputPlugin;
+import org.apache.forrest.plugin.api.ForrestSource;
+import org.apache.forrest.plugin.api.ForrestStreamSource;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
-import org.osgi.service.log.LogService;
-
-import org.apache.forrest.log.LogPlugin.LOG;
-import org.apache.forrest.plugin.api.BaseInputPlugin;
-import org.apache.forrest.plugin.api.ForrestResult;
-import org.apache.forrest.plugin.api.ForrestSource;
-import org.apache.forrest.plugin.api.ForrestStreamSource;
 
 public class XDocInput extends BaseInputPlugin {
 

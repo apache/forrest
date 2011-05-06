@@ -17,12 +17,9 @@
 package org.apache.forrest.plugin.api;
 
 import java.net.URI;
-import org.osgi.framework.BundleContext;
-import org.osgi.service.log.LogService;
 
 import org.apache.forrest.log.LogPlugin.LOG;
-import org.apache.forrest.plugin.api.ForrestResult;
-import org.apache.forrest.plugin.api.ForrestSource;
+import org.osgi.framework.BundleContext;
 
 /**
  * Base implementation for input plugins. Input plugins override

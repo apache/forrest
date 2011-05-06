@@ -17,10 +17,9 @@
 package org.apache.forrest.plugin.api;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.IOException;
-import javax.xml.transform.stream.StreamResult;
 
 public class ForrestStreamSource implements ForrestSource {
 

@@ -16,16 +16,13 @@
  */
 package org.apache.forrest.log;
 
-import java.util.Properties;
-
+import org.apache.forrest.log.service.LogWriter;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.log.LogReaderService;
 import org.osgi.service.log.LogService;
 import org.osgi.util.tracker.ServiceTracker;
-
-import org.apache.forrest.log.service.LogWriter;
 
 public class LogPlugin implements BundleActivator {
 

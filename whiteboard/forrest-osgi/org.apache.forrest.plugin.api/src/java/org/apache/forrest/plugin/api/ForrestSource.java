@@ -17,7 +17,6 @@
 package org.apache.forrest.plugin.api;
 
 import java.io.InputStream;
-import javax.xml.transform.stream.StreamResult;
 
 public interface ForrestSource {
 

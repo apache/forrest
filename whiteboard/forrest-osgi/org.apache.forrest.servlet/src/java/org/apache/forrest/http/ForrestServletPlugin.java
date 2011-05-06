@@ -16,17 +16,18 @@
  */
 package org.apache.forrest.http;
 
-import java.util.Properties;
+import java.util.Dictionary;
+
+import javax.servlet.Servlet;
 import javax.servlet.ServletException;
 
+import org.apache.forrest.log.LogPlugin.LOG;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
+import org.osgi.service.http.HttpContext;
 import org.osgi.service.http.HttpService;
 import org.osgi.service.http.NamespaceException;
-import org.osgi.service.log.LogService;
 import org.osgi.util.tracker.ServiceTracker;
-
-import org.apache.forrest.log.LogPlugin.LOG;
 
 /**
  * Registers a servlet with the OSGi HTTP Service with alias

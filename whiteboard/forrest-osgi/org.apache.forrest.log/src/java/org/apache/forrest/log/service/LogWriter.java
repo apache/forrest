@@ -23,7 +23,6 @@ import org.osgi.framework.Bundle;
 import org.osgi.service.log.LogEntry;
 import org.osgi.service.log.LogListener;
 import org.osgi.service.log.LogService;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

@@ -18,11 +18,10 @@ package org.apache.forrest.plugin.input.xdoc;
 
 import java.util.Properties;
 
-import org.osgi.framework.BundleActivator;
-import org.osgi.framework.BundleContext;
-
 import org.apache.forrest.plugin.api.ForrestPlugin;
 import org.apache.forrest.plugin.input.xdoc.service.XDocInput;
+import org.osgi.framework.BundleActivator;
+import org.osgi.framework.BundleContext;
 
 public class XDocInputPlugin implements BundleActivator {
 

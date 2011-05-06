@@ -18,11 +18,10 @@ package org.apache.forrest.plugin.output.html;
 
 import java.util.Properties;
 
-import org.osgi.framework.BundleActivator;
-import org.osgi.framework.BundleContext;
-
 import org.apache.forrest.plugin.api.ForrestPlugin;
 import org.apache.forrest.plugin.output.html.service.HtmlOutput;
+import org.osgi.framework.BundleActivator;
+import org.osgi.framework.BundleContext;
 
 public class HtmlOutputPlugin implements BundleActivator {
 
