@@ -23,16 +23,18 @@ import org.apache.forrest.util.ContentType;
 
 public class ContentTypeTest {
 
+  static final String HTML_NAME = "index.html";
+
   @Test
   public void getExtensionByName() {
-    String extension = ContentType.getExtensionByName("index.html");
-    assertTrue("html".equals(extension));
+    String extension = ContentType.getExtensionByName(HTML_NAME);
+    assertEquals("html", extension);
   }
 
   @Test
   public void getContentTypeByName() {
-    String contentType = ContentType.getContentTypeByName("index.html");
-    assertTrue("text/html".equals(contentType));
+    String contentType = ContentType.getContentTypeByName(HTML_NAME);
+    assertEquals("text/html", contentType);
   }
 
 }

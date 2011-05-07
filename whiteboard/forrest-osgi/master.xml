@@ -43,13 +43,16 @@
   <property name="bundle.bnd.file" location="" />
   <property name="src.dir" location="src" />
   <property name="java.src.dir" location="${src.dir}/java" />
+  <property name="java.test.src.dir" location="${src.dir}/test" />
   <property name="bundle.resource.dir" location="${src.dir}/bundle" />
   <property name="build.dir" location="build" />
   <property name="build.classes" location="${build.dir}/classes" />
+  <property name="build.test.classes" location="${build.dir}/test" />
   <property name="jar.file" value="${bundle.symbolic.name}.jar" />
 
   <target name="init">
     <mkdir dir="${build.classes}" />
+    <mkdir dir="${build.test.classes}" />
 
     <path id="classpath">
       <fileset dir="${forrest.lib.dir}" includes="*.jar" />
@@ -68,7 +71,36 @@
     </javac>
   </target>
 
-  <target name="jar" depends="compile">
+  <target name="compile-tests" depends="compile">
+    <echo>Compiling tests for ${ant.project.name}</echo>
+    <javac srcdir="${java.test.src.dir}"
+           destdir="${build.test.classes}"
+           debug="true"
+           includeantruntime="false">
+      <classpath>
+        <pathelement location="${forrest.lib.dir}/junit-4.8.1.jar" />
+        <pathelement location="${build.classes}" />
+        <pathelement location="${java.test.src.dir}" />
+      </classpath>
+    </javac>
+  </target>
+
+  <target name="test" depends="compile,compile-tests">
+    <junit printsummary="true"
+           failureproperty="junit.failure">
+      <classpath>
+        <pathelement location="${forrest.lib.dir}/junit-4.8.1.jar" />
+        <pathelement location="${build.classes}" />
+        <pathelement location="${build.test.classes}" />
+      </classpath>
+      <batchtest>
+        <fileset dir="${build.test.classes}" />
+      </batchtest>
+    </junit>
+    <fail if="junit.failure" message="There are unit test failures. Please check the output above." />
+  </target>
+
+  <target name="jar" depends="test">
     <echo>Packaging ${ant.project.name}</echo>
     <jar destfile="${build.dir}/${jar.file}">
       <fileset dir="${build.classes}" />
