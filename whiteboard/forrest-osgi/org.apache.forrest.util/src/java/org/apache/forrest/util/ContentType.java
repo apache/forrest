@@ -17,11 +17,25 @@
 package org.apache.forrest.util;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
+import java.io.IOException;
+import java.net.MalformedURLException;
 import java.util.Hashtable;
 import java.util.Map;
 
+import org.apache.tika.Tika;
+import org.apache.tika.exception.TikaException;
+import org.apache.tika.metadata.Metadata;
+import org.apache.tika.mime.MediaType;
+import org.apache.tika.mime.MimeTypesFactory;
+import org.apache.tika.parser.ParseContext;
+import org.apache.tika.parser.xml.XMLParser;
+
 public class ContentType {
 
+  private static final Tika sTika = new Tika();
   private static final Map<String, String> sContentTypeMap;
 
   public static String getExtensionByName(String name) {
@@ -43,7 +57,7 @@ public class ContentType {
       throw new IllegalArgumentException("Argument must not be null or empty");
     }
 
-    return sContentTypeMap.get(getExtensionByName(path));
+    return sTika.detect(path);
   }
 
   public static String getContentTypeByName(File file) {
@@ -51,11 +65,27 @@ public class ContentType {
       throw new IllegalArgumentException("Argument must not be null or empty");
     }
 
-    return getContentTypeByName(file.getName());
+    if (!file.canRead()) {
+      System.out.println("getContentTypeByName(File) cannot read file: " + file.getName());
+
+      return null;
+    }
+
+    String contentType = null;
+
+    try {
+      contentType = sTika.detect(file.toURI().toURL());
+    } catch (MalformedURLException mue) {
+      ;
+    } catch (IOException ioe) {
+      ;
+    }
+
+    return contentType;
   }
 
   public static String getContentTypeByExt(String ext) {
-    return sContentTypeMap.get(ext);
+    return getContentTypeByName("foo." + ext);
   }
 
   static {

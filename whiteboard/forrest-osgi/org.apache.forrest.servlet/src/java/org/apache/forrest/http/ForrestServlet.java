@@ -259,7 +259,6 @@ public class ForrestServlet extends HttpServlet {
     if (source.isFile()) {
       try {
         String contentType = ContentType.getContentTypeByName(source);
-        String ext = ContentType.getExtensionByName(source.getName());
 
         if (null != contentType) {
           resp.setContentType(contentType);
