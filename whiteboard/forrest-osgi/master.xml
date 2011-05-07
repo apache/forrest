@@ -81,21 +81,25 @@
         <pathelement location="${forrest.lib.dir}/junit-4.8.1.jar" />
         <pathelement location="${build.classes}" />
         <pathelement location="${java.test.src.dir}" />
+        <fileset dir="${forrest.lib.dir}/bundle" includes="*.jar" />
       </classpath>
     </javac>
   </target>
 
   <target name="test" depends="compile,compile-tests">
-    <junit printsummary="true"
-           failureproperty="junit.failure">
+    <junit printsummary="withOutAndErr"
+           failureproperty="junit.failure"
+           includeantruntime="false">
       <classpath>
         <pathelement location="${forrest.lib.dir}/junit-4.8.1.jar" />
         <pathelement location="${build.classes}" />
         <pathelement location="${build.test.classes}" />
+        <fileset dir="${forrest.lib.dir}/bundle" includes="*.jar" />
       </classpath>
       <batchtest>
         <fileset dir="${build.test.classes}" />
       </batchtest>
+      <formatter type="plain" usefile="false" />
     </junit>
     <fail if="junit.failure" message="There are unit test failures. Please check the output above." />
   </target>
