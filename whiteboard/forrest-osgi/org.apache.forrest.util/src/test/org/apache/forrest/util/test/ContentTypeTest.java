@@ -14,12 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.forrest.util;
+package org.apache.forrest.util.test;
 
-import static org.junit.Assert.*;
-import org.junit.Test;
+import static org.junit.Assert.assertEquals;
 
 import org.apache.forrest.util.ContentType;
+import org.junit.Test;
 
 public class ContentTypeTest {
 
