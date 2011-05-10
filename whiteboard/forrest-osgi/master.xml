@@ -31,6 +31,9 @@
 
   <property name="bundle.deploy.dir" location="${forrest.home}/bundle" />
 
+  <property name="build.compiler.source" value="1.5" />
+  <property name="build.compiler.target" value="1.5" />
+
 <!--
   Bundle properties
   Override in bundle build.xml where necessary
@@ -66,6 +69,8 @@
            destdir="${build.classes}"
            classpathref="classpath"
            debug="true"
+           source="${build.compiler.source}"
+           target="${build.compiler.target}"
            includeantruntime="false">
       <compilerarg value="-Xlint" />
     </javac>
@@ -76,6 +81,8 @@
     <javac srcdir="${java.test.src.dir}"
            destdir="${build.test.classes}"
            debug="true"
+           source="${build.compiler.source}"
+           target="${build.compiler.target}"
            includeantruntime="false">
       <classpath>
         <pathelement location="${forrest.lib.dir}/junit-4.8.1.jar" />
@@ -104,27 +111,21 @@
     <fail if="junit.failure" message="There are unit test failures. Please check the output above." />
   </target>
 
-  <target name="jar" depends="test">
-    <echo>Packaging ${ant.project.name}</echo>
-    <jar destfile="${build.dir}/${jar.file}">
-      <fileset dir="${build.classes}" />
-    </jar>
-  </target>
-
-  <target name="bundle" depends="jar">
+  <target name="bundle" depends="test">
     <echo>Bundling ${ant.project.name}</echo>
     <mkdir dir="${bundle.deploy.dir}" />
 
     <taskdef resource="aQute/bnd/ant/taskdef.properties"
              classpath="${bnd.jar.file}" />
 
+    <!-- bnd was chosen over bndwrap because bnd seems to be fail-fast -->
     <!--
     <bndwrap
         jars="${build.dir}/${jar.file}"
         output="${bundle.deploy.dir}/${bundle.symbolic.name}-${bundle.version}.jar" />
     -->
     <bnd
-        classpath="${build.dir}/${jar.file}"
+        classpath="${build.classes}"
         eclipse="false"
         failok="false"
         files="${bundle.bnd.file}"

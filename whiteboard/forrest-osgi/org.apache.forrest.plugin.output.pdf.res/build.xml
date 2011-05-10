@@ -26,13 +26,16 @@
   <property name="bundle.bnd.file" location="pdfOutputRes.bnd" />
 
   <!--
-    Override master jar target to include bundle resources
+    Override master compile target to include bundle resources
   -->
-  <target name="jar">
-    <jar destfile="${build.dir}/${jar.file}">
-      <fileset dir="${bundle.resource.dir}" />
-    </jar>
+  <target name="compile" depends="init">
+    <copy todir="build/classes"
+          preservelastmodified="true">
+      <fileset dir="src/bundle" />
+    </copy>
   </target>
+
+  <target name="test" depends="compile" />
 
   <import file="../master.xml" />
 
