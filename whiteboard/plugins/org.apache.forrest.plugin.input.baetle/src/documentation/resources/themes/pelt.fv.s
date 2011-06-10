@@ -240,7 +240,7 @@ p.quote {
             <forrest:property name="branding-logo-url">
               http://forrest.apache.org/</forrest:property>
             <forrest:property name="branding-logo-logo">
-              images/project-logo.gif</forrest:property>
+              images/project-logo.png</forrest:property>
           </forrest:contract>
         </forrest:hook>
         <forrest:hook class="logo">
