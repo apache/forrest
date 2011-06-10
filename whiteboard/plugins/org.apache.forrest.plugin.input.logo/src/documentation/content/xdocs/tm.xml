@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one or more
+  contributor license agreements.  See the NOTICE file distributed with
+  this work for additional information regarding copyright ownership.
+  The ASF licenses this file to You under the Apache License, Version 2.0
+  (the "License"); you may not use this file except in compliance with
+  the License.  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<!DOCTYPE document PUBLIC "-//APACHE//DTD Documentation V2.0//EN" "http://forrest.apache.org/dtd/document-v20.dtd" [
+<!ENTITY rm '&#x00AE;'>
+<!ENTITY sm '&#x2120;'>
+<!ENTITY tm '&#x2122;'>
+]>
+<document>
+  <header>
+    <title>Overlay a trademark symbol to an existing logo image</title>
+  </header>
+  <body>
+    <section id="overview">
+      <title>Overview</title>
+      <p>
+        Without altering the source image, this plugin applies a trademark
+        symbol using an SVG template, and generates a new PNG image.
+      </p>
+    </section>
+    <section id="usage">
+      <title>Configuration and usage</title>
+      <p>
+        Make your existing logo image (only PNG at this stage) available to
+        one of Forrest's image directories, e.g. in your project at either
+        <code>src/documentation/resources/images/</code> or
+        <code>src/documentation/content/xdocs/images/</code>
+        or otherwise available via Locationmap.
+      </p>
+      <p>
+        For example, this plugin has <code>images/example-logo.png</code>
+      </p>
+      <p>
+        <img width="220" height="65" src="images/example-logo.png" alt="image"/>
+      </p>
+      <p>
+        Now provide an SVG template file to specify the symbol placement
+        and other attributes. This file has the same basename as your source
+        logo image and with "<code>-tm.svg</code>" appended.
+      </p>
+      <p>
+        For example, this plugin has <code>images/example-logo-tm.svg</code>
+      </p>
+      <p>
+        As shown in that SVG file, specify the font, size, and x-y placement
+        of the symbol. Choose between "trademark" (e.g. Foo&tm;)
+        or "registered trademark" (e.g. Foo&rm;)
+        or "service mark" (e.g. Foo&sm;)
+        or use plain text symbol.
+      </p>
+      <p>
+        To apply this, request the resource
+        <code>.../</code><a href="example-logo-tm.png">example-logo-tm.png</a>
+        and see following new generated image:
+      </p>
+      <p>
+        <img width="220" height="65" src="example-logo-tm.png" alt="image"/>
+      </p>
+      <p>
+        Tweak the SVG and re-load until the symbol placement is satisfactory.
+      </p>
+      <p>
+        This also enables use of Forrest as a tool to process a set of images.
+        This might be a once-off task to handle various images for which you
+        are responsible. Using Forrest in dynamic mode, these resources can be
+        directly processed, while not being an actual part of your normal site
+        build (e.g. <code>localhost:8888/images/example-logo-tm.png</code>).
+      </p>
+    </section>
+  </body>
+</document>
