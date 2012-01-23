@@ -32,6 +32,10 @@ set PROJECT_HOME=%PWD%
 rem ----- set the ant file to use --------------------------------------
 set ANTFILE=%FORREST_HOME%\main\forrest.build.xml
 
+rem ----- Save old JAVA_TOOL_OPTIONS -----------------------------
+set OLD_TOOL_OPTIONS=%JAVA_TOOL_OPTIONS%
+set JAVA_TOOL_OPTIONS=-Dfile.encoding=UTF8
+
 rem ----- Save old ANT_HOME --------------------------------------------
 set OLD_ANT_HOME=%ANT_HOME%
 set ANT_HOME=%FORREST_HOME%\tools\ant
@@ -53,3 +57,4 @@ call "%ANT_HOME%\bin\forrestant" -buildfile "%ANTFILE%" -Dbasedir="%PROJECT_HOME
 rem ---- Restore old ANT_HOME
 set ANT_HOME=%OLD_ANT_HOME%
 set CLASSPATH=%OLD_CLASSPATH%
+set JAVA_TOOL_OPTIONS=%OLD_TOOL_OPTIONS%
