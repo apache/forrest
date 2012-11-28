@@ -455,18 +455,20 @@
       <title>Preparing the "dist" SVN</title>
       <p>
         The SVN at
-        <a href="https://svn.apache.org/repos/asf/forrest/dist/">https://svn.apache.org/repos/asf/forrest/dist/</a>
-        holds some html files and other files that form the distribution
-        website. This is checked out on the server at
-        /www/www.apache.org/dist/forrest
-      </p>
-      <p>
-        Note that the actual release artefacts are not stored in SVN.
+        <a href="https://dist.apache.org/repos/dist/release/forrest/">https://dist.apache.org/repos/dist/release/forrest/</a>
+        holds some html files for the header and footer of the mirrors, and the other files that form the distribution.
+        This is automatically reflected by
+        <a href="http://www.apache.org/dev/cms.html#svnpubsub">SvnPubSub</a> on the server to
+        /www/www.apache.org/dist/forrest directory, which is our public distribution space.
       </p>
       <p>
         Ensure that the KEYS file is synchronised with the copy in Forrest svn
-        trunk and commit the changes. Do ssh to the server and 'svn up' in that
-        directory.
+        trunk and commit the changes.
+      </p>
+      <p>
+        Ensure that our "dist/dev" SVN area at 
+        <a href="https://dist.apache.org/repos/dist/dev/forrest/">https://dist.apache.org/repos/dist/dev/forrest/</a>
+        is ready to hold the release candidate for voting.
       </p>
     </section>
     <section id="adjustDocs">
@@ -839,8 +841,9 @@ where
       </p>
       <ol>
         <li>
-                  Upload the release candidate packages and signatures to your committer's webspace.
-                </li>
+          Upload the release candidate packages and signatures to the dist/dev/forrest SVN.
+          See <a href="#PrepDistSvn">notes</a>.
+        </li>
         <li><p>
             Use template
             <a href="test_and_vote_on_rel_cand.txt">test_and_vote_on_rel_cand.txt</a>
@@ -858,7 +861,7 @@ where
             <li>Make sure that people have followed the actual user instructions in the Forrest
                             distribution at README.txt and index.html</li>
             <li>Encourage people to build some difficult sites.</li>
-            <li>Remind people about how long remains for testing.</li>
+            <li>Occasionally remind people about how much time remains for testing.</li>
           </ul></li>
         <li id="decisionRM">
            If substantial problems are revealed (not just minor glitches) then co-ordinate their
@@ -886,10 +889,6 @@ where
         vote, we'll finalize the release.
       </p>
       <ol>
-        <li>
-            Remove the release candidate packages from your public_html
-            directory.
-        </li>
         <li><p>
             If there have been changes to the trunk since the branch was
             created, then merge trunk to branch. Remember to use a proper commit message
@@ -1037,15 +1036,14 @@ svn mkdir plugins/&n;</source></li>
           for the release may be appended to the *.asc file.
         </li>
         <li><p>
-            Use scp to upload the release: the *.tar.gz, the *.zip, the *.asc
-            and *.md5 files, and the RELEASE-NOTES-&d;.txt to people.apache.org
-            at /www/www.apache.org/ dist/forrest/ directory.
+            Use 'svn move' to upload the release: i.e. move the *.tar.gz, the *.zip, the *.asc
+            and *.md5 files, and the RELEASE-NOTES-&d;.txt from dist/dev/forrest SVN to dist/release/forrest SVN.
+            Note that SvnPubSub will automatically publish the release.
           </p>
           <p>
-            Ensure correct file permissions by executing <code>'chgrp forrest
-            *'</code> then <code>'chmod g+w *'</code> in that directory.
-            Each PMC member has a server account and belongs to the forrest
-            group.
+            Leave the previous distribution there as well as the new one, until after
+            the announcement (because mirrors.html cannot be updated until most
+            mirrors have received the release).
           </p>
           <p>
             See these tools to ensure that signatures and keys are okay:
@@ -1059,16 +1057,7 @@ svn mkdir plugins/&n;</source></li>
             <a
                             href="http://www.apache.org/dev/#releases">http://www.apache.org/dev/#releases</a>
           </p>
-          <p>
-            Leave the previous dist there as well as the new one, until after
-            the announcement (because mirrors.html cannot be updated until most
-            mirrors have received the release).
-          </p>
-          <note>
-            The other files there (HEADER.html README.html LICENSE.txt KEYS) are
-            all automatically updated from the SVN:forrest/dist/ repository
-            (<a href="#PrepDistSvn">explained</a> above).
-          </note></li>
+        </li>
         <li>
             Wait for the various mirrors to pick up the new files.
         </li>
@@ -1174,8 +1163,8 @@ svn mkdir plugins/&n;</source></li>
                   which removes them from the website.
                 </li>
         <li><p>
-            One day later, remove old dist files from the /www/www.apache.org/dist/forrest/
-            directory. They have already been automatically archived at
+            One day later, remove old distribution files from the dist/release/forrest SVN.
+            They have already been automatically archived at
             archive.apache.org/dist/forrest/
           </p>
           <p>
