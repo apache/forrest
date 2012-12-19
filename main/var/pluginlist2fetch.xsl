@@ -36,7 +36,7 @@
             </xsl:attribute>
           </target>
           <target name="fetch-local-versioned-plugin">
-<!-- Search for the local versionned plugin ...-->
+            <echo level="info">Searching for local versioned plugin ...</echo>
             <antcallback target="get-local" return="plugin-found">
               <param name="local-plugin-version">
                 <xsl:attribute name="value">-<xsl:value-of select="$plugin-version" />
@@ -50,7 +50,7 @@
             </antcallback>
           </target>
           <target name="fetch-remote-versioned-plugin-version-forrest" unless="plugin-found">
-<!-- Search for the remote versionned plugin in the versionned Forrest...-->
+            <echo level="info">Searching for remote versioned plugin for a specific version of Forrest ...</echo>
             <antcallback target="download" return="plugin-found,desired.plugin.zip.present">
               <param name="download-plugin-version">
                 <xsl:attribute name="value">-<xsl:value-of select="$plugin-version" />
@@ -68,7 +68,7 @@
             </antcallback>
           </target>
           <target name="fetch-local-unversioned-plugin" unless="plugin-found">
-<!-- Search for the local unversionned plugin ...-->
+            <echo level="info">Searching for local unversioned plugin ...</echo>
             <antcallback target="get-local" return="plugin-found">
               <param name="local-plugin-version" value=""/>
               <param name="local-plugin-name">
@@ -79,7 +79,7 @@
             </antcallback>
           </target>
           <target name="fetch-remote-unversioned-plugin-version-forrest" unless="plugin-found">
-<!-- Search for the remote unversionned plugin in the versionned Forrest...-->
+            <echo level="info">Searching for remote unversioned plugin for a specific version of Forrest ...</echo>
             <antcallback target="download" return="plugin-found,desired.plugin.zip.present">
               <param name="download-plugin-version" value=""/>
               <param name="download-plugin-name">
@@ -94,7 +94,7 @@
             </antcallback>
           </target>
           <target name="fetch-remote-unversioned-plugin-unversion-forrest" unless="plugin-found">
-<!-- Search for the remote unversionned plugin in the unversionned Forrest...-->
+            <echo level="info">Searching for remote unversioned plugin in the unversioned Forrest ...</echo>
             <antcallback target="download" return="plugin-found,desired.plugin.zip.present">
               <param name="download-plugin-version" value=""/>
               <param name="download-plugin-name">
