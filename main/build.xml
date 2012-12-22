@@ -217,6 +217,22 @@ See other notes above.
 <!-- =================================================================== -->
   <target name="validate-config" depends="init"
     description="Validate the important core configuration files">
+    <if>
+      <available file="${build.dir}/plugins"/>
+      <then>
+        <dirset dir="${build.dir}/plugins" id="installed-plugins">
+          <include name="*"/>
+          <exclude name="lib"/>
+        </dirset>
+        <pathconvert pathsep=", " property="installed-plugins" refid="installed-plugins">
+          <mapper type="flatten"/>
+        </pathconvert>
+      </then>
+      <else>
+        <property name="installed-plugins" value="None"/>
+      </else>
+    </if>
+    <echo level="info">Installed plugins: ${installed-plugins}</echo>
 <!-- FIXME allow switch if="validate.config"  -->
     <taskdef name="jing" classname="com.thaiopensource.relaxng.util.JingTask">
       <classpath>
