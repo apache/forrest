@@ -410,13 +410,27 @@ to be installed again unless you delete them or wish to upgrade them.
               select="\2"
               casesensitive="false"
               defaultvalue=""/>
-        <antcall target="install-plugin">
-          <param name="plugin.name" value="${plugin.name}"/>
-          <param name="plugin.version" value="${plugin.version}"/>
-          <param name="versioned.name" value="@{name}"/>
-          <param name="plugins.desc.already.fetched" value="true"/>
-          <param name="proxy.already.set" value="true"/>
-        </antcall>
+        <condition property="project.plugins.overridden">
+          <and>
+            <isset property="project.plugins.override"/>
+            <istrue value="${project.plugins.override}"/>
+          </and>
+        </condition>
+        <if>
+          <isset property="project.plugins.overridden"/>
+          <then>
+            <echo level="info">Using already installed plugin because 'project.plugins.override' property is ${project.plugins.override}.</echo>
+          </then>
+          <else>
+            <antcall target="install-plugin">
+              <param name="plugin.name" value="${plugin.name}"/>
+              <param name="plugin.version" value="${plugin.version}"/>
+              <param name="versioned.name" value="@{name}"/>
+              <param name="plugins.desc.already.fetched" value="true"/>
+              <param name="proxy.already.set" value="true"/>
+            </antcall>
+          </else>
+        </if>
         <antcall target="configure-plugin">
           <param name="plugin.name" value="${plugin.name}"/>
           <param name="plugin.version" value="${plugin.version}"/>
