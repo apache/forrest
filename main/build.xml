@@ -506,7 +506,7 @@ See other notes above.
        Target used by Gump for the main "forrest" project.
        Our gump descriptor also has other projects for other aspects
        of forrest build:
-       http://svn.apache.org/repos/asf/gump/metadata/project/forrest.xml
+       https://svn.apache.org/repos/asf/gump/metadata/project/forrest.xml
        ================================================== -->
   <target  name="gump" description="Target used by Gump: forrest">
     <antcall target="jar"/>
@@ -520,6 +520,34 @@ See other notes above.
     <ant antfile="${forrest.home}/plugins/org.apache.forrest.plugin.output.pdf/build.xml" target="local-deploy">
       <property name="basedir" location="${forrest.home}/plugins/org.apache.forrest.plugin.output.pdf"/>
     </ant>
+  </target>
+<!-- Target used by Gump to run the test with some other modifications -->
+  <target name="gump-forrest-test" depends="init"
+      description="Target used by Gump: forrest-test">
+    <echo level="info">Doing pre-run configuration:</echo>
+    <echo level="info">Raise verbosity of xml catalogs</echo>
+    <replaceregexp file="${forrest.home}/main/fresh-site/src/documentation/classes/CatalogManager.properties"
+        match="verbosity=1$"
+        replace="verbosity=10"
+        byline="true"/>
+    <replaceregexp file="${forrest.home}/main/webapp/WEB-INF/properties/core.properties"
+        match="org.apache.xml.resolver.verbosity=0$"
+        replace="org.apache.xml.resolver.verbosity=10"
+        byline="true"/>
+    <antcall target="validate-config"/>
+    <antcall target="testSiteType">
+      <param name="test.site.type" value="skinned"/>
+    </antcall>
+    <echo level="info">Doing post-run configuration:</echo>
+    <echo level="info">Reset verbosity of xml catalogs</echo>
+    <replaceregexp file="${forrest.home}/main/fresh-site/src/documentation/classes/CatalogManager.properties"
+        match="verbosity=10$"
+        replace="verbosity=1"
+        byline="true"/>
+    <replaceregexp file="${forrest.home}/main/webapp/WEB-INF/properties/core.properties"
+        match="org.apache.xml.resolver.verbosity=10$"
+        replace="org.apache.xml.resolver.verbosity=0"
+        byline="true"/>
   </target>
 <!-- Target used by Gump to run RAT on Forrest sources -->
   <target name="gump-rat" depends="init"
