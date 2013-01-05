@@ -525,6 +525,7 @@ See other notes above.
   <target name="gump-forrest-test" depends="init"
       description="Target used by Gump: forrest-test">
     <echo level="info">Doing pre-run configuration:</echo>
+<!--
     <echo level="info">Raise verbosity of xml catalogs</echo>
     <replaceregexp file="${forrest.home}/main/fresh-site/src/documentation/classes/CatalogManager.properties"
         match="verbosity=1$"
@@ -534,11 +535,13 @@ See other notes above.
         match="org.apache.xml.resolver.verbosity=0$"
         replace="org.apache.xml.resolver.verbosity=10"
         byline="true"/>
+-->
     <antcall target="validate-config"/>
     <antcall target="testSiteType">
       <param name="test.site.type" value="skinned"/>
     </antcall>
     <echo level="info">Doing post-run configuration:</echo>
+<!--
     <echo level="info">Reset verbosity of xml catalogs</echo>
     <replaceregexp file="${forrest.home}/main/fresh-site/src/documentation/classes/CatalogManager.properties"
         match="verbosity=10$"
@@ -548,6 +551,7 @@ See other notes above.
         match="org.apache.xml.resolver.verbosity=10$"
         replace="org.apache.xml.resolver.verbosity=0"
         byline="true"/>
+-->
   </target>
 <!-- Target used by Gump to run RAT on Forrest sources -->
   <target name="gump-rat" depends="init"
