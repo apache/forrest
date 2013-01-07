@@ -526,11 +526,12 @@ See other notes above.
       description="Target used by Gump: forrest-test">
     <echo level="info">Doing pre-run configuration:</echo>
     <echo level="info">Add a Cocoon cli.xconf and exclude any problem docs.</echo>
-    <copy file="${forrest.home}/main/webapp/WEB-INF/cli.xconf"
+    <copy overwrite="true"
+        file="${forrest.home}/main/webapp/WEB-INF/cli.xconf"
         todir="${forrest.home}/main/fresh-site/src/documentation/conf/"/>
-    <replace file="${forrest.home}/main/fresh-site/src/documentation/conf/cli.xconf"
-        token="api/**"
-        value="**linking.pdf"/>
+    <replaceregexp file="${forrest.home}/main/fresh-site/src/documentation/conf/cli.xconf"
+        match="&lt;/cocoon>"
+        replace="&lt;exclude pattern='**linking.pdf'/>&lt;exclude pattern='**custom.html'/>&lt;/cocoon>"/>
     <replaceregexp file="${forrest.home}/main/fresh-site/forrest.properties"
         match="^# layout properties$"
         replace="project.configfile=${project.home}/src/documentation/conf/cli.xconf"
