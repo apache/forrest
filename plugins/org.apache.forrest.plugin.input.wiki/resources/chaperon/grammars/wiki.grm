@@ -133,18 +133,18 @@ subsubsection
   ;
 
 title
-  : titleitem textsequence
-  | titleitem textsequence hardbreak
+  : titleitem limitedtextsequence
+  | titleitem limitedtextsequence hardbreak
   ;
 
 subtitle
-  : subtitleitem textsequence
-  | subtitleitem textsequence hardbreak
+  : subtitleitem limitedtextsequence
+  | subtitleitem limitedtextsequence hardbreak
   ;
 
 subsubtitle
-  : subsubtitleitem textsequence
-  | subsubtitleitem textsequence hardbreak
+  : subsubtitleitem limitedtextsequence
+  | subsubtitleitem limitedtextsequence hardbreak
   ;
 
 paragraphs  
@@ -259,15 +259,23 @@ tablecolumn
   ;
   
 limitedtextsequence 
-  : textblock break limitedtextsequence
-  | textblock limitedtextsequence
-  | textblock
+  : limitedtextblock limitedtextsequence
+  | limitedtextblock
   ; 
 
+limitedtextblock 
+  : link
+  | anchor
+  | strongblock
+  | emblock
+  | text
+  | codeblock
+  | deftermdefstart
+  | break
+  ;
+
 textsequence
-  : textblock textsequence softbreak
-  | textblock textsequence 
-  | textblock softbreak  
+  : textblock textsequence
   | textblock
   ; 
 
@@ -280,6 +288,7 @@ textblock
   | codeblock
   | deftermdefstart
   | break
+  | softbreak
   ;
 
 termtextsequence 

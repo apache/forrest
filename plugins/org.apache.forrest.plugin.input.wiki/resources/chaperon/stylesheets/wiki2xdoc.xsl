@@ -134,19 +134,19 @@
   <!-- Sections: -->
   <xsl:template match="st:section">
     <section>
-      <title><xsl:value-of select="st:title/st:textsequence"/></title>
+      <title><xsl:value-of select="st:title/st:limitedtextsequence"/></title>
       <xsl:apply-templates select="st:paragraphs/st:paragraph/*|st:subsections/st:subsection" mode="paragraph"/>
     </section>
   </xsl:template>
   <xsl:template match="st:subsection" mode="paragraph">
     <section>
-      <title><xsl:value-of select="st:subtitle/st:textsequence"/></title>
+      <title><xsl:value-of select="st:subtitle/st:limitedtextsequence"/></title>
       <xsl:apply-templates select="st:paragraphs/st:paragraph/*|st:subsubsections/st:subsubsection" mode="paragraph"/>
     </section>
   </xsl:template>
   <xsl:template match="st:subsubsection" mode="paragraph">
     <section>
-      <title><xsl:value-of select="st:subsubtitle/st:textsequence"/></title>
+      <title><xsl:value-of select="st:subsubtitle/st:limitedtextsequence"/></title>
       <xsl:apply-templates select="st:paragraphs/st:paragraph/*" mode="paragraph"/>
     </section>
   </xsl:template>
@@ -191,7 +191,7 @@
 
   <xsl:template match="st:tablecolumn">
     <td>
-      <xsl:apply-templates select="st:limitedtextsequence/st:textblock/*
+      <xsl:apply-templates select="st:limitedtextsequence/st:limitedtextblock/*
                                  | st:limitedtextsequence/st:break"/>
     </td>
   </xsl:template>
