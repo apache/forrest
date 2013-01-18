@@ -35,57 +35,104 @@
   <map:resources>
     <map:resource name="file-resolver">
       <map:select type="exists">
+        <!-- Moinwiki Markup -->
         <map:when test="{lm:project.{uri}.moinwiki}">
           <map:match type="regexp" pattern="^(.*?)([^/]*).xml$">
-            <map:generate type="text2xml" src="{lm:project.{1}{2}.moinwiki}" />
-            <map:transform type="lexer"   src="cocoon:/moinwiki.xlex"/>
-            <map:transform type="parser"  src="cocoon:/moinwiki.xgrm"/>
-            <map:transform type="xsltc" 
-              src="{lm:wiki.transform.moinwiki.xdoc}">
-              <map:parameter name="name" value="{2}" />
-              <map:parameter name="spaceless-filenames" value="true"/>
-            </map:transform>
-            <map:serialize type="xml-document"/>
+            <map:select type="config">
+              <map:parameter name="value" value="{properties:forrest.i18n}"/>
+              <!-- i18n turned on -->
+              <map:when test="true">
+                <map:match type="i18n" pattern="{lm:project.{1}{2}.*.moinwiki}">
+                  <map:generate type="text2xml" src="{source}" />
+                  <map:transform type="lexer"   src="cocoon:/moinwiki.xlex"/>
+                  <map:transform type="parser"  src="cocoon:/moinwiki.xgrm"/>
+                  <map:transform type="xsltc" 
+                    src="{lm:wiki.transform.moinwiki.xdoc}">
+                    <map:parameter name="name" value="{../2}" />
+                    <map:parameter name="spaceless-filenames" value="true"/>
+                  </map:transform>
+                  <map:serialize type="xml-document"/>
+                </map:match>
+              </map:when>
+              <!-- i18n turned off --> 
+              <map:otherwise>
+                <map:generate type="text2xml" src="{lm:project.{1}{2}.moinwiki}" />
+                <map:transform type="lexer"   src="cocoon:/moinwiki.xlex"/>
+                <map:transform type="parser"  src="cocoon:/moinwiki.xgrm"/>
+                <map:transform type="xsltc" 
+                  src="{lm:wiki.transform.moinwiki.xdoc}">
+                  <map:parameter name="name" value="{2}" />
+                  <map:parameter name="spaceless-filenames" value="true"/>
+                </map:transform>
+                <map:serialize type="xml-document"/>
+              </map:otherwise>
+            </map:select>
           </map:match>
         </map:when>
+        <!-- JSPWiki Markup -->
         <map:when test="{lm:project.{uri}.jspwiki}">
           <map:match type="regexp" pattern="^(.*?)([^/]*).xml$">
-            <map:generate type="text2xml" src="{lm:project.{1}{2}.jspwiki}" />
-            <map:transform type="lexer"   src="cocoon:/wiki.xlex"/>
-            <map:transform type="parser"  src="cocoon:/wiki.xgrm"/>
-            <map:transform type="xsltc" 
-              src="{lm:wiki.transform.wiki.xdoc}">
-              <map:parameter name="name" value="{2}" />
-              <map:parameter name="spaceless-filenames" value="true"/>
-            </map:transform>
-            <map:serialize type="xml-document"/>
+            <map:select type="config">
+              <map:parameter name="value" value="{properties:forrest.i18n}"/>
+              <!-- i18n turned on -->
+              <map:when test="true">
+                <map:match type="i18n" pattern="{lm:project.{1}{2}.*.jspwiki}">
+                  <map:generate type="text2xml" src="{source}" />
+                  <map:transform type="lexer"   src="cocoon:/wiki.xlex"/>
+                  <map:transform type="parser"  src="cocoon:/wiki.xgrm"/>
+                  <map:transform type="xsltc" 
+                    src="{lm:wiki.transform.wiki.xdoc}">
+                    <map:parameter name="name" value="{../2}" />
+                    <map:parameter name="spaceless-filenames" value="true"/>
+                  </map:transform>
+                  <map:serialize type="xml-document"/>
+                </map:match>
+              </map:when>
+              <!-- i18n turned off --> 
+              <map:otherwise>
+                <map:generate type="text2xml" src="{lm:project.{1}{2}.jspwiki}" />
+                <map:transform type="lexer"   src="cocoon:/wiki.xlex"/>
+                <map:transform type="parser"  src="cocoon:/wiki.xgrm"/>
+                <map:transform type="xsltc" 
+                  src="{lm:wiki.transform.wiki.xdoc}">
+                  <map:parameter name="name" value="{2}" />
+                  <map:parameter name="spaceless-filenames" value="true"/>
+                </map:transform>
+                <map:serialize type="xml-document"/>
+              </map:otherwise>
+            </map:select>
           </map:match>
         </map:when>
+        <!-- CWiki Markup -->
         <map:when test="{lm:project.{uri}.cwiki}">
           <map:match type="regexp" pattern="^(.*?)([^/]*).xml$">
-            <map:generate type="text2xml" src="{lm:project.{1}{2}.cwiki}" />
+            <map:match type="i18n" pattern="{lm:project.{1}{2}.*.cwiki}">
+            <map:generate type="text2xml" src="{source}" />
             <map:transform type="lexer"   src="cocoon:/wiki.xlex"/>
             <map:transform type="parser"  src="cocoon:/wiki.xgrm"/>
             <map:transform type="xsltc" 
               src="{lm:wiki.transform.wiki.xdoc}">
-              <map:parameter name="name" value="{2}" />
+              <map:parameter name="name" value="{../2}" />
               <map:parameter name="spaceless-filenames" value="true"/>
             </map:transform>
             <map:serialize type="xml-document"/>
+            </map:match>
           </map:match>
         </map:when>
         <!-- Google Code Wiki Markup -->
         <map:when test="{lm:project.{uri}.wiki}">
           <map:match type="regexp" pattern="^(.*?)([^/]*).xml$">
-            <map:generate type="text2xml" src="{lm:project.{1}{2}.wiki}" />
+            <map:match type="i18n" pattern="{lm:project.{1}{2}.*.wiki}">
+            <map:generate type="text2xml" src="{source}" />
             <map:transform type="lexer"   src="cocoon:/googlewiki.xlex"/>
             <map:transform type="parser"  src="cocoon:/googlewiki.xgrm"/>
             <map:transform type="xsltc" 
               src="{lm:wiki.transform.googlewiki.xdoc}">
-              <map:parameter name="name" value="{2}" />
+              <map:parameter name="name" value="{../2}" />
               <map:parameter name="spaceless-filenames" value="true"/>
             </map:transform>
             <map:serialize type="xml-document"/>
+            </map:match>
           </map:match>
         </map:when>
       </map:select>
