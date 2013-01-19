@@ -65,8 +65,10 @@
   </xsl:template>
 
   <!-- Only add a space if the following char is not a punctuation mark: -->
-  <xsl:template name="addSpace">
+  <xsl:template name="addSpaceAfter">
     <xsl:choose>
+      <!-- Please note that we can't use ends-with() below - it throws an error.
+           Searches on the 'net indicates it is a bug in the Xslt processor. -->
       <xsl:when test="starts-with(./following::*[text()],'.') or
                       starts-with(./following::*[text()],',') or
                       starts-with(./following::*[text()],'!') or
@@ -74,6 +76,25 @@
                       starts-with(./following::*[text()],';') or
                       starts-with(./following::*[text()],':') or
                       starts-with(./following::*[text()],'&quot;') or
+                      starts-with(./following::*[text()],'>') or
+                      starts-with(./following::*[text()],'›') or
+                      starts-with(./following::*[text()],'»') or
+                      starts-with(./following::*[text()],'’') or
+                      starts-with(./following::*[text()],'”') or
+                      starts-with(./following::*[text()],')') or
+                      starts-with(./following::*[text()],'}') or
+                      starts-with(./following::*[text()],']') or
+                      contains(substring(., string-length(. - 1)),'¡') or
+                      contains(substring(., string-length(. - 1)),'¿') or
+                      contains(substring(., string-length(. - 1)),'&quot;') or
+                      contains(substring(., string-length(. - 1)),'&lt;') or
+                      contains(substring(., string-length(. - 1)),'‹') or
+                      contains(substring(., string-length(. - 1)),'«') or
+                      contains(substring(., string-length(. - 1)),'‘') or
+                      contains(substring(., string-length(. - 1)),'“') or
+                      contains(substring(., string-length(. - 1)),'(') or
+                      contains(substring(., string-length(. - 1)),'{') or
+                      contains(substring(., string-length(. - 1)),'[') or
                       ./following::*[1]/st:deftermdefstart">
         <xsl:text></xsl:text>
       </xsl:when>
@@ -208,7 +229,7 @@
         <xsl:value-of select="."/>
       </xsl:otherwise>
     </xsl:choose>
-    <xsl:call-template name="addSpace"/>
+    <xsl:call-template name="addSpaceAfter"/>
   </xsl:template>
 
   <xsl:template match="st:deftermdefstart[not(ancestor::st:deflist)]" >
@@ -244,7 +265,7 @@
         </xsl:call-template>
       </xsl:otherwise>
     </xsl:choose>
-    <xsl:call-template name="addSpace"/>
+    <xsl:call-template name="addSpaceAfter"/>
   </xsl:template>
 
   <xsl:template name="convertLink" >
@@ -301,15 +322,15 @@
   </xsl:template>
   <xsl:template match="st:emblock"><em>
     <xsl:value-of select="st:text"/></em>
-    <xsl:call-template name="addSpace"/>
+    <xsl:call-template name="addSpaceAfter"/>
   </xsl:template>
   <xsl:template match="st:strongblock"><strong>
     <xsl:value-of select="st:text"/></strong>
-    <xsl:call-template name="addSpace"/>
+    <xsl:call-template name="addSpaceAfter"/>
   </xsl:template>
   <xsl:template match="st:codeblock"><code>
     <xsl:value-of select="st:text"/></code>
-    <xsl:call-template name="addSpace"/>
+    <xsl:call-template name="addSpaceAfter"/>
   </xsl:template>
 
   <!-- Bulleted lists: -->
