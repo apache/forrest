@@ -321,15 +321,15 @@
   <!-- Inline formatting: -->
   </xsl:template>
   <xsl:template match="st:emblock"><em>
-    <xsl:value-of select="st:text"/></em>
+    <xsl:value-of select="st:plaintextblock"/></em>
     <xsl:call-template name="addSpaceAfter"/>
   </xsl:template>
   <xsl:template match="st:strongblock"><strong>
-    <xsl:value-of select="st:text"/></strong>
+    <xsl:value-of select="st:plaintextblock"/></strong>
     <xsl:call-template name="addSpaceAfter"/>
   </xsl:template>
   <xsl:template match="st:codeblock"><code>
-    <xsl:value-of select="st:text"/></code>
+    <xsl:value-of select="st:plaintextblock"/></code>
     <xsl:call-template name="addSpaceAfter"/>
   </xsl:template>
 

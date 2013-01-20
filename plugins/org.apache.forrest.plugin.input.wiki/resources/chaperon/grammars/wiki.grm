@@ -307,15 +307,30 @@ termtextblock
   ;
 
 emblock 
-  : emitem text emitem
+  : emitem plaintextblock emitem
   ;
 
 strongblock 
-  : strongitem text strongitem
+  : strongitem plaintextblock strongitem
   ;
 
 codeblock 
-  : codeopenitem text codecloseitem
+  : codeopenitem plaintextblock codecloseitem
+  ;
+
+plaintextblock 
+  : plaintextitems plaintextblock
+  | plaintextitems
+  ;
+
+plaintextitems
+  : text
+  | deftermstart
+  | deftermdefstart
+  | tablecolumnitem
+  | subsubtitleitem
+  | bulleted1item
+  | numbered1item
   ;
 
 deflist
