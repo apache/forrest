@@ -201,7 +201,8 @@
   </xsl:template>
   <xsl:template match="st:tabletitle">
     <th>
-      <xsl:apply-templates select="st:textblock/*"/>
+      <xsl:value-of select="st:textblock"/>
+      <xsl:value-of select="st:deftermdefstart"/>
     </th>
   </xsl:template>
   <xsl:template match="st:tablecolumns">
