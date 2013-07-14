@@ -62,8 +62,7 @@
       </p>
       <p>
         The generated static documents which form the website are also stored in SVN. So our Forrestbot uses the "deploy.svn" workstage to deploy the generated documents.
-        The svnpubsub system automatically kicks in to do the final publish step
-        (see <a href="http://www.apache.org/dev/project-site#intro">explanation</a>).
+        The svnpubsub system automatically kicks in to do the final publish step.
         Elegant.
       </p>
       <p>
@@ -175,15 +174,10 @@ forrest -f publish.xml build</source>
     <section id="production">
       <title>Moving the documents into production</title>
       <p>
-        Next a cron job on the server will automatically publish it.
-        However, if quicker turnaround is required, then do this:
+        Next the svnpubsub system automatically kicks in to do the final publish step
+        (see <a href="http://www.apache.org/dev/project-site#intro">explanation</a>). Essentially this monitors each project's "site" svn and publishes the changes.
       </p>
-      <source>ssh people.apache.org
-cd /www/forrest.apache.org
-umask 002
-svn update</source>
       <p>
-        Next an rsync cronjob will publish it to the production webserver.
         See other <a href="http://apache.org/dev/project-site.html">notes</a>
         about how the ASF project websites are managed.
       </p>
