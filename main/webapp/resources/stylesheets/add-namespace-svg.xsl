@@ -15,14 +15,17 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 -->
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns="http://www.w3.org/2000/svg">
-  <xsl:import href="corner-imports.svg.xslt" />
-  <!-- Diagonal 45 degrees corner -->
-  <xsl:template name="figure">
-    <xsl:variable name="biggersize" select="number($size)+number($size)" />
-    <g transform="translate(0 0.5)">
-      <polygon points="0,{$size} {$size},0 {$biggersize},0 {$biggersize},{$biggersize} 0,{$biggersize}"
-      style="{$fill}{$stroke}stroke-width:1" />
-    </g>
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
+  <xsl:import href="copyover.xsl"/>
+  <xsl:template match="/">
+    <svg xmlns="http://www.w3.org/2000/svg">
+      <xsl:copy>
+        <xsl:apply-templates select="svg/@*"/>
+      </xsl:copy>
+      <xsl:apply-templates/>
+    </svg>
+  </xsl:template>
+  <xsl:template match="svg">
+    <xsl:apply-templates/>
   </xsl:template>
 </xsl:stylesheet>

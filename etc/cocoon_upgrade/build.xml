@@ -26,7 +26,7 @@
     <property file="revision.properties" />
     <property environment="env"/>
     <property name="cocoon.home" location="${env.COCOON_HOME}"/>
-    <property name="cocoon.version" value="2.1.12-dev"/>
+    <property name="cocoon.version" value="2.1.13-dev"/>
     <property name="forrest.home" location="${env.FORREST_HOME}"/>
   </target>
 
@@ -53,23 +53,26 @@
       <fileset dir="${cocoon.home}/lib/core" defaultexcludes="yes">
         <!-- Exclude some that we don't need -->
         <exclude name="commons-beanutils-core-*.jar"/>
-        <exclude name="commons-javaflow-*.jar"/>
         <exclude name="excalibur-instrument-mgr-*.jar"/>
         <exclude name="javac*.jar"/>
         <exclude name="jdtcore-*.jar"/>
         <exclude name="js-*.jar"/>
-        <exclude name="nekohtml-*.jar"/>
-        <exclude name="pizza-*.jar"/>
-        <!-- OSGI not yet needed -->
-        <exclude name="knopflerfish-*.jar"/>
         <!-- FIXME: The jxpath upgrade cannot be done.
           See issue FOR-675 (and FOR-405 and FOR-303) and dev mail list.
           commons-jxpath-1.2 causes errors with "site:" links.
           We have a workaround so use Cocoon's jar.
         <exclude name="commons-jxpath-*.jar"/>
         -->
-        <!-- We have newer xml-commons-resolver -->
-        <exclude name="xml-commons-resolver-*.jar"/>
+        <!-- We have some jars that are newer than Cocoon -->
+        <exclude name="commons-cli-*.jar"/>
+        <exclude name="commons-collections-*.jar"/>
+        <exclude name="commons-io-*.jar"/>
+        <exclude name="commons-jxpath-*.jar"/>
+        <exclude name="commons-lang-*.jar"/>
+        <exclude name="commons-logging-*.jar"/>
+        <exclude name="ehcache-*.jar"/>
+        <exclude name="log4j-*.jar"/>
+        <exclude name="slf4j-api-*.jar"/>
         <!-- servlet.jar goes under tools/jetty -->
         <exclude name="servlet-*.jar"/>
       </fileset>
@@ -85,12 +88,9 @@
     <copy todir="${forrest.home}/lib/core" preservelastmodified="true">
       <fileset dir="${cocoon.home}/lib/optional">
         <include name="batik-all-*.jar"/>
-<!-- FIXME: Cocoon's FOP causes trouble FOR-    ###################
-        <include name="fop-*.jar"/>
--->
+        <include name="xmlgraphics-commons-*.jar"/>
         <include name="lucene-*.jar"/>
         <include name="jtidy-*.jar"/>
-        <include name="nekopull-*.jar"/>
 <!-- FIXME: Chaperon required by core #FOR-501 -->
         <include name="chaperon-*.jar"/>
       </fileset>
@@ -103,6 +103,9 @@
        =============================================================== -->
     <copy todir="${forrest.home}/plugins/org.apache.forrest.plugin.input.dtdx/lib" preservelastmodified="true">
       <fileset dir="${cocoon.home}/lib/optional" includes="nekodtd-*.jar"/>
+    </copy>
+    <copy todir="${forrest.home}/plugins/org.apache.forrest.plugin.output.pdf/lib" preservelastmodified="true">
+      <fileset dir="${cocoon.home}/lib/optional" includes="fop-*.jar"/>
     </copy>
   </target>
 
