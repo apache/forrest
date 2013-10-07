@@ -200,9 +200,17 @@
             <property name="docsVersion" value="0_90"/>
           </then>
           <else>
+            <if>
+              <contains string="${forrest.version}" substring="0.10"/>
+              <then>
+                <property name="docsVersion" value="0_100"/>
+              </then>
+              <else>
 <!-- FIXME: the docs version number should be derived programmatically from the forrest.version in use 
                  (see http://issues.apache.org/jira/browse/FOR-535) -->
             <fail message="Trying to deploy plugin docs to an unknown version of Forrest. Please update the plugin's build file."/>
+              </else>
+            </if>
           </else>
         </if>
       </else>
