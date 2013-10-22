@@ -5,4 +5,9 @@ For each stylesheet that we want to use, add it "as-is" to this directory, using
 
 In the various Forrest plugins, use our "locationmap" techniques to refer to the relevant stylesheet. 
 
-Please note that these stylesheets should not be edited, rather contribute changes to exslt.org and update the copies found in Forrest.
+See the "EXSLT" example in the forrest seed-sample site for documentation and demonstration.
+
+Please note that these stylesheets that are distributed with Forrest must be
+unmodified copies (see http://www.apache.org/legal/resolved.html#cc-sa).
+If you need changes then please contribute to exslt.org and then follow on to
+update our unmodified copies.
