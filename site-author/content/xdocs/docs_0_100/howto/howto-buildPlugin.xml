@@ -135,12 +135,21 @@
         $PROJECT_HOME/plugins. There are a couple of changes you now need to
         make to the newly copied build.xml file. Open up 'build.xml' for
         editing. You can change the project name value to something more
-        suitable.Find the property name for forrest.plugins.dir and change the
-        location to read
+        suitable. Find the property name for forrest.plugins.dir and change the
+        location to read:
       </p>
       <source>location="."</source>
+      <p id="local-plugins-descriptor">
+        You will also need a local "Plugins Descriptor" file.
+        So copy $FORREST_HOME/plugins/plugins.xml to this local plugins directory.
+        Edit it to remove all of the "plugin" entries, and add your own ones.
+        Now need to declare this in the forrest properties.
+        Remember that each user can have a local forrest.properties file in their home directory.
+        Add the "forrest.plugins.descriptors" property by copying it from the forrest.properties file of a "seed-sample" project.
+        Append the full path-name for your local plugins descriptor file using the "file://" protocol.
+      </p>
       <p class="instruction">
-        So, revised commands for $PROJECT_HOME/plugins:
+        So the revised commands for the $PROJECT_HOME/plugins space, to seed a new plugin:
       </p>
       <source>
       cd [path_to_project_home]/plugins
@@ -193,12 +202,20 @@
         <section id="skinconf">
           <title>src/documentation/skinconf.xml</title>
           <p>
-            This configures the skin for your plugins documentation.
+            This configures the skin for your plugin's documentation.
             Note that it is a minimal file, as most content is centrally configured for all ASF plugins.
-            Over-ride some elements if needed, e.g. see the PDF output plugin.
           </p>
           <p>
-            If this is not and ASF-hosted plugin, then copy the skinconf.xml from a fresh
+            The "project-name" element was generated during the seedPlugin phase.
+            Now edit that to use a sensible short name, e.g. "Plugin: FooBar Output".
+            (This "project-name" is used to generate the default project logo banner.)
+            See other plugins for relevant examples.
+          </p>
+          <p>
+            Over-ride some other elements if needed, e.g. see the PDF output plugin.
+          </p>
+          <p>
+            If this is not an ASF-hosted plugin, then copy the skinconf.xml from a fresh
             'forrest seed-sample' site instead.
           </p>
         </section>
@@ -218,6 +235,7 @@
             src/documentation/content/xdocs/images/project-logo.png
             and
             src/documentation/content/xdocs/favicon.ico
+            to the same place in your plugin.
           </p>
         </section>
       </section>
@@ -366,11 +384,15 @@
       <section id="explain-descriptor">
         <title>Explanation</title>
         <p>
-          The files plugins/plugins.xml and
-          whiteboard/plugins/whiteboard-plugins.xml are the "Plugins Descriptor"
+          The files $FORREST_HOME/plugins/plugins.xml and
+          $FORREST_HOME/whiteboard/plugins/whiteboard-plugins.xml
+          are the core "Plugins Descriptor"
           files. Each plugin is described with its name, purpose, location, and
           version information. These descriptors are deployed to the forrest
           website.
+          (If you are developing local plugins then you will have declared
+          additional <a href="#local-plugins-descriptor">local plugins descriptor</a>
+          files.)
         </p>
         <p>
           Each plugin has a build.xml file which defines its version
