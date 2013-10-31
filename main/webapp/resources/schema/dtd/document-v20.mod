@@ -385,7 +385,7 @@ NOTES:
 <!-- ==================================================== -->
 <!ENTITY % local.headers "">
 <!ELEMENT header (title, subtitle?, version?, type?, authors?,
-                      notice*, abstract?, meta* %local.headers;)>
+  notice*, abstract?, meta*, link*, script* %local.headers;)>
 <!ATTLIST header
   %common.att; 
 >
@@ -426,6 +426,20 @@ NOTES:
 <!ATTLIST meta
   name NMTOKEN #REQUIRED
   %common.att; 
+>
+
+<!ELEMENT link EMPTY>
+<!ATTLIST link
+  href CDATA #IMPLIED
+  media CDATA #IMPLIED
+  rel CDATA #IMPLIED
+  type CDATA #IMPLIED
+>
+
+<!ELEMENT script EMPTY>
+<!ATTLIST script
+  src CDATA #IMPLIED
+  type CDATA #IMPLIED
 >
 
 <!-- ==================================================== -->
