@@ -25,6 +25,7 @@ imported document-to-html.xsl for details.
     <meta-data>
       <xsl:apply-templates select="header/meta"/>
       <xsl:apply-templates select="header/link"/>
+      <xsl:apply-templates select="header/script"/>
     </meta-data>
     <div id="content">
       <xsl:apply-templates select="body" mode="carry-body-attribs"/>

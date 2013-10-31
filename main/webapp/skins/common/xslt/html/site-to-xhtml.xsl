@@ -341,6 +341,11 @@ along with all other "link" elements. -->
         <xsl:apply-templates select="@*"/>
       </xsl:element>
     </xsl:for-each>
+    <xsl:for-each select="//meta-data/script">
+      <xsl:element name="script">
+        <xsl:apply-templates select="@*"/>
+      </xsl:element>
+    </xsl:for-each>
   </xsl:template>
   <xsl:template name="feedback">
     <div id="feedback">
