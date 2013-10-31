@@ -24,6 +24,7 @@ imported document-to-html.xsl for details.
   <xsl:template match="document">
     <meta-data>
       <xsl:apply-templates select="header/meta"/>
+      <xsl:apply-templates select="header/link"/>
     </meta-data>
     <div id="content">
       <div id="skinconf-printlink"/>

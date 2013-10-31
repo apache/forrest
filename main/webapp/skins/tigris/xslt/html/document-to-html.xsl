@@ -32,6 +32,7 @@ and tabs (tab-to-menu.xsl) to generate the final HTML.
   <xsl:template match="document">
     <meta-data>
       <xsl:apply-templates select="header/meta"/>
+      <xsl:apply-templates select="header/link"/>
     </meta-data>
     <div class="content">
       <div id="topmodule" align="right">
