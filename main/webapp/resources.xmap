@@ -132,13 +132,15 @@ $Revision: 1.13 $
   </map:resources>
   <map:pipelines>
     <map:pipeline>
+<!-- skin-level js -->
       <map:match pattern="**skin/**.js">
         <map:read src="{lm:skin.js.{2}}" mime-type="text/javascript" />
       </map:match>
-<!-- @deprecated -->
-      <map:match pattern="**.js">
-        <map:read src="{lm:project.js.{1}}" mime-type="text/javascript" />
+<!-- project-level js -->
+      <map:match pattern="**scripts/**.js">
+        <map:read src="{lm:project.js.{2}}" mime-type="text/javascript" />
       </map:match>
+<!-- skin-level css -->
       <map:match pattern="**skin/**.css">
         <map:select type="exists">
           <map:when test="{lm:skin.css.xslt.{2}}">
@@ -154,9 +156,9 @@ $Revision: 1.13 $
           </map:otherwise>
         </map:select>
       </map:match>
-<!-- @deprecated -->
-      <map:match pattern="**.css">
-        <map:read src="{lm:project.css.{1}}" mime-type="text/css" />
+<!-- project-level css -->
+      <map:match pattern="**css/**.css">
+        <map:read src="{lm:project.css.{2}}" mime-type="text/css" />
       </map:match>
 <!-- special case corner generator pipeline -->
       <map:match pattern="skin/images**/*c-*-*-*-1*-2*-3*.png">
