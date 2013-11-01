@@ -16,6 +16,36 @@
   limitations under the License.
 -->
 <map:sitemap xmlns:map="http://apache.org/cocoon/sitemap/1.0">
+  <map:components>
+    <map:actions>
+      <map:action logger="sitemap.action.sourcetype" name="sourcetype" src="org.apache.forrest.sourcetype.SourceTypeAction">
+<!--
+      These actions are additional sourcetype demonstrations.
+      See the main definitions at main/webapp/forrest.xmap
+-->
+        <sourcetype name="demo-js-css">
+          <processing-instruction target="demo" data="js-css"/>
+        </sourcetype>
+      </map:action>
+    </map:actions>
+    <map:selectors default="parameter">
+      <map:selector logger="sitemap.selector.parameter" name="parameter" src="org.apache.cocoon.selection.ParameterSelector" />
+    </map:selectors>
+  </map:components>
+  <map:resources>
+    <map:resource name="transform-to-document">
+      <map:act type="sourcetype" src="{src}">
+        <map:select type="parameter">
+          <map:parameter name="parameter-selector-test" value="{sourcetype}" />
+          <map:when test="demo-js-css">
+            <map:generate src="{properties:content.xdocs}{../../1}.xml" />
+            <map:transform src="{properties:resources.stylesheets}/demo-js-css.xsl" />
+            <map:serialize type="xml-document"/>
+          </map:when>
+        </map:select>
+      </map:act>
+    </map:resource>
+  </map:resources>
   <map:pipelines>
     <map:pipeline>
       <map:match pattern="forrest-issues.xml">
@@ -33,6 +63,11 @@
             <map:read src="{properties:content}{1}.dtdx.pdf" mime-type="application/pdf"/>
           </map:when>
         </map:select>
+      </map:match>
+      <map:match pattern="**.xml">
+        <map:call resource="transform-to-document">
+          <map:parameter name="src" value="{properties:content.xdocs}{1}.xml" />
+        </map:call>
       </map:match>
     </map:pipeline>
   </map:pipelines>
