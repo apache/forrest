@@ -75,5 +75,66 @@
         ####
       </p>
     </section>
+    <section id="examples">
+      <title>Examples</title>
+      <section id="example-d3">
+        <title>D3.js Data Driven Documentation</title>
+        <p>
+          Hooking up
+          <a href="http://d3js.org/">D3.js</a> is very easy, as shown there.
+          After declaring the "script" element in the header of your source,
+          then add one of the example snippets to your project JS.
+          The "randomly color paragraphs" example is a quick test that you are
+          up and running.
+        </p>
+        <p>
+          Obviously it is a very powerful combination to use D3 together with
+          Forrest's ability to gather, co-ordinate, and transform data.
+        </p>
+      </section>
+      <section id="example-leaflet">
+        <title>Leaflet</title>
+        <p>
+          Follow the excellent 
+          <a href="http://bost.ocks.org/mike/leaflet/">example</a>
+          "using D3 to render GeoJSON shapes in conjunction with Leaflet".
+        </p>
+        <p>
+          Forrest will automatically find the CSS and JS when you place them
+          in the corresponding "project resources" directories as explained above.
+        </p>
+        <p>
+          In this case we need to help Forrest find the images that are used by
+          the Leaflet CSS. For example, it is looking for the resource
+          <code>css/images/zoom-in.png</code> (i.e. relative to its CSS file).
+        </p>
+        <p>
+          However, the default machinery in Forrest for locating images does not
+          look in that location, even if you try to place them there.
+        </p>
+        <p>
+          Add to your "project locationmap". This is consulted first in the
+          sequence of locationmaps, so you can cause Forrest to look for all
+          project image files in certain specific locations. If it does not
+          find them there, then it continues through the default locationmaps.
+        </p>
+        <p>
+          So if you added your source images to a
+          <code>resources/images/leaflet/</code> sub-directory, then add the following to your "project locationmap":
+        </p>
+        <source>
+<![CDATA[<match pattern="project.images.**.*">
+  <location src="{properties:resources.images}leaflet/{1}.{2}" />
+</match>
+]]></source>
+        <p>
+          Note that each locationmap match can try multiple locations in sequence.
+        </p>
+        <p>
+          This "project locationmap" technique is useful for utilising multiple
+          image/javascript/css libraries and keeping their resources separate.
+        </p>
+      </section>
+    </section>
   </body>
 </document>
