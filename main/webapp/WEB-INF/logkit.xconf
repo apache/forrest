@@ -102,6 +102,14 @@
       <append>false</append>
     </cocoon>
 
+    <cocoon id="exception">
+      <filename>${context-root}/WEB-INF/logs/exception.log</filename>
+      <format type="cocoon">
+        %7.7{priority} %{time}   [%{category}] (%{uri}): %{message}\n%{throwable}
+      </format>
+      <append>false</append>
+    </cocoon>
+
     <cocoon id="idgen">
       <filename>${context-root}/WEB-INF/logs/idgen.log</filename>
       <format type="cocoon">
@@ -244,6 +252,10 @@
       </category>
       <category name="transformer.linkrewriter" log-level="INFO">
         <log-target id-ref="linkrewriter"/>
+        <log-target id-ref="error"/>
+      </category>
+      <category name="handled-errors" log-level="INFO">
+        <log-target id-ref="exception"/>
         <log-target id-ref="error"/>
       </category>
 

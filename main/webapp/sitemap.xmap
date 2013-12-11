@@ -223,8 +223,9 @@ $Revision: 1.12 $
     <map:selectors>
       <map:selector name="exists" logger="sitemap.selector.exists"  
                     src="org.apache.forrest.sourceexists.SourceExistsSelector" />
-      <map:selector name="exception" src="org.apache.cocoon.selection.ExceptionSelector">
+      <map:selector name="exception" logger="sitemap.selector.exception" src="org.apache.cocoon.selection.ExceptionSelector">
         <exception name="resourceNotFound" class="org.apache.cocoon.ResourceNotFoundException"/>
+        <exception name="transformer" class="javax.xml.transform.TransformerException"/>
         <exception class="java.lang.Throwable" unroll="true"/>
       </map:selector>
       <map:selector name="config" logger="sitemap.selector.config" 
@@ -638,16 +639,7 @@ $Revision: 1.12 $
         <map:redirect-to uri="index.html"/>
       </map:match>
     </map:pipeline>
-<!-- 
-     <map:handle-errors>
-      <map:select type="exception">
-       <map:when test="resourceNotFound">
-         <map:generate  type="exception"/>
-         <map:transform src="{lm:transform.exception.html}"/>
-         <map:serialize type="html"/>
-       </map:when>
-      </map:select>
-    </map:handle-errors>
-    -->
+<!-- Enable Cocoon error handling. See FOR-1245. -->
+  &handle-errors;
   </map:pipelines>
 </map:sitemap>

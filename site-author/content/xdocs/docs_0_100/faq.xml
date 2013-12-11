@@ -1313,6 +1313,50 @@ X [0]         /docs_0_80/upgrading_08.html  BROKEN: No pipeline matched...
         </p>
       </answer>
     </faq>
+    <faq id="handle-errors">
+      <question>How to enable Cocoon error handling?</question>
+      <answer>
+        <p>
+          When Cocoon encounters an exception then it will present a default
+          page to explain the error. Better error handling can be configured
+          by adding a "map:handle-errors" section to each sitemap from which
+          such exceptions might arise.
+        </p>
+        <p>
+          That is easily added directly to your project sitemap for any
+          special processing.
+          However for many cases it needs to be added to the main
+          webapp/sitemap.xmap file.
+        </p>
+        <p>
+          Do this by adding a "handle-errors" xml entity to your project
+          "symbols" file (<a href="#sitemap-entities">explained above</a>).
+          For example:
+        </p>
+        <source>
+<![CDATA[<!ENTITY handle-errors '
+     <map:handle-errors>
+      <map:select type="exception">
+       <map:when test="resourceNotFound">
+         <map:generate type="exception"/>
+         <map:transform src="{lm:transform.exception.text}">
+           <map:parameter name="type" value="404"/>
+         </map:transform>
+         <map:serialize type="text" status-code="404"/>
+       </map:when>
+      </map:select>
+    </map:handle-errors>
+'>]]></source>
+        <p>
+          Some exception selectors are configured in webapp/sitemap.xmap file
+          at the "map:selectors" section.
+          Please send patches for others if you need them to be added.
+        </p>
+        <p>
+          See further <a href="http://s.apache.org/b8V">exxplanation</a>.
+        </p>
+      </answer>
+    </faq>
     <faq id="svn-eol-style">
       <question>Why are there SVN diffs for some documents, even though they have not changed?</question>
       <answer>
