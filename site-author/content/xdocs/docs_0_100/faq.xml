@@ -1326,7 +1326,7 @@ X [0]         /docs_0_80/upgrading_08.html  BROKEN: No pipeline matched...
           That is easily added directly to your project sitemap for any
           special processing.
           However for many cases it needs to be added to the main
-          webapp/sitemap.xmap file.
+          <code>webapp/sitemap.xmap</code> file.
         </p>
         <p>
           Do this by adding a "handle-errors" xml entity to your project
@@ -1348,9 +1348,36 @@ X [0]         /docs_0_80/upgrading_08.html  BROKEN: No pipeline matched...
     </map:handle-errors>
 '>]]></source>
         <p>
-          Some exception selectors are configured in webapp/sitemap.xmap file
-          at the "map:selectors" section.
-          Please send patches for others if you need them to be added.
+          Some exception selectors are already configured in Forrest's main
+          <code>webapp/sitemap.xmap</code> file at the "map:selectors" section.
+          There is a mechanism for declaring more selectors for your project.
+          As above, add a "sitemap-selectors" xml entity to your project "symbols" file.
+          For this example, we demonstrate using an extra file for the snippet content.
+        </p>
+        <source>
+<![CDATA[<!ENTITY sitemap-selectors SYSTEM "sitemap-selectors.xml">]]></source>
+        <p>
+          The file will be found relative to your project "symbols" file that declared it.
+          (If you need to hold a common set of such files elsewhere, then the
+          project Catalog Entity Resolver could be configured.)
+          So here is an example "sitemap-selectors" snippet to configure the XPathExceptionSelector
+          to declare other exception names for use in a more comprehensive
+          "map:handle-errors" section:
+        </p>
+        <source>
+<![CDATA[<map:selector name="exception2" src="org.apache.cocoon.selection.XPathExceptionSelector">
+  <exception name="transformer2" class="javax.xml.transform.TransformerException" unroll="true">
+    <xpath name="goofer2" test="message='The identifier is not allowed.'"/>
+  </exception>
+  <exception class="java.lang.Throwable" unroll="true"/>
+</map:selector>]]></source>
+        <p>
+          The "message" text is issued from a stylesheet-directed termination
+          via <code><![CDATA[<xsl:message terminate="yes">]]></code>
+        </p>
+        <p>
+          This file-based entity is a very useful technique, as it handles the
+          case where both double-quotes and single-quotes are required in the entity content.
         </p>
         <p>
           See further <link href="http://s.apache.org/b8V">explanation</link>.
