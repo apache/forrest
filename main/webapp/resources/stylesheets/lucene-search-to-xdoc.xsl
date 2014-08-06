@@ -42,7 +42,7 @@
         <title>Search Results</title>
       </header>
       <body>
-        <xsl:if test="not(search:hits)">
+        <xsl:if test="not(search:hits/search:hit)">
           <note>
 <xsl:text>Your search for </xsl:text>
             <code>
