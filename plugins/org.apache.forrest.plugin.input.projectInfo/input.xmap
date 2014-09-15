@@ -129,10 +129,38 @@
         <map:serialize type="xml-document"/>
       </map:match>
     </map:pipeline>
-    <map:pipeline>
 <!-- svnHelper -->
-      <map:mount uri-prefix="" src="svnHelper.xmap" check-reload="yes" 
-        pass-through="true" />
+    <map:pipeline>
+      <map:match pattern="*.svn.xml">
+        <map:aggregate element="svn">
+          <map:part src="{lm:projectInfo.svn.log.dir}{0}"/>
+          <map:part src="{lm:projectInfo.svn.mapper}"/>
+        </map:aggregate>
+        <map:transform src="resources/stylesheets/svn-to-changes.xsl" />
+        <map:transform src="{lm:projectInfo.transform.changes.document}" >
+          <map:parameter name="bugtracking-url" value="{properties:forrest.bugtracking-url}"/>
+          <map:parameter name="path" value="{1}"/>
+          <map:parameter name="projectInfo.changes.sort" value="{properties:projectInfo.changes.sort}"/>
+          <map:parameter name="projectInfo.changes.includeCommitterList" value="{properties:projectInfo.changes.includeCommitterList}"/>
+          <map:parameter name="projectInfo.changes.includeContributorList" value="{properties:projectInfo.changes.includeContributorList}"/>
+        </map:transform>
+        <map:serialize type="xml-document"/>
+      </map:match>
+      <map:match pattern="*.svn-revision.xml">
+        <map:generate src="{lm:projectInfo.svn.log.dir}{1}.svn.xml"/>
+        <map:transform src="resources/stylesheets/svn-to-revision.xsl" />
+        <map:transform src="resources/stylesheets/first-last-revision.xsl" />
+        <map:serialize type="xml"/>
+      </map:match>
+      <map:match pattern="*.svn-sh.xml">
+        <map:generate src="cocoon:/{1}.svn-revision.xml"/>
+        <map:transform src="resources/stylesheets/svn-log.xsl">
+          <map:parameter value="{lm:project.svn.url}" name="url"/>
+          <map:parameter value="{properties:projectInfo.svn.ext}" name="ext"/>
+          <map:parameter value="{properties:projectInfo.svn.path-prefix}" name="path-prefix"/>
+        </map:transform>
+        <map:serialize type="xml"/>
+      </map:match>
     </map:pipeline>
   </map:pipelines>
 </map:sitemap>
