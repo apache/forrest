@@ -136,7 +136,7 @@
           <map:part src="{lm:projectInfo.svn.log.dir}{0}"/>
           <map:part src="{lm:projectInfo.svn.mapper}"/>
         </map:aggregate>
-        <map:transform src="resources/stylesheets/svn-to-changes.xsl" />
+        <map:transform src="{lm:projectInfo.transform.svn.changes}" />
         <map:transform src="{lm:projectInfo.transform.changes.document}" >
           <map:parameter name="bugtracking-url" value="{properties:forrest.bugtracking-url}"/>
           <map:parameter name="path" value="{1}"/>
@@ -148,13 +148,13 @@
       </map:match>
       <map:match pattern="*.svn-revision.xml">
         <map:generate src="{lm:projectInfo.svn.log.dir}{1}.svn.xml"/>
-        <map:transform src="resources/stylesheets/svn-to-revision.xsl" />
-        <map:transform src="resources/stylesheets/first-last-revision.xsl" />
+        <map:transform src="{lm:projectInfo.transform.svn.revision}" />
+        <map:transform src="{lm:projectInfo.transform.svn-revision.first-last}" />
         <map:serialize type="xml"/>
       </map:match>
       <map:match pattern="*.svn-sh.xml">
         <map:generate src="cocoon:/{1}.svn-revision.xml"/>
-        <map:transform src="resources/stylesheets/svn-log.xsl">
+        <map:transform src="{lm:projectInfo.transform.svn-log.sh}">
           <map:parameter value="{lm:project.svn.url}" name="url"/>
           <map:parameter value="{properties:projectInfo.svn.ext}" name="ext"/>
           <map:parameter value="{properties:projectInfo.svn.path-prefix}" name="path-prefix"/>
