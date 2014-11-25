@@ -206,8 +206,8 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
                   <xsl:when test="$config/search/@provider = 'lucene'">
 <!-- Lucene search -->
                     <form method="get" action="{$root}{$lucene-search}">
-                      <input type="text" id="query" name="queryString" size="25" onFocus="getBlank (this, '{$search-prompt}');">
-                        <xsl:attribute name="value">
+                      <input type="text" id="query" name="queryString" size="25" i18n:attr="value placeholder">
+                        <xsl:attribute name="placeholder">
                           <xsl:value-of select="$search-prompt"/>
                         </xsl:attribute>
                       </input>&#160;
@@ -217,8 +217,8 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
                   <xsl:otherwise>
                     <form class="roundtopsmall" method="get" action="http://www.google.com/search">
                       <input type="hidden" name="sitesearch" value="{$config/search/@domain}"/>
-                      <input type="text" id="query" name="q" size="25" onFocus="getBlank (this, '{$search-prompt}');">
-                        <xsl:attribute name="value">
+                      <input type="text" id="query" name="q" size="25" i18n:attr="value placeholder">
+                        <xsl:attribute name="placeholder">
                           <xsl:value-of select="$search-prompt"/>
                         </xsl:attribute>
                       </input>&#160; 
@@ -464,8 +464,8 @@ document.write("]]><i18n:text >Last Published:</i18n:text><![CDATA[ " + document
             <xsl:when test="$config/search/@provider = 'lucene'">
 <!-- Lucene search -->
               <form method="get" action="{$root}{$lucene-search}">
-                <input type="text" id="query" name="queryString" size="18" onFocus="getBlank (this, '{$search-prompt}');">
-                  <xsl:attribute name="value">
+                <input type="text" id="query" name="queryString" size="18" i18n:attr="value placeholder">
+                  <xsl:attribute name="placeholder">
                     <xsl:value-of select="$search-prompt"/>
                   </xsl:attribute>
                 </input>&#160;
@@ -475,8 +475,8 @@ document.write("]]><i18n:text >Last Published:</i18n:text><![CDATA[ " + document
             <xsl:otherwise>
               <form method="get" action="http://www.google.com/search">
                 <input type="hidden" name="sitesearch" value="{$config/search/@domain}"/>
-                <input type="text" id="query" name="q" size="18" onFocus="getBlank (this, '{$search-prompt}');">
-                  <xsl:attribute name="value">
+                <input type="text" id="query" name="q" size="18" i18n:attr="value placeholder">
+                  <xsl:attribute name="placeholder">
                     <xsl:value-of select="$search-prompt"/>
                   </xsl:attribute>
                 </input>&#160; 
@@ -746,9 +746,9 @@ if (VERSION > 3) {
     <xsl:if test="$disable-font-script = 'false'">
       <div class="trail">
         <i18n:text >Font size:</i18n:text> 
-	          &#160;<input type="button" onclick="ndeSetTextSize('reset'); return false;" title="Reset text" class="resetfont" value="Reset"/>      
-	          &#160;<input type="button" onclick="ndeSetTextSize('decr'); return false;" title="Shrink text" class="smallerfont" value="-a"/>
-	          &#160;<input type="button" onclick="ndeSetTextSize('incr'); return false;" title="Enlarge text" class="biggerfont" value="+a"/>
+	          &#160;<input type="button" onclick="ndeSetTextSize('reset'); return false;" title="Reset text"   class="resetfont"   value="Reset" i18n:attr="value title"/>      
+	          &#160;<input type="button" onclick="ndeSetTextSize('decr');  return false;" title="Shrink text"  class="smallerfont" value="-a"    i18n:attr="value title"/>
+	          &#160;<input type="button" onclick="ndeSetTextSize('incr');  return false;" title="Enlarge text" class="biggerfont"  value="+a"    i18n:attr="value title"/>
       </div>
     </xsl:if>
   </xsl:template>
