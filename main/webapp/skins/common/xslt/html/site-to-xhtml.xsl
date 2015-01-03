@@ -344,6 +344,7 @@ along with all other "link" elements. -->
     <xsl:for-each select="//meta-data/script">
       <xsl:element name="script">
         <xsl:apply-templates select="@*"/>
+	<xsl:value-of disable-output-escaping="yes" select="text()"/>
       </xsl:element>
     </xsl:for-each>
   </xsl:template>
