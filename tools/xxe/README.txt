@@ -27,7 +27,8 @@ questions to XXE support or mailing lists.
 
 Requirements:
 =============
-* XXE 3.0p1+ (version 1.3 of the tool works with XXE version 2.5p3 - 3.0)
+* XXE 4.x (version 1.4 of the tool works with XXE version 4.0 > 3.0, and
+           version 1.3 of the tool works with XXE version 2.5p3 - 3.0)
 * Forrest 0.5+
 
 
@@ -45,11 +46,7 @@ Upgrading
 Installing
 ==========
 
-* Extract into the XXE application config directory (e.g. D:\Program Files\XMLmind_XML_Editor\config)
-  OR
-* Extract into your XXE user directory (e.g. ~/.xxe/addon/config) (only for version 1.3+ of this config)
-  For version 1.3+ of this tool, this is the recommended installation location, as it permits upgrading XXE without having to reinstall the tool
-  NOTE: This location is new for XXE 2.10, and is not tested with earlier releases!
+Follow the instructions on http://www.xmlmind.com/xmleditor/addons.shtml#manual_install
 
 
 Developer Instructions
@@ -65,6 +62,11 @@ folder in the XXE 'addon' folder. Run the build there to copy the DTDs
 
 History
 =======
+
+1.5:
+----
+- Updated the tool to work with XXE 4.x
+  NOTE: This change is backwards INCOMPATIBLE, therefore the tool now requires XXE 4.x
 
 1.4:
 ----
