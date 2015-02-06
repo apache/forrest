@@ -164,7 +164,7 @@ which is then merged by site-to-xhtml.xsl
       <xsl:when test="@id and @id = $matching-id">
         <xsl:call-template name="level2-selected"/>
       </xsl:when>
-      <xsl:when test="@dir = $level2-longest-dir">
+      <xsl:when test="not(@id) and @dir=$level2-longest-dir or @href=$level2-longest-dir">
         <xsl:call-template name="level2-selected"/>
       </xsl:when>
       <xsl:otherwise>
