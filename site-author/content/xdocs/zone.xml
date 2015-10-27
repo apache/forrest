@@ -24,34 +24,62 @@
     <section id="overview">
       <title>Overview</title>
       <p>
-        The server <a href="ext:forrest-zone">forrest.zones.apache.org</a>
+        Note the current hostname is forrest-vm.apache.org. Links in this
+        text have been updated but not all uses of the name forrest.zones.apache.org.
+      </p>
+      <p>
+        The server <a href="ext:forrest-zone">forrest-vm.apache.org</a>
         provides our testing and demonstration area. It is managed by Apache
         Forrest committers. The material is intended for developer use only.
       </p>
-      <fixme author="">
-        These notes are for our previous zone on the Solaris OS.
-        Much of this documentation will just need some tweaking.
-        The new zone (jail)
-        <a href="http://www.apache.org/dev/freebsd-jails.html">documentation</a>
-        needs to be referenced.
-      </fixme>
     </section>
     <section id="configuration">
       <title>Configuration</title>
       <p>
         Configuration files and directory structures are stored in SVN at
-        <code>https://svn.apache.org/repos/asf/forrest/zone</code> and
+        <a href="ext:forrest-zone/svn">https://svn.apache.org/repos/asf/forrest/zone</a> and
         additional private stuff is in our pmc/forrest/zone SVN.
       </p>
       <p>
-        Other notes are in SVN at
+        The current environment is a virtual machine provisioned using
+        configuration information stored in <a href="ext:forrest-zone/puppet">puppet</a>.
+      </p>
+      <ul>
+        <li>Basic configuration classes and settings
+          <ul>
+            <li>
+              <a href="https://github.com/apache/infrastructure-puppet/blob/deployment/data/nodes/forrest-vm.apache.org.yaml">
+                data/nodes/forrest-vm.apache.org.yaml</a>
+            </li>
+          </ul>
+        </li>
+        <li>Manifest to create role account and install extra packages
+          <ul>
+            <li>
+              <a href="https://github.com/apache/infrastructure-puppet/blob/deployment/modules/forrest_pvm_asf/manifests/init.pp">
+                modules/forrest_pvm_asf/manifests/init.pp</a>
+            </li>
+          </ul>
+        </li>
+      </ul>
+      <p>
+        Configuration changes may be applied by submitting a
+        <a href="https://help.github.com/articles/using-pull-requests/">pull request</a>.
+        Fork the <a href="https://github.com/apache/infrastructure-puppet">repository</a>,
+        make your changes on a topic branch based on deployment branch, and submit your request.
+      </p>
+      <p>
+        Other (old) notes are in SVN at
         <a href="http://svn.apache.org/repos/asf/forrest/zone/README.txt">zone/README.txt</a>
+      </p>
+      <p>
+        Note that the user account <code>forrest</code> is now a role account named <code>forrest_role</code>.
       </p>
       <p>
         <strong>config</strong>
       </p>
       <source>
-creates /home/forrest/config ... $CONFIG
+creates /home/forrest_role/config ... $CONFIG
 directories /forrestbot-*/ are the forrestbot homes, see below.
 setenv*.sh ... these are sourced by the forrestbots and other
   cronjobs and user configs, to set the environment.
@@ -60,7 +88,7 @@ setenv*.sh ... these are sourced by the forrestbots and other
         <strong>htdocs</strong>
       </p>
       <source>
-creates /home/forrest/htdocs ... $DOC_ROOT
+creates /home/forrest_role/htdocs ... $DOC_ROOT
 directories /ft/ and /fts/ are the forrestbot config and results, see below.
 </source>
       <p>
@@ -72,34 +100,15 @@ Normally these would be in the relevant project's SVN.
 Hold them here until building properly.
 </source>
       <p>
-        All files are owned in the group "other" so any one of us can
-        edit/update. Make sure that your 'umask' is set properly so that new
-        files have group write permissions. See the
-        <a href="#admin-user">notes</a> about user administration. FIXME: Add a
-        proper group.
-      </p>
-      <p>
         Cron runs the various Forrestbots and management tasks, such as updating
-        the forrest-trunk software; cleaning up old logfiles, etc. FIXME: These
-        are not yet managed under SVN, see ~crossley/my-crontab.txt
+        the forrest-trunk software; cleaning up old logfiles, etc. A copy of the
+        crontab is stored in SVN at <code>zone/config/crontab.txt</code>.
       </p>
     </section>
     <section id="software">
       <title>Software</title>
       <p>
-        Global zone software is as described in
-        <a href="http://www.apache.org/dev/solaris-zones.html">zone
-        administration</a>.
-      </p>
-      <p>
-        Various local software is installed in <code>/export/opt/</code> (not
-        managed with SVN) ...
-      </p>
-      <p>
-        Our Apache httpd server is managed using
-        <a href="http://www.apache.org/dev/solaris-zones.html#apache2_smf">Solaris SMF</a>
-        
-       so should always come back up automatically after a failure or machine reboot.
+        Installed software is now managed via puppet, see above.
       </p>
       <section id="s-forrest">
         <title>Forrest</title>
@@ -197,15 +206,6 @@ Configuration files and the generated results are at $DOC_ROOT/fts/
         to get a user account added or modified.
       </p>
       <p>
-        As requested by that infra doc, keep our zone info up-to-date (see
-        https://svn.apache.org/repos/infra/infrastructure/trunk/docs/machines/helios/zones.txt).
-      </p>
-      <p>
-       We have minimally configured our zone. See some other projects' config ideas, e.g.
-        <a href="http://wiki.apache.org/gump/GumpZonesConfig">GumpZonesConfig</a>
-        and those of us on the Cocoon PMC can see their config in their "pmc" SVN.
-      </p>
-      <p>
         Monitor the infrastructure@
         <a href="http://www.apache.org/dev/infra-mail.html">mail lists</a>
         for changes to the 
@@ -213,7 +213,7 @@ Configuration files and the generated results are at $DOC_ROOT/fts/
       </p>
       <p>
         Keep an eye on the status via the
-        <a href="http://apache.org/dev/#status">monitoring</a> service.
+        <a href="http://status.apache.org/">monitoring</a> service.
       </p>
       <p>
         Occasionally the "SSL server certificate" will change for svn.apache.org
@@ -227,7 +227,7 @@ Configuration files and the generated results are at $DOC_ROOT/fts/
         <a href="http://www.apache.org/dev/infra-contact">infra</a>
         about anything, then please try our Forrest dev or private list first.
         See the monitor page for
-        <a href="http://www.apache.org/dev/#status">Service Status</a>.
+        <a href="http://status.apache.org/">Service Status</a>.
       </p>
       <p>
         Keep an occasional eye on $CONFIG/update-forrest-trunk.log This is
@@ -241,10 +241,9 @@ Configuration files and the generated results are at $DOC_ROOT/fts/
         </p>
         <p>
           See some notes at
-          <a href="http://www.apache.org/dev/solaris-zones.html">zone
-          administration</a> and the general notes for
-          <a href="http://www.apache.org/dev/new-committers-guide.html#shell">new
-          committers</a> (especially the part about 'umask').
+          <a href="https://www.apache.org/dev/freebsd-jails#opie">configuring opie
+            for sudo access</a>. Opie and sudo are needed to work as the <code>forrest_role</code>
+          user.
         </p>
         <p>
           Look at the setup of some other users on our zone.
