@@ -166,38 +166,6 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
                             <xsl:comment>end Subtabs</xsl:comment>
                         </xsl:if>
 
-                        <xsl:if test="$config/search and not($config/search/@box-location = 'alt')">
-                            <xsl:comment>start Search</xsl:comment>
-                            <div class="searchbox">
-                                <xsl:variable name="search-prompt">Search the site with <xsl:value-of select="$config/search/@provider"/>
-                                </xsl:variable>
-                                <xsl:choose>
-                                    <xsl:when test="$config/search/@provider = 'lucene'">
-                                        <xsl:comment>Lucene search</xsl:comment>
-                                        <form method="get" action="{$root}{$lucene-search}">
-                                            <input type="text" id="query" name="queryString" size="25" i18n:attr="value placeholder">
-                                                <xsl:attribute name="placeholder">
-                                                    <xsl:value-of select="$search-prompt"/>
-                                                </xsl:attribute>
-                                            </input>&#160;
-                                            <input type="submit" value="Search" name="Search" i18n:attr="value"/>
-                                        </form>
-                                    </xsl:when>
-                                    <xsl:otherwise>
-                                        <form class="roundtopsmall" method="get" action="http://www.google.com/search">
-                                            <input type="hidden" name="sitesearch" value="{$config/search/@domain}"/>
-                                            <input type="text" id="query" name="q" size="25" i18n:attr="value placeholder">
-                                                <xsl:attribute name="placeholder">
-                                                    <xsl:value-of select="$search-prompt"/>
-                                                </xsl:attribute>
-                                            </input>&#160;
-                                            <input type="submit" value="Search" name="Search" i18n:attr="value"/>
-                                        </form>
-                                    </xsl:otherwise>
-                                </xsl:choose>
-                            </div>
-                            <xsl:comment>end search</xsl:comment>
-                        </xsl:if>
                     </div>
                 </div>
                 <xsl:comment>centerstrip with menu and mainarea</xsl:comment>
@@ -343,6 +311,37 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
     <xsl:template name="menu">
         <xsl:comment>start Menu</xsl:comment>
         <div id="menu" class="col-sm-3">
+            <xsl:comment>Search box: only location for the fleece skin</xsl:comment>
+            <xsl:comment>start Search</xsl:comment>
+            <div class="searchbox">
+                <xsl:variable name="search-prompt">Search the site with <xsl:value-of select="$config/search/@provider"/>
+                </xsl:variable>
+                <xsl:choose>
+                    <xsl:when test="$config/search/@provider = 'lucene'">
+                        <xsl:comment>Lucene search</xsl:comment>
+                        <form method="get" action="{$root}{$lucene-search}">
+                            <input type="text" id="query" name="queryString" size="18" onFocus="getBlank (this, '{$search-prompt}');">
+                                <xsl:attribute name="value">
+                                    <xsl:value-of select="$search-prompt"/>
+                                </xsl:attribute>
+                            </input>&#160;
+                            <input type="submit" value="Search" name="Search" i18n:attr="value"/>
+                        </form>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <form method="get" action="http://www.google.com/search">
+                            <input type="hidden" name="sitesearch" value="{$config/search/@domain}"/>
+                            <input type="text" id="query" name="q" size="18" onFocus="getBlank (this, '{$search-prompt}');" i18n:attr="value">
+                                <xsl:attribute name="value">
+                                    <xsl:value-of select="$search-prompt"/>
+                                </xsl:attribute>
+                            </input>&#160;
+                            <input type="submit" value="Search" name="Search" i18n:attr="value"/>
+                        </form>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </div>
+            <xsl:comment>end search</xsl:comment>
             <ul class="nav nav-sidebar">
                 <xsl:comment>menu - inner</xsl:comment>
                 <xsl:for-each select = "div[@id='menu']/ul/li">
@@ -351,40 +350,6 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
                     </xsl:call-template>
                 </xsl:for-each>
             </ul>
-            <xsl:comment>Search box: alternative location</xsl:comment>
-            <xsl:if test="$config/search and $config/search/@box-location='alt'">
-                <xsl:comment>start Search</xsl:comment>
-                <div class="searchbox">
-                    <hr />
-                    <xsl:variable name="search-prompt">Search the site with <xsl:value-of select="$config/search/@provider"/>
-                    </xsl:variable>
-                    <xsl:choose>
-                        <xsl:when test="$config/search/@provider = 'lucene'">
-                            <xsl:comment>Lucene search</xsl:comment>
-                            <form method="get" action="{$root}{$lucene-search}">
-                                <input type="text" id="query" name="queryString" size="18" onFocus="getBlank (this, '{$search-prompt}');">
-                                    <xsl:attribute name="value">
-                                        <xsl:value-of select="$search-prompt"/>
-                                    </xsl:attribute>
-                                </input>&#160;
-                                <input type="submit" value="Search" name="Search" i18n:attr="value"/>
-                            </form>
-                        </xsl:when>
-                        <xsl:otherwise>
-                            <form method="get" action="http://www.google.com/search">
-                                <input type="hidden" name="sitesearch" value="{$config/search/@domain}"/>
-                                <input type="text" id="query" name="q" size="18" onFocus="getBlank (this, '{$search-prompt}');" i18n:attr="value">
-                                    <xsl:attribute name="value">
-                                        <xsl:value-of select="$search-prompt"/>
-                                    </xsl:attribute>
-                                </input>&#160;
-                                <input type="submit" value="Search" name="Search" i18n:attr="value"/>
-                            </form>
-                        </xsl:otherwise>
-                    </xsl:choose>
-                </div>
-                <xsl:comment>end search</xsl:comment>
-            </xsl:if>
             <xsl:comment>start group logo</xsl:comment>
             <xsl:if test="$config/group-url">
                 <hr/>
