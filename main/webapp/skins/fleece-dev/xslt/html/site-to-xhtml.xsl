@@ -134,11 +134,12 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
                                     </xsl:if>
                                     <xsl:call-template name="renderlogo">
                                         <xsl:with-param name="name" select="$config/project-name"/>
-                                        <xsl:with-param name="url" select="$config/project-url"/>
+                                        <xsl:with-param name="url"  select="$config/project-url"/>
                                         <xsl:with-param name="logo" select="$config/project-logo"/>
                                         <xsl:with-param name="root" select="$root"/>
                                         <xsl:with-param name="description" select="$config/project-description"/>
-                                        <xsl:with-param name="height" select="30"/>
+                                        <xsl:with-param name="height" select="$config/project-logo-height"/>
+                                        <xsl:with-param name="width"  select="$config/project-logo-width"/>
                                         <xsl:with-param name="aclass" select="'navbar-brand'"/>
                                     </xsl:call-template>
                                     <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
@@ -394,20 +395,21 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
                         <xsl:with-param name="logo" select="$config/group-logo"/>
                         <xsl:with-param name="root" select="$root"/>
                         <xsl:with-param name="description" select="$config/group-description"/>
-                        <xsl:with-param name="height" select="150"/>
+                        <xsl:with-param name="height" select="$config/group-logo-height"/>
+                        <xsl:with-param name="width" select="$config/group-logo-width"/>
                     </xsl:call-template>
                 </div>
             </xsl:if>
             <xsl:if test="$config/host-url">
                 <div class="host-logo">
                     <xsl:call-template name="renderlogo">
-                         <xsl:with-param name="name" select="$config/host-name"/>
-                         <xsl:with-param name="url" select="$config/host-url"/>
-                         <xsl:with-param name="logo" select="$config/host-logo"/>
-                         <xsl:with-param name="root" select="$root"/>
-
-                        <xsl:with-param name="description" select="$config/group-description"/>
-                        <xsl:with-param name="height" select="50"/>
+                        <xsl:with-param name="name" select="$config/host-name"/>
+                        <xsl:with-param name="url" select="$config/host-url"/>
+                        <xsl:with-param name="logo" select="$config/host-logo"/>
+                        <xsl:with-param name="root" select="$root"/>
+                        <xsl:with-param name="description" select="$config/host-description"/>
+                        <xsl:with-param name="height" select="$config/host-logo-height"/>
+                        <xsl:with-param name="width" select="$config/host-logo-width"/>
                     </xsl:call-template>
                 </div>
             </xsl:if>
