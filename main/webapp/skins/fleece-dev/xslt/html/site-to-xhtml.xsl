@@ -296,6 +296,46 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
         </xsl:choose>
     </xsl:template>
 
+  <xsl:template match="h4[not(@class='faq')]">
+    <xsl:choose>
+      <xsl:when test="//skinconfig/headings/@type='underlined'">
+        <h4 class="underlined_2">
+          <xsl:value-of select="."/>
+        </h4>
+      </xsl:when>
+      <xsl:when test="//skinconfig/headings/@type='boxed'">
+        <h4 class="boxed">
+          <xsl:value-of select="."/>
+        </h4>
+      </xsl:when>
+      <xsl:otherwise>
+        <h4>
+          <xsl:value-of select="."/>
+        </h4>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+
+  <xsl:template match="h5">
+    <xsl:choose>
+      <xsl:when test="//skinconfig/headings/@type='underlined'">
+        <h5 class="underlined_2">
+          <xsl:value-of select="."/>
+        </h5>
+      </xsl:when>
+      <xsl:when test="//skinconfig/headings/@type='boxed'">
+        <h5 class="boxed">
+          <xsl:value-of select="."/>
+        </h5>
+      </xsl:when>
+      <xsl:otherwise>
+        <h5>
+          <xsl:value-of select="."/>
+        </h5>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+
     <!-- Add links to any standards-compliance logos -->
     <xsl:template name="compliancy-logos">
         <xsl:if test="$filename = 'index.html' and $config/disable-compliance-links = 'false'">
