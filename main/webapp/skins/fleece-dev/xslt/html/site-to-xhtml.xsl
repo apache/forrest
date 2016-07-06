@@ -186,7 +186,7 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
                         </xsl:choose>
                     </div>-->
                     <xsl:comment>start Menu, mainarea</xsl:comment>
-                    <xsl:if test="div[@id='menu']/ul/li">
+                    <xsl:if test="div[@id='menu']/ul">
                         <xsl:call-template name="menu"/>
                     </xsl:if>
                     <xsl:comment>start content</xsl:comment>
