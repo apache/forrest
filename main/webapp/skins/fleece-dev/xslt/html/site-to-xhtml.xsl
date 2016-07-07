@@ -387,7 +387,7 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
                 </xsl:choose>
             </div>
             <xsl:comment>end search</xsl:comment>
-            <ul class="nav nav-sidebar">
+            <ul class="nav nav-sidebar hidden-xs">
                 <xsl:comment>menu - inner</xsl:comment>
                 <xsl:for-each select = "div[@id='menu']/ul/li">
                     <xsl:call-template name = "innermenuli" >
@@ -398,8 +398,8 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
             <div id="nav-sidebar-bottom">
                 <xsl:comment>start group logo</xsl:comment>
                 <xsl:if test="$config/group-url">
-                <hr/>
-                <div class="group-logo">
+                <hr class="hidden-xs"/>
+                <div class="group-logo hidden-xs">
                     <xsl:call-template name="renderlogo">
                         <xsl:with-param name="name" select="$config/group-name"/>
                         <xsl:with-param name="url" select="$config/group-url"/>
@@ -412,7 +412,7 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
                 </div>
             </xsl:if>
                 <xsl:if test="$config/host-url">
-                <div class="host-logo">
+                <div class="host-logo hidden-xs">
                     <xsl:call-template name="renderlogo">
                         <xsl:with-param name="name" select="$config/host-name"/>
                         <xsl:with-param name="url" select="$config/host-url"/>
