@@ -104,12 +104,12 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
                 <xsl:comment>topstrip with logos and search box</xsl:comment>
                 <div id="top">
                     <xsl:comment>breadcrumbs org location</xsl:comment>
-                    <!--<xsl:if test="not ($config/trail/@location)">
+                    <xsl:if test="not ($config/trail/@location)">
                         <xsl:comment>breadtrail</xsl:comment>
-                        <div class="breadtrail">
+                        <div class="breadtrail breadcrumb">
                             <xsl:call-template name="breadcrumbs"/>
                         </div>
-                    </xsl:if>-->
+                    </xsl:if>
                     <xsl:comment>header</xsl:comment>
                     <div class="header  col-sm-12">
                         <xsl:comment>start Tabs</xsl:comment>
@@ -340,7 +340,8 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
     <xsl:template name="compliancy-logos">
         <xsl:if test="$filename = 'index.html' and $config/disable-compliance-links = 'false'">
             <a href="http://validator.w3.org/check/referer">
-                <img class="logoImage" src="{$skin-img-dir}/valid-html401.png" alt="Valid HTML 4.01!" title="Valid HTML 4.01!" style="height: 31px; width: 88px;" />
+                <img class="logoImage" src="{$skin-img-dir}/valid-html401.png"
+                     alt="Valid HTML 4.01!" title="Valid HTML 4.01!" style="height: 31px; width: 88px;" />
             </a>
             <a href="http://jigsaw.w3.org/css-validator/check/referer">
                 <img class="logoImage" src="{$skin-img-dir}/vcss.png" alt="Valid CSS!" title="Valid CSS!" style="height: 31px; width: 88px;"/>
@@ -354,18 +355,22 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
             <xsl:comment>Search box: only location for the fleece skin</xsl:comment>
             <xsl:comment>start Search</xsl:comment>
             <div class="searchbox">
-                <xsl:variable name="search-prompt">Search the site with <xsl:value-of select="$config/search/@provider"/>
+                <xsl:variable
+                    name="search-prompt">Search the site with <xsl:value-of
+                    select="$config/search/@provider"/>
                 </xsl:variable>
                 <xsl:choose>
                     <xsl:when test="$config/search/@provider = 'lucene'">
                         <xsl:comment>Lucene search</xsl:comment>
                         <form method="get" action="{$root}{$lucene-search}">
-                            <input type="text" id="query" name="queryString" size="18" onFocus="getBlank (this, '{$search-prompt}');">
+                            <input type="text" id="query" name="queryString"
+                                   size="18" onFocus="getBlank (this, '{$search-prompt}');">
                                 <xsl:attribute name="value">
                                     <xsl:value-of select="$search-prompt"/>
                                 </xsl:attribute>
                             </input>&#160;
-                            <input type="submit" value="Search" name="Search" i18n:attr="value"/>
+                            <input type="submit" value="Search" name="Search"
+                                   i18n:attr="value"/>
                         </form>
                     </xsl:when>
                     <xsl:otherwise>
@@ -390,8 +395,9 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
                     </xsl:call-template>
                 </xsl:for-each>
             </ul>
-            <xsl:comment>start group logo</xsl:comment>
-            <xsl:if test="$config/group-url">
+            <div id="nav-sidebar-bottom">
+                <xsl:comment>start group logo</xsl:comment>
+                <xsl:if test="$config/group-url">
                 <hr/>
                 <div class="group-logo">
                     <xsl:call-template name="renderlogo">
@@ -405,7 +411,7 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
                     </xsl:call-template>
                 </div>
             </xsl:if>
-            <xsl:if test="$config/host-url">
+                <xsl:if test="$config/host-url">
                 <div class="host-logo">
                     <xsl:call-template name="renderlogo">
                         <xsl:with-param name="name" select="$config/host-name"/>
@@ -418,7 +424,7 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
                     </xsl:call-template>
                 </div>
             </xsl:if>
-            <xsl:if test="not($config/disable-copyright-footer = 'true')">
+                <xsl:if test="not($config/disable-copyright-footer = 'true')">
                 <div class="copyright">
                     Copyright &#169;
                     <xsl:text> </xsl:text>
@@ -451,9 +457,9 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
                     </xsl:if>
                 </div>
             </xsl:if>
-            <xsl:comment>end group logo</xsl:comment>
-            <xsl:comment>credits in alternative location</xsl:comment>
-            <div id="credit">
+                <xsl:comment>end group logo</xsl:comment>
+                <xsl:comment>credits in alternative location</xsl:comment>
+                <div id="credit">
                 <xsl:if test="$filename = 'index.html' and $config/credits and ($config/credits/credit/@box-location = 'alt')">
                 <hr />
                 <xsl:for-each select="$config/credits/credit[not(@role='pdf')]">
@@ -524,11 +530,11 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
                     </xsl:for-each>
                 </xsl:if>
             </div>
-            <div id="roundbottom">
-            </div>
-            <xsl:comment>credits in alternative location #2</xsl:comment>
-            <xsl:comment>alternative credits</xsl:comment>
-            <div id="credit2">
+                <div id="roundbottom">
+                </div>
+                <xsl:comment>credits in alternative location #2</xsl:comment>
+                <xsl:comment>alternative credits</xsl:comment>
+                <div id="credit2">
                 <xsl:if test="$config/credits and ($config/credits/credit/@box-location = 'alt2')">
                     <xsl:for-each select="$config/credits/credit[not(@role='pdf')]">
                         <xsl:if test="@box-location = 'alt2'">
@@ -554,6 +560,7 @@ footer, searchbar, css etc.  As input, it takes XML of the form:
                         </xsl:if>
                     </xsl:for-each>
                 </xsl:if>
+            </div>
             </div>
         </div>
         <xsl:comment>end Menu</xsl:comment>
