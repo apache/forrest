@@ -151,10 +151,10 @@
   <xsl:template match="img">
     <xsl:choose>
       <xsl:when test="name(..)='section'">
-        <figure alt="{@alt}" src= "{@src}"/>
+        <figure alt="{@alt}" src="{@src}" height="{@height}" width="{@width}"/>
       </xsl:when>
       <xsl:otherwise>
-        <img alt="{@alt}" src= "{@src}"/>
+        <img alt="{@alt}" src="{@src}" height="{@height}" width="{@width}"/>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
