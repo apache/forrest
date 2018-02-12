@@ -104,14 +104,24 @@
   <xsl:template match="p">
     <xsl:choose>
       <xsl:when test="ancestor::li and not(preceding-sibling::*)">
-        <fo:block space-after="4pt">
+        <fo:block space-after="4pt"
+            white-space-collapse="false"
+            linefeed-treatment="preserve"
+            white-space-treatment="preserve"
+            wrap-option="wrap"
+            text-align="start">
           <xsl:copy-of select="@id"/>
           <xsl:call-template name="insertPageBreaks"/>
           <xsl:apply-templates/>
         </fo:block>
       </xsl:when>
       <xsl:otherwise>
-        <fo:block space-before="4pt" space-after="4pt">
+        <fo:block space-before="4pt" space-after="4pt"
+            white-space-collapse="false"
+            linefeed-treatment="preserve"
+            white-space-treatment="preserve"
+            wrap-option="wrap"
+            text-align="start">
           <xsl:copy-of select="@id"/>
           <xsl:call-template name="insertPageBreaks"/>
           <xsl:apply-templates/>
